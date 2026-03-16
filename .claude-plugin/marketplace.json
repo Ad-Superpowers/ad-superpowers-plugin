@@ -1,0 +1,43 @@
+{
+  "name": "ad-superpowers",
+  "owner": {
+    "name": "Ad Superpowers"
+  },
+  "plugins": [
+    {
+      "name": "meta-ads",
+      "source": "./meta-ads",
+      "description": "Meta (Facebook/Instagram) advertising intelligence. 23 expert skills for campaign optimization, creative fatigue analysis, audience targeting, and budget management."
+    },
+    {
+      "name": "google-ads",
+      "source": "./google-ads",
+      "description": "Google Ads optimization expertise. 28 expert skills for search campaigns, keyword strategy, GAQL queries, and performance max campaigns."
+    },
+    {
+      "name": "ga4",
+      "source": "./ga4",
+      "description": "Google Analytics 4 analysis and reporting. 18 expert skills for event tracking, conversion analysis, audience insights, and attribution modeling."
+    },
+    {
+      "name": "linkedin-ads",
+      "source": "./linkedin-ads",
+      "description": "LinkedIn B2B advertising intelligence. 7 expert skills for lead gen optimization, account-based marketing, and B2B campaign strategy."
+    },
+    {
+      "name": "tiktok-ads",
+      "source": "./tiktok-ads",
+      "description": "TikTok advertising creative and performance expertise. 6 expert skills for creative fatigue tracking, video performance analysis, and audience targeting."
+    },
+    {
+      "name": "google-search-console",
+      "source": "./google-search-console",
+      "description": "Google Search Console organic search intelligence. 2 expert skills for SEO performance analysis, technical health monitoring, and indexing diagnostics."
+    },
+    {
+      "name": "cross-platform",
+      "source": "./cross-platform",
+      "description": "Cross-platform advertising strategy and analysis. 10 expert skills, 1 agent, plus 22 workflow commands for multi-platform budget allocation, attribution reconciliation, SEO vs SEA gap analysis, and reporting."
+    }
+  ]
+}
