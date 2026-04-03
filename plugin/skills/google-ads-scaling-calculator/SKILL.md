@@ -1,5 +1,5 @@
 ---
-name: scaling-calculator
+name: google-ads-scaling-calculator
 description: |
   Calculates and implements Google Ads budget scaling strategies with focus on profitability and incremental ROAS. Use when: budget scaling strategies, incremental ROAS (iROAS) calculation, diminishing returns analysis, break-even calculations, profit maximization models, scaling roadmap planning. Do NOT use for: initial campaign setup (use search-campaign-builder), bid strategy selection (use learning-phase-tracker).
 metadata:

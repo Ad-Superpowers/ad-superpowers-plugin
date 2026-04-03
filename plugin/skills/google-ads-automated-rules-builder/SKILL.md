@@ -1,5 +1,5 @@
 ---
-name: automated-rules-builder
+name: google-ads-automated-rules-builder
 description: |
   Google Ads automated rules and automation setup. Use for: (1) Automated rules configuration, (2) Budget management automation, (3) Bid adjustment rules, (4) Performance alerts, (5) Scheduling automation, (6) Scripts vs rules advice.
   Do NOT use for: Meta Ads rules (use meta-automated-rules-builder), Google Ads Scripts only (use google-ads-scripts-library), or bid strategy selection (use bid-strategy-selector).

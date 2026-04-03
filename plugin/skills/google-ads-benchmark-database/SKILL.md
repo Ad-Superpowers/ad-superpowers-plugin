@@ -1,5 +1,5 @@
 ---
-name: benchmark-database
+name: google-ads-benchmark-database
 description: |
   Google Ads industry benchmark database with KPI benchmarks per industry, campaign type, and region. Use when: comparing account performance against industry averages, setting initial KPI targets for new accounts, planning budgets with CPA/ROAS estimates, evaluating seasonal CPC trends, or benchmarking client performance. Do NOT use for: real-time performance troubleshooting (use performance-troubleshooter), Quality Score optimization (use quality-score-optimizer), or campaign structure decisions (use campaign-structure-advisor).
 metadata:

@@ -1,5 +1,5 @@
 ---
-name: performance-troubleshooter
+name: meta-performance-troubleshooter
 description: |
   Meta Ads campaign performance diagnostics and troubleshooting. Use when: analyzing underperforming campaigns, solving CPA/ROAS problems, diagnosing delivery issues, interpreting Ad Relevance Diagnostics, making kill vs scale decisions.
   Do NOT use for: learning phase issues (use learning-phase-tracker), bid strategy changes (use bid-strategy-selector), creative fatigue specifically (use creative-fatigue-analyzer).

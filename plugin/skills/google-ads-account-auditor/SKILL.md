@@ -1,5 +1,5 @@
 ---
-name: account-auditor
+name: google-ads-account-auditor
 description: |
   Performs complete Google Ads account audits with health scoring and actionable recommendations. Use when: account takeover, periodic review, performance diagnosis, optimization opportunity identification, quick health check. Do NOT use for: single campaign troubleshooting (use performance-troubleshooter), keyword-only analysis (use keyword-strategy-planner).
 metadata:

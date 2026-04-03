@@ -1,5 +1,5 @@
 ---
-name: scaling-calculator
+name: meta-scaling-calculator
 description: |
   Calculates optimal scaling strategies for Meta Ads campaigns with budget increments, timeline planning, and risk assessment. Use when: scaling successfully without losing performance.
   Do NOT use for: bid strategy selection (use bid-strategy-selector), budget allocation across funnel (use full-funnel-designer), performance diagnostics (use performance-troubleshooter).

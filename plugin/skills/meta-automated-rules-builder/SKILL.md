@@ -1,5 +1,5 @@
 ---
-name: automated-rules-builder
+name: meta-automated-rules-builder
 description: |
   Builds effective automated rules for Meta Ads to optimize campaigns 24/7, protect budgets, and maximize performance. Use when: setting up rules for budget management, performance actions, or notifications.
   Do NOT use for: bid strategy selection (use bid-strategy-selector), workflow process optimization (use workflow-optimizer), campaign structure (use campaign-structure-advisor).

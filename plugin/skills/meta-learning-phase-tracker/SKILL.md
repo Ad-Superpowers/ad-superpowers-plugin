@@ -1,5 +1,5 @@
 ---
-name: learning-phase-tracker
+name: meta-learning-phase-tracker
 description: |
   Meta Ads learning phase management and edit impact analyzer. Use when: assessing learning phase status, predicting significant edit impact, learning phase exit strategies, calculating budget change impact, ad set health checks.
   Do NOT use for: campaign structure decisions (use campaign-structure-advisor), performance troubleshooting (use performance-troubleshooter), bid strategy selection (use bid-strategy-selector).

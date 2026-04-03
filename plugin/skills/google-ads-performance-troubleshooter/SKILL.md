@@ -1,5 +1,5 @@
 ---
-name: performance-troubleshooter
+name: google-ads-performance-troubleshooter
 description: |
   Diagnoses and resolves Google Ads performance problems using decision trees and root cause analysis. Use when: CPA/ROAS degradation, conversion drops, impression share declines, Quality Score problems, budget and bidding issues. Do NOT use for: full account audits (use account-auditor), keyword strategy planning (use keyword-strategy-planner).
 metadata:

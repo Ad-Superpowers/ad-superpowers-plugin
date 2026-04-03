@@ -1,5 +1,5 @@
 ---
-name: benchmark-database
+name: meta-benchmark-database
 description: |
   Reference database with industry benchmarks for Meta Ads metrics by vertical, funnel stage, and campaign type. Use when: evaluating whether your metrics are performing well, or setting targets for new campaigns.
   Do NOT use for: performance diagnostics (use performance-troubleshooter), account audits (use account-auditor), scaling decisions (use scaling-calculator).

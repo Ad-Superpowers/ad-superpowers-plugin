@@ -1,5 +1,5 @@
 ---
-name: bid-strategy-selector
+name: meta-bid-strategy-selector
 description: |
   Selects optimal Meta Ads bid strategy (Lowest Cost, Cost Cap, Bid Cap, ROAS Goal) based on goals, budget, and account maturity. Use when: choosing bid strategy, comparing cost cap vs bid cap, budget allocation, scaling strategy, value rules setup.
   Do NOT use for: Google Ads bidding (use google-bid-strategy-selector), campaign structure decisions (use campaign-structure-advisor), creative testing (use creative-diversification-generator).

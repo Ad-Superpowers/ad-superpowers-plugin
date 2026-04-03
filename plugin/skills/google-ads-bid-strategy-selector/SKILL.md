@@ -1,5 +1,5 @@
 ---
-name: bid-strategy-selector
+name: google-ads-bid-strategy-selector
 description: |
   Selects optimal Google Ads bid strategy (Target CPA, Target ROAS, Maximize Conversions,
   Maximize Conversion Value, Portfolio Bidding). Use when: choosing Smart Bidding strategy,

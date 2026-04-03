@@ -1,5 +1,5 @@
 ---
-name: account-auditor
+name: meta-account-auditor
 description: |
   Performs complete Meta Ads account audits with structured checklists, health scores, and actionable recommendations. Use when: taking over a new account, doing periodic reviews, or diagnosing performance problems.
   Do NOT use for: campaign structure advice (use campaign-structure-advisor), performance troubleshooting (use performance-troubleshooter), benchmark comparisons only (use benchmark-database).

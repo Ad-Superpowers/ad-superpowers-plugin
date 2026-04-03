@@ -1,5 +1,5 @@
 ---
-name: learning-phase-tracker
+name: google-ads-learning-phase-tracker
 description: |
   Google Ads Smart Bidding Learning Phase tracker and optimizer. Use when: (1) Learning phase status monitoring, (2) Signals and factors that influence learning, (3) Troubleshooting stuck learning, (4) Predicting learning phase duration, (5) Best practices to accelerate learning. Do NOT use for: bid strategy selection (use bid-strategy-selector), campaign structure changes (use campaign-structure-advisor), or conversion tracking setup (use conversion-tracking-auditor). Triggers: learning phase, learning limited, smart bidding learning, bid strategy learning, eligible, tcpa learning, troas learning, maximize conversions learning.
 metadata:
