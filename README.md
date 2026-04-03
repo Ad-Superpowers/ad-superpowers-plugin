@@ -1,71 +1,109 @@
 # Ad Superpowers — Claude Plugin
 
-AI-powered advertising intelligence across 7 platforms. 100+ expert skills, 25 workflow commands, and 29 MCP tools — all through natural language in Claude.
+AI-powered advertising intelligence across 8 platforms. Manage, analyze, and optimize your ad campaigns through natural language in Claude Code and Cowork.
 
-## Why Ad Superpowers?
+**98 expert skills** | **26 workflow commands** | **29 MCP tools** | **1 specialized agent**
 
-- **7 platforms** in one plugin: Meta Ads, Google Ads, GA4, Google Search Console, LinkedIn Ads, TikTok Ads, Google Tag Manager
-- **100+ expert skills** with decision frameworks, benchmarks, and actionable recommendations
-- **25 workflow commands** for performance reviews, audits, creative analysis, and reporting
-- **29 MCP tools** for direct API access — query, analyze, and manage campaigns
-- **Cross-platform intelligence** — attribution reconciliation, SEO vs SEA gap analysis, budget optimization
+## Platforms
+
+| Platform | Skills | MCP Tools | Capabilities |
+|----------|--------|-----------|--------------|
+| **Meta Ads** | 23 | 8 | Campaign management, creative fatigue analysis, audience targeting, ad creation, budget optimization |
+| **Google Ads** | 32 | 4 | GAQL queries, Performance Max, keyword strategy, bid optimization, campaign creation |
+| **Google Analytics 4** | 18 | 2 | Event tracking, attribution models, audience building, ecommerce analysis |
+| **Google Search Console** | 2 | 3 | SEO performance, keyword rankings, indexing diagnostics, sitemap management |
+| **Google Tag Manager** | 1 | 3 | Container auditing, tag management, configuration |
+| **LinkedIn Ads** | 7 | 4 | B2B lead gen optimization, CPL troubleshooting, campaign analytics |
+| **TikTok Ads** | 6 | 6 | Creative fatigue tracking, video performance, audience targeting |
+| **Cross-Platform** | 9 | — | Attribution reconciliation, SEO vs SEA gaps, budget allocation, competitive analysis |
 
 ## Install
 
 ```bash
-# Add the marketplace
-/plugin marketplace add Ad-Superpowers/claude-plugin
-
-# Install what you need
-/plugin install cross-platform@ad-superpowers    # Strategy, workflows, attribution
-/plugin install meta-ads@ad-superpowers          # Meta/Facebook/Instagram
-/plugin install google-ads@ad-superpowers        # Google Ads, PMax, Search
-/plugin install ga4@ad-superpowers               # Google Analytics 4
-/plugin install google-search-console@ad-superpowers  # Organic SEO
-/plugin install linkedin-ads@ad-superpowers      # B2B advertising
-/plugin install tiktok-ads@ad-superpowers        # TikTok Ads
+/plugin install ad-superpowers@claude-plugins-official
 ```
 
-## Plugins
+That's it. The MCP server, all 94 skills, 26 workflow commands, and safety confirmations are bundled.
 
-| Plugin | Skills | Commands | Highlights |
-|--------|--------|----------|------------|
-| **cross-platform** | 10 | 22 | Attribution reconciliation, SEO vs SEA gaps, budget allocation, weekly/monthly reports |
-| **meta-ads** | 23 | 1 | Creative fatigue (14-day cycles), bid strategy, campaign structure, full-funnel design |
-| **google-ads** | 28 | 2 | GAQL query guide, Performance Max, keyword strategy, bid optimization, quality score |
-| **ga4** | 18 | — | Event tracking, attribution models, audience building, ecommerce, BigQuery export |
-| **google-search-console** | 2 | 1 | SEO performance analysis, technical health monitoring, indexing diagnostics |
-| **linkedin-ads** | 7 | — | B2B lead gen optimization, CPL troubleshooting, performance diagnosis |
-| **tiktok-ads** | 6 | — | Creative fatigue (4x faster than Meta!), video hook analysis, rotation strategies |
+## Setup
 
-## Workflow Commands
+1. **Create an account** at [app.adsuperpowers.ai](https://app.adsuperpowers.ai)
+2. **Connect your ad platforms** via OAuth in the dashboard
+3. **Start using** — ask Claude anything about your campaigns
 
-Pre-built analysis workflows that connect to your live ad data:
+No API keys to configure. No manual MCP setup. Authentication is handled via OAuth through the Ad Superpowers dashboard.
+
+## What You Can Do
+
+### Ask questions in natural language
+
+- "How are my Meta campaigns performing this week?"
+- "Which Google Ads keywords have the highest CPA?"
+- "Compare my LinkedIn and Meta lead gen performance"
+- "Is my TikTok creative showing signs of fatigue?"
+- "What's my organic vs paid keyword overlap?"
+
+### Run workflow commands
 
 | Command | What It Does |
-|---------|-------------|
-| `weekly-performance-pulse` | Cross-platform weekly health check |
-| `creative-fatigue-scanner` | Scan all platforms for fatigued creatives |
-| `budget-allocation-planner` | Data-driven budget reallocation across platforms |
-| `keyword-opportunities` | SEO vs paid keyword gap analysis with savings estimates |
-| `campaign-battle-report` | Head-to-head campaign comparison |
-| `monthly-executive-summary` | C-level cross-platform performance report |
-| `anomaly-detective` | Detect sudden performance anomalies |
-| `account-health-scoring` | Score account health (0-100) across 5 dimensions |
-| ... | [25 total — install cross-platform to see all] |
+|---------|--------------|
+| `/ad-superpowers:weekly-performance-pulse` | Cross-platform weekly health check |
+| `/ad-superpowers:creative-fatigue-scanner` | Detect fatigued creatives across platforms |
+| `/ad-superpowers:budget-allocation-planner` | Data-driven budget reallocation recommendations |
+| `/ad-superpowers:keyword-opportunities` | SEO vs paid keyword gap analysis |
+| `/ad-superpowers:monthly-executive-summary` | Executive-ready monthly performance report |
+| `/ad-superpowers:anomaly-detective` | Detect performance anomalies across campaigns |
+| `/ad-superpowers:competitive-landscape-analyzer` | Competitive positioning analysis |
 
-## Connect Your Ad Accounts
+[See all 26 commands →](commands/)
 
-1. Sign up at [app.adsuperpowers.ai](https://app.adsuperpowers.ai) (free)
-2. Connect your ad platforms via OAuth
-3. Skills work without connection — commands need live data
+### Expert skills (auto-invoked)
 
-## Links
+Claude automatically uses the right skill based on your question. Skills provide decision frameworks, benchmarks, and actionable recommendations for:
 
-- **Dashboard:** [app.adsuperpowers.ai](https://app.adsuperpowers.ai)
-- **Website:** [adsuperpowers.ai](https://adsuperpowers.ai)
-- **Support:** nick@adsuperpowers.ai
+- **Campaign optimization** — bid strategies, budget scaling, learning phase management
+- **Creative analysis** — fatigue detection, A/B testing, diversification
+- **Audience strategy** — lookalike planning, overlap detection, remarketing
+- **Measurement** — attribution models, conversion tracking, CAPI setup
+- **Technical** — GAQL queries, GTM auditing, GA4 event tracking
+
+### Write operations (with safety)
+
+- Create Meta ads (image upload + creative + ad in one step)
+- Duplicate ads with creative overrides
+- Pause/resume campaigns and update budgets
+- Create Google Ads campaigns (budget + campaign + ad group + ads + keywords)
+
+All write operations include safety confirmations:
+- **Campaigns always create paused** for review before going live
+- **Budget changes require explicit approval**
+- **Destructive operations are clearly flagged**
+
+## Pricing
+
+| Tier | Monthly | Connected Accounts | Platforms |
+|------|---------|-------------------|-----------|
+| **Free** | €0 | 3 | Meta, Google Ads, GA4, Search Console |
+| **Pro** | €79 | 25 | All 8 platforms |
+| **Team** | €249 | 100 | All 8 platforms |
+| **Enterprise** | Custom | Unlimited | All + custom integrations |
+
+20% discount on annual plans. Start free at [adsuperpowers.ai](https://adsuperpowers.ai).
+
+## Security
+
+- OAuth authentication — credentials never stored locally
+- All API communication over HTTPS
+- Users can revoke platform access at any time
+- Per-user authentication in team environments
+- See [SECURITY.md](SECURITY.md) for our responsible disclosure policy
+
+## Support
+
+- **Website**: [adsuperpowers.ai](https://adsuperpowers.ai)
+- **Dashboard**: [app.adsuperpowers.ai](https://app.adsuperpowers.ai)
+- **Email**: support@adsuperpowers.ai
 
 ## License
 
-CC BY-NC-ND 4.0 — See [LICENSE](LICENSE) for details.
+MIT — see [LICENSE](LICENSE)

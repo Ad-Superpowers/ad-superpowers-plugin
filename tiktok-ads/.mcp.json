@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "ad-superpowers": {
-      "type": "http",
-      "url": "https://mcp.adsuperpowers.ai/v1"
-    }
-  }
-}

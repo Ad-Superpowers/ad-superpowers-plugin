@@ -1,0 +1,28 @@
+# Changelog
+
+All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
+
+## [1.0.0] - 2026-04-03
+
+### Added
+
+- **Unified plugin** combining all 8 platform modules into a single installable plugin
+- **98 expert skills** (v2.0) across Meta Ads, Google Ads, GA4, LinkedIn Ads, TikTok Ads, Google Search Console, Google Tag Manager, and cross-platform strategy
+- **26 workflow commands** for performance reviews, audits, creative analysis, budget planning, and reporting
+- **1 specialized agent** for performance marketing analysis
+- **29 MCP tools** via `mcp.adsuperpowers.ai/v1` for direct API access to all platforms
+- OAuth authentication for all 8 platforms via the Ad Superpowers dashboard
+- Safety confirmations: campaigns create paused, budget changes require approval
+
+### Platforms
+
+| Platform | Skills | Tools |
+|----------|--------|-------|
+| Meta Ads (Facebook/Instagram) | 23 | 8 |
+| Google Ads | 32 | 4 |
+| Google Analytics 4 | 18 | 2 |
+| Google Search Console | 2 | 3 |
+| Google Tag Manager | 1 | 3 |
+| LinkedIn Ads | 7 | 4 |
+| TikTok Ads | 6 | 6 |
+| Cross-Platform | 9 | — |

@@ -1,0 +1,492 @@
+---
+name: first-party-data-strategy
+description: |
+  Guide to building a privacy-first data infrastructure for advertising: first-party data collection, server-side tracking (Meta CAPI, Google Enhanced Conversions, TikTok Events API), Consent Mode V2 implementation, CDP selection, data clean rooms, and GDPR compliance checklists.
+  Use when: user asks about first-party data strategy, server-side tracking, CAPI setup, Consent Mode, privacy-first measurement, CDP selection, GDPR-compliant tracking, Enhanced Conversions, cookieless advertising, or signal loss recovery.
+  Do NOT use for: attribution discrepancy diagnosis (use attribution-reconciler), GTM container auditing (use gtm-container-auditor), or incrementality measurement (use incrementality-testing-guide).
+metadata:
+  author: "AdSuperpowers"
+  version: "1.0.0"
+  platform: "cross-platform"
+  phase: "fase-2-onboarding"
+compatibility: "Requires AdSuperpowers MCP server with multiple platform connections connection"
+---
+# First-Party Data Strategy Guide
+
+## Purpose
+
+Help advertisers build a robust first-party data infrastructure that maintains measurement quality and targeting effectiveness in an increasingly privacy-restricted advertising landscape.
+
+## When to Use This Skill
+
+Invoke when user mentions:
+- **First-party data:** "How do I collect first-party data?"
+- **Server-side tracking:** "Should I implement CAPI?"
+- **Privacy compliance:** "How do I handle GDPR tracking?"
+- **Consent Mode:** "What is Consent Mode V2?"
+- **CDPs:** "Do I need a Customer Data Platform?"
+- **Cookieless:** "How do I prepare for cookie deprecation?"
+- **Signal loss:** "My conversion tracking is getting worse"
+
+---
+
+## Part 1: The Privacy Landscape (2025-2026)
+
+### Current State of Digital Advertising Privacy
+
+| Change | Status | Impact |
+|--------|--------|--------|
+| iOS App Tracking Transparency | Active (since 2021) | 40-60% signal loss on mobile |
+| GDPR Consent Requirements | Active | ~50% opt-in rates in EU |
+| Chrome 3rd Party Cookie Deprecation | In progress (2025) | Major impact pending |
+| Meta Aggregated Event Measurement | Active | Limited to 8 priority events |
+| Google Privacy Sandbox | Rolling out | Topics API, Protected Audiences |
+
+### Signal Loss by Region
+
+| Region | Cookie Consent Rate | Mobile Opt-in Rate | Total Signal Loss |
+|--------|--------------------|--------------------|-------------------|
+| EU (GDPR) | 45-55% | 25-35% | 50-65% |
+| UK | 50-60% | 30-40% | 45-55% |
+| US (No federal law) | 75-85% | 35-45% | 25-35% |
+| California (CCPA) | 65-75% | 35-45% | 35-45% |
+
+### The First-Party Data Advantage
+
+| Data Type | Definition | Privacy Status | Value |
+|-----------|------------|----------------|-------|
+| **First-party** | Data you collect directly | Owned, compliant | Highest |
+| **Second-party** | Partner's first-party data | Licensed | Medium |
+| **Third-party** | Aggregated from many sources | Declining | Lowest |
+
+**Why First-Party Data Wins:**
+- You own it (no dependency on external sources)
+- Compliant by design (collected with consent)
+- More accurate (direct from customer)
+- Future-proof (not affected by browser changes)
+
+---
+
+## Part 2: First-Party Data Collection Strategy
+
+### Data Collection Framework
+
+**What to Collect:**
+
+| Data Type | Examples | Collection Method | Priority |
+|-----------|----------|-------------------|----------|
+| **Identity** | Email, phone, user ID | Account creation, checkout | P0 |
+| **Behavioral** | Page views, clicks, time on site | Analytics, server logs | P0 |
+| **Transactional** | Purchases, order value, products | E-commerce platform | P0 |
+| **Preference** | Newsletter signup, interests | Preference centers | P1 |
+| **Engagement** | Email opens, app usage | Email/app analytics | P1 |
+| **Feedback** | Reviews, surveys, NPS | Direct collection | P2 |
+
+### Collection Points
+
+| Touchpoint | Data Collected | Consent Required | Implementation |
+|------------|---------------|------------------|----------------|
+| Website registration | Email, name | Yes | Form + CMP |
+| Newsletter signup | Email | Yes | Double opt-in |
+| Purchase checkout | Email, phone, address | Legitimate interest | Order flow |
+| Account creation | Profile data | Yes | Sign-up flow |
+| Loyalty program | Preferences, history | Yes | Program enrollment |
+| Mobile app | Device ID, behavior | Yes (ATT) | SDK |
+| Customer service | Interaction history | Legitimate interest | CRM |
+
+### Data Quality Hierarchy
+
+**Email Quality Ladder:**
+
+| Level | Description | Match Rate | Value |
+|-------|-------------|------------|-------|
+| **Verified email** | Confirmed via double opt-in | 95%+ | Highest |
+| **Checkout email** | Provided at purchase | 85-95% | High |
+| **Registration email** | Account signup | 70-85% | Medium |
+| **Lead form email** | Marketing capture | 50-70% | Lower |
+| **Third-party list** | Purchased data | 20-40% | Lowest |
+
+---
+
+## Part 3: Server-Side Tracking Implementation
+
+### Why Server-Side Tracking
+
+| Client-Side (Traditional) | Server-Side |
+|---------------------------|-------------|
+| Blocked by ad blockers (25-40%) | Not affected by ad blockers |
+| Affected by ITP/ETP | Resistant to browser restrictions |
+| Limited by cookie consent | Works with proper consent |
+| 6-7 day cookie lifetime (Safari) | Extended attribution |
+| Visible to user | More control over data |
+
+### Platform-Specific Implementation
+
+#### Meta Conversions API (CAPI)
+
+**What it does:** Send conversion events directly from your server to Meta.
+
+**Implementation Options:**
+
+| Method | Complexity | Best For |
+|--------|------------|----------|
+| **Partner integration** | Low | Shopify, WooCommerce, Segment |
+| **Gateway API** | Medium | Custom sites with GTM |
+| **Direct integration** | High | Full control, custom platforms |
+
+**Required Fields:**
+
+| Field | Type | Match Quality Impact |
+|-------|------|---------------------|
+| email (hashed) | em | High |
+| phone (hashed) | ph | Medium |
+| first_name (hashed) | fn | Low |
+| last_name (hashed) | ln | Low |
+| IP address | client_ip_address | Low |
+| User agent | client_user_agent | Low |
+| Click ID (fbc) | fbc | Highest |
+| Browser ID (fbp) | fbp | High |
+
+**Event Match Quality (EMQ) Targets:**
+
+| EMQ Score | Status | Action |
+|-----------|--------|--------|
+| 8.0+ | Excellent | Maintain |
+| 6.0-7.9 | Good | Minor improvements |
+| 4.0-5.9 | Fair | Add customer parameters |
+| <4.0 | Poor | Urgent: add email/phone |
+
+#### Google Enhanced Conversions
+
+**What it does:** Send hashed first-party data with conversion tags for better measurement.
+
+**Setup Options:**
+
+| Method | Requirements |
+|--------|--------------|
+| **Tag Manager** | GTM, data layer with user data |
+| **gtag.js** | Manual implementation |
+| **Google Ads API** | Server-side sending |
+
+**Required Data:**
+- Email (hashed SHA256)
+- Phone number (hashed)
+- Name (optional)
+- Address (optional)
+
+**Implementation Checklist:**
+- [ ] Enable Enhanced Conversions in Google Ads
+- [ ] Configure data layer to include user data
+- [ ] Hash all PII before sending
+- [ ] Verify setup with Tag Assistant
+- [ ] Monitor in Diagnostics tab
+
+#### TikTok Events API
+
+**Setup Options:**
+- Direct API integration
+- Partner integrations (Shopify, etc.)
+- GTM server-side container
+
+**Key Parameters:**
+- email (hashed)
+- phone (hashed)
+- external_id
+- ttclid (click ID)
+- ttp (pixel ID)
+
+#### LinkedIn Conversions API
+
+**Implementation:**
+- Via LinkedIn Partner (Segment, mParticle)
+- Direct API integration
+
+**Match Keys:**
+- email (SHA256)
+- LinkedIn First-Party ID
+- Google Click ID (for cross-platform)
+
+### Deduplication Strategy
+
+**Critical:** Sending both client-side and server-side events can cause double-counting.
+
+| Platform | Deduplication Method |
+|----------|---------------------|
+| Meta | event_id matching |
+| Google | transaction_id matching |
+| TikTok | event_id matching |
+| LinkedIn | conversion_id matching |
+
+**Implementation:**
+1. Generate unique event_id on client-side
+2. Include same event_id in server-side call
+3. Platform deduplicates automatically
+
+---
+
+## Part 4: Consent Mode V2 (Google)
+
+### What is Consent Mode V2?
+
+Consent Mode allows Google tags to adjust behavior based on user consent status, while still enabling conversion modeling for non-consented users.
+
+### Consent Mode Parameters
+
+| Parameter | What It Controls | Default Without Consent |
+|-----------|------------------|------------------------|
+| ad_storage | Advertising cookies | Denied (no cookies) |
+| analytics_storage | Analytics cookies | Denied (no cookies) |
+| ad_user_data | Sending user data to Google | Denied |
+| ad_personalization | Personalized ads | Denied |
+
+### Implementation Levels
+
+| Level | Description | Data Recovery |
+|-------|-------------|---------------|
+| **Basic** | Block all tags when no consent | 0% |
+| **Advanced** | Send cookieless pings | 40-70% recovery |
+| **Full** | With Enhanced Conversions | 70-85% recovery |
+
+### Setup Checklist
+
+- [ ] Implement CMP (Consent Management Platform)
+- [ ] Configure consent mode parameters
+- [ ] Pass consent state to all Google tags
+- [ ] Enable conversion modeling in Google Ads
+- [ ] Test with Tag Assistant
+- [ ] Monitor consent rates in GA4
+
+### Recommended CMP Providers
+
+| Provider | Complexity | Best For |
+|----------|-----------|----------|
+| Cookiebot | Low | Small-medium sites |
+| OneTrust | Medium | Enterprise |
+| Usercentrics | Medium | EU focus |
+| Osano | Low | US focus |
+| Built-in (Shopify) | Low | Shopify stores |
+
+---
+
+## Part 5: Customer Data Platforms (CDPs)
+
+### Do You Need a CDP?
+
+**CDP Decision Matrix:**
+
+| Factor | Yes, Get a CDP | No, Not Yet |
+|--------|---------------|-------------|
+| Data sources | 5+ systems | 1-3 systems |
+| Customer records | 100K+ | <50K |
+| Monthly ad spend | €50K+ | <€20K |
+| Team size (marketing) | 5+ people | <3 people |
+| Multi-channel campaigns | Yes | Single platform |
+| Real-time needs | Yes | Batch OK |
+
+### CDP Vendor Comparison
+
+| CDP | Best For | Price Range | Complexity |
+|-----|----------|-------------|------------|
+| **Segment** | Developer-first, integrations | €€€ | Medium |
+| **Rudderstack** | Open-source alternative | €€ | Medium |
+| **mParticle** | Mobile-first | €€€ | Medium |
+| **Treasure Data** | Enterprise | €€€€ | High |
+| **Klaviyo** | E-commerce, email | € | Low |
+| **Customer.io** | Messaging focus | €€ | Low |
+| **Hightouch** | Data warehouse-first | €€ | Medium |
+
+### CDP vs. Other Solutions
+
+| Solution | Best For | Limitation |
+|----------|----------|------------|
+| **CDP** | Unified customer view + activation | Cost, complexity |
+| **Data warehouse + Reverse ETL** | Analytics teams | No real-time |
+| **Marketing automation** | Email/SMS | Limited identity resolution |
+| **Platform audiences** | Single-platform campaigns | No cross-platform |
+
+---
+
+## Part 6: Data Activation for Advertising
+
+### Audience Activation Workflow
+
+```
+1. COLLECT → First-party data (email, behavior, transactions)
+2. UNIFY → Match to single customer profile
+3. SEGMENT → Create audiences based on attributes
+4. ACTIVATE → Push to ad platforms
+5. MEASURE → Close the loop with conversion data
+```
+
+### Platform Audience Matching
+
+| Platform | Upload Method | Match Rate (Email) | Best Practice |
+|----------|--------------|-------------------|---------------|
+| Meta Custom Audiences | Manager or API | 60-80% | SHA256 hash, normalize |
+| Google Customer Match | UI or API | 50-70% | Multiple identifiers |
+| TikTok Audiences | UI or API | 50-70% | Include phone |
+| LinkedIn Matched Audiences | UI or API | 40-60% | Work email performs better |
+
+### Audience Strategy Matrix
+
+| Audience Type | Source | Platforms | Use Case |
+|---------------|--------|-----------|----------|
+| **Purchasers** | Transaction data | All | Exclusion, lookalikes |
+| **High-value customers** | LTV data | All | Lookalikes, upsell |
+| **Cart abandoners** | Behavior data | Meta, Google | Retargeting |
+| **Email subscribers** | CRM | Meta, Google | Retargeting |
+| **Website visitors** | Analytics | All | Retargeting |
+| **App users** | App analytics | Meta, TikTok | Re-engagement |
+
+### Lookalike/Similar Audiences
+
+**Quality Factors:**
+
+| Factor | Impact on Lookalike Quality |
+|--------|----------------------------|
+| Source audience size | 1K-50K optimal |
+| Source quality | Higher LTV → better lookalike |
+| Data recency | Last 90 days best |
+| Country scope | Single country performs better |
+
+---
+
+## Part 7: Data Clean Rooms
+
+### What Are Data Clean Rooms?
+
+Secure environments where multiple parties can analyze combined data without exposing raw PII.
+
+### Use Cases
+
+| Use Case | How It Works |
+|----------|--------------|
+| **Publisher collaboration** | Match your data with publisher data |
+| **Retailer insights** | Connect ad exposure to retail sales |
+| **Attribution** | Cross-platform measurement |
+| **Audience building** | Create segments from multiple sources |
+
+### Data Clean Room Options
+
+| Provider | Type | Best For |
+|----------|------|----------|
+| Google Ads Data Hub | Platform-specific | Google campaigns |
+| Meta Advanced Analytics | Platform-specific | Meta campaigns |
+| AWS Clean Rooms | Cloud-native | Custom use cases |
+| Snowflake Data Clean Rooms | Data warehouse | Analytics teams |
+| LiveRamp | Independent | Multi-platform |
+| InfoSum | Independent | Privacy-first |
+
+### When to Consider
+
+- Ad spend > €500K/year
+- Need offline conversion attribution
+- Working with large publishers/retailers
+- Complex multi-party data needs
+
+---
+
+## Part 8: Implementation Roadmap
+
+### Phase 1: Foundation (Weeks 1-4)
+
+**Priority Actions:**
+
+| Action | Effort | Impact |
+|--------|--------|--------|
+| Implement server-side tracking (Meta CAPI) | Medium | High |
+| Enable Google Enhanced Conversions | Low | Medium |
+| Review and optimize CMP | Low | Medium |
+| Audit current data collection | Low | Foundation |
+
+**Quick Wins:**
+- [ ] Add Meta CAPI via partner integration (Shopify/WooCommerce)
+- [ ] Enable Enhanced Conversions in Google Ads
+- [ ] Implement Consent Mode V2 with advanced mode
+- [ ] Add email collection to key conversion points
+
+### Phase 2: Enhancement (Weeks 5-12)
+
+**Focus Areas:**
+
+| Area | Actions |
+|------|---------|
+| **Data quality** | Improve EMQ scores, add phone numbers |
+| **Consent optimization** | A/B test CMP messaging |
+| **Audience building** | Create customer match audiences |
+| **Cross-platform** | Implement TikTok/LinkedIn APIs |
+
+### Phase 3: Optimization (Ongoing)
+
+**Regular Activities:**
+
+| Cadence | Activity |
+|---------|----------|
+| Weekly | Monitor EMQ scores, consent rates |
+| Monthly | Review audience performance |
+| Quarterly | Audit data collection, update strategy |
+| Annually | Review CDP/tech stack needs |
+
+---
+
+## Part 9: Compliance Checklist
+
+### GDPR Compliance for Advertising Data
+
+| Requirement | Implementation |
+|-------------|----------------|
+| **Legal basis** | Consent or legitimate interest documented |
+| **Transparency** | Privacy policy updated |
+| **Consent** | CMP implemented, records stored |
+| **Data minimization** | Only necessary data collected |
+| **Purpose limitation** | Clear advertising purposes stated |
+| **Storage limitation** | Retention periods defined |
+| **Security** | Encryption, access controls |
+| **Data subject rights** | Delete/export capabilities |
+
+### Platform-Specific Requirements
+
+| Platform | Key Requirements |
+|----------|-----------------|
+| Meta | GDPR consent signal, Terms of Service |
+| Google | Consent Mode, EU user consent policy |
+| TikTok | EEA consent documentation |
+| LinkedIn | Member consent documentation |
+
+---
+
+## Part 10: Quick Reference
+
+### Signal Recovery Cheat Sheet
+
+| Problem | Solution | Recovery |
+|---------|----------|----------|
+| Low Meta EMQ | Add email + phone to CAPI | +30-50% match |
+| Google modeling inaccurate | Enable Enhanced Conversions | +20-40% accuracy |
+| Safari cookie loss | Server-side tracking | +60-80% recovery |
+| Ad blocker impact | Server-side tracking | +25-40% recovery |
+| Low consent rates | Optimize CMP messaging | +10-20% consent |
+
+### Tech Stack Recommendations by Budget
+
+| Annual Ad Spend | Recommended Stack |
+|-----------------|-------------------|
+| <€50K | Native platform tools + GTM |
+| €50-200K | GTM Server + Basic CDP (Klaviyo) |
+| €200K-1M | Full CDP (Segment) + clean room |
+| €1M+ | Enterprise CDP + custom data infrastructure |
+
+### KPIs to Track
+
+| Metric | Target | How to Measure |
+|--------|--------|----------------|
+| Meta EMQ Score | >6.0 | Events Manager |
+| Consent rate | >50% | CMP dashboard |
+| Customer match rate | >60% | Platform reports |
+| Server-side coverage | >80% events | GTM Server |
+| Modeled conversions % | <40% | Platform reports |
+
+---
+
+*Last updated: February 2026*
+*Based on platform documentation and industry best practices*
