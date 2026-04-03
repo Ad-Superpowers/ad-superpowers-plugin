@@ -1,0 +1,32 @@
+{
+  "name": "ad-superpowers",
+  "owner": {
+    "name": "Ad Superpowers",
+    "email": "support@adsuperpowers.ai"
+  },
+  "metadata": {
+    "description": "AI-powered advertising intelligence across 8 platforms",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "ad-superpowers",
+      "source": ".",
+      "description": "AI-powered advertising intelligence across 8 platforms. 98 expert skills, 26 workflow commands, and 29 MCP tools for Meta, Google Ads, GA4, Search Console, LinkedIn, TikTok, and Google Tag Manager.",
+      "version": "1.0.0",
+      "homepage": "https://adsuperpowers.ai",
+      "category": "productivity",
+      "keywords": [
+        "advertising",
+        "meta-ads",
+        "google-ads",
+        "ga4",
+        "linkedin-ads",
+        "tiktok-ads",
+        "search-console",
+        "ppc",
+        "marketing-analytics"
+      ]
+    }
+  ]
+}
