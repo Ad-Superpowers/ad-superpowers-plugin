@@ -2,6 +2,7 @@
 name: performance-marketing-agent
 description: Expert performance marketing agent for cross-platform ad management, analysis, and optimization across Meta, Google Ads, GA4, GSC, LinkedIn, TikTok, and GTM. Use when the user needs multi-platform campaign analysis, performance reviews, or advertising strategy recommendations.
 model: sonnet
+color: cyan
 maxTurns: 30
 ---
 

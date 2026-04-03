@@ -2,6 +2,18 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [1.1.0] - 2026-04-03
+
+### Added
+
+- **5 new specialized agents** for focused advertising tasks:
+  - `campaign-auditor` — Comprehensive account audits with structured scoring
+  - `creative-analyst` — Creative fatigue detection and refresh strategies
+  - `budget-optimizer` — Cross-platform budget allocation and pacing
+  - `reporting-agent` — Structured performance reports (weekly, monthly, executive)
+  - `seo-sea-analyst` — Organic vs paid search overlap and cannibalization analysis
+- Updated `performance-marketing-agent` with color coding
+
 ## [1.0.0] - 2026-04-03
 
 ### Added
