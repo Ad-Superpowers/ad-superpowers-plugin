@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "ad-superpowers",
-      "source": ".",
+      "source": "./plugin",
       "description": "AI-powered advertising intelligence across 8 platforms. 98 expert skills, 26 workflow commands, and 29 MCP tools for Meta, Google Ads, GA4, Search Console, LinkedIn, TikTok, and Google Tag Manager.",
       "version": "1.0.0",
       "homepage": "https://adsuperpowers.ai",
