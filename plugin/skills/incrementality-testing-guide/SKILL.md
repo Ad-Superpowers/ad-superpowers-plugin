@@ -366,5 +366,21 @@ This channel's TRUE return is 3.0x, not 5.0x
 
 ---
 
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, pull baseline metrics before the test starts to establish the pre-test period benchmark:
+
+```python
+# Capture pre-test baseline: conversions, sessions, revenue by channel
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["keyEvents", "sessions", "purchaseRevenue"],
+    dimensions=["date", "sessionDefaultChannelGroup"],
+    date_range="last_30d"
+)
+```
+
+Document this baseline before the test begins. Post-test, run the same query for the test period and compare. The difference (adjusted for seasonality) is your incrementality signal. Store both outputs to calculate iROAS accurately.
+
 *Last updated: February 2026*
 *Based on industry best practices and academic research in causal inference*

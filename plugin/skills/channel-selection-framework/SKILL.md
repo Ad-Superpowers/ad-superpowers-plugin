@@ -411,5 +411,29 @@ Score each channel 1-5 for your specific situation:
 
 ---
 
+## Optional: Enrich with Live Data
+
+If the user has connected accounts, validate channel selection with actual traffic and search volume data:
+
+```python
+# See how existing traffic splits across channels — which are already performing?
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["sessions", "keyEvents", "totalUsers"],
+    dimensions=["sessionDefaultChannelGroup"],
+    date_range="last_30d"
+)
+```
+
+```python
+# Check search impression volume for core keywords to confirm Google Search viability
+google_ads_run_gaql(
+    customer_id="YOUR_CUSTOMER_ID",
+    query="SELECT search_term_view.search_term, metrics.impressions FROM search_term_view WHERE segments.date DURING LAST_30_DAYS ORDER BY metrics.impressions DESC LIMIT 25"
+)
+```
+
+Use GA4 channel data to identify where you already have traction, and GAQL to verify that search demand actually exists before recommending Google Search as a channel.
+
 *Last updated: February 2026*
 *Framework based on industry best practices and AdSuperpowers platform data*

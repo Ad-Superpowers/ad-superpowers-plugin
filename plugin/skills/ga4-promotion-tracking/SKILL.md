@@ -317,3 +317,19 @@ METHOD 3: GA4 + EXTERNAL A/B TOOL
 2. [ ] [Action item]
 3. [ ] [Action item]
 ```
+
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, pull promotion performance to ground recommendations in actual click and conversion rates:
+
+```python
+# Get view_promotion and select_promotion event counts by promotion name
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["eventCount"],
+    dimensions=["eventName", "customEvent:promotion_name"],
+    date_range="last_30d"
+)
+```
+
+Compare `view_promotion` vs `select_promotion` counts per promotion slot to calculate CTR per banner. Low CTR (<1%) = poor placement or weak creative; high view count with low revenue = promotion is seen but not compelling.

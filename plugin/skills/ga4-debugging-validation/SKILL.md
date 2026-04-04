@@ -731,3 +731,19 @@ jobs:
 ### Network Requests Sample
 [Attach sample collect requests]
 ```
+
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, run validation checks against production data to surface discrepancies:
+
+```python
+# Cross-check event counts and session data against expected values from debugging session
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["sessions", "eventCount", "keyEvents"],
+    dimensions=["eventName", "date"],
+    date_range="last_7d"
+)
+```
+
+Compare live event counts against what you observed in DebugView/GTM Preview. Unexpected gaps between debug mode and production indicate environment differences (consent mode, sampling, or tag firing conditions).

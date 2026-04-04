@@ -615,3 +615,20 @@ DON'Ts
 ## Notes
 [Specific considerations or context]
 ```
+
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, check exclusion audience sizes before applying them to campaigns:
+
+```python
+# Get converters and recent purchasers volume to size exclusion lists
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["totalUsers"],
+    dimensions=["date"],
+    date_range="last_30d",
+    filter_expression="eventName==purchase"
+)
+```
+
+If exclusion audience size is very small (<500 users), the impact on reach will be negligible — you can safely apply it. If it's large (>10% of total users), review whether exclusions are too aggressive and might be cutting into valid remarketing pool.

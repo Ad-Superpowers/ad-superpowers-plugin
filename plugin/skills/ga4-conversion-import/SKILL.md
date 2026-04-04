@@ -404,3 +404,19 @@ Lead type tiers:
 ## Notes
 [Additional observations, deviations, or special configurations]
 ```
+
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, check key event counts before setting up the import to establish a baseline:
+
+```python
+# Get key event counts to verify volume and consistency before importing to Google Ads
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["keyEvents", "sessions"],
+    dimensions=["date", "sessionDefaultChannelGroup"],
+    date_range="last_30d"
+)
+```
+
+Use this baseline to detect post-import discrepancies. If Google Ads shows significantly more conversions than GA4 key events, attribution windows or cross-device matching is inflating numbers.

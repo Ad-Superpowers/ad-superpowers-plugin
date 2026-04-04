@@ -361,3 +361,14 @@ Each additional tag on All Pages adds ~5-15ms to page load time:
 - 100 tags: ~500ms-1.5s overhead (significant SEO and UX impact)
 
 Recommend: Audit tags that fire on All Pages. Can most fire on specific events instead?
+
+## Optional: Enrich with Live Data
+
+If the user has connected their GTM account, run a live container audit instead of relying on manual review:
+
+```python
+# Pull a full audit of the container — tags, triggers, variables, and issues
+gtm_audit(account_id="YOUR_GTM_ACCOUNT_ID", container_id="YOUR_CONTAINER_ID")
+```
+
+This returns tag counts, firing rules, variable usage, and flags common issues (missing notes, paused tags, All Pages over-triggers). Use the audit output to populate the framework above with real data rather than estimates.

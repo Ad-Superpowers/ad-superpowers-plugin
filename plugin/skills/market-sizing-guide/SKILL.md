@@ -412,5 +412,19 @@ When calculating market size, provide:
 
 ---
 
+## Optional: Enrich with Live Data
+
+If the user has connected a Google Ads account, use keyword volume as a demand-side proxy to validate market size estimates:
+
+```python
+# Pull impression data for core category keywords as a market demand signal
+google_ads_run_gaql(
+    customer_id="YOUR_CUSTOMER_ID",
+    query="SELECT search_term_view.search_term, metrics.impressions, metrics.clicks FROM search_term_view WHERE segments.date DURING LAST_30_DAYS ORDER BY metrics.impressions DESC LIMIT 30"
+)
+```
+
+High impression volume with low competition (low CPCs) = under-served market. High volume with high CPCs = competitive market where you need strong differentiation. Use this to sense-check the TAM/SAM estimates in the framework above.
+
 *Last updated: February 2026*
 *Sources: Statista, Euromonitor, IAB, CBS Netherlands, Ecommerce Europe*

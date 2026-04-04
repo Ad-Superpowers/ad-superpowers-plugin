@@ -456,4 +456,21 @@ DON'Ts
 ## Notes
 [Specific recommendations or context for this property]
 ```
+
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, check whether predictive metrics are available and what the underlying purchase event volume looks like:
+
+```python
+# Check purchase event volume — need ≥1k purchasers in last 28 days for predictive eligibility
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["eventCount", "totalUsers"],
+    dimensions=["eventName"],
+    date_range="last_28d",
+    filter_expression="eventName==purchase"
+)
+```
+
+If `eventCount` is below 1,000 purchases, predictive audiences are not yet available. Focus on growing purchase volume before revisiting predictive segments.
 </output>

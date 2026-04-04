@@ -787,3 +787,17 @@ function sendReport(report) {
 - [ ] Budget and bids confirmed
 - [ ] Conversion tracking verified
 ```
+
+## Optional: Enrich with Live Data
+
+If the user has connected their Google Ads account, check for existing campaigns before building new ones to avoid duplication and surface relevant performance history:
+
+```python
+# List active search campaigns with budget, status, and recent performance
+google_ads_run_gaql(
+    customer_id="YOUR_CUSTOMER_ID",
+    query="SELECT campaign.name, campaign.status, campaign.advertising_channel_type, campaign_budget.amount_micros, metrics.impressions, metrics.clicks, metrics.conversions, metrics.cost_micros FROM campaign WHERE campaign.advertising_channel_type = 'SEARCH' AND campaign.status != 'REMOVED' AND segments.date DURING LAST_30_DAYS ORDER BY metrics.cost_micros DESC LIMIT 20"
+)
+```
+
+Use this to understand the existing campaign structure, identify budget already allocated to search, and avoid duplicating keyword coverage. Existing high-performing campaigns may only need RSA copy improvements rather than a full rebuild.

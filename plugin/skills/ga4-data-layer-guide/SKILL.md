@@ -696,3 +696,19 @@ DATA LAYER IMPLEMENTATION CHECKLIST
 |------|--------|--------|
 | [Date] | Initial implementation | [Name] |
 ```
+
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, check event parameter fill rates to spot missing or misconfigured Data Layer pushes:
+
+```python
+# Check which custom events are firing and with what frequency
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["eventCount"],
+    dimensions=["eventName", "customEvent:form_name"],
+    date_range="last_7d"
+)
+```
+
+Low event counts or missing dimension values (showing as `(not set)`) indicate Data Layer variables are not populating. Use this to prioritise which pushes to fix first.

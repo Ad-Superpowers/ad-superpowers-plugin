@@ -517,3 +517,19 @@ Step 3: [Action to exclude]
 ## Notes
 [Any additional remarks or context]
 ```
+
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, pull segment sizes to validate audience eligibility before building:
+
+```python
+# Check user counts per key segment to estimate audience sizes
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["totalUsers", "sessions"],
+    dimensions=["sessionDefaultChannelGroup"],
+    date_range="last_30d"
+)
+```
+
+Use this to check if there are enough users in each segment to meet platform minimums (Google Ads: 1,000 users, Meta: 100). Small segments need broader definitions or longer lookback windows.

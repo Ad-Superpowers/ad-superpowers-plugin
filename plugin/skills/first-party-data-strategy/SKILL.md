@@ -501,5 +501,21 @@ Secure environments where multiple parties can analyze combined data without exp
 
 ---
 
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, check current consent rate and data coverage to benchmark where first-party data collection stands today:
+
+```python
+# Assess session volume and key event data — gaps indicate consent/tracking issues
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["sessions", "totalUsers", "keyEvents"],
+    dimensions=["date", "sessionDefaultChannelGroup"],
+    date_range="last_30d"
+)
+```
+
+If you see significantly fewer sessions in GA4 than in your CMS/server logs, that gap represents unconsented or untracked users — the exact population the first-party data strategy needs to address. Use the ratio as the baseline "data loss rate" to track improvement against.
+
 *Last updated: February 2026*
 *Based on platform documentation and industry best practices*

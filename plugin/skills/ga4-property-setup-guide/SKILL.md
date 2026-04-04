@@ -541,3 +541,19 @@ PER-CONVERSION ATTRIBUTION SETTINGS (Beta, 2026):
 ## Notes
 [Any additional remarks or points of attention]
 ```
+
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, verify the setup is actually collecting data:
+
+```python
+# Confirm sessions are flowing in — proves property is connected and firing
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["sessions", "totalUsers", "screenPageViews"],
+    dimensions=["date"],
+    date_range="last_7d"
+)
+```
+
+Use this to validate the setup before declaring it complete. Zero sessions after 24h = something is wrong (GTM unpublished, wrong measurement ID, consent block).

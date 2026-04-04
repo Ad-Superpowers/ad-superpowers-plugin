@@ -514,3 +514,19 @@ DON'Ts
 ## Notes
 [Specific recommendations or context]
 ```
+
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, check remarketing pool sizes before setting up ad platform audiences:
+
+```python
+# Estimate funnel stage volumes for remarketing tiers
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["totalUsers"],
+    dimensions=["sessionDefaultChannelGroup"],
+    date_range="last_30d"
+)
+```
+
+This helps size each remarketing tier (cart abandoners, product viewers, site visitors) and decide lookback windows. If 30-day pools are too small (<1k), extend to 60 or 90 days.

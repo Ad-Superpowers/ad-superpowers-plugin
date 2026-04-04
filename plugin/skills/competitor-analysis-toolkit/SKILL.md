@@ -507,5 +507,24 @@ For each 10 points of ESOV, expect ~0.5% market share growth/year
 
 ---
 
+## Optional: Enrich with Live Data
+
+If the user has connected accounts, complement manual competitor research with live platform data:
+
+```python
+# Pull auction insights to see which competitors you're bidding against in Google Ads
+google_ads_run_gaql(
+    customer_id="YOUR_CUSTOMER_ID",
+    query="SELECT auction_insight.domain, metrics.search_impression_share, metrics.search_outranking_share FROM auction_insight_view WHERE segments.date DURING LAST_30_DAYS ORDER BY metrics.search_impression_share DESC LIMIT 20"
+)
+```
+
+```python
+# Check your own organic keyword positions for gap analysis vs competitors
+gsc_search_analytics(site_url="https://yourdomain.com", dimensions=["query"], date_range="last_30d", row_limit=50)
+```
+
+Auction insights show which competitors are actively bidding on your keywords. GSC positions show where you rank organically — compare these to identify where competitors outrank you and where you have room to take share.
+
 *Last updated: February 2026*
 *Framework based on industry best practices and AdSuperpowers methodology*

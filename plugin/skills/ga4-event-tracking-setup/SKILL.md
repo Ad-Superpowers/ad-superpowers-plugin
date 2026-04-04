@@ -605,3 +605,19 @@ PRE-LAUNCH EVENT TRACKING CHECKLIST
 ## Notes
 [Any points of attention or follow-up items]
 ```
+
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, verify events are actually firing in production:
+
+```python
+# Confirm events are being received and count correctly
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["eventCount"],
+    dimensions=["eventName"],
+    date_range="last_7d"
+)
+```
+
+Compare the returned event list against the events in the tracking plan above. Missing events = not yet firing. Low counts relative to sessions = potential mis-trigger conditions (wrong page, wrong element, consent block).

@@ -696,3 +696,19 @@ WHERE
 
 [Any additional remarks or points of attention]
 ```
+
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, check current data volume to estimate BigQuery export size and costs before enabling:
+
+```python
+# Check session and event volume to project daily BQ export row count
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["sessions", "eventCount", "totalUsers"],
+    dimensions=["date"],
+    date_range="last_7d"
+)
+```
+
+Multiply average daily `eventCount` by ~3-5 (BQ exports one row per event hit) to estimate rows/day. This determines whether to use daily export (standard) or streaming export (real-time, higher cost).

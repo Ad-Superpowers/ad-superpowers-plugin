@@ -563,4 +563,25 @@ When creating personas, provide:
 
 ---
 
+## Optional: Enrich with Live Data
+
+If the user has connected accounts, ground persona demographics in actual audience data rather than assumptions:
+
+```python
+# Pull real demographic breakdown from GA4
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["totalUsers", "sessions"],
+    dimensions=["userAgeBracket", "userGender"],
+    date_range="last_30d"
+)
+```
+
+```python
+# Cross-reference with Meta audience insights for top-performing campaigns
+meta_query(account_id="act_XXXXX", entity="campaigns", fields=["name","spend","actions"], date_range="last_30d")
+```
+
+Compare GA4 demographics against what you assumed in the persona framework. Surprises (e.g., older audience than expected) should update persona priorities and platform channel mix.
+
 *Last updated: February 2026*

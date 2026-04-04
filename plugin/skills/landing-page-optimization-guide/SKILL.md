@@ -259,3 +259,19 @@ LOW PRIORITY (PIE < 4):
 | [Test 2] | [X] | [High/Med/Low] |
 | [Test 3] | [X] | [High/Med/Low] |
 ```
+
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, pull landing page performance data to identify which pages need the most attention:
+
+```python
+# Get landing page performance: sessions, bounce rate, and conversion rate per page
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["sessions", "bounceRate", "keyEvents", "averageSessionDuration"],
+    dimensions=["landingPage"],
+    date_range="last_30d"
+)
+```
+
+Sort by `sessions DESC` to find high-traffic pages with poor `keyEvents` or high `bounceRate` — these are your highest-impact optimisation targets. Pages with <30s session duration + high bounce = above-the-fold messaging failing immediately.

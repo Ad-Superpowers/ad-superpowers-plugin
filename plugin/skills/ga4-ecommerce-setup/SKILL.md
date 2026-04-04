@@ -552,3 +552,19 @@ E-COMMERCE TRACKING AUDIT
 ## Notes
 [Any additional remarks]
 ```
+
+## Optional: Enrich with Live Data
+
+If the user has connected their GA4 account, verify ecommerce events are firing and revenue is being captured correctly:
+
+```python
+# Confirm purchase events, transaction count, and revenue totals
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["transactions", "purchaseRevenue", "ecommercePurchases"],
+    dimensions=["date"],
+    date_range="last_14d"
+)
+```
+
+Compare `transactions` against backend order count for the same period. A >5% discrepancy indicates missed events (bots filtered, server-side gap, duplicate transactions, or consent drop-off).
