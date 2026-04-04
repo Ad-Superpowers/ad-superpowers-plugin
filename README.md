@@ -2,7 +2,7 @@
 
 AI-powered advertising intelligence across 8 platforms. Manage, analyze, and optimize your ad campaigns through natural language in Claude Code and Cowork.
 
-**98 expert skills** | **26 workflow commands** | **9 specialized agents** | **29 MCP tools**
+**98 expert skills** | **26 workflow commands** | **5 specialized agents** | **29 MCP tools**
 
 ## Platforms
 
@@ -63,15 +63,11 @@ Claude automatically delegates to the right agent based on your task:
 
 | Agent | Focus | Triggers |
 |-------|-------|----------|
-| **campaign-auditor** | Account health scoring and structural review | "audit my account", "check campaign health" |
-| **creative-analyst** | Creative fatigue detection and refresh strategy | "check creative fatigue", "which ads are tired" |
-| **budget-optimizer** | Cross-platform budget allocation and pacing | "optimize my budget", "where should I spend more" |
-| **reporting-agent** | Structured performance reports | "weekly report", "monthly summary" |
-| **seo-sea-analyst** | Organic vs paid search analysis | "keyword overlap", "SEO vs SEA" |
-| **gtm-specialist** | GTM container audits and tracking validation | "audit my GTM", "check conversion tracking" |
-| **campaign-builder** | Campaign creation and ad duplication | "create a campaign", "duplicate winning ads" |
-| **audience-strategist** | Audience targeting and lookalike strategies | "audience overlap", "build lookalike audiences" |
-| **performance-marketing-agent** | General cross-platform strategy | Multi-platform analysis, strategy questions |
+| **marketing-strategist** | Strategy, competitive analysis, channel selection, personas | "analyze competition", "which channels?", "new client onboarding" |
+| **media-buyer** | Campaign execution, budgets, bidding, audiences, scaling | "create campaign", "optimize budget", "scale winners" |
+| **creative-analyst** | Creative fatigue detection, A/B tests, refresh strategy | "check creative fatigue", "which ads are tired" |
+| **reporting-agent** | Structured performance reports and comparisons | "weekly report", "monthly summary" |
+| **tracking-specialist** | GTM audits, conversion tracking, SEO vs SEA analysis | "audit my GTM", "keyword overlap", "missing conversions" |
 
 ### Expert skills (auto-invoked)
 

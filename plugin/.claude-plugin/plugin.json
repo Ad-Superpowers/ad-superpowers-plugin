@@ -1,7 +1,7 @@
 {
   "name": "ad-superpowers",
-  "version": "1.2.0",
-  "description": "AI-powered advertising intelligence across 8 platforms. 98 expert skills, 26 workflow commands, 9 specialized agents, and 29 MCP tools for Meta, Google Ads, GA4, Search Console, LinkedIn, TikTok, and Google Tag Manager.",
+  "version": "2.0.0",
+  "description": "AI-powered advertising intelligence across 8 platforms. 98 expert skills, 26 workflow commands, 5 specialized agents, and 29 MCP tools for Meta, Google Ads, GA4, Search Console, LinkedIn, TikTok, and Google Tag Manager.",
   "author": {
     "name": "Ad Superpowers",
     "email": "support@adsuperpowers.ai",
