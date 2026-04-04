@@ -13,6 +13,8 @@ skills:
   - google-ads-creative-fatigue-tracker
   - tiktok-creative-fatigue-tracker
   - tiktok-video-performance-analyzer
+  - tiktok-hook-optimization-guide
+  - tiktok-spark-ads-strategy
 ---
 
 # Creative Analyst

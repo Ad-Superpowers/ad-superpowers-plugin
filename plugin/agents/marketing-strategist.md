@@ -13,6 +13,9 @@ skills:
   - first-party-data-strategy
   - incrementality-testing-guide
   - attribution-reconciler
+  - client-onboarding-checklist
+  - ltv-cac-modeling-framework
+  - local-business-advertising-guide
 ---
 
 # Marketing Strategist

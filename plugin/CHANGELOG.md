@@ -2,6 +2,22 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.1.0] - 2026-04-04
+
+### Added
+
+- **17 new expert skills** filling platform coverage gaps:
+  - LinkedIn (+4): ABM targeting strategy, content strategy, lead scoring framework, campaign scaling guide
+  - TikTok (+4): Spark Ads strategy, hook optimization guide, shopping ads guide, audience strategy
+  - GTM/Tracking (+4): tracking plan builder, conversion setup guide, server-side tagging guide, consent mode guide
+  - Cross-Platform (+5): e-commerce funnel optimizer, LTV/CAC modeling, experiment design, client onboarding, local business guide
+- **4 new workflow commands**: new-client-launch, ecommerce-health-check, b2b-pipeline-review, quarterly-business-review
+- Injected new skills into agent `skills` fields for deeper expertise
+
+### Removed
+
+- 4 redundant skills consolidated: meta-full-funnel-designer, meta-prompt-engineering-library, google-ads-gaql-query-guide, google-ads-pmax-asset-group-optimizer
+
 ## [2.0.0] - 2026-04-04
 
 ### Changed

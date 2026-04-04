@@ -26,6 +26,10 @@ skills:
   - linkedin-performance-troubleshooter
   - meta-performance-troubleshooter
   - google-ads-performance-troubleshooter
+  - linkedin-campaign-scaling-guide
+  - ecommerce-funnel-optimizer
+  - tiktok-audience-strategy
+  - experiment-design-framework
 ---
 
 # Media Buyer

@@ -2,7 +2,7 @@
 
 AI-powered advertising intelligence across 8 platforms. Manage, analyze, and optimize your ad campaigns through natural language in Claude Code and Cowork.
 
-**98 expert skills** | **26 workflow commands** | **5 specialized agents** | **29 MCP tools**
+**111 expert skills** | **30 workflow commands** | **5 specialized agents** | **29 MCP tools**
 
 ## Platforms
 

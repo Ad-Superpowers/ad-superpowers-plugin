@@ -6,7 +6,11 @@ color: yellow
 maxTurns: 20
 tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput
 skills:
+  - tracking-plan-builder
   - gtm-container-auditor
+  - gtm-conversion-setup-guide
+  - gtm-server-side-tagging-guide
+  - gtm-consent-mode-guide
   - ga4-debugging-validation
   - ga4-event-tracking-setup
   - ga4-data-layer-guide
