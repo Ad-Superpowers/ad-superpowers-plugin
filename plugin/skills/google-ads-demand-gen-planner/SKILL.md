@@ -1,11 +1,11 @@
 ---
 name: demand-gen-planner
 description: |
-  Demand Gen campaign strategy and optimization. Use for: (1) Demand Gen campaign setup, (2) Discovery ads strategy, (3) Gmail ads configuration, (4) Feed-based creatives, (5) YouTube Shorts advertising, (6) Visual storytelling campaigns.
-  Do NOT use for: Search campaign setup (use search-campaign-builder), Performance Max optimization (use performance-max-optimizer), or YouTube video ads strategy (use youtube-ads-strategist).
+  Demand Gen campaign strategy and optimization. Use for: (1) Demand Gen campaign setup, (2) Gmail ads configuration, (3) Feed-based creatives, (4) YouTube Shorts advertising, (5) Visual storytelling campaigns, (6) mid-funnel audience-based campaigns. Note: Demand Gen replaced Discovery campaigns (2024) and absorbed Video Action Campaigns (2025).
+  Do NOT use for: Search campaign setup (use search-campaign-builder), Performance Max optimization (use performance-max-optimizer), or YouTube awareness/bumper strategy (use youtube-ads-strategist).
 metadata:
   author: "AdSuperpowers"
-  version: "1.0.0"
+  version: "1.1.0"
   platform: "google_ads"
   phase: "fase-5-full-funnel-automation"
 compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
@@ -13,21 +13,28 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Demand Gen Planner
 
 Complete guide to Google Ads Demand Gen campaigns — the successor to Discovery campaigns for visual, mid-funnel advertising on YouTube, Discover, Gmail, and YouTube Shorts.
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
+
 ## What is Demand Gen?
 
 ### From Discovery to Demand Gen
 
 ```
-DEMAND GEN EVOLUTION (2024+)
-════════════════════════════
+DEMAND GEN EVOLUTION
+════════════════════
 
-DISCOVERY ADS (2019-2023)     →     DEMAND GEN (2024+)
-────────────────────────────────────────────────────────
+DISCOVERY ADS (2019-2023)     →     DEMAND GEN (2024+, incl. Video Action 2025)
+────────────────────────────────────────────────────────────────────────────────
 
 Placements:                    Placements (expanded):
 ├── YouTube Home               ├── YouTube Home
 ├── Discover Feed              ├── YouTube Watch Next
-├── Gmail Promotions           ├── YouTube Shorts ⭐ NEW
+├── Gmail Promotions           ├── YouTube Shorts ⭐ (added 2024)
 └── Gmail Social               ├── Discover Feed
                                ├── Gmail Promotions
 Formats:                       └── Gmail Social
@@ -35,21 +42,27 @@ Formats:                       └── Gmail Social
 ├── Carousel                   Formats (expanded):
 └── Product feeds              ├── Single image
                                ├── Carousel
-Bidding:                       ├── Video ads ⭐ NEW
+Bidding:                       ├── Video ads (incl. former Video Action)
 ├── tCPA                       ├── Product feeds
 └── Maximize conversions       └── Mixed (image + video)
 
                                Bidding (expanded):
                                ├── tCPA
                                ├── Maximize conversions
-                               ├── tROAS ⭐ NEW
+                               ├── tROAS (added v22)
                                ├── Maximize clicks
                                └── Maximize conversion value
 
-                               Features (new):
+                               Features (2024-2025):
                                ├── Lookalike segments
                                ├── A/B creative experiments
+                               ├── Video Action format absorbed
                                └── Enhanced audience tools
+
+NOTE: Video Action Campaigns were merged into Demand Gen in 2025.
+      If you need conversion-optimized video ads, use Demand Gen with
+      tCPA/Maximize Conversions and video assets — not a separate VAC.
+      Discovery campaigns were sunset in 2023/2024.
 ```
 
 ### Where Demand Gen Ads Appear
@@ -116,6 +129,60 @@ DEMAND GEN PLACEMENTS
    │  ─────────────────────────────────────────────  │
    │  [Expanded view shows full creative]            │
    └─────────────────────────────────────────────────┘
+```
+
+## MCP Tool Integration
+
+```
+STEP 1: List Demand Gen campaigns and performance
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    campaign.status,
+    campaign.advertising_channel_type,
+    campaign.advertising_channel_sub_type,
+    campaign.bidding_strategy_type,
+    metrics.impressions,
+    metrics.clicks,
+    metrics.conversions,
+    metrics.cost_micros,
+    metrics.cost_per_conversion
+  FROM campaign
+  WHERE campaign.advertising_channel_type = 'DEMAND_GEN'
+    AND campaign.status = 'ENABLED'
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY metrics.cost_micros DESC
+")
+
+STEP 2: Asset group performance within Demand Gen
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    ad_group.name,
+    ad_group.status,
+    metrics.impressions,
+    metrics.clicks,
+    metrics.conversions,
+    metrics.cost_micros
+  FROM ad_group
+  WHERE campaign.advertising_channel_type = 'DEMAND_GEN'
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY metrics.cost_micros DESC
+")
+
+STEP 3: Check audience targeting
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    ad_group.name,
+    ad_group_criterion.type,
+    ad_group_criterion.status,
+    ad_group_criterion.bid_modifier
+  FROM ad_group_criterion
+  WHERE campaign.advertising_channel_type = 'DEMAND_GEN'
+    AND ad_group_criterion.status != 'REMOVED'
+  LIMIT 100
+")
 ```
 
 ## Creative Asset Requirements
@@ -625,6 +692,13 @@ OPTIMIZATION PRIORITY:
 4. Budget allocation
 5. Campaign structure
 ```
+
+
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+
+
 ## Demand Gen vs Other Campaign Types
 
 ```

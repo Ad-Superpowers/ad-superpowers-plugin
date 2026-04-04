@@ -8,7 +8,7 @@ metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
   platform: "tiktok"
-  phase: "fase-3-campaigns-creative"
+  phase: "fase-1-foundation"
 compatibility: "Requires AdSuperpowers MCP server with TikTok Ads connection"
 ---
 # TikTok Video Performance Analyzer
@@ -116,6 +116,13 @@ Invoke when user mentions:
 | **Consideration** | 10-15 seconds | Balance engagement and attention |
 | **Conversion** | 6-10 seconds | Quick CTA, lowest cost per action |
 
+### Creative Specs (In-Feed Video)
+
+- **Format:** 9:16 vertical, 1080×1920px
+- **Max length:** 60 seconds (recommended 9-15 sec for best performance)
+- **Audio:** Required — 93% of TikTok users watch with sound on
+- **Safe zones:** 150px top, 175px bottom (avoid placing text/CTAs here)
+
 ### Completion Rate Benchmarks by Length
 
 | Video Length | Expected Completion Rate |
@@ -123,7 +130,7 @@ Invoke when user mentions:
 | Under 15s | 76.4% |
 | 15-30s | 65% |
 | 30-60s | 50% |
-| Over 60s | <40% |
+| Over 60s | <40% (also exceeds platform max for In-Feed ads) |
 
 ### Length Decision Framework
 
@@ -228,9 +235,9 @@ Invoke when user mentions:
 
 **Common Fixes for Low Completion:**
 1. Strengthen first 2 seconds
-2. Shorten video by 30%
-3. Add captions (85% watch without sound)
-4. Test trending sounds
+2. Shorten video by 30% (max 60 sec; target 9-15 sec)
+3. Add captions (7% watch without sound — but captions improve retention for all)
+4. Test trending sounds (93% watch with sound — audio is a primary engagement lever)
 
 ### Low CTR Despite Views
 
@@ -275,12 +282,23 @@ Invoke when user mentions:
 | 6s vs 15s vs 30s lengths | Shorter = higher completion | Completion rate, CPA |
 | Spark Ad vs regular boost | Spark = higher engagement | Engagement rate, CVR |
 
+### Campaign Type Considerations
+
+| Campaign Type | Video Approach | Notes |
+|---------------|---------------|-------|
+| **Standard auction** | Any length ≤60s; hook critical | Manual control |
+| **Smart+ Campaigns** | 9-15s recommended; algorithm selects best | Auto-optimization across audiences (like Meta Advantage+) |
+| **Search Ads** (Sep 2025) | 9-15s; clear value prop in first 2s | Keyword-targeted; higher intent audience |
+| **Spark Ads** | Matches original organic post length | Must feel native |
+| **GMV Max / TikTok Shop** | 9-15s product demo; CTA = "Shop Now" | Automated Shop campaign |
+
 ### Advanced Optimization
 
 1. Analyze top-performing organic for hooks
 2. Use Creative Center for inspiration
 3. Test creator collaborations
 4. Implement Smart Creative for auto-optimization
+5. For Smart+ Campaigns: let the algorithm test hooks — provide 3-5 variations at launch
 
 ## Benchmarks
 
@@ -379,6 +397,36 @@ When analyzing TikTok video performance, provide:
 - [ ] Content mix optimization
 - [ ] Creator collaboration ROI
 
+## MCP Tool Examples
+
+Pull video performance data directly:
+
+```
+# Get creative-level performance (hook rates, completion, CTR)
+tiktok_get_ad_insights(
+  advertiser_id="...",
+  dimensions=["ad_id", "stat_time_day"],
+  metrics=["video_play_actions", "video_watched_2s", "video_watched_6s",
+           "video_views_p25", "video_views_p50", "video_views_p100",
+           "ctr", "cpc", "spend"],
+  start_date="2026-03-01",
+  end_date="2026-04-04"
+)
+
+# Get asset info for a specific creative
+tiktok_get_asset_info(
+  advertiser_id="...",
+  asset_type="video",
+  asset_ids=["<video_id>"]
+)
+
+# List campaigns to find which use which ad formats
+tiktok_get_campaigns(
+  advertiser_id="...",
+  fields=["campaign_name", "objective_type", "campaign_type", "budget"]
+)
+```
+
 ---
 
-*Based on 2025-2026 TikTok Ads research. The first 2 seconds determine 70% of video performance - prioritize hook optimization above all else.*
+*Based on 2025-2026 TikTok Ads research. The first 2 seconds determine 70% of video performance - prioritize hook optimization above all else. In-Feed video max is 60 sec; target 9-15 sec for best results.*

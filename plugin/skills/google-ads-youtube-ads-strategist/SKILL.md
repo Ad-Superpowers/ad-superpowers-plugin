@@ -4,7 +4,7 @@ description: |
   Develops YouTube Ads strategy and optimizes video campaigns across all ad formats. Use when: TrueView and video ad format selection, Bumper ads strategy, YouTube audience targeting, video campaign setup, YouTube remarketing, video ad creative best practices, ABCD framework. Do NOT use for: standard Display campaigns (use display-campaign-optimizer), Performance Max video assets (use pmax-asset-group-optimizer).
 metadata:
   author: "AdSuperpowers"
-  version: "1.0.0"
+  version: "1.2.0"
   platform: "google_ads"
   phase: "fase-5-full-funnel-automation"
 compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
@@ -12,6 +12,13 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # YouTube Ads Strategist
 
 Complete guide for YouTube advertising strategy, video ad formats, targeting, and campaign optimization within Google Ads.
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
+
 ## YouTube Ad Formats Overview
 
 ### Format Comparison
@@ -20,6 +27,10 @@ Complete guide for YouTube advertising strategy, video ad formats, targeting, an
 YOUTUBE AD FORMATS 2025/2026
 ════════════════════════════
 
+⚠️ IMPORTANT CHANGE (2025): Video Action Campaigns (VAC) have been merged
+   into Demand Gen. For conversion-focused video advertising, use Demand Gen
+   campaigns with video assets + tCPA/Maximize Conversions bidding.
+
 ┌──────────────────────┬────────────┬──────────────┬─────────────┬──────────────┐
 │ Format               │ Length     │ Skippable    │ Pay Model   │ Best for     │
 ├──────────────────────┼────────────┼──────────────┼─────────────┼──────────────┤
@@ -27,7 +38,7 @@ YOUTUBE AD FORMATS 2025/2026
 │ Non-Skip In-Stream   │ 15-20 sec  │ No           │ CPM         │ Reach        │
 │ Bumper Ads           │ 6 sec      │ No           │ CPM         │ Awareness    │
 │ In-Feed Video        │ Any        │ N/A          │ CPV         │ Consideration│
-│ Video Action         │ 10s - 3min │ After 5 sec  │ CPA/tCPA    │ Conversions  │
+│ Demand Gen (video)   │ 10s - 3min │ After 5 sec  │ CPA/tCPA    │ Conversions  │
 │ YouTube Shorts       │ <60 sec    │ Variable     │ CPV/CPM     │ Mobile reach │
 │ Masthead             │ 24 hours   │ N/A          │ CPD/CPM     │ Mass reach   │
 └──────────────────────┴────────────┴──────────────┴─────────────┴──────────────┘
@@ -36,6 +47,9 @@ CPV = Cost Per View (30 sec or full video)
 CPM = Cost Per 1000 Impressions
 CPA = Cost Per Action (conversion)
 CPD = Cost Per Day (masthead)
+
+Note: "Video Action Campaigns" (VAC) is the legacy name. In 2025 these were
+merged into Demand Gen. Use Demand Gen + video assets for conversion goals.
 ```
 
 ### Skippable In-Stream Ads
@@ -117,11 +131,15 @@ CREATIVE STRUCTURE (6 sec):
 └── Audio: Consistent brand sound
 ```
 
-### Video Action Campaigns
+### Demand Gen Video (formerly Video Action Campaigns)
 
 ```
-VIDEO ACTION CAMPAIGNS (VAC)
-════════════════════════════
+DEMAND GEN CONVERSION VIDEO (2025+)
+════════════════════════════════════
+
+⚠️ Video Action Campaigns (VAC) were merged into Demand Gen in 2025.
+   This format now lives inside Demand Gen campaigns. The features and
+   capabilities are the same; only the campaign container changed.
 
 ┌──────────────────────────────────────────────────────────────┐
 │                                                              │
@@ -145,9 +163,16 @@ VIDEO ACTION CAMPAIGNS (VAC)
 │                                                              │
 └──────────────────────────────────────────────────────────────┘
 
+HOW TO SET UP (2025+):
+├── Create a Demand Gen campaign
+├── Select conversion goal (Sales/Leads)
+├── Add video assets (horizontal + vertical for Shorts)
+├── Set bid strategy: tCPA or Maximize Conversions
+└── Optional: Link product feed for shopping overlay
+
 FEATURES:
 ├── Conversion-optimized
-├── Automatic placement (in-stream + discovery + shorts)
+├── Automatic placement (YouTube in-stream + Shorts + Discover + Gmail)
 ├── CTA buttons and sitelinks
 ├── Product feed integration possible
 └── Bid strategy: tCPA or Maximize Conversions
@@ -156,8 +181,8 @@ SETUP REQUIREMENTS:
 ├── Conversion tracking active
 ├── Minimum 50 conversions/month recommended
 ├── Video: 10-180 seconds (30-60 sec optimal)
-├── CTA headline: Max 10 characters
-└── CTA description: Max 15 characters
+├── Include vertical 9:16 video for YouTube Shorts placement
+└── CTA overlay: headline max 10 chars, description max 15 chars
 ```
 
 ## Audience Targeting Strategies
@@ -263,7 +288,7 @@ CONVERSION (Bottom of Funnel)
 │ ├── Previous converters (cross-sell/upsell)             │
 │ └── Video completers (high intent)                      │
 │                                                         │
-│ Formats: Video Action Campaigns                         │
+│ Formats: Demand Gen (video) — formerly Video Action     │
 │ KPIs: CPA, ROAS, Conversions                            │
 │ Budget: 30% of video budget                             │
 └─────────────────────────────────────────────────────────┘
@@ -397,8 +422,9 @@ STEP 2: CAMPAIGN SUBTYPE
 ─────────────────────────
 □ Video Reach: Maximum reach (bumpers/non-skip)
 □ Video Views: Skippable in-stream + in-feed
-□ Video Action: Conversion-focused (tCPA/tROAS)
 □ Ad Sequence: Storytelling with multiple videos
+□ Demand Gen (conversion video): Use Demand Gen campaign type instead
+  (Video Action Campaigns were merged into Demand Gen in 2025)
 
 STEP 3: BID STRATEGY SELECTION
 ──────────────────────────────
@@ -407,7 +433,7 @@ STEP 3: BID STRATEGY SELECTION
 ├─────────────────────────┼───────────────────────────────┤
 │ Video Reach             │ Target CPM                    │
 │ Video Views             │ Maximum CPV                   │
-│ Video Action            │ Target CPA / Maximize Conv    │
+│ Demand Gen (video)      │ Target CPA / Maximize Conv    │
 │ Brand Awareness         │ Target CPM                    │
 └─────────────────────────┴───────────────────────────────┘
 
@@ -548,6 +574,13 @@ Campaign subtype: Ad sequence
     ├── Step 2: View-based (25%+ of step 1)
     └── Step 3: View-based (50%+ of step 2)
 ```
+
+
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+
+
 ## Measurement & Optimization
 
 ### Key Metrics per Campaign Type
@@ -556,52 +589,118 @@ Campaign subtype: Ad sequence
 YOUTUBE METRICS PER CAMPAIGN TYPE
 ═════════════════════════════════
 
+⚠️ API METRIC NAME CHANGES (v22+):
+   video_views         → metrics.video_trueview_views
+   average_cpv         → metrics.trueview_average_cpv
+   These renames apply when querying via GAQL / MCP tool calls.
+   The Google Ads UI still shows "Video views" and "Avg. CPV" as friendly names.
+
 AWARENESS (Reach) CAMPAIGNS:
 ────────────────────────────
 Primary KPIs:
 ├── Unique Reach: Number of unique users
-├── CPM: Cost per 1000 impressions
+├── CPM: Cost per 1000 impressions (metrics.average_cpm)
 ├── Frequency: Average number of views per person
 └── Brand Lift: Survey-based brand metrics
 
 Secondary KPIs:
-├── Impressions
+├── Impressions (metrics.impressions)
 ├── Video plays
 └── Earned views (shares, subscribes)
 
 CONSIDERATION (Views) CAMPAIGNS:
 ────────────────────────────────
 Primary KPIs:
-├── View Rate: Views / Impressions
-├── CPV: Cost per view
+├── View Rate: Views / Impressions (metrics.video_view_rate)
+├── CPV: Cost per view (API: metrics.trueview_average_cpv)
 ├── Watch Time: Average watch time
 └── Engagement Rate: Likes + Comments + Shares
 
 Secondary KPIs:
 ├── 25% / 50% / 75% / 100% completion rates
-├── Click-through rate
+├── Click-through rate (metrics.ctr)
 └── Earned subscribers
 
-CONVERSION (Action) CAMPAIGNS:
-──────────────────────────────
+CONVERSION (Action/Demand Gen) CAMPAIGNS:
+──────────────────────────────────────────
 Primary KPIs:
-├── Conversions
-├── CPA: Cost per acquisition
-├── ROAS: Return on ad spend
-└── Conversion Rate
+├── Conversions (metrics.conversions)
+├── CPA: Cost per acquisition (metrics.cost_per_conversion)
+├── ROAS: Return on ad spend (metrics.conversions_value / cost)
+└── Conversion Rate (metrics.conversions_from_interactions_rate)
 
 Secondary KPIs:
-├── View-through conversions
+├── View-through conversions (metrics.view_through_conversions)
 ├── Click-through conversions
 └── Assisted conversions
 
 BENCHMARK TARGETS:
 ──────────────────
-├── View Rate: >25% (skippable)
+├── View Rate: >25% (skippable in-stream)
 ├── CTR: >0.5%
 ├── Video Completion (100%): >15%
 ├── CPV: <$0.08 (brand), <$0.15 (action)
 └── CPA: Depends on industry
+```
+
+### MCP Tool Integration
+
+```
+STEP 1: YouTube campaign performance overview
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    campaign.status,
+    campaign.advertising_channel_type,
+    campaign.bidding_strategy_type,
+    metrics.impressions,
+    metrics.video_trueview_views,
+    metrics.video_view_rate,
+    metrics.trueview_average_cpv,
+    metrics.clicks,
+    metrics.ctr,
+    metrics.cost_micros
+  FROM campaign
+  WHERE campaign.advertising_channel_type IN ('VIDEO', 'DEMAND_GEN')
+    AND campaign.status = 'ENABLED'
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY metrics.cost_micros DESC
+")
+
+STEP 2: Video completion rates
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    ad_group.name,
+    metrics.video_quartile_p25_rate,
+    metrics.video_quartile_p50_rate,
+    metrics.video_quartile_p75_rate,
+    metrics.video_quartile_p100_rate,
+    metrics.video_trueview_views,
+    metrics.impressions
+  FROM ad_group
+  WHERE campaign.advertising_channel_type IN ('VIDEO', 'DEMAND_GEN')
+    AND campaign.status = 'ENABLED'
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY metrics.impressions DESC
+  LIMIT 50
+")
+
+STEP 3: Conversion-focused (Demand Gen with video)
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    metrics.conversions,
+    metrics.cost_per_conversion,
+    metrics.view_through_conversions,
+    metrics.cost_micros,
+    metrics.impressions
+  FROM campaign
+  WHERE campaign.advertising_channel_type = 'DEMAND_GEN'
+    AND campaign.status = 'ENABLED'
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY metrics.cost_micros DESC
+")
 ```
 
 ## Output: YouTube Ads Strategy Template

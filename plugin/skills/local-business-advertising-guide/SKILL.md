@@ -52,14 +52,14 @@ Invoke when user mentions:
 Budget: €500/month
 ├── Google Ads: €350/month (70%)
 │   ├── Search campaigns: €300 (~€10/day)
-│   └── Local campaigns: €50 (maps/local inventory)
+│   └── Performance Max (local): €50 (Google Maps, Display)
 └── Meta Ads: €150/month (30%)
     └── Local awareness + lead gen: €150 (~€5/day)
 
 Budget: €1,000/month
 ├── Google Ads: €700/month (70%)
 │   ├── Search campaigns: €550 (~€18/day)
-│   └── Local campaigns: €150
+│   └── Performance Max (local): €150
 └── Meta Ads: €300/month (30%)
     ├── Local awareness: €150
     └── Retargeting: €150
@@ -67,13 +67,15 @@ Budget: €1,000/month
 Budget: €2,000/month
 ├── Google Ads: €1,200/month (60%)
 │   ├── Search campaigns: €800 (~€27/day)
-│   ├── Local campaigns: €200
+│   ├── Performance Max (local): €200
 │   └── Display remarketing: €200
 └── Meta Ads: €800/month (40%)
     ├── Local awareness: €400
     ├── Lead generation: €250
     └── Retargeting: €150
 ```
+
+Note: Google deprecated standalone "Local campaigns" in 2022. Local inventory ads, Maps promotions, and local objectives are now managed through Performance Max campaigns with store goals enabled.
 
 ### Why 70/30 Google/Meta for Most Local Businesses
 

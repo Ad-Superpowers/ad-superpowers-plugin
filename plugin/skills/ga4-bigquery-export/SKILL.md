@@ -43,9 +43,10 @@ GA4 BIGQUERY EXPORT FLOW
 │       └─► Multiple times per day
 │
 └─► COST CONSIDERATIONS?
-    ├─► Storage: ~$0.02/GB/month
-    ├─► Queries: $5/TB scanned
-    └─► Optimize with partitioning
+    ├─► GA4 daily export itself: FREE (no GA360 needed)
+    ├─► BigQuery storage: ~$0.02/GB/month (GCP cost, not GA4)
+    ├─► Queries: $5/TB scanned (on-demand) or flat rate
+    └─► Optimize with partitioning to reduce query costs
 ```
 
 ## Configuring BigQuery Export
@@ -171,7 +172,6 @@ GROUP BY
 ORDER BY
   event_date, event_count DESC;
 
-
 -- 2. UNIQUE USERS PER DAY
 -- ───────────────────────
 SELECT
@@ -185,7 +185,6 @@ GROUP BY
   event_date
 ORDER BY
   event_date;
-
 
 -- 3. PAGE VIEWS WITH PAGE LOCATION
 -- ─────────────────────────────────
@@ -205,7 +204,6 @@ GROUP BY
 ORDER BY
   pageviews DESC
 LIMIT 100;
-
 
 -- 4. EXTRACT EVENT PARAMETERS
 -- ───────────────────────────
@@ -246,7 +244,6 @@ WHERE
 ORDER BY
   event_date DESC;
 
-
 -- 2. PRODUCT PERFORMANCE
 -- ──────────────────────
 SELECT
@@ -269,7 +266,6 @@ GROUP BY
 ORDER BY
   total_revenue DESC
 LIMIT 50;
-
 
 -- 3. CHECKOUT FUNNEL ANALYSIS
 -- ───────────────────────────
@@ -299,7 +295,6 @@ ORDER BY
     WHEN 'add_payment_info' THEN 4
     WHEN 'purchase' THEN 5
   END;
-
 
 -- 4. REVENUE PER TRAFFIC SOURCE
 -- ─────────────────────────────
@@ -361,7 +356,6 @@ WHERE event_sequence <= 10
 GROUP BY event_sequence, event_name
 ORDER BY event_sequence, occurrences DESC;
 
-
 -- 2. TIME TO CONVERSION
 -- ─────────────────────
 WITH first_visit AS (
@@ -406,7 +400,6 @@ ORDER BY
     WHEN '7-30 days' THEN 4
     ELSE 5
   END;
-
 
 -- 3. SESSION RECONSTRUCTION
 -- ─────────────────────────
@@ -571,7 +564,6 @@ Solution:
 ├── Verify billing is enabled
 └── Verify GA4 is receiving data
 
-
 PROBLEM: Discrepancy GA4 UI vs BigQuery
 ────────────────────────────────────────
 Causes:
@@ -588,7 +580,6 @@ Solution:
 ├── Filter on consent_granted if needed
 ├── Match timezones in queries
 
-
 PROBLEM: Queries too expensive
 ──────────────────────────────
 Causes:
@@ -604,7 +595,6 @@ Solution:
 ├── Use subqueries for nested data
 ├── ALWAYS use _TABLE_SUFFIX filter
 ├── Create scheduled queries/views
-
 
 PROBLEM: Event parameters missing
 ──────────────────────────────────

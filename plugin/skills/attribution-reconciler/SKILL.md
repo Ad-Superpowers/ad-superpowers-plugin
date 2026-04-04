@@ -8,7 +8,7 @@ metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
   platform: "cross-platform"
-  phase: "fase-3-attribution"
+  phase: "fase-1-foundation"
 compatibility: "Requires AdSuperpowers MCP server with multiple platform connections connection"
 ---
 # Cross-Platform Attribution Reconciler
@@ -25,6 +25,27 @@ Invoke when user mentions:
 - **Budget decisions:** "How do I allocate budget across channels?"
 - **Reconciliation:** "How do I reconcile attribution across channels?"
 - **Specific gaps:** "What's causing the 30% discrepancy I'm seeing?"
+
+## Required Tools
+
+Use these MCP tools to pull live data when diagnosing attribution discrepancies:
+
+| Tool | Purpose |
+|------|---------|
+| `ga4_run_report` | Pull GA4 Key Events (conversions) as neutral baseline |
+| `meta_query` | Pull Meta campaign conversions by attribution window |
+| `google_ads_run_gaql` | Pull Google Ads conversion data for comparison |
+| `tiktok_get_reports` | Pull TikTok conversion data |
+| `linkedin_get_analytics` | Pull LinkedIn conversion data |
+
+**Recommended diagnostic sequence:**
+```
+1. ga4_run_report(metrics=["keyEvents"], dimensions=["date"], date_range=[last 28 days])
+2. meta_query(fields=["campaign_name","actions","spend"], date_preset="last_28d")
+3. google_ads_run_gaql(query="SELECT campaign.name, metrics.conversions, metrics.cost_micros FROM campaign WHERE segments.date DURING LAST_28_DAYS")
+```
+
+---
 
 ## Quick Reference: Expected Discrepancies
 
@@ -62,7 +83,7 @@ These discrepancy ranges are **normal** and don't necessarily indicate a problem
 - [ ] Is server-side tracking (CAPI) set up?
 - [ ] Are event IDs deduplicated properly?
 - [ ] Are UTM parameters consistent across all ad URLs?
-- [ ] Is Consent Mode V2 implemented?
+- [ ] Is Consent Mode v2 implemented? (Required for EEA since March 2024 — includes `ad_user_data` and `ad_personalization` parameters)
 
 **Step 2: Attribution Settings**
 
@@ -70,7 +91,7 @@ These discrepancy ranges are **normal** and don't necessarily indicate a problem
 |----------|---------------|-----------------|
 | Meta | Settings > Attribution | 7-day click, 1-day view |
 | Google Ads | Tools > Conversions > Settings | Last-click (or DDA) |
-| GA4 | Admin > Attribution Settings | Cross-channel DDA |
+| GA4 | Admin > Attribution Settings | Cross-channel DDA (reports Key Events, not "Conversions") |
 | TikTok | Assets > Events > Attribution | 7-day click, 1-day view |
 | LinkedIn | Account Settings > Attribution | 30-day click, 7-day view |
 
@@ -112,9 +133,11 @@ The platform's algorithm optimizes based on its own signals. If you optimize Met
 *Example: Meta reports 100 conversions, GA4 shows 70. Optimize within Meta Ads Manager using Meta's 100.*
 
 #### 2. Cross-Channel Budget Allocation
-**Use: Unified BI or GA4 (with caveats)**
+**Use: Unified BI or GA4 Key Events (with caveats)**
 
 Need apples-to-apples comparison. GA4 uses consistent attribution across channels.
+
+> **Terminology note:** GA4 renamed "Conversions" to **Key Events** in 2024. In GA4 reports, look for "Key events" (formerly conversions). Google Ads still shows "Conversions" — those are imported from GA4 Key Events or set up via Google Ads conversion tracking. Don't confuse the two.
 
 **Caveats:**
 - GA4 underreports by 18-35%
@@ -122,11 +145,11 @@ Need apples-to-apples comparison. GA4 uses consistent attribution across channel
 - Or use MMM for strategic allocation
 
 #### 3. Reporting to Stakeholders
-**Use: GA4 as single source of truth + context**
+**Use: GA4 Key Events as single source of truth + context**
 
 Consistency matters for trust. Explain discrepancies upfront.
 
-*Script: "We use GA4 as our source of truth for cross-channel comparison. Note that GA4 captures ~70-80% of true conversions due to cookie restrictions. Platform dashboards show higher numbers due to view-through attribution and modeling."*
+*Script: "We use GA4 Key Events as our source of truth for cross-channel comparison. Note that GA4 captures ~70-80% of true conversions due to cookie restrictions. Platform dashboards show higher numbers due to view-through attribution and modeling."*
 
 #### 4. Strategic Planning
 **Use: Marketing Mix Modeling (MMM)**

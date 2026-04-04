@@ -430,6 +430,17 @@ Feedback loop: CRM outcomes → LinkedIn campaign optimization
 | LinkedIn Marketing API (manual) | Batch (manual pull) | High | Custom scoring models |
 | LinkedIn Lead Sync via HubSpot Connector | Real-time | Low | HubSpot users |
 
+### LinkedIn Revenue Attribution Reports
+
+LinkedIn's native Revenue Attribution Reports (available in Campaign Manager > Analyze > Revenue Attribution) connect LinkedIn ad exposure to CRM pipeline and revenue using direct CRM integration (Salesforce, HubSpot, Dynamics 365). This provides closed-loop reporting without manual CSV exports.
+
+**How it works:**
+1. Connect your CRM to LinkedIn Campaign Manager (native integration)
+2. LinkedIn matches contacts who saw/engaged with ads to CRM contacts
+3. Report shows: pipeline influenced, revenue influenced, deal stages, average deal size by campaign
+
+**When to use over manual tracking:** Any account spending >€5K/month on LinkedIn with a connected CRM. The data quality is significantly better than last-touch attribution.
+
 ### Closed-Loop Reporting
 
 The ultimate optimization is feeding CRM outcomes back to LinkedIn:

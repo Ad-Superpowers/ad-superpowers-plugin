@@ -255,7 +255,7 @@ HIGH CPM CAUSES:
 IMMEDIATE ACTIONS:
 ├── Expand audience (larger = cheaper)
 ├── Remove restrictive targeting
-├── Test different placements
+├── Test different placements (including Threads — new March 2026, lower CPM early stage)
 ├── Check audience overlap tool
 
 STRATEGIC ACTIONS:
@@ -415,6 +415,16 @@ IF ALL VERIFIED, THEN:
 ├── Document learnings
 ├── Archive for reference
 └── Reallocate budget to winners
+```
+
+## MCP: Pull Performance Data for Diagnosis
+
+```python
+# Get campaign-level performance metrics
+meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","status","spend","impressions","clicks","ctr","cpm","cpc","actions","cost_per_action_type","frequency"], date_range="last_7d", filters={"effective_status":["ACTIVE"]})
+
+# Get ad-level breakdown to isolate creative issues
+meta_query(account_id="act_XXXXX", entity="ads", fields=["id","name","status","spend","impressions","clicks","ctr","frequency","actions","quality_ranking","engagement_rate_ranking","conversion_rate_ranking"], date_range="last_7d", filters={"campaign_id":"<campaign_id>"})
 ```
 
 ## Troubleshooting Output Template

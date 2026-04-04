@@ -14,6 +14,8 @@ compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 
 Advisor for choosing the optimal Meta Ads attribution configuration based on product, buying cycle, and goals.
 
+> **January 2026 Attribution Change:** Meta removed 7-day view and 28-day view attribution windows. The new default is **7-day click + 1-day view**. Unique reach counts now have a **13-month retention limit**. If your reports compare to periods before January 2026, expect metric discontinuities for view-based attribution.
+
 ## Attribution Basics
 
 ### What Is Attribution?
@@ -27,7 +29,7 @@ Attribution Types:
 └── Engaged-View: Conversion after 10+ sec video view
 ```
 
-### Available Windows (Post-iOS 14)
+### Available Windows (Current)
 
 | Window Type | Options | Default |
 |-------------|---------|---------|
@@ -136,17 +138,17 @@ Note:
 - Always compare apples-to-apples
 ```
 
-## iOS 14+ Attribution
+## ATT Attribution Constraints
 
-### Impact Overview
+### Current State (Since iOS 14.5)
 
 ```
-iOS 14.5+ (App Tracking Transparency):
-├── Most users opt-out of tracking
-├── Limited conversion visibility
+App Tracking Transparency (ATT) — standard since 2021:
+├── ~75-85% of iOS users opt out of tracking
+├── Limited conversion visibility for opted-out users
 ├── Up to 72 hour delay for iOS conversions
-├── Aggregated Event Measurement (AEM)
-└── Modeled conversions by Meta
+├── Aggregated Event Measurement (AEM) for opted-out users
+└── Meta uses modeled conversions to fill gaps
 
 Practical Impact:
 ├── Reported conversions ~15-25% below actual
@@ -329,7 +331,7 @@ CONFIGURATION:
 | **Prospecting** | 7-day click | 1-day | Capture delayed conversions |
 | **Retargeting** | 7-day click | 1-day or None | Consider incrementality |
 | **Brand Awareness** | 7-day click | 1-day | Measure full impact |
-| **Dynamic Ads (DPA)** | 7-day click | 1-day | Standard e-commerce |
+| **Advantage+ Catalog Ads** | 7-day click | 1-day | Standard e-commerce (formerly DPA) |
 | **Lead Gen** | 7-day click | 1-day | Research-heavy decision |
 | **App Install** | 7-day click | 1-day | Standard mobile |
 
@@ -416,6 +418,16 @@ MEASURING VT CONTRIBUTION:
 ## Action Items
 □ [Action 1]
 □ [Action 2]
+```
+
+## MCP: Analyze Attribution Impact
+
+```python
+# Pull conversions broken down by attribution window to understand click vs view contribution
+meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","spend","actions","website_purchase_roas"], date_range="last_30d", action_attribution_windows=["1d_click","7d_click","1d_view"])
+
+# Compare 1d_click vs 7d_click vs 1d_view attribution for the same period
+meta_query(account_id="act_XXXXX", entity="adsets", fields=["id","name","actions","cost_per_action_type"], date_range="last_7d", action_attribution_windows=["1d_click","7d_click"])
 ```
 
 ## Best Practices

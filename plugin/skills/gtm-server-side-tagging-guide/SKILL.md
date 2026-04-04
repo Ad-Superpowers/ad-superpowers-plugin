@@ -39,7 +39,8 @@ Is accurate conversion tracking critical to your business?
     |
     +-- No
     |   |
-    |   Do you need Meta CAPI, Google Enhanced Conversions, or LinkedIn CAPI?
+    |   Do you need Google Enhanced Conversions or LinkedIn CAPI?
+    |   (Note: Meta CAPI is now mandatory — implement via sGTM or backend code)
     |   |
     |   +-- No ---> Stay client-side. sGTM won't add enough value.
     |   +-- Yes --> Consider sGTM. Server-side is the cleanest way to implement these.
@@ -65,7 +66,7 @@ Is accurate conversion tracking critical to your business?
 | Data enrichment | Add server-side data (CRM, margin, LTV) to events | E-commerce, SaaS |
 | Single point of control | All vendor tags managed server-side | Multi-platform advertisers |
 | Privacy compliance | PII never leaves your server | EU businesses under GDPR |
-| Meta CAPI quality score | Score 7+ with redundant setup | Meta advertisers spending >EUR 5k/mo |
+| Meta CAPI quality score | Score 7+ with redundant setup | All Meta advertisers (CAPI is now mandatory for signal quality) |
 
 | Cost | Estimate |
 |---|---|

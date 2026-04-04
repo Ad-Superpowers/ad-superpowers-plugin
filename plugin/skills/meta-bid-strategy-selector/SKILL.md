@@ -61,7 +61,7 @@ Meta gets as many results as possible within your budget, without a CPA limit.
 ### Setup
 ```
 Campaign Settings:
-├── Budget optimization: CBO or ABO
+├── Budget optimization: Advantage Campaign Budget or Ad Set Budget
 ├── Bid strategy: Highest Volume
 ├── No cost controls: Leave empty
 └── Conversion goal: Select optimization event
@@ -347,6 +347,16 @@ Post-Migration:
 □ Compare week-over-week
 □ Tighten targets if stable
 □ Document learnings
+```
+
+## MCP: Check Current Bid Strategy & Performance
+
+```python
+# Pull campaign-level bid strategy and spend for active campaigns
+meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","bid_strategy","daily_budget","status"], filters={"effective_status":["ACTIVE"]})
+
+# Pull ad set performance to evaluate current CPA vs target
+meta_query(account_id="act_XXXXX", entity="adsets", fields=["id","name","bid_strategy","bid_amount","optimization_goal","cost_per_result","spend","actions"], date_range="last_7d")
 ```
 
 ## Output: Strategy Recommendation Template

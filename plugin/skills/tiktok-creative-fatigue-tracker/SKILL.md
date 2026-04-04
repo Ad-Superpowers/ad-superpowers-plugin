@@ -1,352 +1,633 @@
 ---
 name: tiktok-creative-fatigue-tracker
 description: |
-  Detects and prevents creative fatigue on TikTok Ads, where ads fatigue 4x faster than Meta (3 days vs 2 weeks). Monitors key indicators, recommends rotation timing, and suggests recovery tactics.
-  Use when: user asks about TikTok ad fatigue, declining CTR on TikTok, when to refresh TikTok creatives, why TikTok CPM is spiking, or how many creatives they need for TikTok campaigns.
-  Do NOT use for: TikTok video hook/length optimization (use tiktok-video-performance-analyzer), TikTok benchmark lookups (use tiktok-benchmark-database), or TikTok learning phase questions (use tiktok-learning-phase-tracker).
+  Detects and prevents creative fatigue on Google Ads (Display, PMax, YouTube). Monitors asset ratings, performance decay, and recommends optimal refresh timing. Google Ads has the longest fatigue cycles (4-8 weeks) compared to other platforms.
+  
+  Use when: user asks about Google Ads creative fatigue, declining asset performance, when to refresh Google Ads creatives, PMax asset group performance, Display ad fatigue, or YouTube ad creative burnout.
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
-  platform: "tiktok"
+  platform: "google_ads"
   phase: "fase-3-campaigns-creative"
-compatibility: "Requires AdSuperpowers MCP server with TikTok Ads connection"
+compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
-# TikTok Creative Fatigue Tracker
+# Google Ads Creative Fatigue Tracker
 
 ## Purpose
 
-Detect and prevent creative fatigue on TikTok Ads. TikTok's novelty-driven algorithm causes ads to fatigue **4x faster** than Meta (3-7 days vs 14 days). This skill helps identify early warning signs and provides actionable refresh strategies.
+Detect and prevent creative fatigue on Google Ads across Display, Performance Max, and YouTube campaigns. Google Ads has **fundamentally different fatigue patterns** than Meta or TikTok - using asset ratings instead of frequency, with longer cycles (4-8 weeks vs 3-14 days).
 
-## The Critical Difference: TikTok vs Meta
+## The Critical Difference: Google Ads vs Other Platforms
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                     CREATIVE FATIGUE: TIKTOK vs META                         │
+│                  CREATIVE FATIGUE: PLATFORM COMPARISON                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  TIKTOK ADS                              META ADS                            │
-│  ──────────                              ─────────                           │
+│  GOOGLE ADS                TIKTOK ADS               META ADS                 │
+│  ──────────                ──────────               ─────────                │
 │                                                                              │
-│  Fatigue onset: ~3-7 days                Fatigue onset: ~14 days            │
-│  CTR decline: Cliff (-20-25%/day)        CTR decline: Gradual (-2%/day)     │
-│  CPM rise: Sudden (+5-10%/day)           CPM rise: Slow (+1-3%/day)         │
+│  Fatigue onset: 4-8 weeks  Fatigue onset: 3-7 days  Fatigue onset: ~14 days │
+│  Indicator: Ad Strength    Indicator: Frequency     Indicator: Frequency    │
+│  (PMax); Asset Labels      (Display still uses                               │
+│  (Display/RDA only)        performance labels)                               │
+│  CTR decline: Very gradual CTR decline: Cliff       CTR decline: Gradual    │
+│  (~0.5%/week)              (-20-25%/day)            (~2%/day)               │
 │                                                                              │
-│  ┌──────────────────────┐                ┌──────────────────────┐           │
-│  │ DAY 1-2: Learning    │                │ DAY 1-7: Learning    │           │
-│  │ DAY 2-4: Peak        │                │ DAY 7-10: Peak       │           │
-│  │ DAY 4-7: Decline     │                │ DAY 10-14: Decline   │           │
-│  │ DAY 7+: Severe       │                │ DAY 14+: Fatigue     │           │
-│  └──────────────────────┘                └──────────────────────┘           │
+│  ┌──────────────────────┐  ┌──────────────────────┐ ┌─────────────────────┐ │
+│  │ Week 1-2: Learning   │  │ Day 1-2: Learning    │ │ Day 1-7: Learning   │ │
+│  │ Week 3-4: Evaluating │  │ Day 2-4: Peak        │ │ Day 7-10: Peak      │ │
+│  │ Week 5-6: Optimize   │  │ Day 4-7: Decline     │ │ Day 10-14: Decline  │ │
+│  │ Week 7-8: Refresh    │  │ Day 7+: Severe       │ │ Day 14+: Fatigue    │ │
+│  └──────────────────────┘  └──────────────────────┘ └─────────────────────┘ │
 │                                                                              │
-│  Refresh: Every 3-5 days                 Refresh: Every 7-14 days           │
-│  Creatives needed: 8-12 per campaign     Creatives needed: 4-6 per ad set   │
+│  Refresh: Every 4-8 weeks  Refresh: Every 3-5 days  Refresh: Every 7-14 days│
+│  Asset minimum: 15+        Creatives needed: 8-12   Creatives needed: 4-6   │
 │                                                                              │
+│  ⚠️ Google Ads fatigues 4x SLOWER than Meta, 8x SLOWER than TikTok!          │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ## When to Use This Skill
 
 Invoke when user mentions:
-- **Fatigue questions:** "Is my TikTok ad fatiguing?"
-- **Timing questions:** "When should I refresh my TikTok creatives?"
-- **Performance drops:** "Why did my TikTok CPM spike suddenly?"
-- **Creative planning:** "How many creatives do I need for TikTok?"
-- **Prevention:** "How do I prevent TikTok creative fatigue?"
+- **Performance questions:** "My Google Ads CTR is declining slowly"
+- **Asset questions:** "What do PMax asset ratings mean?"
+- **Timing questions:** "When should I refresh my Google Ads creatives?"
+- **PMax specific:** "My asset group performance is degrading"
+- **Display specific:** "My RDA performance is dropping"
+- **YouTube specific:** "My video ad is getting fewer views"
 
-## Fatigue Detection Algorithm
+## Google Ads Fatigue Detection: Asset Ratings
 
-### Warning Signs & Thresholds
+### Understanding Asset Ratings (Primary Indicator for Display/RDA — Removed for PMax)
 
-| Signal | Warning | Critical | Severity |
-|--------|---------|----------|----------|
-| **CTR decline** | >15% decline within 3 days | >30% decline within 3 days | Warning → Critical |
-| **CPM spike** | >20% increase over baseline | >40% increase over baseline | Warning → Critical |
-| **CPA rise** | >20% increase (no budget/audience change) | >50% increase | Warning → Critical |
-| **Frequency** | >4/week prospecting | >2/day OR >6-10/week | Warning → Urgent |
-| **Days active** | >5 days | >7 days | Warning → Critical |
-
-### Fatigue Detection Decision Tree
+Google Ads uses **asset performance ratings** for Display (RDA) campaigns. Note the critical API change:
 
 ```
+GOOGLE ADS ASSET RATING SYSTEM
+══════════════════════════════
+
+⚠️ CRITICAL API CHANGE (v22, 2025):
+   Asset performance labels (Best/Good/Low/Pending) were REMOVED for
+   Performance Max campaigns in API v22. They are still available for
+   Display (RDA) campaigns.
+
+   For PMax fatigue detection, use PERFORMANCE TRENDS instead of asset labels.
+   See "PMax Fatigue Detection" section below.
+
+RATING MEANINGS (Display/RDA only):
+─────────────────────────────────────
+┌─────────────┬─────────────────────────────────────────────────────────────┐
+│ Rating      │ What It Means                                               │
+├─────────────┼─────────────────────────────────────────────────────────────┤
+│ Best        │ Outperforms other assets - KEEP and create variations       │
+│ Good        │ Average or above - KEEP, monitor for changes                │
+│ Low         │ Underperforms vs others - REPLACE after 30+ days of "Low"   │
+│ Pending     │ Insufficient data - WAIT (needs 2-4 weeks minimum)          │
+└─────────────┴─────────────────────────────────────────────────────────────┘
+
+⚠️ Ratings are RELATIVE within your asset group
+   "Low" doesn't mean bad in absolute terms - just worse than others
+
+⚠️ Minimum assets needed for meaningful ratings: 3-5 per type
+   Without enough assets, ratings can't be calculated properly
+```
+
+### Fatigue Detection by Campaign Type
+
+#### Performance Max Asset Groups
+
+```
+PMAX CREATIVE FATIGUE DETECTION
+═══════════════════════════════
+
+⚠️ NOTE: Asset performance labels (Best/Good/Low) were REMOVED for PMax
+   in API v22. For PMax, rely on performance trends and search term data.
+
+SIGNAL 1: PERFORMANCE TRENDS (Primary for PMax)
+────────────────────────────────────────────────
+Weekly tracking:
+├── CTR decline: >10% week-over-week for 2+ weeks
+├── Conv Rate decline: >15% from baseline
+├── CPM rise: >20% without competition changes
+└── ROAS decline: >15% sustained over 2+ weeks
+
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    segments.week,
+    metrics.impressions,
+    metrics.clicks,
+    metrics.ctr,
+    metrics.cost_micros,
+    metrics.conversions,
+    metrics.conversions_value
+  FROM campaign
+  WHERE campaign.advertising_channel_type = 'PERFORMANCE_MAX'
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY campaign.name, segments.week ASC
+")
+
+SIGNAL 2: SEARCH TERM QUALITY (v21+ PMax feature)
+────────────────────────────────────────────────────
+Declining search query quality = early creative/signal fatigue signal:
+
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    campaign_search_term_view.search_term,
+    campaign_search_term_view.status,
+    metrics.impressions,
+    metrics.clicks,
+    metrics.cost_micros,
+    metrics.conversions
+  FROM campaign_search_term_view
+  WHERE campaign.advertising_channel_type = 'PERFORMANCE_MAX'
+    AND segments.date DURING LAST_14_DAYS
+    AND metrics.cost_micros > 0
+  ORDER BY metrics.cost_micros DESC
+  LIMIT 100
+")
+→ Surge in irrelevant search terms + declining conv rate = creative/audience signal fatigue
+
+SIGNAL 3: ASSET GROUP PERFORMANCE
+─────────────────────────────────
+Compare asset groups:
+├── Declining vs stable asset groups
+├── Watch for consistent underperformers
+└── Budget share shifting away automatically
+
+FATIGUE TIMELINE (PMAX):
+────────────────────────
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                    IS MY TIKTOK CREATIVE FATIGUED?                           │
+│ WEEK 1-2: LEARNING PHASE                                                     │
+│ ├── Asset ratings: "Pending"                                                │
+│ ├── No changes - let system learn                                           │
+│ └── Monitor delivery and basics only                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ WEEK 3-4: EVALUATION PHASE                                                   │
+│ ├── First ratings appear (may be unstable)                                  │
+│ ├── Note initial performers                                                 │
+│ └── Still too early for optimization                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ WEEK 5-6: FIRST OPTIMIZATION                                                 │
+│ ├── Ratings stabilize                                                       │
+│ ├── Replace consistently "Low" assets                                       │
+│ ├── Add variations of "Best" performers                                     │
+│ └── This is your baseline performance                                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ WEEK 7-8+: ONGOING OPTIMIZATION / FATIGUE WATCH                              │
+│ ├── Monthly 20-30% asset refresh                                            │
+│ ├── Watch for Best→Good→Low transitions                                     │
+│ ├── Seasonal/promotional updates                                            │
+│ └── Fatigue signs typically appear here                                     │
 └─────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-                         Check Frequency
-                                    │
-            ┌───────────────────────┼───────────────────────────┐
-            │                       │                           │
-            ▼                       ▼                           ▼
-    FREQUENCY LOW            FREQUENCY MODERATE          FREQUENCY HIGH
-    (<4/week)                (4-6/week)                  (>6/week or >2/day)
-            │                       │                           │
-            ▼                       ▼                           ▼
-    Check CTR trend          Check CTR trend             FATIGUE LIKELY
-            │                       │                    Confirm with CTR
-            │               ┌───────┴───────┐                   │
-            │               ▼               ▼                   │
-            │         CTR STABLE      CTR DECLINING             │
-            │         (±10%)          (>15% in 3 days)          │
-            │               │               │                   │
-            │               ▼               ▼                   │
-            │         Not fatigued    Check CPM trend           │
-            │         (rare for TikTok)     │                   │
-            │                       ┌───────┴───────┐           │
-            │                       ▼               ▼           │
-            │                   CPM STABLE     CPM RISING       │
-            │                       │          (>20%)           │
-            │                       ▼               ▼           │
-            │                   Audience      FATIGUE           │
-            │                   issue         CONFIRMED ────────┘
-            │                                      │
-            └──────────────────────────────────────┘
-                                    │
-                                    ▼
-                         ACTION: REFRESH OR KILL
 ```
 
-### Fatigue Timeline
-
-| Phase | Days | What's Happening | Action |
-|-------|------|------------------|--------|
-| **Learning** | 1-2 | Metrics stabilizing | Don't touch |
-| **Peak** | 2-4 | Best performance window | Monitor daily |
-| **Early decline** | 4-5 | Fatigue signs appearing | Prepare refresh |
-| **Fatigue** | 5-7 | Performance degrading | Refresh immediately |
-| **Severe** | 7+ | Significant fatigue | Kill and replace |
-
-## Refresh vs Kill Decision Framework
+#### Display Campaigns (RDA)
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    REFRESH vs KILL DECISION                                  │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-                    How severe is the decline?
-                                    │
-            ┌───────────────────────┼───────────────────────────┐
-            │                       │                           │
-            ▼                       ▼                           ▼
-      MODERATE                  SEVERE                    CRITICAL
-   CTR -10-15%               CTR -15-30%                CTR >30% below
-   CPM +15-20%               CPM +20-40%                average for 48h
-            │                       │                           │
-            ▼                       ▼                           ▼
-       REFRESH                   TEST                        KILL
-   Minor tweaks:              New version:               Pause immediately
-   - New hook                 - Different angle          Do not revive
-   - Different music          - New format               Replace completely
-   - Add text overlay         - UGC version
-   - Change thumbnail
+DISPLAY / RDA CREATIVE FATIGUE DETECTION
+════════════════════════════════════════
+
+SIGNAL 1: ASSET PERFORMANCE LABELS (Still available for Display/RDA)
+──────────────────────────────────────────────────────────────────────
+Rating system for Display (RDA) — unlike PMax, still active for Display:
+├── Best/Good/Low/Pending
+├── Check Ads → Assets → View asset details
+└── Replace "Low" after 30+ days consistent
+
+google_ads_run_gaql(query="
+  SELECT
+    ad_group.name,
+    campaign.name,
+    ad_group_ad.ad.responsive_display_ad.headlines,
+    asset_group_asset.performance_label,
+    metrics.impressions,
+    metrics.ctr,
+    metrics.cost_micros,
+    metrics.conversions
+  FROM ad_group_ad
+  WHERE campaign.advertising_channel_type = 'DISPLAY'
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY metrics.cost_micros DESC
+")
+
+SIGNAL 2: AD PERFORMANCE METRICS
+────────────────────────────────
+┌─────────────────┬──────────────┬──────────────┬────────────────────────────┐
+│ Metric          │ Healthy      │ Warning      │ Critical (Fatigue Likely)  │
+├─────────────────┼──────────────┼──────────────┼────────────────────────────┤
+│ CTR             │ >0.3%        │ 0.1-0.3%     │ <0.1% sustained            │
+│ CTR decline     │ <5%/month    │ 5-10%/month  │ >10%/month                 │
+│ Conv Rate       │ >1%          │ 0.5-1%       │ <0.5% declining            │
+│ CPA increase    │ <10%         │ 10-25%       │ >25% from baseline         │
+└─────────────────┴──────────────┴──────────────┴────────────────────────────┘
+
+SIGNAL 3: PLACEMENT FATIGUE
+───────────────────────────
+High-performing placements declining:
+├── Check per-placement performance
+├── Top sites showing CTR decline
+└── May indicate audience saturation on those sites
+
+DISPLAY FATIGUE TIMELINE:
+────────────────────────
+├── Week 1-2: Learning (don't touch)
+├── Week 3-4: First optimization opportunity
+├── Week 5-8: Monitor for decline patterns
+├── Week 8+: Plan refresh if decline detected
+└── Monthly: 20-30% creative refresh recommended
 ```
 
-### Refresh Actions (Minor Tweaks)
+#### YouTube Campaigns
 
-When CTR declines 10-15% or CPM rises 15-20%:
+```
+YOUTUBE VIDEO AD FATIGUE DETECTION
+══════════════════════════════════
 
-1. **New hook** (first 2 seconds) - highest impact
-2. **Different music/sound** - TikTok-specific lever
-3. **Add text overlay** - reinforces message
-4. **Change thumbnail** - improves click-through
-5. **Speed up pacing** - maintains attention
+SIGNAL 1: VIEW-THROUGH RATE (VTR) DECLINE
+─────────────────────────────────────────
+Skippable in-stream ads:
+├── Healthy: >25-30% VTR
+├── Warning: 20-25% VTR (declining)
+├── Fatigue: <20% VTR or >15% decline from peak
+└── Severe: <15% VTR
 
-### Kill Criteria (Pause Immediately)
+SIGNAL 2: WATCH TIME METRICS
+────────────────────────────
+├── Average % viewed declining
+├── Drop-off points shifting earlier
+├── "Skip" behavior increasing
+└── Engagement (likes/comments) declining
 
-- CTR falls >30% below campaign average
-- CPA >2x baseline for 48 hours
-- Negative comments/feedback rising
-- Policy violation risk
+SIGNAL 3: CPV TRENDS
+────────────────────
+├── Healthy: Stable or declining CPV
+├── Warning: +10-20% CPV increase
+├── Fatigue: +30%+ CPV increase
+└── Combined with VTR decline = confirmed fatigue
 
-**Do NOT attempt to revive severely fatigued creative.**
+YOUTUBE FATIGUE TIMELINE:
+─────────────────────────
+├── Week 1-2: Learning (delivery ramp-up)
+├── Week 3-4: Peak performance
+├── Week 5-8: Stable performance expected
+├── Week 8-12: Watch for fatigue signs
+├── Week 12+: Most videos show some fatigue
+└── Typical video lifespan: 8-16 weeks
+```
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
 
 ## Prevention Strategies
 
-### Creative Rotation Schedule
+### Asset Library Requirements
 
-| Scenario | Refresh Every | Creatives Needed |
-|----------|--------------|------------------|
-| Standard | 5-7 days | 8-12 per campaign |
-| High budget | 3-4 days | 12-15 per campaign |
-| Exploration phase | Weekly (1-2 assets) | 8-10 active |
-| Scaling phase | Biweekly (2-3 assets) | 10-12 active |
+```
+GOOGLE ADS CREATIVE REQUIREMENTS
+════════════════════════════════
+
+PERFORMANCE MAX:
+───────────────
+Per Asset Group (for healthy rotation):
+├── Headlines: 5-15 (aim for 10+)
+├── Long Headlines: 3-5
+├── Descriptions: 4-5
+├── Images (landscape): 5-10
+├── Images (square): 5-10
+├── Images (portrait): 3-5
+├── Logos: 2-3
+├── Videos: 2-5 (highly recommended)
+└── TOTAL: 40+ assets per asset group
+
+DISPLAY (RDA):
+──────────────
+├── Landscape Images: 5
+├── Square Images: 5
+├── Short Headlines: 5
+├── Long Headline: 1
+├── Descriptions: 5
+├── Logos: 2
+├── Videos: 1-5 (optional but recommended)
+└── TOTAL: 25+ assets per ad
+
+YOUTUBE:
+────────
+├── Video variants: 3-5 per campaign
+├── Different lengths: 6s, 15s, 30s, 60s+
+├── Different hooks: Test first 5 seconds
+├── Different CTAs: Various call-to-actions
+└── Companion banners: Match video style
+```
+
+### Refresh Schedule
+
+```
+GOOGLE ADS CREATIVE REFRESH SCHEDULE
+════════════════════════════════════
+
+WEEKLY CHECKS:
+──────────────
+□ Asset ratings changes
+□ Major metric shifts (>10% any direction)
+□ Disapproved ads
+□ "Limited" warnings
+
+BI-WEEKLY ACTIONS:
+──────────────────
+□ Replace any asset consistently "Low" for 30+ days
+□ Add 1-2 new image variations
+□ Test new headline angles
+□ Review video performance
+
+MONTHLY REFRESH (CRITICAL):
+───────────────────────────
+□ Replace 20-30% of assets
+□ Add seasonal/promotional content
+□ New image concepts
+□ Fresh headline/description copy
+□ Review and update audience signals (PMax)
+
+QUARTERLY OVERHAUL:
+──────────────────
+□ Full creative strategy review
+□ New photoshoot/video production
+□ Brand guideline updates
+□ Competitive creative analysis
+□ Test new formats (if available)
+
+SEASONAL CALENDAR:
+──────────────────
+├── 3-4 weeks before peak: Upload seasonal assets
+├── During peak: Monitor performance daily
+├── After peak: Return to evergreen content
+└── Always maintain evergreen baseline
+
+REFRESH VOLUME BY SCENARIO:
+───────────────────────────
+┌─────────────────┬───────────────────┬────────────────────────────────────┐
+│ Scenario        │ Refresh Frequency │ Volume                             │
+├─────────────────┼───────────────────┼────────────────────────────────────┤
+│ Stable perform  │ Monthly           │ 20% of assets                      │
+│ Slight decline  │ Bi-weekly         │ 30% of assets                      │
+│ Clear fatigue   │ Weekly            │ 50% of assets over 2 weeks         │
+│ Severe fatigue  │ Immediate         │ 100% (full refresh)                │
+│ Seasonal peak   │ Pre-peak          │ Add 30-50% new seasonal assets     │
+└─────────────────┴───────────────────┴────────────────────────────────────┘
+```
 
 ### Content Mix for Longevity
 
 ```
-TIKTOK CREATIVE MIX (RECOMMENDED)
-──────────────────────────────────
+GOOGLE ADS CREATIVE MIX (RECOMMENDED)
+═════════════════════════════════════
 
-UGC Content: 60-70%
-├─ Fatigues 20-30% slower than polished
-├─ +1-2 days extended lifespan
-├─ Best for: Prospecting, awareness, Gen Z
-└─ Use: Creator partnerships, customer testimonials
+IMAGE MIX:
+──────────
+Product shots: 40%
+├── Clean product imagery
+├── Multiple angles
+├── White/neutral backgrounds
+└── Typical lifespan: 8-12 weeks
 
-Polished Content: 20-30%
-├─ 2-3 day typical lifespan
-├─ Use sparingly
-├─ Best for: Brand launches, premium positioning
-└─ Rotate most frequently
+Lifestyle images: 40%
+├── Products in context
+├── People using products
+├── Emotional appeal
+└── Typical lifespan: 6-10 weeks
 
-Lo-fi/Native Content: 10%
-├─ Looks organic (not "ad-like")
-├─ Often best CTR
-├─ Best for: Authenticity, scroll-stopping
-└─ POV videos, behind-the-scenes
+Promotional/Seasonal: 20%
+├── Sale imagery
+├── Holiday themes
+├── Limited time offers
+└── Typical lifespan: Campaign duration
+
+HEADLINE MIX:
+─────────────
+Brand headlines: 20%
+├── "[Brand] Official"
+├── "Shop [Brand] Online"
+└── Long lifespan (rarely fatigue)
+
+Benefit headlines: 30%
+├── "Free Shipping"
+├── "30-Day Returns"
+└── Medium lifespan
+
+Action headlines: 30%
+├── "Shop Now"
+├── "Get Yours Today"
+└── Medium lifespan
+
+Promotional headlines: 20%
+├── "Up to 50% Off"
+├── "New Arrivals"
+└── Short lifespan (rotate frequently)
+
+VIDEO MIX (For PMax/YouTube):
+─────────────────────────────
+Product demos: 30%
+├── How it works
+├── Feature showcase
+└── Lifespan: 12-16 weeks
+
+Testimonials: 30%
+├── Customer reviews
+├── Social proof
+└── Lifespan: 8-12 weeks
+
+Brand story: 20%
+├── Company values
+├── Behind the scenes
+└── Lifespan: 16+ weeks
+
+Short-form (6-15s): 20%
+├── Quick promos
+├── Bumper ads
+└── Lifespan: 6-10 weeks
 ```
-
-### Variation Types to Prepare (8-12 per campaign)
-
-1. **Different hooks** (question, shocking stat, POV, pattern interrupt)
-2. **Different creators/faces** (diversity extends reach)
-3. **Different video lengths** (6s, 15s, 30s)
-4. **Different music/sounds** (trending vs custom)
-5. **Different editing styles** (fast cuts, continuous, split screen)
-6. **Spark Ads vs regular ads** (organic boost vs controlled)
-
-### Frequency Caps
-
-| Campaign Type | Recommended Cap | Action |
-|--------------|-----------------|--------|
-| Prospecting | 4-5 impressions/user/week | Use TikTok automated rules |
-| Retargeting | 6-8 impressions/user/week | Monitor daily |
-| Awareness | Can go higher | Watch for CTR decline |
 
 ## Recovery Playbook
 
-### When Creative is Fatigued
-
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                    TIKTOK FATIGUE RECOVERY                                   │
+│                    GOOGLE ADS FATIGUE RECOVERY                               │
 └─────────────────────────────────────────────────────────────────────────────┘
                                     │
                                     ▼
-                First: Try NEW CREATIVE
-                (Most effective lever - 15-25% CTR lift)
+                First: REPLACE LOW-PERFORMING ASSETS
+                (Most important action)
                                     │
                     ┌───────────────┴───────────────┐
                     │                               │
                     ▼                               ▼
-            WORKS (+15-25% CTR)           DOESN'T WORK
-                    │                               │
-                    ▼                               ▼
-             Continue with                Second: Try NEW AUDIENCE
-             new creative                 (10-20% expansion)
-                                                   │
+            WORKS                           DOESN'T WORK
+            (Ratings improve,                      │
+            metrics stabilize)                     │
+                    │                               ▼
+                    ▼                  Second: ADD NEW CREATIVE CONCEPTS
+             Monitor &                  (Not just variations - new angles)
+             Continue                              │
                                     ┌───────────────┴───────────────┐
                                     │                               │
                                     ▼                               ▼
                             WORKS                           STILL STRUGGLING
-                            (Extends 3-5 days)                     │
-                                    │                               ▼
-                                    ▼                  Third: COMBINED APPROACH
-                             Scale up               New creative + new audience
-                                                    + budget reallocation
+                                    │                               │
+                                    ▼                               ▼
+                             Scale up              Third: REVIEW TARGETING/AUDIENCE
+                                                   (PMax audience signals,
+                                                    Display audiences)
+                                                              │
+                                                              ▼
+                                                   Fourth: CAMPAIGN RESTRUCTURE
+                                                   (New asset groups, fresh start)
 ```
 
-### Budget Reallocation Strategy
+### Budget Reallocation During Recovery
 
-**TikTok-Specific Approach:**
-- Reallocate 30-50% weekly to new creative experiments
-- Reserve 20% for proven high performers (evergreen reserve)
-- Rotate aggressively - TikTok rewards freshness
+```
+BUDGET STRATEGY DURING FATIGUE
+══════════════════════════════
 
-### Recovery Impact by Tactic
+HEALTHY STATE:
+──────────────
+├── Continue normal budget
+├── 10% allocated to creative testing
+└── Standard optimization cadence
 
-| Tactic | Expected Impact | Best Use Case |
-|--------|-----------------|---------------|
-| New creative | +15-25% CTR lift immediately | Always try first |
-| Audience expansion | Extends reach 3-5 days | When creative is strong |
-| Combined approach | Best for scaling | Broad budgets |
-| Budget reallocation | Sustained performance | Ongoing optimization |
+WARNING STATE:
+──────────────
+├── Maintain budget (don't reduce)
+├── Increase testing budget to 20%
+├── Accelerate creative production
+└── Daily monitoring
+
+CRITICAL STATE:
+───────────────
+├── Reduce budget 20-30% temporarily
+├── Reallocate to fresh creatives/campaigns
+├── Aggressive creative refresh
+├── Consider pausing worst performers
+└── Plan full campaign rebuild if needed
+```
 
 ## Benchmarks
 
-### Healthy Metrics
+### Healthy Performance Metrics
 
-| Metric | Healthy | Warning | Critical |
-|--------|---------|---------|----------|
-| CTR | >1.5% | 1.0-1.5% declining | <1.0% |
-| CPM | Platform avg for vertical | +10-20% above baseline | +30%+ above baseline |
-| Frequency | <4/week prospecting | 4-6/week | >6/week |
-| CPA | At or below target | +10-20% above target | +50%+ above target |
+```
+GOOGLE ADS CREATIVE HEALTH BENCHMARKS
+═════════════════════════════════════
+
+PERFORMANCE MAX:
+───────────────
+┌─────────────────┬──────────────┬──────────────┬──────────────┐
+│ Metric          │ Healthy      │ Warning      │ Critical     │
+├─────────────────┼──────────────┼──────────────┼──────────────┤
+│ "Best" assets   │ 20-30%       │ 10-20%       │ <10%         │
+│ "Low" assets    │ <20%         │ 20-40%       │ >40%         │
+│ CTR trend       │ Stable/up    │ -5-10%/month │ >-10%/month  │
+│ ROAS trend      │ Stable/up    │ -10-15%      │ >-15%        │
+│ Conv Rate       │ Stable/up    │ -10-20%      │ >-20%        │
+└─────────────────┴──────────────┴──────────────┴──────────────┘
+
+DISPLAY (RDA):
+──────────────
+┌─────────────────┬──────────────┬──────────────┬──────────────┐
+│ Metric          │ Healthy      │ Warning      │ Critical     │
+├─────────────────┼──────────────┼──────────────┼──────────────┤
+│ CTR             │ >0.3%        │ 0.15-0.3%    │ <0.15%       │
+│ Conv Rate       │ >1%          │ 0.5-1%       │ <0.5%        │
+│ CPA trend       │ Stable       │ +10-25%      │ >+25%        │
+│ Asset ratings   │ Mixed B/G    │ Many "Low"   │ Mostly "Low" │
+└─────────────────┴──────────────┴──────────────┴──────────────┘
+
+YOUTUBE:
+────────
+┌─────────────────┬──────────────┬──────────────┬──────────────┐
+│ Metric          │ Healthy      │ Warning      │ Critical     │
+├─────────────────┼──────────────┼──────────────┼──────────────┤
+│ VTR (skippable) │ >30%         │ 20-30%       │ <20%         │
+│ CPV trend       │ Stable/down  │ +10-30%      │ >+30%        │
+│ Avg % viewed    │ >40%         │ 25-40%       │ <25%         │
+│ Engagement      │ Stable/up    │ Declining    │ Dropped >50% │
+└─────────────────┴──────────────┴──────────────┴──────────────┘
+```
 
 ### Platform Comparison
 
-| Metric | TikTok | Meta |
-|--------|--------|------|
-| Fatigue onset | 3-7 days | 14 days |
-| CTR pattern | Convex (plateau then cliff) | Linear (gradual descent) |
-| CTR daily decline after peak | 20-25% | ~2% |
-| CPM daily increase post-fatigue | +5-10% | +1-3% |
-| Creatives needed | 8-12 | 4-6 |
+```
+CREATIVE FATIGUE: GOOGLE ADS vs OTHERS
+══════════════════════════════════════
+
+┌─────────────────────┬─────────────┬─────────────┬─────────────┐
+│ Factor              │ Google Ads  │ Meta        │ TikTok      │
+├─────────────────────┼─────────────┼─────────────┼─────────────┤
+│ Fatigue onset       │ 4-8 weeks   │ ~14 days    │ 3-7 days    │
+│ Primary indicator   │ Ad Strength │ Frequency   │ Frequency   │
+│                     │ (PMax v22+) │             │             │
+│                     │ Asset Label │             │             │
+│                     │ (Display)   │             │             │
+│ Decline pattern     │ Very gradual│ Gradual     │ Cliff/sudden│
+│ Refresh frequency   │ Monthly     │ Bi-weekly   │ Every 3-5d  │
+│ Assets needed       │ 15+ per AG  │ 4-6 per set │ 8-12 per    │
+│ Learning phase      │ 2-4 weeks   │ ~7 days     │ 1-2 days    │
+│ Video importance    │ High (PMax) │ Medium      │ Critical    │
+│ Seasonality impact  │ High        │ Medium      │ Lower       │
+└─────────────────────┴─────────────┴─────────────┴─────────────┘
+```
 
 ## Output Template
 
-When diagnosing TikTok creative fatigue, provide:
+When diagnosing Google Ads creative fatigue, provide:
 
 ```
-## TikTok Creative Fatigue Analysis
 
-### Fatigue Score: X/10
-(10 = severe fatigue)
 
-**Components:**
-- CTR trend: [score] - [detail]
-- CPM trend: [score] - [detail]
-- Frequency: [score] - [detail]
-- Days active: [score] - [detail]
+See [detailed-reference.md](references/detailed-reference.md) for details.
 
-### Status: [Healthy / Warning / Critical]
 
-### Current Metrics vs Benchmarks
-| Metric | Current | Benchmark | Status |
-|--------|---------|-----------|--------|
-| CTR | X% | >1.5% | [status] |
-| CPM | $X | $X avg | [status] |
-| Frequency | X/week | <4/week | [status] |
-| Days active | X days | <5 days | [status] |
-
-### Recommendation: [Refresh / Kill / Continue]
-
-**Immediate Actions:**
-1. [Action 1]
-2. [Action 2]
-
-**Creative Suggestions:**
-- [Specific refresh idea based on analysis]
-- [Alternative approach]
-
-**Rotation Schedule:**
-- Next refresh: [date/timing]
-- Creatives needed in pipeline: [number]
-```
 
 ## Monitoring Checklist
 
-### Daily Checks
-- [ ] CTR trend (last 3 days)
-- [ ] CPM trend (last 3 days)
-- [ ] Frequency by creative
-- [ ] Days since creative launch
-- [ ] CPA trend
-
 ### Weekly Checks
-- [ ] Calculate fatigue score per creative
-- [ ] Identify refresh candidates
-- [ ] Review creative library depth (need 8-12)
-- [ ] Plan next week's refreshes
-- [ ] Analyze top/bottom performers
+- [ ] Asset ratings in PMax/Display
+- [ ] CTR trend (last 7 days vs previous 7)
+- [ ] Any "Limited" or warning flags
+- [ ] Top/bottom performing assets
+
+### Bi-Weekly Checks
+- [ ] Overall performance trend (2-week window)
+- [ ] Identify consistently "Low" assets (30+ days)
+- [ ] Plan asset replacements
+- [ ] Review competitive landscape
 
 ### Monthly Review
-- [ ] Average creative lifespan analysis
-- [ ] UGC vs polished performance comparison
-- [ ] Rotation cadence effectiveness
-- [ ] Budget allocation vs creative performance
+- [ ] Full asset audit (all ratings)
+- [ ] Execute 20-30% refresh
+- [ ] Compare to previous month
+- [ ] Update seasonal content
+- [ ] Document learnings
+
+### Quarterly Review
+- [ ] Creative strategy assessment
+- [ ] Asset performance analysis
+- [ ] Production planning for next quarter
+- [ ] Test new formats/approaches
+- [ ] Budget vs creative performance
 
 ---
 
-*Based on 2025-2026 TikTok Ads research. TikTok creative fatigue is fundamentally different from other platforms - plan for 4x faster refresh cycles.*
+*Based on 2025-2026 Google Ads research. Google Ads creative fatigue is fundamentally different from Meta/TikTok - longer cycles, asset ratings vs frequency, and gradual decline patterns. Plan for 4-8 week refresh cycles.*

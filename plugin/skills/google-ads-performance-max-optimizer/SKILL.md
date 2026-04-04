@@ -14,6 +14,25 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Performance Max Optimizer
 
 Complete guide for setting up, optimizing and scaling Google Ads Performance Max campaigns for e-commerce and lead generation.
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
+
+
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+
+
+
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+
+
 ## Audience Signals
 
 ### Important Nuance: Signals != Targeting
@@ -114,7 +133,9 @@ SEARCH THEMES SETUP
 RECOMMENDATIONS PER ASSET GROUP:
 +-- Count: 3-7 themes per asset group
 +-- Type: Mix of broad and specific
-+-- No negative keywords possible in PMax
++-- Negative keywords: Campaign-level negatives ARE supported (v20+ feature)
++--   Apply via google_ads_mutate (campaign_criterion with negative=true)
++--   Account-level negative keyword lists also apply to PMax
 
 EXAMPLE (Fashion E-commerce):
 Asset Group: Winter Jackets
@@ -137,6 +158,13 @@ TIPS:
 +-- Check Search Terms report for ideas
 +-- Update monthly based on performance
 ```
+
+
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+
+
 ## Channel Performance Analysis
 
 ### Insights Reporting (2025+)
@@ -166,14 +194,35 @@ WHAT TO ANALYZE:
 ### Asset Performance Optimization
 
 ```
-ASSET PERFORMANCE RATINGS
-=========================
+ASSET PERFORMANCE (AD STRENGTH — PMax primary signal since v22)
+================================================================
 
-RATINGS SYSTEM:
-+-- Best: Highest performance, keep running
-+-- Good: Solid performance, monitor
-+-- Low: Underperforming, replace after 30 days
-+-- Pending: Not enough data yet
+⚠️ Performance labels (Best/Good/Low/Pending) were REMOVED for PMax
+   campaigns in API v22. Use Ad Strength as the primary asset quality
+   signal for PMax.
+
+AD STRENGTH RATINGS:
++-- Excellent: Best setup, keep structure
++-- Good: Solid, consider adding variety
++-- Average: Add more diverse assets
++-- Poor: Immediate overhaul needed
+
+Monitor via:
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    asset_group.name,
+    asset_group.ad_strength,
+    asset_group.status,
+    metrics.impressions,
+    metrics.clicks,
+    metrics.cost_micros,
+    metrics.conversions,
+    metrics.conversions_value
+  FROM asset_group
+  WHERE segments.date DURING LAST_30_DAYS
+  ORDER BY metrics.cost_micros DESC
+")
 
 OPTIMIZATION WORKFLOW:
 -----------------------
@@ -189,6 +238,18 @@ Monthly:
 +-- Seasonal updates
 +-- Analyze performance trends
 ```
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
 
 ## Google Ads Script: PMax Performance Monitor
 
@@ -357,6 +418,52 @@ function sendAlertEmail(alerts) {
 }
 ```
 
+## PMax 2025-2026 Feature Updates
+
+```
+PMAX RECENT UPDATES (IMPORTANT FOR OPTIMIZATION)
+==================================================
+
+v20 (2024): Campaign-level negative keywords
++-- PMax now supports negative keywords at campaign level
++-- Apply via: google_ads_mutate (campaign_criterion, negative=true)
++-- Account-level shared negative keyword lists also apply
+
+v21 (2025): Search term reporting + Smart Bidding Exploration
++-- Use campaign_search_term_view (NOT search_term_view) for PMax queries
++-- Smart Bidding Exploration: target_roas_tolerance_percent_millis
++-- Brand guidelines default ON for new PMax campaigns
+
+v22 (2025): ad_network_type + Asset performance labels removed
++-- Channel breakdown via segments.ad_network_type
++-- asset_group_asset.performance_label REMOVED for PMax
++-- url_expansion_opt_out REMOVED → use AssetAutomationType
++-- Ad Strength is now primary asset quality signal
+
+v23 / Mar 2026: Budget forecasting, High Value Mode, demographic reporting
++-- High Value Mode for new customer acquisition (premium bidding)
++-- First-party audience exclusions available
++-- Demographic reporting in Insights
+
+HOW TO CHECK PMAX SEARCH TERMS (v21+):
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    campaign_search_term_view.search_term,
+    campaign_search_term_view.status,
+    metrics.impressions,
+    metrics.clicks,
+    metrics.cost_micros,
+    metrics.conversions
+  FROM campaign_search_term_view
+  WHERE campaign.advertising_channel_type = 'PERFORMANCE_MAX'
+    AND segments.date DURING LAST_30_DAYS
+    AND metrics.cost_micros > 0
+  ORDER BY metrics.cost_micros DESC
+  LIMIT 200
+")
+```
+
 ## PMax vs Search: Coexistence Strategy
 
 ```
@@ -424,7 +531,8 @@ MEASURING INCREMENTALITY:
 [ ] Exclusions set (out of stock, low margin)
 
 ## Final Checks
-[ ] Final URL expansion: [On/Off]
+[ ] Final URL expansion: configured via AssetAutomationType.FINAL_URL_EXPANSION_TEXT_ASSET_AUTOMATION
+    (Note: url_expansion_opt_out field was removed in v22 — use AssetAutomationType instead)
 [ ] Brand exclusions: [Yes/No, which]
 [ ] URL exclusions configured
 [ ] Schedule: 24/7 or custom

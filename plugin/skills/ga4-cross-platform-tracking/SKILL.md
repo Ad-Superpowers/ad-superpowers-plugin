@@ -12,6 +12,7 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Cross-Platform Tracking Guide
 
 Complete guide for consistent tracking of all advertising platforms in Google Analytics 4 with UTM parameters and platform integrations.
+
 ## UTM Parameters Basics
 
 ```
@@ -334,6 +335,41 @@ TEST CHECKLIST:
 [ ] Default channel grouping is correct
 [ ] No (not set) or (other) values
 ```
+
+## 2026: Cross-Channel Budgeting in GA4
+
+```
+GA4 CROSS-CHANNEL BUDGETING (BETA, 2026)
+==========================================
+
+WHAT IT IS:
+├── A budget planning tool inside GA4 that combines data from multiple ad platforms
+├── Supported platforms: Google Ads (native), Meta, LinkedIn, TikTok, Snapchat (import)
+├── Location: GA4 → Advertising → Cross-channel budgeting
+└── Uses GA4's data-driven attribution as the single source of truth
+
+WHY IT MATTERS FOR TRACKING SETUP:
+├── Consistent UTMs are critical for this feature to work correctly
+├── Meta, LinkedIn, TikTok data must be connected via GA4 product links
+├── Platform performance is compared using GA4 attributed conversions (Key Events)
+└── Accurate channel groupings are prerequisite (Paid Social must not fall into Unassigned)
+
+SETUP REQUIREMENTS:
+├── All paid platforms must have UTMs on every ad
+├── Channel groupings must be clean (Unassigned < 5%)
+└── Key Events must be correctly configured with values
+
+MCP TOOL - Check cross-channel attribution:
+```
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["keyEvents", "totalRevenue"],
+    dimensions=["sessionDefaultChannelGroup", "sessionCampaignName"],
+    date_range={"start_date": "30daysAgo", "end_date": "yesterday"}
+)
+```
+```
+
 ## Output: Cross-Platform Tracking Template
 
 ```markdown

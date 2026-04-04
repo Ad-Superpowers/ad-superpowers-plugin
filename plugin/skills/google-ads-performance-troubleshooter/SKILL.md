@@ -1,400 +1,485 @@
 ---
 name: google-ads-performance-troubleshooter
 description: |
-  Diagnoses and resolves Google Ads performance problems using systematic decision trees
-  and root cause analysis. Covers CPA/ROAS degradation, conversion volume drops,
-  impression share declines, Quality Score problems, Smart Bidding issues, and delivery failures.
-  Use when: campaign performance declining, CPA increasing, ROAS dropping, conversions dropping,
-  impressions declining, Quality Score issues, Smart Bidding not learning, ads not delivering,
-  budget not spending, sudden performance changes.
-  Do NOT use for: full account audits (use google-ads-account-auditor), conversion tracking
-  setup issues (use google-ads-conversion-tracking-debugger), keyword strategy (use
-  google-ads-keyword-strategy-planner).
+  Meta Ads campaign performance diagnostics and troubleshooting. Use when: analyzing underperforming campaigns, solving CPA/ROAS problems, diagnosing delivery issues, interpreting Ad Relevance Diagnostics, making kill vs scale decisions.
+  Do NOT use for: learning phase issues (use learning-phase-tracker), bid strategy changes (use bid-strategy-selector), creative fatigue specifically (use creative-fatigue-analyzer).
 metadata:
   author: "AdSuperpowers"
-  version: "2.0.0"
-  platform: "google_ads"
-  phase: "fase-4-measurement-attribution"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
+  version: "1.0.0"
+  platform: "meta"
+  phase: "fase-1-foundation"
+compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
-
 # Performance Troubleshooter
 
-Systematic guide for diagnosing and resolving Google Ads performance problems. Start with the master diagnostic tree, then follow the relevant section for deep-dive analysis.
+Diagnostic framework for identifying and resolving Meta Ads performance problems.
 
-## Master Diagnostic Tree
-
-```
-WHAT IS THE PROBLEM?
-│
-├─► CONVERSIONS DROPPED
-│   Go to: Section 1
-│
-├─► CPA INCREASED / ROAS DECREASED
-│   Go to: Section 2
-│
-├─► IMPRESSIONS / CLICKS DROPPED
-│   Go to: Section 3
-│
-├─► NO DELIVERY (0 impressions)
-│   Go to: Section 4
-│
-├─► QUALITY SCORE DROPPED
-│   Go to: Section 5
-│
-└─► SMART BIDDING NOT WORKING
-    Go to: Section 6
-```
-
----
-
-## Section 1: Conversion Drop Diagnosis
+## Quick Diagnostic
 
 ```
-CONVERSIONS DROPPED
+WHAT IS THE PRIMARY SYMPTOM?
 │
-├── Tracking issue? (most common cause)
-│   ├── Check: Google Ads → Conversions → Status column
-│   │   ├── "No recent conversions" → tag broken or consent blocking
-│   │   ├── "Recording conversions" → tracking is fine, issue is elsewhere
-│   │   └── "Inactive" → conversion action was paused/removed
-│   ├── Check: GA4 events still recording? (cross-reference)
-│   ├── Check: GTM container → recent changes published?
-│   └── Action: Use conversion-tracking-debugger skill for deep investigation
+├─► No or low delivery
+│   └─► Go to [Delivery Issues]
 │
-├── Landing page issue?
-│   ├── Check: Landing page speed (>3s load = 50%+ bounce increase)
-│   ├── Check: Is the page returning 404 or errors?
-│   ├── Check: Mobile experience (60%+ of traffic is mobile)
-│   └── Action: Test landing pages manually + check GA4 bounce rate trend
+├─► High CPA / Low ROAS
+│   └─► Go to [Efficiency Problems]
 │
-├── Seasonal/external factor?
-│   ├── Check: YoY data — same dip last year?
-│   ├── Check: Industry news — competitor launches, market shifts?
-│   ├── Check: Day-of-week pattern — was it a holiday?
-│   └── Action: Compare with GA4 organic traffic — if organic also dropped, it's market-wide
+├─► Low CTR
+│   └─► Go to [Engagement Issues]
 │
-├── Competition increased?
-│   ├── Check: Auction Insights → impression share trend
-│   ├── Check: Avg CPC trend — rising CPCs = more competition
-│   ├── Check: Search impression share → if declining, you're losing auctions
-│   └── Action: Review competitor strategies, consider bid adjustments
+├─► High CPM
+│   └─► Go to [Auction Competition]
 │
-└── Audience exhaustion?
-    ├── Check: Frequency (Display/Video) — are you showing ads to same people?
-    ├── Check: Audience size — has remarketing pool shrunk?
-    └── Action: Refresh audiences, expand targeting, create new segments
+├─► Performance declining over time
+│   └─► Go to [Performance Decay]
+│
+└─► Conversions not tracked
+    └─► Go to [Tracking Issues]
 ```
 
-### MCP Diagnostic Queries
+## Diagnostic Framework
 
-**Check conversion trend:**
-```
-google_ads_run_gaql(query="
-  SELECT segments.date, metrics.conversions, metrics.conversions_value,
-         metrics.cost_micros, metrics.cost_per_conversion
-  FROM campaign
-  WHERE segments.date DURING LAST_30_DAYS
-  ORDER BY segments.date DESC
-")
-```
-
-**Check auction insights:**
-```
-google_ads_run_gaql(query="
-  SELECT campaign.name, metrics.search_impression_share,
-         metrics.search_top_impression_percentage,
-         metrics.search_budget_lost_impression_share,
-         metrics.search_rank_lost_impression_share
-  FROM campaign
-  WHERE segments.date DURING LAST_14_DAYS
-  AND campaign.status = 'ENABLED'
-")
-```
-
----
-
-## Section 2: Efficiency Degradation (CPA Up / ROAS Down)
+### Step 1: Check Fundamentals
 
 ```
-CPA INCREASING / ROAS DECLINING
-│
-├── Gradual increase over weeks?
-│   ├── Creative fatigue → CTR declining while impressions stable
-│   ├── Audience saturation → same users seeing ads repeatedly
-│   ├── Competitive pressure → CPCs rising across the board
-│   └── Seasonal trend → compare YoY
-│
-├── Sudden spike?
-│   ├── Tracking change → conversions undercounted (check tracking)
-│   ├── Landing page broken → check for 404, slow load, form errors
-│   ├── Budget change triggered learning phase reset
-│   ├── Bid strategy change → still in learning (wait 2 weeks)
-│   └── New competitor → check Auction Insights for new entrants
-│
-├── Only specific campaigns?
-│   ├── Check per-campaign CPA trend to isolate the problem
-│   ├── Is it a Search, Display, PMax, or Video campaign?
-│   │   ├── Search: Check search terms report for irrelevant queries
-│   │   ├── Display: Check placement report for low-quality sites
-│   │   ├── PMax: Check asset group performance and search terms
-│   │   └── Video: Check view-through vs click-through conversions
-│   └── Action: Pause worst performers, reallocate to efficient campaigns
-│
-└── Account-wide?
-    ├── Market shift → industry CPA benchmarks changed
-    ├── Attribution window change → compare "Conversions" vs "All conversions"
-    ├── Conversion action change → primary vs secondary conversion settings
-    └── Action: Review conversion settings, compare with industry benchmarks
+FUNDAMENTALS CHECKLIST:
+□ Pixel firing correctly? (Check Events Manager)
+□ CAPI active? (Server events visible?)
+□ Event Match Quality? (Target: >7)
+□ Attribution window correct? (Match buying cycle)
+□ Budget sufficient? (Min €50/day for learning)
+□ Audience size adequate? (Min 1M+ for prospecting)
+□ Creative variety? (Min 3-5 ads per ad set)
 ```
 
-### CPA Benchmark Reference
+### Step 2: Ad Relevance Diagnostics
 
-| Campaign Type | Good CPA | Average CPA | Investigate If |
-|--------------|----------|-------------|---------------|
-| Search (non-brand) | <€30 | €30-75 | >€100 |
-| Search (brand) | <€10 | €10-25 | >€40 |
-| Display | <€50 | €50-150 | >€200 |
-| PMax (e-com) | ROAS >300% | ROAS 200-300% | ROAS <150% |
-| PMax (lead gen) | <€50 | €50-100 | >€150 |
-| YouTube | <€75 | €75-200 | >€300 |
+Meta's 3 ranking metrics at ad level:
 
-*Note: Benchmarks vary significantly by industry. Use `google-ads-benchmark-database` skill for vertical-specific data.*
+| Metric | Meaning | Below Average = |
+|--------|---------|-----------------|
+| **Quality Ranking** | Perceived quality vs competitors | Improve creative/landing page |
+| **Engagement Rate Ranking** | Expected engagement vs competitors | Better hooks, more compelling creative |
+| **Conversion Rate Ranking** | Expected CVR vs competitors | Landing page issues, audience mismatch |
 
----
+### Step 3: Identify Root Cause
 
-## Section 3: Volume Decline (Impressions/Clicks Dropping)
+Use diagnostic matrix below per symptom.
 
-```
-IMPRESSIONS DECLINING
-│
-├── Search campaigns?
-│   ├── Search impression share dropping?
-│   │   ├── "Budget lost" share increasing → budget too low, increase or narrow targeting
-│   │   ├── "Rank lost" share increasing → bids too low or Quality Score declining
-│   │   └── Both stable → search volume itself is declining (seasonal/market)
-│   ├── Check: Google Trends for your keywords — is demand down?
-│   ├── Check: Keyword status — are keywords paused, disapproved, or "Below first page bid"?
-│   └── Check: Negative keywords — did you accidentally add broad negatives that block traffic?
-│
-├── Display/Video campaigns?
-│   ├── Audience exhaustion → same people targeted repeatedly
-│   ├── Placement exclusions → too many sites excluded
-│   ├── Frequency cap → set too low?
-│   └── Budget constraint → daily budget fully consumed before end of day?
-│
-├── PMax campaigns?
-│   ├── Asset group status → "Limited" or "Low" performance?
-│   ├── Audience signals → too narrow?
-│   ├── Search themes → check PMax search terms for relevance
-│   └── Budget → PMax needs sufficient budget for cross-channel optimization
-│
-└── All campaigns?
-    ├── Account-level issue → payment method declined? Account suspended?
-    ├── Billing → check billing summary for payment failures
-    ├── Policy → check Ads → Policy details for disapprovals
-    └── Geographic → did targeting accidentally narrow?
-```
+## Delivery Issues
 
-### MCP Diagnostic Queries
-
-**Impression share analysis:**
-```
-google_ads_run_gaql(query="
-  SELECT campaign.name, campaign.advertising_channel_type,
-         metrics.impressions, metrics.clicks, metrics.ctr,
-         metrics.search_impression_share,
-         metrics.search_budget_lost_impression_share,
-         metrics.search_rank_lost_impression_share
-  FROM campaign
-  WHERE segments.date DURING LAST_14_DAYS
-  AND campaign.status = 'ENABLED'
-  ORDER BY metrics.impressions DESC
-")
-```
-
-**Search terms quality check:**
-```
-google_ads_run_gaql(query="
-  SELECT search_term_view.search_term, metrics.impressions,
-         metrics.clicks, metrics.conversions, metrics.cost_micros
-  FROM search_term_view
-  WHERE segments.date DURING LAST_14_DAYS
-  ORDER BY metrics.cost_micros DESC
-  LIMIT 50
-")
-```
-
----
-
-## Section 4: No Delivery (0 Impressions)
+### Symptom: No or Very Low Impressions
 
 ```
-0 IMPRESSIONS
+DIAGNOSE: Why no delivery?
 │
-├── Check campaign status
-│   ├── Campaign enabled? Ad group enabled? Ads enabled?
-│   ├── Campaign start/end dates correct?
-│   └── Daily budget > €0?
+├─► Ad Account Issues
+│   ├── Account restricted/disabled?
+│   ├── Payment method issue?
+│   └── Policy violation?
 │
-├── Check ad approval
-│   ├── Ads → Policy details → any disapprovals?
-│   ├── Common: restricted content, misleading claims, trademark issues
-│   └── Fix: Edit ad to comply with policy, request re-review
+├─► Campaign Settings
+│   ├── Budget too low?
+│   ├── Bid/Cost cap too restrictive?
+│   ├── Schedule issues? (Ads not active?)
+│   └── Campaign paused?
 │
-├── Check targeting
-│   ├── Location targeting → is it set to "Presence" not "Presence or interest"?
-│   ├── Audience targeting → "Targeting" mode vs "Observation" mode?
-│   ├── Keyword status → "Below first page bid" or "Rarely shown"?
-│   └── Fix: Broaden targeting, increase bids, or switch to broader match types
+├─► Audience Issues
+│   ├── Audience too small? (<50K)
+│   ├── Too many exclusions?
+│   ├── Geo targeting too narrow?
+│   └── Overlap with other campaigns?
 │
-├── Check billing
-│   ├── Payment method active?
-│   ├── Account balance/credit available?
-│   └── Fix: Update payment method, contact billing support
+├─► Ad Issues
+│   ├── Ads rejected/in review?
+│   ├── Low Quality Ranking?
+│   └── Policy flags?
 │
-└── Check account status
-    ├── Account → Admin → Account status
-    ├── Suspended? → review suspension reason, submit appeal
-    └── Under review? → wait or contact support
+└─► Competition Issues
+    ├── Auction outbid?
+    └── CPM spike in market?
 ```
 
----
+### Solutions Matrix: Delivery
 
-## Section 5: Quality Score Troubleshooting
+| Issue | Diagnose Via | Solution |
+|-------|--------------|----------|
+| Budget too low | Spend vs budget | Increase to €50+/day |
+| Bid cap too low | Delivery insights | Increase 20-30% or switch to Lowest Cost |
+| Audience too small | Audience size estimate | Broader targeting, remove restrictions |
+| Ads rejected | Ad status | Fix policy issues, appeal if incorrect |
+| Low quality | Quality Ranking | Improve creative, landing page |
+| Outbid | Auction overlap | Increase bid or switch strategy |
 
-```
-QUALITY SCORE DECLINING
-│
-├── Check which component is low (1-10 scale, 7+ is good)
-│   ├── Ad Relevance: "Below Average"
-│   │   ├── Ad text doesn't contain the keyword or its theme
-│   │   ├── Fix: Include keyword in headline 1 or 2
-│   │   ├── Fix: Use RSAs with 15 headlines covering key themes
-│   │   └── Fix: Tighten ad group structure (fewer, more related keywords)
-│   │
-│   ├── Expected CTR: "Below Average"
-│   │   ├── Ad isn't compelling enough vs competitors
-│   │   ├── Fix: Improve headlines — use numbers, urgency, specificity
-│   │   ├── Fix: Add all relevant extensions (sitelinks, callouts, structured snippets)
-│   │   └── Fix: Test new ad variations focusing on click-through
-│   │
-│   └── Landing Page Experience: "Below Average"
-│       ├── Page load speed (>3 seconds = penalty)
-│       ├── Mobile responsiveness
-│       ├── Content relevance to ad/keyword
-│       ├── Fix: Improve page speed (compress images, reduce scripts)
-│       ├── Fix: Ensure keyword theme appears on landing page
-│       └── Fix: Improve user experience (clear CTA, no intrusive popups)
-│
-└── Historical vs current QS
-    ├── QS is calculated at auction time — historical QS in reporting is lagged
-    ├── Focus on trends, not absolute numbers
-    └── QS impact: 7→10 = ~50% CPC reduction; 7→4 = ~100% CPC increase
-```
+## Efficiency Problems
 
-### MCP Quality Score Query
+### Symptom: High CPA / Low ROAS
 
 ```
-google_ads_run_gaql(query="
-  SELECT ad_group_criterion.keyword.text,
-         ad_group_criterion.quality_info.quality_score,
-         ad_group_criterion.quality_info.creative_quality_score,
-         ad_group_criterion.quality_info.post_click_quality_score,
-         ad_group_criterion.quality_info.search_predicted_ctr,
-         metrics.impressions, metrics.clicks, metrics.cost_micros
-  FROM keyword_view
-  WHERE ad_group_criterion.quality_info.quality_score IS NOT NULL
-  AND metrics.impressions > 100
-  ORDER BY ad_group_criterion.quality_info.quality_score ASC
-  LIMIT 30
-")
+DIAGNOSE: Why high CPA?
+│
+├─► Funnel Analysis
+│   ├── CPM normal, CTR low → Creative issue
+│   ├── CPM normal, CTR normal, CVR low → Landing page issue
+│   ├── CPM high, CTR normal → Audience/competition issue
+│   └── All metrics degraded → Multiple issues
+│
+├─► Funnel Metrics Checklist
+│   ├── CPM: €[X] (Benchmark: €15-25)
+│   ├── CTR: [X]% (Benchmark: 1-2%)
+│   ├── CPC: €[X] (Benchmark: €0.50-1.00)
+│   ├── LP → ATC: [X]% (Benchmark: 15%)
+│   ├── ATC → Purchase: [X]% (Benchmark: 30-50%)
+│   └── Overall CVR: [X]% (Benchmark: 2-5%)
+│
+└─► Identify Bottleneck
+    └─► Focus optimization effort there
 ```
 
----
+### Solutions Matrix: Efficiency
 
-## Section 6: Smart Bidding Problems
+| Bottleneck | Symptom | Solution |
+|------------|---------|----------|
+| Creative | Low CTR | Test new hooks, formats, angles |
+| Targeting | High CPM, normal CTR | Broader audience, less competition |
+| Landing Page | High CTR, low CVR | UX audit, speed test, trust elements |
+| Offer | Good traffic, no sales | Price, value prop, urgency |
+| Tracking | Conversions missing | Fix Pixel/CAPI, check deduplication |
+| Attribution | Sales in GA but not Meta | Attribution window, cross-device |
+
+### Funnel Optimization Priority
 
 ```
-SMART BIDDING NOT PERFORMING
-│
-├── Still in learning phase?
-│   ├── Check: Campaign status shows "Learning" or "Learning (limited)"?
-│   ├── Learning requires: ~50 conversions in 30 days (per campaign)
-│   ├── "Learning (limited)" = not enough conversion data
-│   ├── Fix: Wait 2 weeks without making changes
-│   ├── Fix: If limited, consider combining campaigns for more data
-│   └── Fix: Use a higher-funnel conversion action (e.g., add-to-cart vs purchase)
-│
-├── Target too aggressive?
-│   ├── tCPA set below historical CPA → algorithm can't find enough auctions
-│   ├── tROAS set above historical ROAS → same problem
-│   ├── Fix: Start with 20% above current CPA/below current ROAS
-│   └── Fix: Gradually tighten targets by 10-15% every 2 weeks
-│
-├── Not enough conversion data?
-│   ├── <30 conversions/month → Maximize Conversions (no target) is better
-│   ├── 30-50 conversions/month → tCPA possible but volatile
-│   ├── 50+ conversions/month → tCPA/tROAS reliable
-│   └── Fix: Use google-ads-bid-strategy-selector skill for right strategy
-│
-├── Conversion value not set?
-│   ├── Using tROAS but no conversion value → bidding blind
-│   ├── Fix: Set static values per conversion action
-│   ├── Better: Pass dynamic values (cart total, lead score)
-│   └── Best: Use value rules to adjust by audience, location, device
-│
-└── Recent major changes?
-    ├── Budget change >20% → triggers learning reset
-    ├── Conversion action change → triggers learning reset
-    ├── Audience/targeting change → partial reset
-    ├── Fix: Make incremental changes (max 15-20% per adjustment)
-    └── Fix: Wait 2 weeks between significant changes
+PRIORITY ORDER:
+1. Fix tracking first (no data = optimizing blind)
+2. Landing page (often 2-3x lift possible)
+3. Creative (highest ongoing impact)
+4. Targeting (let AI help)
+5. Bid strategy (fine-tuning)
+
+ROI PER FIX:
+├── Tracking: 50-200% improvement possible
+├── Landing page: 20-100% CVR lift
+├── Creative: 20-50% CTR lift
+├── Targeting: 10-30% efficiency gain
+└── Bid strategy: 5-15% fine-tuning
 ```
 
----
+## Engagement Issues
 
-## Output: Troubleshooting Report Template
+### Symptom: Low CTR
+
+```
+CTR BENCHMARK:
+├── Poor: <0.8%
+├── Average: 0.8-1.5%
+├── Good: 1.5-2.5%
+└── Excellent: >2.5%
+
+LOW CTR CAUSES:
+│
+├─► Creative Issues
+│   ├── Weak hook (first 3 sec video)
+│   ├── Unclear value proposition
+│   ├── Poor visual quality
+│   ├── Wrong format for placement
+│   └── Creative fatigue
+│
+├─► Targeting Issues
+│   ├── Irrelevant audience
+│   ├── Audience too broad
+│   └── Message-audience mismatch
+│
+└─► Ad Copy Issues
+    ├── Weak headline
+    ├── No clear CTA
+    └── Benefits unclear
+```
+
+### Solutions: Low CTR
+
+```
+CREATIVE FIXES:
+├── Test 5+ new hook variations
+├── A/B test headlines
+├── Try different formats (video vs static)
+├── Update visuals/thumbnails
+└── Add motion/animation
+
+TARGETING FIXES:
+├── Narrow to higher-intent segments
+├── Test different interest combinations
+├── Create lookalikes from purchasers
+└── Exclude low-engagement segments
+
+COPY FIXES:
+├── Lead with benefit, not feature
+├── Add social proof
+├── Create urgency
+└── Clearer, action-oriented CTA
+```
+
+## Auction Competition
+
+### Symptom: High CPM
+
+```
+CPM BENCHMARK:
+├── Low: <€10
+├── Average: €15-25
+├── High: €25-40
+└── Very High: >€40
+
+HIGH CPM CAUSES:
+│
+├─► Market Factors
+│   ├── Peak season (Q4, Black Friday)
+│   ├── Industry competition spike
+│   └── Major events/elections
+│
+├─► Targeting Factors
+│   ├── Very competitive audience
+│   ├── Small audience (premium pricing)
+│   └── Overlapping with own campaigns
+│
+└─► Quality Factors
+    ├── Low relevance score
+    ├── Poor engagement history
+    └── New ad account (no history)
+```
+
+### Solutions: High CPM
+
+```
+IMMEDIATE ACTIONS:
+├── Expand audience (larger = cheaper)
+├── Remove restrictive targeting
+├── Test different placements (including Threads — new March 2026, lower CPM early stage)
+├── Check audience overlap tool
+
+STRATEGIC ACTIONS:
+├── Improve ad quality (better auction position)
+├── Test off-peak timing
+├── Build lookalikes from best customers
+└── Diversify to less competitive channels
+
+SEASONAL STRATEGY:
+├── Pre-peak: Lock in audiences, test creatives
+├── Peak: Accept higher CPM, focus on ROAS
+└── Post-peak: Capitalize on lower competition
+```
+
+## Performance Decay
+
+### Symptom: Metrics Declining Over Time
+
+```
+DECAY DIAGNOSIS:
+│
+├─► Creative Fatigue
+│   ├── Symptoms: Rising frequency, falling CTR
+│   ├── Threshold: Frequency >3-4
+│   └── Solution: Fresh creative rotation
+│
+├─► Audience Saturation
+│   ├── Symptoms: Shrinking reach, high frequency
+│   ├── Threshold: Reached >70% of audience
+│   └── Solution: Expand targeting, new audiences
+│
+├─► Seasonal Effects
+│   ├── Symptoms: Industry-wide decline
+│   └── Solution: Adjust expectations, test new offers
+│
+├─► Competitor Activity
+│   ├── Symptoms: CPM up, CTR down
+│   └── Solution: Differentiate, refresh positioning
+│
+└─► Algorithm Changes
+    ├── Symptoms: Sudden performance shift
+    └── Solution: Adapt to new best practices
+```
+
+### Creative Fatigue Detection
+
+```
+FATIGUE INDICATORS:
+□ CTR dropping week-over-week
+□ Frequency >4 in past 7 days
+□ Same creative running >14-21 days
+□ Engagement Rate Ranking declining
+□ CPM increasing without market shift
+
+REFRESH CADENCE:
+├── High-spend campaigns: Every 7-14 days
+├── Medium-spend: Every 14-21 days
+├── Low-spend: Every 21-30 days
+└── Evergreen/testimonials: Can run longer
+```
+
+## Tracking Issues
+
+### Symptom: Conversions Not Tracked
+
+```
+TRACKING DIAGNOSTIC:
+│
+├─► Pixel Issues
+│   ├── Pixel not installed correctly
+│   ├── Pixel blocked by ad blockers
+│   ├── Event not firing on conversion
+│   └── Wrong pixel ID
+│
+├─► CAPI Issues
+│   ├── CAPI not configured
+│   ├── Events not deduplicating
+│   ├── Low Event Match Quality
+│   └── Token expired
+│
+├─► Attribution Issues
+│   ├── Wrong attribution window
+│   ├── Cross-device not tracked
+│   ├── Long purchase cycle
+│   └── iOS privacy impact
+│
+└─► Technical Issues
+    ├── Thank you page not loading
+    ├── Redirect issues
+    └── Tag manager conflicts
+```
+
+### Tracking Fix Checklist
+
+```
+QUICK FIXES:
+□ Test Pixel with Meta Pixel Helper
+□ Check Events Manager for recent events
+□ Verify domain is verified
+□ Confirm event parameters (value, currency)
+□ Check for duplicate events
+
+CAPI VERIFICATION:
+□ Server events visible in Events Manager?
+□ Deduplication working? (Same event from 2 sources)
+□ Event Match Quality >7?
+□ Customer parameters hashed correctly?
+
+ATTRIBUTION CHECK:
+□ Attribution window matches buying cycle
+□ GA4 comparison (same trends?)
+□ Post-purchase survey attribution
+```
+
+## Kill vs Scale Decision
+
+### Decision Framework
+
+```
+SCALE SIGNALS (Increase Budget):
+├── ROAS >target for 5+ days
+├── CPA <target and stable
+├── CTR above benchmark
+├── Frequency <3
+├── Room to grow in audience
+└── Consistent daily performance
+
+OPTIMIZE SIGNALS (Test & Tweak):
+├── ROAS within 20% of target
+├── CPA fluctuating but manageable
+├── Some ads performing, others not
+├── Creative starting to fatigue
+└── Potential with adjustments
+
+KILL SIGNALS (Pause/Stop):
+├── ROAS <1x (losing money)
+├── CPA >2x target for 7+ days
+├── CTR <0.5% consistent
+├── No improvements despite tests
+├── Insufficient budget for learning
+└── Audience exhausted
+```
+
+### Kill Decision Checklist
+
+```
+BEFORE KILLING, VERIFY:
+□ Tracking is accurate (not a tracking issue)
+□ Attribution window appropriate
+□ Gave sufficient time (7+ days minimum)
+□ Tested multiple creatives
+□ Budget was adequate
+□ Not during anomaly period (holiday, etc.)
+
+IF ALL VERIFIED, THEN:
+├── Killing = correct decision
+├── Document learnings
+├── Archive for reference
+└── Reallocate budget to winners
+```
+
+## MCP: Pull Performance Data for Diagnosis
+
+```python
+# Get campaign-level performance metrics
+meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","status","spend","impressions","clicks","ctr","cpm","cpc","actions","cost_per_action_type","frequency"], date_range="last_7d", filters={"effective_status":["ACTIVE"]})
+
+# Get ad-level breakdown to isolate creative issues
+meta_query(account_id="act_XXXXX", entity="ads", fields=["id","name","status","spend","impressions","clicks","ctr","frequency","actions","quality_ranking","engagement_rate_ranking","conversion_rate_ranking"], date_range="last_7d", filters={"campaign_id":"<campaign_id>"})
+```
+
+## Troubleshooting Output Template
 
 ```markdown
-# Google Ads Performance Troubleshooting Report
+# Campaign Troubleshooting Report
 
-## Issue Summary
-- **Problem:** [CPA increase / conversion drop / impression decline / etc.]
-- **First observed:** [Date]
-- **Impacted campaigns:** [List]
-- **Severity:** [Critical / Warning / Monitor]
+## Campaign Overview
+- Campaign: [name]
+- Objective: [objective]
+- Daily Budget: €[X]
+- Running since: [date]
+- Current Status: [status]
 
-## Data Analysis
-| Metric | Previous 14d | Current 14d | Change | Status |
-|--------|-------------|-------------|--------|--------|
-| Impressions | X | X | % | 🟢/🟡/🔴 |
-| Clicks | X | X | % | 🟢/🟡/🔴 |
-| CTR | X% | X% | % | 🟢/🟡/🔴 |
-| Conversions | X | X | % | 🟢/🟡/🔴 |
-| CPA | €X | €X | % | 🟢/🟡/🔴 |
-| ROAS | X% | X% | % | 🟢/🟡/🔴 |
-| Impression Share | X% | X% | % | 🟢/🟡/🔴 |
+## Symptom Analysis
+**Primary symptom:** [description]
+**Duration:** [since when]
+**Severity:** [Low/Medium/High/Critical]
 
-## Root Cause Analysis
-- [ ] Conversion tracking: [OK / Issue found]
-- [ ] Landing pages: [OK / Issue found]
-- [ ] Ad quality/relevance: [OK / Issue found]
-- [ ] Bidding strategy: [OK / Issue found]
-- [ ] Budget adequacy: [OK / Issue found]
-- [ ] Competition changes: [Stable / Increased]
-- [ ] Seasonal factors: [None / Present]
+## Diagnostic Results
 
-**Identified cause:** [Description with evidence]
+### Fundamentals Check
+- [x] Pixel: [OK/Issue]
+- [x] CAPI: [OK/Issue]
+- [x] EMQ: [score]
+- [x] Budget: [OK/Issue]
+- [x] Audience: [OK/Issue]
+
+### Key Metrics
+| Metric | Current | Benchmark | Status |
+|--------|---------|-----------|--------|
+| CPM | €[X] | €15-25 | [OK/High/Low] |
+| CTR | [X]% | 1-2% | [OK/High/Low] |
+| CPC | €[X] | €0.50-1 | [OK/High/Low] |
+| CVR | [X]% | 2-5% | [OK/High/Low] |
+| CPA | €[X] | €[target] | [OK/High] |
+| ROAS | [X]x | [target]x | [OK/Low] |
+
+### Root Cause Identified
+[Description of root cause]
 
 ## Recommended Actions
 
-### Immediate (Today)
-1. [Action with expected impact]
+### Immediate (This Week)
+1. [Action 1]
+2. [Action 2]
 
-### This Week
-1. [Action with expected impact]
+### Short-term (2-4 Weeks)
+1. [Action 1]
+2. [Action 2]
 
-### Ongoing Prevention
-1. [Monitoring plan]
+### Monitor
+- [Metric 1]: Watch for [threshold]
+- [Metric 2]: Watch for [threshold]
+
+## Prognosis
+[Expected outcome if recommendations followed]
 ```

@@ -474,6 +474,18 @@ When analyzing TikTok attribution, provide:
 [Summary of how to demonstrate TikTok's contribution to overall marketing mix]
 ```
 
+## Campaign Type Attribution Notes
+
+| Campaign Type | Attribution Behavior |
+|---------------|---------------------|
+| **Standard In-Feed** | Default 7-day CTA + 1-day VTA |
+| **Smart+ Campaigns** | Same windows; algorithm optimizes toward attributed events — VTA is a key signal |
+| **Search Ads (Sep 2025)** | Primarily CTA (users have explicit intent); VTA is lower; attribution behaves more like Google Search |
+| **TikTok Shop / GMV Max** | Extended 28-day CTA window; higher VTA due to product discovery behavior |
+| **Spark Ads** | VTA particularly important — organic engagement drives delayed conversions |
+
+**Search Ads tip:** For campaigns using TikTok Search Ads, expect a lower VTA/CTA ratio (0.1-0.4 is normal) since search-intent users click rather than passively view.
+
 ## Common Questions Answered
 
 ### "Should I include VTA in my ROAS calculation?"
@@ -525,6 +537,28 @@ When analyzing TikTok attribution, provide:
 - [ ] Attribution model refinement
 - [ ] Cross-channel budget allocation review
 - [ ] Stakeholder education on VTA importance
+
+## MCP Tool Examples
+
+Pull CTA vs VTA breakdowns:
+
+```
+# Get attribution split by campaign
+tiktok_get_ad_insights(
+  advertiser_id="...",
+  dimensions=["campaign_id", "stat_time_day"],
+  metrics=["cta_conversion", "vta_conversion", "cta_purchase", "vta_purchase",
+           "total_landing_page_view", "spend", "impressions"],
+  start_date="2026-03-01",
+  end_date="2026-04-04"
+)
+
+# Get campaign list to understand campaign type and attribution context
+tiktok_get_campaigns(
+  advertiser_id="...",
+  fields=["campaign_name", "objective_type", "campaign_type", "status"]
+)
+```
 
 ---
 

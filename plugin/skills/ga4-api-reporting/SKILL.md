@@ -13,6 +13,21 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 
 Complete guide for using the GA4 Data API for custom reporting and automated dashboards.
 
+## Quick Note: AdSuperpowers MCP Tool
+
+The AdSuperpowers MCP server wraps the GA4 Data API into the `ga4_report()` tool, which handles authentication and pagination automatically. Use it for ad-hoc analysis before building custom API integrations:
+
+```python
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["sessions", "activeUsers", "keyEvents"],
+    dimensions=["date", "sessionDefaultChannelGroup"],
+    date_range={"start_date": "30daysAgo", "end_date": "yesterday"}
+)
+```
+
+For programmatic/automated reporting, use the GA4 Data API v1 (v1beta) directly as documented below. The API base URL is `analyticsdata.googleapis.com/v1beta/` — no v2 exists as of 2026.
+
 ## Available Metrics & Dimensions
 
 ```
@@ -63,6 +78,7 @@ E-COMMERCE:
 ├── itemCategory
 ├── transactionId
 └── orderCoupon
+
 COMMONLY USED METRICS
 ======================
 
@@ -93,8 +109,9 @@ E-COMMERCE:
 ├── itemRevenue
 └── itemsViewed
 
-CONVERSIONS:
-├── conversions
+KEY EVENTS (CONVERSIONS):
+├── keyEvents (current metric name — was "conversions" before March 2024, both still work in API)
+├── keyEventRate
 ├── eventValue
 └── [customEvent]:eventCount
 
@@ -130,7 +147,7 @@ def daily_ga4_report(event, context):
     response = client.run_report(
         property=f"properties/{property_id}",
         dimensions=[{"name": "date"}, {"name": "sessionSourceMedium"}],
-        metrics=[{"name": "sessions"}, {"name": "conversions"}],
+        metrics=[{"name": "sessions"}, {"name": "keyEvents"}],  # "keyEvents" is the current metric name (was "conversions" pre-2024)
         date_ranges=[{"start_date": "yesterday", "end_date": "yesterday"}]
     )
 
@@ -141,7 +158,7 @@ def daily_ga4_report(event, context):
             "date": row.dimension_values[0].value,
             "source_medium": row.dimension_values[1].value,
             "sessions": row.metric_values[0].value,
-            "conversions": row.metric_values[1].value,
+            "key_events": row.metric_values[1].value,
         })
     df = pd.DataFrame(rows)
 
@@ -161,10 +178,11 @@ def daily_ga4_report(event, context):
 #   --schedule="0 6 * * *" \
 #   --uri="YOUR_CLOUD_FUNCTION_URL" \
 #   --http-method=POST
+
 OPTION 2: GITHUB ACTIONS
 ─────────────────────────
 # .github/workflows/ga4-report.yml
-name: Daily GA4 Report
+name: ga4-api-reporting
 
 on:
   schedule:
@@ -198,6 +216,7 @@ jobs:
         with:
           name: ga4-report
           path: output/*.csv
+
 OPTION 3: AIRFLOW DAG
 ─────────────────────
 from airflow import DAG
@@ -247,6 +266,7 @@ with DAG(
 
     extract >> transform >> load
 ```
+
 ## Output: API Integration Report Template
 
 ```markdown
@@ -259,7 +279,7 @@ with DAG(
 | GA4 Property ID | XXXXXXXXX |
 | GCP Project ID | [project-id] |
 | Service Account | [email]@[project].iam.gserviceaccount.com |
-| API Version | v1beta |
+| API Version | v1beta (current as of 2026, no v2) |
 | Setup Date | [Date] |
 
 ## Authentication Status

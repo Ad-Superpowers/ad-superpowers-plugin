@@ -14,6 +14,58 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Search Campaign Builder
 
 Complete guide for setting up high-performance Google Ads Search campaigns specifically for lead generation with RSA best practices and full ad extensions setup.
+
+
+
+## 2026 Updates: AI Max + Broad Match + Smart Bidding
+
+### AI Max Search Campaign Type (2026)
+AI Max is a new Search campaign subtype that combines RSA ad serving with expanded keyword matching powered by Google AI. Key differences from standard Search:
+
+- Automatically matches to relevant queries beyond your keyword list
+- Uses landing page and asset content to find additional traffic
+- Requires: Smart Bidding (tCPA or Max Conversions), RSA with 8+ headlines
+- URL expansion: Google may direct to most relevant landing page
+- Best for: advertisers with strong conversion data who want to scale Search
+
+To create an AI Max campaign, set `advertising_channel_sub_type = 'SEARCH_EXPRESS'` in API v23+. Note: `url_expansion_opt_out` was removed in v22; URL expansion control is now via `final_url_expansion_opt_out` at the campaign level.
+
+### Broad Match + Smart Bidding (Google's 2026 Recommendation)
+Google's official recommendation: use **broad match keywords paired with Smart Bidding** (tCPA or Max Conversions) rather than exact+phrase-heavy structures. Smart Bidding's signals prevent broad match from serving on irrelevant queries.
+
+Decision guide:
+- Account has <30 conversions/month: Start with exact+phrase, add broad later
+- Account has 30-100 conversions/month: Mix phrase + broad with tCPA
+- Account has >100 conversions/month: Broad match + tCPA is recommended, fewer ad groups needed
+
+### GAQL: Audit Search Campaign Health
+
+```sql
+SELECT campaign.name, campaign.status, campaign.bidding_strategy_type,
+    ad_group.name, metrics.impressions, metrics.clicks,
+    metrics.cost_micros, metrics.conversions,
+    metrics.search_impression_share, metrics.search_top_impression_share
+FROM ad_group
+WHERE campaign.advertising_channel_type = 'SEARCH'
+AND campaign.status = 'ENABLED'
+AND segments.date DURING LAST_30_DAYS
+ORDER BY metrics.cost_micros DESC
+LIMIT 50
+```
+
+```sql
+-- Check search terms quality (match type performance)
+SELECT campaign.name, search_term_view.search_term,
+    search_term_view.status, segments.keyword.ad_group_criterion,
+    metrics.impressions, metrics.clicks, metrics.conversions,
+    metrics.cost_micros
+FROM search_term_view
+WHERE campaign.advertising_channel_type = 'SEARCH'
+AND segments.date DURING LAST_30_DAYS
+ORDER BY metrics.cost_micros DESC
+LIMIT 100
+```
+
 ## Campaign Structure for Lead Gen
 
 ### Recommended Account Structure
@@ -72,19 +124,21 @@ KEYWORDS PER AD GROUP:
 □ Same landing page
 □ Same ad copy theme
 
-MATCH TYPE STRATEGY (Lead Gen):
-───────────────────────────────
-┌─────────────────────────────────────────────────────────┐
-│ Match Type │ Budget % │ Use Case                        │
-├────────────┼──────────┼─────────────────────────────────┤
-│ Exact      │ 40-50%   │ Proven converting queries       │
-│ Phrase     │ 30-40%   │ Core service terms              │
-│ Broad      │ 10-20%   │ Discovery + Smart Bidding only  │
-└────────────┴──────────┴─────────────────────────────────┘
+MATCH TYPE STRATEGY (Lead Gen 2026):
+───────────────────────────────────
+┌──────────────────────────────────────────────────────────────────────┐
+│ Match Type │ Budget % │ Use Case                                     │
+├────────────┼──────────┼──────────────────────────────────────────────┤
+│ Exact      │ 30-40%   │ Proven converting queries, brand terms       │
+│ Phrase     │ 20-30%   │ Core service terms, medium accounts          │
+│ Broad      │ 30-50%   │ Scale with Smart Bidding — Google's primary  │
+│            │          │ recommendation for accounts >30 conv/month   │
+└────────────┴──────────┴──────────────────────────────────────────────┘
 
 LEAD GEN SPECIFIC:
-├── Broad match ONLY with tCPA bidding
-├── Heavy negatives for quality
+├── Broad match REQUIRES tCPA or Max Conversions bidding (never manual)
+├── Heavy negatives for quality regardless of match type
+├── For accounts <30 conversions/month: stick to exact+phrase only
 └── Focus on qualified leads, not CTR
 ```
 
@@ -172,6 +226,9 @@ QUICKLY IMPROVE AD STRENGTH:
 □ Add location headlines
 □ Mix short and long headlines
 ```
+
+
+
 ## Ad Extensions Setup
 
 ### Required Extensions for Lead Gen

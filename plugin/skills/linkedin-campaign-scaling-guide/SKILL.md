@@ -295,11 +295,13 @@ PHASE 2 (Add at €5K+/month): Video + Document Ads
 ├── Budget allocation: 20-30% split between them
 └── Objective: Awareness + consideration
 
-PHASE 3 (Add at €10K+/month): Message Ads / Conversation Ads
+PHASE 3 (Add at €10K+/month): Message Ads
 ├── Direct outreach channel, separate from feed
 ├── Reaches people who skip sponsored content
 ├── Budget allocation: 15-20% of total
 └── Objective: Bottom-funnel conversion
+Note: Conversation Ads are deprecated in EU/EEA (privacy restrictions) and being
+phased out globally. Use Message Ads instead for direct outreach.
 
 PHASE 4 (Add at €20K+/month): LinkedIn Audience Network + Text Ads
 ├── LAN extends reach to partner sites at lower CPM
@@ -489,14 +491,14 @@ When frequency is too high:
 ├── 3-5 campaigns, 1-2 geos, 2-3 formats
 ├── 50% Lead gen (Single Image + Lead Form)
 ├── 25% Consideration (Video or Document Ads)
-├── 15% Bottom-funnel (Message or Conversation Ads)
+├── 15% Bottom-funnel (Message Ads)
 └── 10% Testing new audiences/formats
 
 €10,000-25,000/month (Scale)
 ├── 6-10 campaigns, 2-4 geos, 3-4 formats
 ├── 40% Lead gen (Image + Carousel)
 ├── 25% Consideration (Video + Document Ads)
-├── 20% Bottom-funnel (Message + Conversation Ads)
+├── 20% Bottom-funnel (Message Ads)
 ├── 10% Retargeting
 └── 5% Testing
 

@@ -4,7 +4,7 @@ description: |
   Google Ads Attribution Model advisor for selecting, implementing, and evaluating attribution models. Use when: setting up Data-Driven Attribution (DDA), comparing attribution models, analyzing conversion paths, evaluating cross-channel attribution, or optimizing lookback windows. Do NOT use for: bid strategy selection (use bid-strategy-selector), conversion tracking setup (use conversion-tracking-setup), or campaign performance diagnosis (use performance-troubleshooter).
 metadata:
   author: "AdSuperpowers"
-  version: "1.0.0"
+  version: "1.1.0"
   platform: "google_ads"
   phase: "fase-4-measurement-attribution"
 compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
@@ -12,6 +12,57 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Attribution Model Advisor
 
 Complete guide for choosing, implementing, and evaluating Google Ads attribution models with focus on Data-Driven Attribution (DDA) and cross-channel measurement.
+
+## 2026 Measurement Foundation: Consent Mode v2 + Enhanced Conversions
+
+Attribution accuracy depends entirely on your measurement stack being compliant and complete. Check this first:
+
+```
+MEASUREMENT HEALTH CHECKLIST (2026)
+════════════════════════════════════
+
+1. CONSENT MODE V2 (Required for EEA since March 2024)
+   ├── ad_storage + analytics_storage consent signals firing
+   ├── ad_user_data + ad_personalization signals set
+   ├── Google Tag Manager: Consent Initialization trigger configured
+   └── Verify: gtag('consent', 'default', {...}) fires BEFORE any ad tags
+
+2. ENHANCED CONVERSIONS (Name unchanged — still "Enhanced Conversions")
+   ├── Hashes first-party user data (email, phone, address)
+   ├── Recovers conversions lost to cookie rejection
+   ├── Setup: Google Ads → Tools → Conversions → Enhanced Conversions
+   └── Requires privacy policy update
+
+3. ATTRIBUTION MODEL ORDER OF PREFERENCE (2026):
+   Data-Driven (DDA) > Linear > Position-Based > Time Decay > Last Click
+   ├── First Click: Only for pure awareness measurement
+   └── Last Click: Legacy only — avoid for Smart Bidding campaigns
+```
+
+## Pull Conversion Action Settings via MCP
+
+```
+google_ads_run_gaql(query="
+  SELECT conversion_action.name,
+         conversion_action.attribution_model_settings.attribution_model,
+         conversion_action.counting_type,
+         conversion_action.include_in_conversions_metric,
+         conversion_action.click_through_lookback_window_days,
+         conversion_action.view_through_lookback_window_days,
+         metrics.conversions, metrics.conversion_value
+  FROM conversion_action
+  WHERE conversion_action.status = 'ENABLED'
+")
+```
+
+Use this to audit whether DDA is active and whether lookback windows match your sales cycle.
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
+
 ## Attribution Models Overview
 
 ### Model Comparison
@@ -126,8 +177,8 @@ RECOMMENDED FOR OPTIMAL DDA:
 □ 1000+ conversions per month
 □ Consistent tracking (no gaps)
 □ Cross-device tracking enabled
-□ Enhanced conversions active
-□ Consent mode correctly configured
+□ Enhanced Conversions active (recovers consent-rejected data)
+□ Consent Mode v2 correctly configured (required EEA, Mar 2024+)
 
 ACTIVATING DDA:
 1. Tools & Settings → Measurement → Conversions
@@ -272,6 +323,13 @@ WHAT TO ANALYZE:
    Ratio > 1: Channel is "assister" (top-funnel)
    Ratio < 1: Channel is "closer" (bottom-funnel)
 ```
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
+
 ## Multi-Touch Attribution Strategy
 
 ### Assisted Conversions Analysis
@@ -372,6 +430,13 @@ HOW TO SET:
 Tools → Measurement → Conversions → [Action] →
 Edit settings → Lookback window
 ```
+
+
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+
+
 ## Output: Attribution Model Recommendation Template
 
 ```markdown
@@ -383,3 +448,9 @@ Edit settings → Lookback window
 - **Current attribution model:** [Last Click/DDA/etc.]
 - **Average path length:** [X touchpoints]
 - **Average time to conversion:** [X days]
+
+
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+

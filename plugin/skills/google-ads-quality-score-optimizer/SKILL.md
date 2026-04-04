@@ -4,7 +4,7 @@ description: |
   Optimizes Google Ads Quality Score to achieve lower CPCs and better ad positions. Use when: Quality Score component analysis, CTR improvement strategies, ad relevance optimization, landing page experience improvement, QS diagnosis and troubleshooting, CPC reduction through QS. Do NOT use for: full account audits (use account-auditor), landing-page-only issues without QS context.
 metadata:
   author: "AdSuperpowers"
-  version: "1.0.0"
+  version: "1.1.0"
   platform: "google_ads"
   phase: "fase-4-ecommerce-advanced"
 compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
@@ -12,6 +12,31 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Quality Score Optimizer
 
 Complete guide for understanding and improving Google Ads Quality Score to achieve lower CPCs and better ad positions.
+
+## Pull Quality Score Data via MCP First
+
+```
+# Identify keywords with low Quality Score
+google_ads_run_gaql(query="
+  SELECT ad_group_criterion.keyword.text,
+         ad_group_criterion.keyword.match_type,
+         ad_group_criterion.quality_info.quality_score,
+         ad_group_criterion.quality_info.search_predicted_ctr,
+         ad_group_criterion.quality_info.ad_relevance,
+         ad_group_criterion.quality_info.landing_page_experience,
+         metrics.impressions, metrics.clicks, metrics.ctr,
+         metrics.cost_micros, campaign.name, ad_group.name
+  FROM keyword_view
+  WHERE segments.date DURING LAST_30_DAYS
+    AND campaign.status = 'ENABLED'
+    AND ad_group_criterion.status = 'ENABLED'
+    AND ad_group_criterion.quality_info.quality_score < 7
+  ORDER BY metrics.cost_micros DESC
+  LIMIT 50
+")
+```
+
+This surfaces your most expensive low-QS keywords — the highest ROI targets for optimization.
 
 ## What Is Quality Score?
 
@@ -162,19 +187,22 @@ HIGH-CTR HEADLINE FORMULAS:
 □ Benefit-focused, not feature-focused
 □ Social proof (reviews, awards)
 
-3. AD EXTENSIONS IMPACT
-────────────────────────
-Extensions increase visual footprint = higher CTR
+3. AD ASSETS IMPACT (formerly "Extensions")
+────────────────────────────────────────────
+Assets increase visual footprint = higher CTR
+Note: Google rebranded "Extensions" to "Assets" in 2022.
+The Google Ads API uses asset_group for PMax,
+ad_group_ad_asset_view for Search ads.
 
-CTR IMPACT PER EXTENSION:
+CTR IMPACT PER ASSET TYPE:
 ├── Sitelinks: +10-15%
 ├── Callouts: +5-10%
 ├── Structured Snippets: +5-8%
-├── Call Extension: +5-10%
-├── Location: +5-10%
-└── Price Extension: +10-20%
+├── Call Asset: +5-10%
+├── Location Asset: +5-10%
+└── Price Asset: +10-20%
 
-USING ALL EXTENSIONS = Up to +30% CTR boost
+USING ALL ASSETS = Up to +30% CTR boost
 ```
 
 ### RSA Optimization for CTR
@@ -223,6 +251,13 @@ Position 1: Pin your best CTR headline
 Position 2: Pin keyword-focused headline
 Position 3: Let Google test
 ```
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
+
 ## Landing Page Experience
 
 ### Landing Page Optimization Checklist
@@ -347,6 +382,18 @@ QUICK WINS:
 4. Remove unused code
 5. Optimize fonts (subset, preload)
 ```
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
+
+
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+
 
 ## Output: Quality Score Improvement Plan
 

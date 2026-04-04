@@ -1,577 +1,360 @@
 ---
 name: google-ads-benchmark-database
 description: |
-  Google Ads industry benchmark database with KPI benchmarks per industry, campaign type, and region. Use when: comparing account performance against industry averages, setting initial KPI targets for new accounts, planning budgets with CPA/ROAS estimates, evaluating seasonal CPC trends, or benchmarking client performance. Do NOT use for: real-time performance troubleshooting (use performance-troubleshooter), Quality Score optimization (use quality-score-optimizer), or campaign structure decisions (use campaign-structure-advisor).
+  Reference database with industry benchmarks for Meta Ads metrics by vertical, funnel stage, and campaign type. Use when: evaluating whether your metrics are performing well, or setting targets for new campaigns.
+  Do NOT use for: performance diagnostics (use performance-troubleshooter), account audits (use account-auditor), scaling decisions (use scaling-calculator).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
-  platform: "google_ads"
-  phase: "fase-4-ecommerce-advanced"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
+  platform: "meta"
+  phase: "fase-5-advanced"
+compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # Benchmark Database
 
-Complete database with Google Ads KPI benchmarks per industry, campaign type, and region for performance comparison and goal setting.
+## Overview
 
-## Disclaimer
+This skill provides an extensive database of Meta Ads benchmarks by industry, funnel stage, and campaign type, so you can assess how your metrics perform relative to market standards.
 
-```
-BENCHMARK DISCLAIMER
-════════════════════
-
-These benchmarks are compiled from:
-├── Google Ads industry reports
-├── WordStream benchmarks
-├── Semrush advertising data
-├── Agency experience and case studies
-└── Platform-specific reports
-
-IMPORTANT NUANCES:
-├── Benchmarks are AVERAGES
-├── Top 10% performers do 2-3x better
-├── Bottom 10% performers do 2-3x worse
-├── Your results depend on:
-│   ├── Landing page quality
-│   ├── Brand awareness
-│   ├── Product/market fit
-│   ├── Competition in your niche
-│   └── Account history
-
-USE FOR:
-├── Initial target setting (new account)
-├── Performance check (significant deviations)
-├── Budget planning (CPA estimates)
-└── Client benchmarking
-
-DO NOT USE AS:
-├── Absolute truth
-├── Guarantee of results
-└── Direct comparison without context
-```
-
-## Search Campaign Benchmarks
-
-### CTR Benchmarks per Industry
+## Benchmark Disclaimer
 
 ```
-SEARCH CTR BENCHMARKS (2024/2025)
-═════════════════════════════════
+IMPORTANT CONTEXT
 
-┌────────────────────────────┬─────────┬─────────┬─────────┐
-│ INDUSTRY                   │ AVG CTR │ TOP 25% │ TOP 10% │
-├────────────────────────────┼─────────┼─────────┼─────────┤
-│ Dating & Personals         │ 6.05%   │ 8.5%    │ 11%+    │
-│ Travel & Hospitality       │ 4.68%   │ 6.5%    │ 9%+     │
-│ Advocacy                   │ 4.41%   │ 6.0%    │ 8%+     │
-│ Auto                       │ 4.00%   │ 5.5%    │ 7%+     │
-│ Education                  │ 3.78%   │ 5.2%    │ 7%+     │
-│ Real Estate                │ 3.71%   │ 5.0%    │ 7%+     │
-│ Health & Medical           │ 3.27%   │ 4.5%    │ 6%+     │
-│ Employment Services        │ 2.42%   │ 3.5%    │ 5%+     │
-│ Finance & Insurance        │ 2.91%   │ 4.0%    │ 5%+     │
-│ E-Commerce (Retail)        │ 2.69%   │ 4.0%    │ 5%+     │
-│ Consumer Services          │ 2.41%   │ 3.5%    │ 5%+     │
-│ Industrial Services        │ 2.61%   │ 3.5%    │ 5%+     │
-│ Home Goods                 │ 2.44%   │ 3.5%    │ 5%+     │
-│ Legal                      │ 2.93%   │ 4.0%    │ 5%+     │
-│ Technology                 │ 2.09%   │ 3.0%    │ 4%+     │
-│ B2B                        │ 2.41%   │ 3.5%    │ 5%+     │
-└────────────────────────────┴─────────┴─────────┴─────────┘
+These benchmarks are based on:
+├── Aggregated industry data (2025-2026)
+├── Multiple sources (Meta, WordStream, AdEspresso, etc.)
+├── Primarily focused on Western markets
+├── Attribution: 7d click + 1d view (Meta default since Jan 2026 — 28d view removed)
+└── Subject to seasonal fluctuations
 
-OVERALL SEARCH AVERAGE: 3.17%
+Benchmarks are GUIDELINES, not absolute truths:
+├── Your specific niche may differ significantly
+├── Product pricing strongly influences metrics
+├── Audience quality determines a lot
+└── Always compare with your own historical data
 ```
 
-### CPC Benchmarks per Industry
+## Benchmarks by Industry
+
+### E-commerce
 
 ```
-SEARCH CPC BENCHMARKS (EUR, 2024/2025)
-══════════════════════════════════════
+E-COMMERCE BENCHMARKS
+=====================
 
-┌────────────────────────────┬──────────┬──────────┬──────────┐
-│ INDUSTRY                   │ AVG CPC  │ LOW END  │ HIGH END │
-├────────────────────────────┼──────────┼──────────┼──────────┤
-│ Legal                      │ €5.88    │ €3.00    │ €15.00   │
-│ Consumer Services          │ €5.66    │ €3.00    │ €12.00   │
-│ Finance & Insurance        │ €3.44    │ €1.50    │ €8.00    │
-│ B2B                        │ €3.33    │ €1.50    │ €7.00    │
-│ Technology                 │ €3.80    │ €1.50    │ €8.00    │
-│ Employment Services        │ €2.04    │ €1.00    │ €5.00    │
-│ Real Estate                │ €2.37    │ €1.00    │ €5.00    │
-│ Industrial Services        │ €2.56    │ €1.00    │ €5.00    │
-│ Home Goods                 │ €2.94    │ €1.00    │ €6.00    │
-│ Health & Medical           │ €2.62    │ €1.00    │ €6.00    │
-│ Education                  │ €2.40    │ €0.80    │ €5.00    │
-│ Advocacy                   │ €1.43    │ €0.50    │ €3.00    │
-│ E-Commerce (Retail)        │ €1.16    │ €0.40    │ €3.00    │
-│ Travel & Hospitality       │ €1.53    │ €0.50    │ €4.00    │
-│ Dating & Personals         │ €2.78    │ €1.00    │ €5.00    │
-│ Auto                       │ €2.46    │ €1.00    │ €5.00    │
-└────────────────────────────┴──────────┴──────────┴──────────┘
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR (All)       │ <0.5%   │ 0.5-1%  │ 1-2%    │ >2%
+CTR (Link)      │ <0.8%   │ 0.8-1.5%│ 1.5-2.5%│ >2.5%
+CPC             │ >$1.50  │ $0.80-1.50│ $0.40-0.80│ <$0.40
+CPM             │ >$15    │ $8-15   │ $5-8    │ <$5
+CPA (Purchase)  │ >$50    │ $25-50  │ $15-25  │ <$15
+ROAS            │ <1.5x   │ 1.5-2.5x│ 2.5-4x  │ >4x
+Add to Cart Rate│ <3%     │ 3-6%    │ 6-10%   │ >10%
+Conversion Rate │ <1%     │ 1-2%    │ 2-4%    │ >4%
 
-CPCs vary significantly by:
-├── Geo (Randstad vs rest)
-├── Device (Mobile often cheaper)
-├── Time of day
-└── Seasonality
+SUBCATEGORIES:
+├── Fashion: CPA $20-40, ROAS 2.5-4x
+├── Beauty: CPA $15-30, ROAS 3-5x
+├── Electronics: CPA $30-60, ROAS 2-3x
+├── Home & Garden: CPA $25-45, ROAS 2.5-4x
+└── Food & Beverage: CPA $10-25, ROAS 3-6x
 ```
 
-### Conversion Rate Benchmarks
+### SaaS / Software
 
 ```
-SEARCH CONVERSION RATE BENCHMARKS (2024/2025)
-═════════════════════════════════════════════
+SAAS BENCHMARKS
+===============
 
-┌────────────────────────────┬──────────┬──────────┬──────────┐
-│ INDUSTRY                   │ AVG CVR  │ TOP 25%  │ TOP 10%  │
-├────────────────────────────┼──────────┼──────────┼──────────┤
-│ Dating & Personals         │ 9.64%    │ 12%      │ 15%+     │
-│ Legal                      │ 6.98%    │ 10%      │ 14%+     │
-│ Consumer Services          │ 6.64%    │ 9%       │ 12%+     │
-│ Auto                       │ 6.03%    │ 8%       │ 11%+     │
-│ Employment Services        │ 5.13%    │ 7%       │ 10%+     │
-│ Finance & Insurance        │ 5.10%    │ 7%       │ 10%+     │
-│ Health & Medical           │ 3.36%    │ 5%       │ 8%+      │
-│ Industrial Services        │ 3.37%    │ 5%       │ 7%+      │
-│ Education                  │ 3.39%    │ 5%       │ 7%+      │
-│ Travel & Hospitality       │ 3.55%    │ 5%       │ 7%+      │
-│ Real Estate                │ 2.47%    │ 4%       │ 6%+      │
-│ Home Goods                 │ 2.70%    │ 4%       │ 6%+      │
-│ Technology                 │ 2.92%    │ 4%       │ 6%+      │
-│ Advocacy                   │ 1.96%    │ 3%       │ 5%+      │
-│ E-Commerce (Retail)        │ 2.81%    │ 4%       │ 6%+      │
-│ B2B                        │ 3.04%    │ 4%       │ 6%+      │
-└────────────────────────────┴──────────┴──────────┴──────────┘
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR             │ <0.4%   │ 0.4-0.8%│ 0.8-1.5%│ >1.5%
+CPC             │ >$3.00  │ $1.50-3 │ $0.80-1.50│ <$0.80
+CPM             │ >$20    │ $12-20  │ $6-12   │ <$6
+CPL (Lead)      │ >$80    │ $40-80  │ $20-40  │ <$20
+CPA (Trial)     │ >$150   │ $80-150 │ $40-80  │ <$40
+CPA (Paid)      │ >$300   │ $150-300│ $80-150 │ <$80
+Trial to Paid   │ <5%     │ 5-15%   │ 15-25%  │ >25%
 
-CONVERSION TYPES:
-├── E-commerce: Purchase
-├── Lead Gen: Form submit, Phone call
-├── SaaS: Free trial, Demo request
-└── Local: Store visit, Call
+NOTES:
+├── B2B SaaS: Higher CPA acceptable (LTV!)
+├── Freemium: Focus on trial signups
+└── Enterprise: CPA can be $500+ (high LTV)
 ```
 
-## E-Commerce Specific Benchmarks
-
-### ROAS Benchmarks per Vertical
+### Lead Generation / Services
 
 ```
-E-COMMERCE ROAS BENCHMARKS (2024/2025)
-══════════════════════════════════════
+LEAD GEN BENCHMARKS
+===================
 
-┌─────────────────────────┬──────────┬──────────┬─────────────┐
-│ VERTICAL                │ AVG ROAS │ GOOD     │ EXCELLENT   │
-├─────────────────────────┼──────────┼──────────┼─────────────┤
-│ Fashion & Apparel       │ 3.5x     │ 4-5x     │ 6x+         │
-│ Beauty & Cosmetics      │ 4.0x     │ 5-6x     │ 7x+         │
-│ Electronics             │ 2.5x     │ 3-4x     │ 5x+         │
-│ Home & Garden           │ 3.0x     │ 4-5x     │ 6x+         │
-│ Sports & Outdoor        │ 3.5x     │ 4-5x     │ 6x+         │
-│ Food & Beverage         │ 3.0x     │ 4-5x     │ 6x+         │
-│ Health & Wellness       │ 3.5x     │ 5-6x     │ 7x+         │
-│ Jewelry & Accessories   │ 4.0x     │ 5-7x     │ 8x+         │
-│ Pet Supplies            │ 3.5x     │ 4-5x     │ 6x+         │
-│ Toys & Games            │ 3.0x     │ 4-5x     │ 6x+         │
-│ Office & Business       │ 2.5x     │ 3-4x     │ 5x+         │
-│ Automotive Parts        │ 3.0x     │ 4-5x     │ 6x+         │
-└─────────────────────────┴──────────┴──────────┴─────────────┘
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR             │ <0.5%   │ 0.5-1%  │ 1-2%    │ >2%
+CPC             │ >$2.50  │ $1-2.50 │ $0.50-1 │ <$0.50
+CPM             │ >$18    │ $10-18  │ $5-10   │ <$5
+CPL             │ >$50    │ $20-50  │ $10-20  │ <$10
+Form Fill Rate  │ <10%    │ 10-20%  │ 20-35%  │ >35%
+Lead Quality    │ <5% SQL │ 5-15%   │ 15-30%  │ >30%
 
-ROAS CONTEXT:
-─────────────
-Break-even ROAS = 1 / Profit Margin
-
-Example:
-├── 30% margin → Break-even ROAS = 3.33x
-├── 40% margin → Break-even ROAS = 2.50x
-├── 50% margin → Break-even ROAS = 2.00x
-└── 60% margin → Break-even ROAS = 1.67x
-
-Target ROAS = Break-even x (1 + Desired Profit %)
+INDUSTRY SPECIFIC:
+├── Real Estate: CPL $30-80
+├── Finance/Insurance: CPL $40-100
+├── Legal: CPL $50-150
+├── Healthcare: CPL $25-60
+├── Education: CPL $15-40
+└── B2B Services: CPL $50-200
 ```
 
-### Average Order Value per Category
+### Local Business
 
 ```
-AVERAGE ORDER VALUE BENCHMARKS (EUR)
-════════════════════════════════════
+LOCAL BUSINESS BENCHMARKS
+=========================
 
-┌─────────────────────────┬──────────┬─────────────┬─────────────┐
-│ CATEGORY                │ AVG AOV  │ RANGE LOW   │ RANGE HIGH  │
-├─────────────────────────┼──────────┼─────────────┼─────────────┤
-│ Jewelry & Watches       │ €180     │ €80         │ €500+       │
-│ Electronics             │ €150     │ €50         │ €400+       │
-│ Furniture               │ €250     │ €100        │ €800+       │
-│ Fashion & Apparel       │ €85      │ €40         │ €150        │
-│ Beauty & Cosmetics      │ €55      │ €30         │ €100        │
-│ Sports & Outdoor        │ €95      │ €40         │ €200        │
-│ Health & Supplements    │ €65      │ €30         │ €120        │
-│ Pet Supplies            │ €50      │ €25         │ €100        │
-│ Food & Beverage         │ €45      │ €20         │ €80         │
-│ Home & Garden           │ €75      │ €30         │ €200        │
-│ Books & Media           │ €30      │ €15         │ €60         │
-│ Baby & Kids             │ €65      │ €30         │ €120        │
-└─────────────────────────┴──────────┴─────────────┴─────────────┘
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR             │ <0.6%   │ 0.6-1.2%│ 1.2-2%  │ >2%
+CPC             │ >$1.50  │ $0.70-1.50│$0.30-0.70│ <$0.30
+CPM             │ >$12    │ $6-12   │ $3-6    │ <$3
+Cost per Store Visit │ >$15│ $8-15  │ $4-8    │ <$4
+Cost per Call   │ >$20    │ $10-20  │ $5-10   │ <$5
+Cost per Direction│>$8    │ $4-8    │ $2-4    │ <$2
 
-AOV INCREASE STRATEGIES:
-├── Cross-sell & upsell (+15-30%)
-├── Bundle offers (+20-40%)
-├── Free shipping threshold (+10-20%)
-└── Quantity discounts (+10-25%)
+NOTES:
+├── Radius targeting: Tight radius = higher CPM
+├── Store visits: Not available for all locations
+└── Calls: Most trackable local metric
 ```
 
-### Cart Abandonment Benchmarks
+## Benchmarks by Funnel Stage
+
+### TOFU (Top of Funnel)
 
 ```
-CART ABANDONMENT RATES (2024/2025)
-══════════════════════════════════
+TOFU BENCHMARKS - AWARENESS
+===========================
 
-┌─────────────────────────┬────────────────┬────────────────┐
-│ INDUSTRY                │ CART ABANDON   │ CHECKOUT ABAND │
-├─────────────────────────┼────────────────┼────────────────┤
-│ Finance                 │ 83.6%          │ 75.0%          │
-│ Non-Profit              │ 83.1%          │ 74.0%          │
-│ Travel                  │ 81.7%          │ 72.0%          │
-│ Retail/E-commerce       │ 72.8%          │ 63.0%          │
-│ Fashion & Apparel       │ 68.3%          │ 59.0%          │
-│ Gaming                  │ 64.2%          │ 55.0%          │
-│ Food & Grocery          │ 52.0%          │ 44.0%          │
-└─────────────────────────┴────────────────┴────────────────┘
+Objective: Reach / Brand Awareness / Video Views
 
-TOP REASONS FOR ABANDONMENT:
-├── 48% Extra costs (shipping, tax)
-├── 24% Account creation required
-├── 18% Shipping too slow
-├── 17% Checkout too complex
-├── 15% Trust issues
-└── 12% Payment options
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CPM             │ >$10    │ $5-10   │ $3-5    │ <$3
+Reach (per $)   │ <100    │ 100-200 │ 200-350 │ >350
+Frequency/week  │ >4      │ 2.5-4   │ 1.5-2.5 │ 1-1.5
+Video Views     │ <20%    │ 20-40%  │ 40-60%  │ >60%
+ThruPlay Rate   │ <10%    │ 10-20%  │ 20-35%  │ >35%
+Cost/ThruPlay   │ >$0.10  │ $0.05-0.10│$0.02-0.05│<$0.02
+3-sec View Rate │ <30%    │ 30-50%  │ 50-70%  │ >70%
 ```
 
-## Campaign Type Benchmarks
-
-### Shopping Campaign Benchmarks
+### MOFU (Middle of Funnel)
 
 ```
-SHOPPING CAMPAIGN BENCHMARKS (2024/2025)
-════════════════════════════════════════
+MOFU BENCHMARKS - CONSIDERATION
+===============================
 
-OVERALL BENCHMARKS:
-───────────────────
-├── CTR: 0.86% (range: 0.5% - 2.0%)
-├── CPC: €0.38 (range: €0.15 - €1.00)
-├── CVR: 1.91% (range: 1.0% - 4.0%)
-├── ROAS: 4.0x (range: 2.5x - 8.0x)
-└── Impression Share: 40% (target: 60%+)
+Objective: Traffic / Engagement / Lead Gen
 
-PER VERTICAL:
-─────────────
-┌─────────────────────┬───────┬───────┬───────┬───────┐
-│ VERTICAL            │ CTR   │ CPC   │ CVR   │ ROAS  │
-├─────────────────────┼───────┼───────┼───────┼───────┤
-│ Fashion & Apparel   │ 1.2%  │ €0.32 │ 2.1%  │ 4.5x  │
-│ Electronics         │ 0.7%  │ €0.45 │ 1.5%  │ 3.0x  │
-│ Beauty & Cosmetics  │ 1.1%  │ €0.28 │ 2.5%  │ 5.0x  │
-│ Home & Garden       │ 0.9%  │ €0.35 │ 1.8%  │ 3.5x  │
-│ Sports & Outdoor    │ 1.0%  │ €0.30 │ 2.0%  │ 4.0x  │
-│ Food & Beverage     │ 0.8%  │ €0.25 │ 2.2%  │ 4.5x  │
-│ Toys & Games        │ 1.3%  │ €0.28 │ 2.3%  │ 4.0x  │
-└─────────────────────┴───────┴───────┴───────┴───────┘
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR             │ <0.8%   │ 0.8-1.5%│ 1.5-2.5%│ >2.5%
+CPC             │ >$1.50  │ $0.80-1.50│$0.40-0.80│<$0.40
+Landing Page View Rate│<60%│60-75%  │ 75-85%  │ >85%
+Bounce Rate     │ >70%    │ 50-70%  │ 30-50%  │ <30%
+Time on Site    │ <30s    │ 30-60s  │ 60-120s │ >120s
+Content Eng.    │ <2%     │ 2-5%    │ 5-10%   │ >10%
+Email Signup    │ <1%     │ 1-3%    │ 3-6%    │ >6%
 ```
 
-### Performance Max Benchmarks
+### BOFU (Bottom of Funnel)
 
 ```
-PERFORMANCE MAX BENCHMARKS (2024/2025)
-══════════════════════════════════════
+BOFU BENCHMARKS - CONVERSION
+============================
 
-E-COMMERCE PMAX:
-────────────────
-├── ROAS: 3.5-5.0x (vs Shopping 4.0x)
-├── CPA: Often 10-20% lower than Search alone
-├── CVR: 2.0-3.5%
-├── Learning phase: 2-4 weeks
-└── Impression share: N/A (multi-channel)
+Objective: Conversions / Catalog Sales
 
-LEAD GEN PMAX:
-──────────────
-├── CPL: Often 15-25% lower than Search
-├── CVR: 3.0-6.0%
-├── Lead Quality: Monitor closely (varies)
-├── Learning phase: 2-3 weeks
-└── Best for: 50+ conversions/month goal
-
-PMAX VS STANDARD SHOPPING:
-──────────────────────────
-┌───────────────┬──────────────┬──────────────┐
-│ METRIC        │ PMAX         │ STD SHOPPING │
-├───────────────┼──────────────┼──────────────┤
-│ ROAS          │ +10-20%      │ Baseline     │
-│ Reach         │ +40-60%      │ Baseline     │
-│ CPA           │ -10-20%      │ Baseline     │
-│ Control       │ Lower        │ Higher       │
-│ Transparency  │ Lower        │ Higher       │
-└───────────────┴──────────────┴──────────────┘
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR             │ <1%     │ 1-2%    │ 2-3.5%  │ >3.5%
+CPC             │ >$1.20  │ $0.60-1.20│$0.30-0.60│<$0.30
+Conv. Rate      │ <2%     │ 2-4%    │ 4-8%    │ >8%
+CPA             │ varies by industry (see above)
+ROAS            │ varies by industry (see above)
+Cart Abandon    │ >80%    │ 70-80%  │ 60-70%  │ <60%
+Checkout Comp.  │ <30%    │ 30-50%  │ 50-70%  │ >70%
 ```
 
-### Display & Video Benchmarks
+## Benchmarks by Ad Format
+
+### Static Image Ads
 
 ```
-DISPLAY CAMPAIGN BENCHMARKS
-═══════════════════════════
+STATIC IMAGE BENCHMARKS
+=======================
 
-┌─────────────────────────┬───────┬───────┬───────┐
-│ TYPE                    │ CTR   │ CPM   │ CVR   │
-├─────────────────────────┼───────┼───────┼───────┤
-│ Remarketing - Website   │ 0.7%  │ €2.50 │ 0.8%  │
-│ Remarketing - Cart      │ 1.2%  │ €3.50 │ 1.5%  │
-│ In-Market Audiences     │ 0.4%  │ €1.80 │ 0.3%  │
-│ Custom Intent           │ 0.5%  │ €2.00 │ 0.4%  │
-│ Similar Audiences       │ 0.3%  │ €1.50 │ 0.2%  │
-│ Affinity Audiences      │ 0.2%  │ €1.20 │ 0.1%  │
-└─────────────────────────┴───────┴───────┴───────┘
-
-VIDEO/YOUTUBE BENCHMARKS:
-─────────────────────────
-├── View Rate: 25-35%
-├── CPV: €0.02 - €0.06
-├── CTR (to website): 0.5-2.0%
-├── View-through CVR: 0.5-1.5%
-└── Completion rate: 40-60%
-
-DEMAND GEN BENCHMARKS:
-──────────────────────
-├── CTR: 0.8-1.5%
-├── CPC: €0.50-1.50
-├── CVR: 1.0-3.0%
-└── Best for: Visual products, brand consideration
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR             │ <0.8%   │ 0.8-1.5%│ 1.5-2.5%│ >2.5%
+Engagement Rate │ <1%     │ 1-2%    │ 2-4%    │ >4%
+Save Rate       │ <0.1%   │ 0.1-0.5%│ 0.5-1%  │ >1%
+Share Rate      │ <0.05%  │ 0.05-0.2%│0.2-0.5% │ >0.5%
 ```
 
-## Lead Generation Benchmarks
-
-### CPL Benchmarks per Industry
+### Video Ads
 
 ```
-COST PER LEAD BENCHMARKS (EUR, 2024/2025)
-═════════════════════════════════════════
+VIDEO AD BENCHMARKS
+===================
 
-┌────────────────────────────┬──────────┬──────────┬──────────┐
-│ INDUSTRY                   │ AVG CPL  │ LOW      │ HIGH     │
-├────────────────────────────┼──────────┼──────────┼──────────┤
-│ Technology/SaaS            │ €75      │ €30      │ €200     │
-│ Financial Services         │ €80      │ €40      │ €250     │
-│ Insurance                  │ €60      │ €25      │ €150     │
-│ Legal Services             │ €110     │ €50      │ €300     │
-│ Healthcare                 │ €70      │ €30      │ €180     │
-│ Education                  │ €45      │ €20      │ €100     │
-│ Real Estate                │ €50      │ €20      │ €120     │
-│ Home Services              │ €40      │ €15      │ €100     │
-│ B2B Services               │ €90      │ €40      │ €250     │
-│ Marketing/Advertising      │ €55      │ €25      │ €150     │
-│ Recruitment                │ €65      │ €30      │ €180     │
-│ Consulting                 │ €85      │ €40      │ €220     │
-│ Manufacturing              │ €95      │ €45      │ €250     │
-└────────────────────────────┴──────────┴──────────┴──────────┘
-
-LEAD QUALITY CONTEXT:
-─────────────────────
-├── MQL CPL = Avg CPL x 2-3
-├── SQL CPL = MQL CPL x 2-3
-├── Opportunity CPL = SQL CPL x 2-4
-└── Customer Acquisition Cost = Opportunity x Close Rate
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+3-sec View Rate │ <25%    │ 25-40%  │ 40-60%  │ >60%
+ThruPlay Rate   │ <8%     │ 8-15%   │ 15-25%  │ >25%
+Avg Watch Time  │ <3s     │ 3-6s    │ 6-10s   │ >10s
+Video Complete  │ <5%     │ 5-12%   │ 12-20%  │ >20%
+CTR (post-view) │ <0.5%   │ 0.5-1%  │ 1-2%    │ >2%
+Cost/ThruPlay   │ >$0.12  │ $0.06-0.12│$0.03-0.06│<$0.03
 ```
 
-### Lead Form Conversion Benchmarks
+### Carousel Ads
 
 ```
-FORM CONVERSION RATES
-═════════════════════
+CAROUSEL AD BENCHMARKS
+======================
 
-BY FORM LENGTH:
-───────────────
-├── 1-3 fields: 25-30% conversion
-├── 4-6 fields: 15-20% conversion
-├── 7-10 fields: 10-15% conversion
-└── 11+ fields: 5-10% conversion
-
-BY FORM TYPE:
-─────────────
-├── Contact form: 12-18%
-├── Quote request: 8-15%
-├── Demo request: 5-12%
-├── Newsletter: 20-35%
-├── Whitepaper download: 15-25%
-└── Free trial: 8-15%
-
-GOOGLE LEAD FORM EXTENSIONS:
-────────────────────────────
-├── CVR: 5-15%
-├── CPL: Often 20-40% lower than LP forms
-├── Quality: Usually lower (convenience leads)
-└── Best for: High-volume, qualification funnel
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR             │ <1%     │ 1-1.8%  │ 1.8-3%  │ >3%
+Cards Viewed    │ <2      │ 2-3     │ 3-4     │ >4
+Swipe Rate      │ <30%    │ 30-50%  │ 50-70%  │ >70%
+Exit Card       │ Card 1-2│ Card 3-4│ Card 5+ │ Last card
 ```
 
-## Seasonal Benchmarks
-
-### Seasonal CPC Trends
+### Collection/Instant Experience
 
 ```
-SEASONAL CPC FLUCTUATIONS
-═════════════════════════
+COLLECTION AD BENCHMARKS
+========================
 
-┌───────────────┬────────────┬─────────────────────────────────┐
-│ PERIOD        │ CPC CHANGE │ NOTES                           │
-├───────────────┼────────────┼─────────────────────────────────┤
-│ Jan           │ -15%       │ Post-holiday lull               │
-│ Feb           │ -10%       │ Valentine's spike (certain)     │
-│ Mar           │ Baseline   │ Spring season start             │
-│ Apr           │ +5%        │ Easter, spring shopping         │
-│ May           │ +10%       │ Mother's Day, pre-summer        │
-│ Jun           │ +5%        │ Summer sales start              │
-│ Jul-Aug       │ -5%        │ Summer lull (varies by industry)│
-│ Sep           │ +10%       │ Back-to-school, fall season     │
-│ Oct           │ +15%       │ Pre-holiday buildup             │
-│ Nov           │ +30-50%    │ Black Friday, Cyber Monday      │
-│ Dec           │ +40-60%    │ Holiday shopping peak           │
-└───────────────┴────────────┴─────────────────────────────────┘
-
-BLACK FRIDAY / CYBER MONDAY BENCHMARKS:
-───────────────────────────────────────
-├── CPC increase: +40-80%
-├── CTR increase: +20-40%
-├── CVR increase: +25-50%
-├── ROAS impact: Often neutral (higher CPC, higher CVR)
-└── Recommendation: Increase budgets 2-3x
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+Click to Open   │ <3%     │ 3-6%    │ 6-10%   │ >10%
+Time in IE      │ <15s    │ 15-30s  │ 30-60s  │ >60s
+Outbound CTR    │ <2%     │ 2-5%    │ 5-10%   │ >10%
+Product Views   │ <3      │ 3-6     │ 6-10    │ >10
 ```
 
-### Industry-Specific Seasonality
+## Seasonal Adjustment Factors
 
 ```
-INDUSTRY SEASONAL PATTERNS
-══════════════════════════
+SEASONAL VARIATIONS
+====================
 
-E-COMMERCE / RETAIL:
-────────────────────
-Peak: Nov-Dec (holiday), June (sales)
-Low: Jan-Feb, Jul-Aug
-Strategy: Scale budgets 50-100% for peaks
+MONTH           │ CPM Factor │ CPA Factor │ Notes
+────────────────┼────────────┼────────────┼───────────────
+January         │   0.85     │   0.90     │ Low competition
+February        │   0.90     │   0.95     │ Valentine's spike
+March           │   0.95     │   1.00     │ Baseline
+April           │   0.95     │   1.00     │ Baseline
+May             │   1.00     │   1.00     │ Baseline
+June            │   0.95     │   0.98     │ Summer start
+July            │   0.90     │   0.95     │ Summer lull
+August          │   0.88     │   0.92     │ Summer lull
+September       │   1.00     │   1.00     │ Back to school
+October         │   1.10     │   1.05     │ Q4 start
+November        │   1.35     │   1.20     │ Black Friday
+December        │   1.40     │   1.25     │ Holiday peak
 
-TRAVEL:
-───────
-Peak: Jan (booking), Jun-Aug (travel)
-Low: Oct-Nov
-Strategy: Early year booking campaigns
-
-EDUCATION:
-──────────
-Peak: Aug-Sep (back-to-school), Jan (new year)
-Low: Jun-Jul
-Strategy: Lead gen before decision periods
-
-B2B / SAAS:
-───────────
-Peak: Jan (budget season), Sep-Oct (Q4 push)
-Low: Jul-Aug, Dec (holidays)
-Strategy: Reduce bids during holidays
-
-HOME SERVICES:
-──────────────
-Peak: Mar-Jun (spring projects), Sep (pre-winter)
-Low: Dec-Feb
-Strategy: Weather-dependent bid adjustments
+Usage: Benchmark x Factor = Seasonally Adjusted Benchmark
 ```
 
-## Geographic Benchmarks (Benelux Focus)
+## Benchmark Comparison Template
 
-### Regional CPC Differences
-
-```
-BENELUX CPC DIFFERENCES (vs NL Average)
-═══════════════════════════════════════
-
-NETHERLANDS:
-────────────
-├── Randstad (AMS, RTD, UTR): +20-30%
-├── Noord-Holland (other): Baseline
-├── Zuid-Holland (other): +5-10%
-├── Noord-Brabant: -5-10%
-├── Limburg: -10-15%
-├── Other regions: -15-25%
-
-BELGIUM:
-────────
-├── Brussels: +10-20% vs NL average
-├── Flanders: -5-15% vs NL average
-├── Wallonia: -15-25% vs NL average
-
-GERMANY (if targeting):
-───────────────────────
-├── Munich, Frankfurt: +30-50% vs NL
-├── Berlin, Hamburg: +20-30% vs NL
-├── Other: Comparable to NL
-└── Overall: German market 2-3x larger, similar CPCs
-
-RECOMMENDATION:
-───────────────
-├── Budget allocation: Match to population/purchasing power
-├── Bid adjustments: -10% to -20% for lower-value regions
-├── Separate campaigns: If significant budget differences
-└── Language: NL/DE/FR separate campaigns
-```
-
-## Quick Reference Tables
-
-### Universal Benchmark Cheat Sheet
+### When user asks to evaluate metrics:
 
 ```
-QUICK REFERENCE - ALL CAMPAIGN TYPES
-════════════════════════════════════
+METRIC EVALUATION - [ACCOUNT]
+============================
 
-                    │ POOR      │ AVERAGE   │ GOOD      │ EXCELLENT
-────────────────────┼───────────┼───────────┼───────────┼───────────
-SEARCH CTR          │ <2%       │ 2-4%      │ 4-6%      │ >6%
-SEARCH CVR          │ <2%       │ 2-4%      │ 4-6%      │ >6%
-SEARCH CPA          │ >€100     │ €50-100   │ €25-50    │ <€25
-────────────────────┼───────────┼───────────┼───────────┼───────────
-SHOPPING CTR        │ <0.5%     │ 0.5-1%    │ 1-2%      │ >2%
-SHOPPING CVR        │ <1%       │ 1-2%      │ 2-3%      │ >3%
-SHOPPING ROAS       │ <2x       │ 2-4x      │ 4-6x      │ >6x
-────────────────────┼───────────┼───────────┼───────────┼───────────
-PMAX CVR            │ <1.5%     │ 1.5-3%    │ 3-5%      │ >5%
-PMAX ROAS           │ <2.5x     │ 2.5-4x    │ 4-6x      │ >6x
-────────────────────┼───────────┼───────────┼───────────┼───────────
-DISPLAY CTR         │ <0.2%     │ 0.2-0.5%  │ 0.5-1%    │ >1%
-DISPLAY CVR         │ <0.2%     │ 0.2-0.5%  │ 0.5-1%    │ >1%
-────────────────────┼───────────┼───────────┼───────────┼───────────
-VIDEO VIEW RATE     │ <20%      │ 20-30%    │ 30-40%    │ >40%
-VIDEO CTR           │ <0.5%     │ 0.5-1%    │ 1-2%      │ >2%
-────────────────────┼───────────┼───────────┼───────────┼───────────
-QUALITY SCORE       │ 1-4       │ 5-6       │ 7-8       │ 9-10
+YOUR METRICS vs BENCHMARKS
+
+Metric      │ Your Value  │ Benchmark │ Difference │ Status
+────────────┼─────────────┼───────────┼────────────┼────────
+CTR         │   [X]%      │   [Y]%    │  [+/-Z%]   │ [green/yellow/red]
+CPC         │   $[X]      │   $[Y]    │  [+/-Z%]   │ [green/yellow/red]
+CPM         │   $[X]      │   $[Y]    │  [+/-Z%]   │ [green/yellow/red]
+CPA         │   $[X]      │   $[Y]    │  [+/-Z%]   │ [green/yellow/red]
+ROAS        │   [X]x      │   [Y]x    │  [+/-Z%]   │ [green/yellow/red]
+Conv Rate   │   [X]%      │   [Y]%    │  [+/-Z%]   │ [green/yellow/red]
+
+INTERPRETATION:
+Green: Above benchmark (>10% better)
+Yellow: At benchmark (+/-10%)
+Red: Below benchmark (>10% worse)
+
+RECOMMENDATIONS:
+├── [Focus area 1]
+├── [Focus area 2]
+└── [Focus area 3]
 ```
 
-## Output: Benchmark Comparison Report
+## MCP Tool Integration
 
-```markdown
-# Benchmark Comparison Report
+### Pulling Real Data for Benchmark Comparison
 
-## Account Overview
-- **Account:** [Account Name]
-- **Industry:** [Industry]
-- **Report Period:** [Date Range]
-- **Compared Against:** Industry Benchmarks 2024/2025
-## Priority Improvements
+Never benchmark against user-provided numbers alone — always pull live account data first:
 
-### High Priority (Below Average)
-1. [Metric]: Currently X.XX%, target X.XX%
-   - Recommended action: [Action]
-
-### Medium Priority (At Average)
-1. [Metric]: Currently X.XX%, opportunity to reach X.XX%
-   - Recommended action: [Action]
-
-## Seasonal Outlook
-- Current month benchmark adjustments: [+/-X%]
-- Upcoming opportunities: [Holidays, seasons]
-- Recommended budget changes: [Increase/maintain]
-
-## Next Steps
-1. [ ] Address high-priority gaps
-2. [ ] A/B test improvements
-3. [ ] Re-benchmark in [X weeks]
 ```
+1. Get current metrics (last 30 days):
+→ meta_query(account_id="...", fields=["campaign_name","spend","ctr","cpc","cpm","cost_per_result","purchase_roas","impressions"], date_preset="last_30d", level="campaign")
+
+2. Drill into ad set level for audience-specific benchmarks:
+→ meta_query(account_id="...", fields=["adset_name","ctr","cpc","cost_per_result","purchase_roas","frequency"], date_preset="last_30d", level="adset")
+```
+
+Then compare the returned metrics against the benchmark tables above, applying seasonal adjustment factors if relevant.
+
+## Example Interaction
+
+**User**: "My e-commerce fashion campaign has a CTR of 1.2%, CPA of $35 and ROAS of 2.8x. Is that good?"
+
+**Claude response**:
+
+"Let me compare your metrics against e-commerce fashion benchmarks:
+
+---
+
+**BENCHMARK COMPARISON - Fashion E-commerce:**
+
+| Metric | Your Value | Benchmark Range | Status |
+|--------|------------|-----------------|--------|
+| CTR | 1.2% | 1-2% (average-good) | Good |
+| CPA | $35 | $20-40 (average) | OK |
+| ROAS | 2.8x | 2.5-4x (average-good) | Good |
+
+---
+
+**INTERPRETATION:**
+
+**CTR (1.2%)** - You're in the 'good' range. Your creatives are grabbing attention.
+
+**CPA ($35)** - Average for fashion. There's room for improvement.
+
+**ROAS (2.8x)** - Healthy. Above breakeven, room to scale.
+
+---
+
+**RECOMMENDATIONS:**
+
+1. **Lowering CPA** is your biggest opportunity
+   - Test more creatives (UGC is often cheaper)
+   - Optimize landing page conversion
+   - Check audience overlap
+
+2. **Scale potential**: With 2.8x ROAS you can increase budget if CPA stays stable
+
+Would you like specific benchmarks for another metric or a comparison with last period?"

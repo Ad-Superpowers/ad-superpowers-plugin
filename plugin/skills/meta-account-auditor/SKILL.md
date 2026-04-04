@@ -81,7 +81,14 @@ TRACKING AUDIT
 ├── Event prioritization correct?
 └── Score: [green OK / yellow Issues / red Critical]
 
-TRACKING SCORE: ___/40 points
+□ ATTRIBUTION WINDOW (Critical — Jan 2026 change)
+├── Are reports using the correct default? (7d click + 1d view)
+├── Note: 7d view and 28d view attribution REMOVED by Meta (Jan 2026)
+├── Historical data using old windows cannot be compared to current data
+├── Any reports or rules referencing 28d attribution must be updated
+└── Score: [green OK / yellow Issues / red Critical]
+
+TRACKING SCORE: ___/50 points
 ```
 
 ### Section 2: Account Structure
@@ -105,10 +112,10 @@ STRUCTURE AUDIT
 └── Score: [green OK / yellow Issues / red Critical]
 
 □ ADS ORGANIZATION
-├── Number of ads per ad set (Ideal: 3-6)
+├── Number of ads per ad set (Ideal: 3-6, Andromeda engine recommends 15+ distinct creatives per account)
 ├── Creative diversity present?
 ├── No duplicate ads?
-├── DCO/Advantage+ correctly used?
+├── Advantage+ Creative (formerly DCO) correctly configured?
 └── Score: [green OK / yellow Issues / red Critical]
 
 □ NAMING CONVENTIONS
@@ -139,12 +146,13 @@ AUDIENCE AUDIT
 ├── Source audience quality?
 ├── Percentage selection appropriate?
 ├── Are value-based LALs being used?
+├── Note: Lookalikes deprioritized in 2026 — Advantage+ Audience is now Meta's recommended approach
 └── Score: [green OK / yellow Issues / red Critical]
 
 □ INTEREST/BEHAVIOR TARGETING
 ├── Relevance of selected interests?
 ├── Audience size not too broad/narrow?
-├── Are Advantage+ audiences being used?
+├── Are Advantage+ Audiences active on prospecting campaigns? (Recommended over manual interests in 2026)
 ├── Testing of new interests?
 └── Score: [green OK / yellow Issues / red Critical]
 
@@ -275,7 +283,7 @@ This section identifies money left on the table - features that are
 available but not being used, representing optimization opportunities.
 
 □ ADVANTAGE+ FEATURES (Underutilized?)
-├── Advantage+ Shopping Campaigns (ASC)
+├── Advantage+ Sales Campaigns (formerly ASC)
 │   └── E-commerce account with $5k+/month? ASC not active?
 │       → Potential: 10-20% ROAS improvement
 ├── Advantage+ Placements
@@ -323,8 +331,8 @@ available but not being used, representing optimization opportunities.
 □ AUTOMATION & RULES (Not Configured?)
 ├── No automated rules for budget/bid management?
 │   └── Missing: Proactive management, less manual work
-├── No campaign budget optimization (CBO)?
-│   └── Missing: Automated budget allocation
+├── No Advantage Campaign Budget enabled?
+│   └── Missing: Automated budget allocation across ad sets
 ├── No cost caps or bid caps when needed?
 │   └── Risk: Uncontrolled spending
 ├── No scheduled ad set rules (day/time)?
@@ -502,13 +510,45 @@ QUICK SCORE: ___/8
 └── <5: In-depth audit needed
 ```
 
+## MCP Tool Integration
+
+### Running an Audit with Live Data
+
+Use these MCP calls to pull actual account data before scoring each section:
+
+```
+1. Campaign structure overview:
+→ meta_query(account_id="...", fields=["campaign_name","objective","status","daily_budget","lifetime_budget"], level="campaign")
+
+2. Ad set performance + delivery:
+→ meta_query(account_id="...", fields=["adset_name","delivery_info","cost_per_result","spend","frequency","impressions"], date_preset="last_7d", level="adset")
+
+3. Ad-level creative health:
+→ meta_get_creatives(account_id="...", scope="active")
+
+4. Top/bottom performers (last 30 days):
+→ meta_query(account_id="...", fields=["campaign_name","spend","purchase_roas","cost_per_result","impressions"], date_preset="last_30d", level="campaign")
+```
+
+Feed results directly into the audit sections above to score each area objectively.
+
 ## Example Interaction
 
 **User**: "I just took over a new account. Can you help me with an audit?"
 
 **Claude response**:
 
-"I'll help you with a systematic account audit. Let's get started:
+"I'll help you with a systematic account audit. Let me pull the live data first:
+
+```
+meta_query(account_id="...", fields=["campaign_name","objective","status","spend","cost_per_result","purchase_roas","frequency","impressions"], date_preset="last_7d", level="campaign")
+```
+
+```
+meta_query(account_id="...", fields=["adset_name","delivery_info","cost_per_result","spend","frequency"], date_preset="last_7d", level="adset")
+```
+
+While that runs, I also need a few things:
 
 ---
 
@@ -522,24 +562,22 @@ Can you tell me the following:
 
 ---
 
-**STEP 2: Check These Points in Ads Manager**
+**STEP 2: Key Things I'll Check From the Data**
 
 **Tracking Check:**
-- [ ] Go to Events Manager → Data Sources
-- [ ] Is the pixel active (green)?
-- [ ] What is the EMQ score for the Purchase event?
+- Pixel active + EMQ score for Purchase event (target: 6.0+)
+- Attribution window: confirm reports use 7d click + 1d view (28d view removed Jan 2026)
 
 **Structure Check:**
-- [ ] How many active campaigns are there?
-- [ ] Are there campaigns with >10 ad sets?
-- [ ] How many ads are active in total?
+- Number of active campaigns (ideal: 3-8)
+- Ad sets per campaign (ideal: 2-5)
+- Creative count and diversity
 
 **Performance Check (Last 7 days):**
-- [ ] Total spend: $___
-- [ ] Total conversions: ___
-- [ ] CPA: $___
-- [ ] ROAS: ___
+- CPA vs target
+- ROAS vs target
+- Learning phase % (should be <20% of budget)
 
 ---
 
-Share this info and I'll generate a complete audit with health score and action plan!"
+Share the account ID and I'll generate a complete audit with health score and action plan!"

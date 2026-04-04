@@ -45,6 +45,13 @@ Invoke when user mentions:
 TIKTOK TARGETING HIERARCHY:
 ───────────────────────────
 
+LAYER 0: SEARCH ADS (highest intent — new as of Sep 2025)
+├── Keyword-based targeting in TikTok's built-in search
+├── Reaches users actively searching on TikTok
+├── Formats: text ads and video ads in search results
+├── Best for: high-intent users, product discovery
+└── Note: TikTok Search Ads available in most markets since Q3 2025
+
 LAYER 1: DEMOGRAPHICS (broadest)
 ├── Location (country, region, DMA)
 ├── Age (13-17, 18-24, 25-34, 35-44, 45-54, 55+)
@@ -131,7 +138,7 @@ NARROW TARGETING ON TIKTOK:
 | Scenario | Recommended | Why |
 |----------|-------------|-----|
 | New account, no pixel data | Narrow | Algorithm needs guidance without conversion history |
-| Mature account, 50+ conv/week | Broad | Algorithm can optimize from rich data |
+| Mature account, 50+ conv/week | Broad or Smart+ | Algorithm can optimize from rich data; Smart+ campaigns automate this |
 | Niche product (small TAM) | Narrow | Broad wastes spend on irrelevant users |
 | Mass market product | Broad | TikTok finds buyers you wouldn't target |
 | Brand awareness campaign | Broad | Maximize reach, let algorithm optimize |

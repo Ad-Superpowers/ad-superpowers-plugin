@@ -39,7 +39,7 @@ This skill generates video scripts optimized for Meta Ads, focusing on the cruci
 | Format | Minimum | Sweet Spot | Maximum |
 |--------|---------|------------|---------|
 | Feed Video | 5 sec | 15-30 sec | 60 sec |
-| Stories | 5 sec | 10-15 sec | 15 sec |
+| Stories | 5 sec | 10-15 sec | 60 sec |
 | Reels | 5 sec | 15-30 sec | 90 sec |
 | In-Stream | 5 sec | 15 sec | 15 sec |
 
@@ -245,8 +245,10 @@ STYLE: More professional, more context
 ### Stories Script
 
 ```
-FORMAT: Vertical 9:16, 5-15 sec
-STYLE: Urgent, snappy, swipe-up focused
+FORMAT: Vertical 9:16, 5-60 sec (sweet spot: 10-15 sec)
+STYLE: Urgent, snappy, tap-through focused
+
+NOTE: No "swipe up" — Stories now use tap/link sticker for CTAs.
 
 [0-2 sec] INSTANT HOOK
 ├── Movement or text sticker
@@ -258,10 +260,10 @@ STYLE: Urgent, snappy, swipe-up focused
 ├── Native stickers/GIFs
 └── Interactive elements
 
-[12-15 sec] SWIPE CTA
-├── Clear swipe instruction
-├── Arrow/gesture animation
-└── Link sticker prominent
+[12-15 sec] TAP CTA
+├── Clear tap/link sticker instruction (NOT "swipe up")
+├── Arrow/gesture animation pointing to link sticker
+└── Link sticker prominent at bottom of frame
 ```
 
 ## UGC Brief Template
@@ -409,7 +411,7 @@ Style: Authentic UGC testimonial
 ├── Visual: Current skin close-up, glowing
 ├── Audio: "Now? Just look. If you also struggle with acne - link in my bio. Trust me."
 ├── Text: "link in bio"
-└── Tip: Confident smile, swipe up gesture
+└── Tip: Confident smile, tap CTA gesture
 
 ---
 
@@ -420,3 +422,31 @@ Style: Authentic UGC testimonial
 - Add trending audio in editing
 
 Want me to create an alternative version with a different hook?"
+
+## MCP Tool Usage
+
+### Pull video creative performance before writing new scripts:
+
+```python
+# Get video-level metrics to identify which hooks and lengths are working
+meta_get_creatives(
+    account_id="act_XXXXXXXXX",
+    scope="ads",
+    filters={"date_preset": "last_30d"}
+)
+
+# Then pull video-specific engagement metrics
+meta_query(
+    account_id="act_XXXXXXXXX",
+    query_type="insights",
+    params={
+        "fields": ["ad_name", "video_thruplay_watched_actions", "video_30_sec_watched_actions",
+                   "video_p25_watched_actions", "video_p50_watched_actions", "video_p75_watched_actions",
+                   "video_p95_watched_actions", "ctr", "spend"],
+        "date_preset": "last_30d",
+        "level": "ad"
+    }
+)
+```
+
+Use the video retention breakpoints (P25/P50/P75/P95) to understand where viewers drop off in existing scripts. High drop-off at P25 (first ~25% of video) indicates a weak hook — use this as the primary brief input when writing replacement scripts.

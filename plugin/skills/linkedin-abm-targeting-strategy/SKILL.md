@@ -323,6 +323,7 @@ Once accounts show engagement, expand strategically:
 
 **Vertical expansion** (similar companies to engaged accounts):
 - LinkedIn Lookalike from engaged company list (1% size)
+- LinkedIn Predictive Audiences — AI-generated audiences built from your CRM data or intent signals (available in Campaign Manager under Audiences > Create Audience > Predictive)
 - Industry + company size mirroring of Tier 1 engaged accounts
 - Promote engaged Tier 2 accounts to Tier 1 treatment
 

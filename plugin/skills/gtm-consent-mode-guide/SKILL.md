@@ -574,11 +574,13 @@ After implementing consent, use GA4 reports to measure the impact:
 
 ```
 Before consent implementation:
-  ga4_run_report(dimensions=["country"], metrics=["activeUsers", "conversions"])
+  ga4_run_report(dimensions=["country"], metrics=["activeUsers", "keyEvents"])
 
 After consent implementation (2 weeks later):
-  ga4_run_report(dimensions=["country"], metrics=["activeUsers", "conversions"])
+  ga4_run_report(dimensions=["country"], metrics=["activeUsers", "keyEvents"])
 
 Compare EU vs non-EU metrics to quantify consent impact.
 Expected: 30-60% drop in EU tracked users, partially recovered by modeling.
 ```
+
+Note: GA4 renamed "Conversions" to "Key Events" in the UI (2023). The Data API metric `keyEvents` reflects this; the older `conversions` metric name is deprecated. Always use `keyEvents` in API calls.

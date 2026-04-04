@@ -4,7 +4,7 @@ description: |
   Google Ads Competitive Analysis Toolkit for market analysis and competitor monitoring. Use when: analyzing Auction Insights, identifying competitor strategies, calculating market share, building competitive response strategies, or setting up Share of Voice monitoring. Do NOT use for: keyword strategy (use keyword-strategy-planner), bid strategy selection (use bid-strategy-selector), or campaign performance diagnosis (use performance-troubleshooter).
 metadata:
   author: "AdSuperpowers"
-  version: "1.0.0"
+  version: "1.1.0"
   platform: "google_ads"
   phase: "fase-4-measurement-attribution"
 compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
@@ -12,6 +12,36 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Competitive Analysis Toolkit
 
 Complete guide for analyzing competition in Google Ads, from Auction Insights interpretation to strategic response to competitor activities.
+
+## Pull Competitive Data via MCP
+
+Auction Insights per-competitor data is only available in the Google Ads UI, but you can pull impression share and competitive proxy metrics via GAQL:
+
+```
+# Impression share + lost IS breakdown
+google_ads_run_gaql(query="
+  SELECT campaign.name,
+         metrics.search_impression_share,
+         metrics.search_budget_lost_impression_share,
+         metrics.search_rank_lost_impression_share,
+         metrics.search_absolute_top_impression_share,
+         metrics.search_top_impression_share,
+         metrics.average_cpc, metrics.cost_micros
+  FROM campaign
+  WHERE segments.date DURING LAST_30_DAYS
+    AND campaign.status = 'ENABLED'
+    AND campaign.advertising_channel_type = 'SEARCH'
+  ORDER BY metrics.cost_micros DESC
+  LIMIT 20
+")
+```
+
+Interpret:
+- `search_rank_lost_impression_share` rising → competitors increasing bids/QS
+- `search_budget_lost_impression_share` rising → you are budget-capped
+- `search_absolute_top_impression_share` dropping → someone pushed you down
+
+For full Auction Insights (competitor domain names and overlap rates), use the Google Ads UI: Campaigns → [select] → Auction Insights.
 
 ## Quick Analysis Guide
 
@@ -435,7 +465,16 @@ https://adstransparency.google.com/
 Limitations:
 ├── Only active ads
 ├── No performance data
-└── No targeting info
+├── No targeting info
+└── Political advertiser disclosure required by EU law (since 2024)
+
+METHOD 3: SEMRUSH / SPYFU KEYWORD GAP
+──────────────────────────────────────
+For keyword-level competitive overlap beyond what Auction Insights shows:
+├── Enter your domain + competitor domains
+├── See shared keywords and keyword gaps
+├── Identify terms competitor bids on that you do not
+└── Combine with search_impression_share GAQL data for full picture
 ```
 
 ### Competitor Strategy Patterns
@@ -456,12 +495,14 @@ Likely strategy:
 ├── Growth/market share focus
 ├── Venture-backed or new to market
 ├── Willing to lose money for share
+├── May be using AI Max (2026) for broad query coverage
 └── Can be expensive long-term
 
 Your response:
 ├── DO NOT match (cost war you'll lose)
 ├── Focus on efficiency and niche
 ├── Wait until they optimize or stop
+├── If they use AI Max: focus on exact match + strong negatives
 └── Differentiate on value, not price
 
 PATTERN 2: CHERRY-PICKING
@@ -524,6 +565,13 @@ Your response:
 ├── Avoid direct competition during peaks
 └── Capture traffic when they normalize
 ```
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
+
 ## Competitive Monitoring Setup
 
 ### Automated Alerts

@@ -350,6 +350,18 @@ SCORE 8-10 (Great):
   └── Per event: which params are populated?
 ```
 
+## MCP: Check Current EMQ and Event Volume
+
+```python
+# Pull pixel-level stats to assess event quality and volume
+meta_query(account_id="act_XXXXX", entity="pixels", fields=["id","name","last_fired_time","diagnostics","event_stats","match_rate_info"])
+
+# Cross-check ROAS — low EMQ typically shows as underreported ROAS
+meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","spend","website_purchase_roas","actions"], date_range="last_7d", filters={"effective_status":["ACTIVE"]})
+```
+
+> **EMQ Minimum Bar:** Meta's own CAPI guidance sets 6.0 as the minimum acceptable EMQ for production campaigns. Below 6.0, algorithm optimization quality degrades measurably. Target 7+ for Purchase events.
+
 ## EMQ Improvement Plan Template
 
 ```markdown

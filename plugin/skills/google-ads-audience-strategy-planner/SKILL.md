@@ -1,8 +1,8 @@
 ---
 name: audience-strategy-planner
 description: |
-  Google Ads audience strategy and targeting planner. Helps with Customer Match implementation, In-market and Affinity audience selection, Similar/Lookalike audience setup, audience layering strategies, first-party data strategy, and B2B audience targeting.
-  Use when: audience, customer match, in-market, affinity, similar audiences, lookalike, first party data, targeting, segments, b2b targeting, audience layering, custom segments, remarketing audiences.
+  Google Ads audience strategy and targeting planner. Helps with Customer Match implementation, In-market and Affinity audience selection, Optimized Targeting setup, audience layering strategies, first-party data strategy, and B2B audience targeting.
+  Use when: audience, customer match, in-market, affinity, optimized targeting, first party data, targeting, segments, b2b targeting, audience layering, custom segments, remarketing audiences.
   Do NOT use for: remarketing list creation (use remarketing-list-builder), GA4 audience export (use ga4-integration-guide), bid strategy selection (use bid-strategy-selector).
 metadata:
   author: "AdSuperpowers"
@@ -14,12 +14,42 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Audience Strategy Planner
 
 Complete guide for setting up an effective Google Ads audience strategy with first-party data, Google audiences, and layering strategies for lead generation.
+
+
+
+## GAQL: Check Audience Performance
+
+Use `google_ads_run_gaql` to pull audience observation data from Search campaigns:
+
+```sql
+SELECT campaign.name, ad_group.name,
+    ad_group_criterion.user_list.user_list,
+    ad_group_criterion.bid_modifier,
+    metrics.impressions, metrics.clicks, metrics.cost_micros,
+    metrics.conversions, metrics.conversions_value
+FROM ad_group_audience_view
+WHERE segments.date DURING LAST_30_DAYS
+AND campaign.advertising_channel_type = 'SEARCH'
+ORDER BY metrics.impressions DESC
+LIMIT 100
+```
+
+```sql
+-- List all Customer Match + remarketing lists
+SELECT user_list.name, user_list.size_for_search,
+    user_list.size_for_display, user_list.membership_life_span,
+    user_list.type, user_list.eligible_for_search
+FROM user_list
+ORDER BY user_list.size_for_search DESC
+LIMIT 50
+```
+
 ## Audience Types Overview
 
 ### Google Ads Audience Types
 
 ```
-GOOGLE ADS AUDIENCE TYPES (2025)
+GOOGLE ADS AUDIENCE TYPES (2026)
 ════════════════════════════════
 
 ┌─────────────────────────────────────────────────────────────────┐
@@ -53,17 +83,18 @@ GOOGLE ADS AUDIENCE TYPES (2025)
 │ Detailed Demo     │ Age, gender, income,   │ Demographic        │
 │                   │ parental status        │ targeting          │
 ├───────────────────┼────────────────────────┼────────────────────┤
-│ Similar Audiences │ Lookalikes of your     │ Scale acquisition  │
-│                   │ first-party lists      │ (limited in EU)    │
+│ Optimized Target. │ Google expands beyond  │ Scale acquisition  │
+│                   │ selected audiences     │ (auto in Display)  │
 ├───────────────────┼────────────────────────┼────────────────────┤
 │ Custom Segments   │ Keywords, URLs,        │ Custom intent      │
 │                   │ app interests          │ targeting          │
 └───────────────────┴────────────────────────┴────────────────────┘
 
-WARNING — SIMILAR AUDIENCES (EU):
-├── Limited availability due to privacy regulations
-├── Replaced by: Optimized Targeting, Smart Bidding signals
-└── Check availability in your account
+NOTE — OPTIMIZED TARGETING:
+├── Replaced Similar Audiences (deprecated May 2023)
+├── Enabled by default in Display, YouTube, and Demand Gen
+├── Uses your audience selections as signals to find converters
+└── Disable in campaign settings if you need strict audience control
 ```
 
 ### Audience Sizing Guidelines
@@ -82,7 +113,7 @@ MINIMUM SIZES PER NETWORK:
 │ YouTube            │ 1,000 users                              │
 │ Gmail              │ 100 users                                 │
 │ Customer Match     │ 1,000 matched users                      │
-│ Similar Audiences  │ 500+ in source list                      │
+│ Optimized Targeting│ Enabled by default (no minimum)          │
 └────────────────────┴───────────────────────────────────────────┘
 
 OPTIMAL SIZES:
@@ -230,18 +261,23 @@ Targeting: Customer match → Exclude
 Use: Prospecting campaigns only
 Result: No wasted spend on existing customers
 
-4. SIMILAR AUDIENCES (Scale)
-────────────────────────────
+4. OPTIMIZED TARGETING (Scale)
+──────────────────────────────
 Goal: Find new customers who resemble your best customers
 
-Base list: High-value customers
-Create: Similar audience automatically
-Targeting: Similar to high-value
-Use: Prospecting campaigns
+How it works:
+├── Upload Customer Match list as audience signal
+├── Google's AI expands targeting beyond your selections
+├── Finds users with similar conversion patterns
+└── Available in Display, YouTube, and Demand Gen campaigns
 
-WARNING: Similar audiences have limited availability in the EU
+Setup:
+├── Add your Customer Match list as targeting
+├── Optimized Targeting is ON by default
+├── Monitor: Settings → Targeting expansion report
+└── Disable if audience precision is more important than scale
 
-5. LOOKALIKE VIA PERFORMANCE MAX
+5. AUDIENCE SIGNALS VIA PERFORMANCE MAX
 ────────────────────────────────
 Goal: Scale using Customer Match signals
 
@@ -547,11 +583,11 @@ FUNNEL STAGE: AWARENESS (Top)
 Goal: Brand awareness, reach
 Audiences:
 ├── Affinity audiences (broad)
-├── Similar to customers
+├── Optimized Targeting (expands beyond selections)
 ├── Custom segments (interest-based)
 └── Life events
 
-Campaigns: Display, YouTube, Discovery
+Campaigns: Display, YouTube, Demand Gen (replaced Discovery in 2024)
 Bidding: CPM, Maximize reach
 Messaging: Brand story, pain points
 Budget: 15-25% of total
@@ -603,7 +639,7 @@ Budget: 5-10% of total
 ┌─────────────────────────────────────────────────────────────────┐
 │                     FULL-FUNNEL VISUAL                          │
 │                                                                 │
-│     AWARENESS        Affinity, Similar, Life Events             │
+│     AWARENESS        Affinity, Optimized Targeting, Life Events             │
 │     ▼▼▼▼▼▼▼▼▼       Wide reach, brand building                │
 │                                                                 │
 │     CONSIDERATION    In-market, Custom Intent                   │
@@ -658,8 +694,8 @@ List 1: Enterprise accounts (1000+ employees)
 List 2: Mid-market accounts (100-999 employees)
 List 3: SMB accounts (<100 employees)
 
-Create similar audiences from best segment
-Target/exclude based on ideal customer
+Use as Audience Signal in Performance Max
+Use with Optimized Targeting in Display/YouTube
 
 3. CUSTOM SEGMENTS (COMPETITOR/TOOL)
 ────────────────────────────────────
@@ -686,7 +722,7 @@ Flow:
 1. LinkedIn campaign → Generate leads
 2. Export leads (email, company)
 3. Upload to Google Ads Customer Match
-4. Target similar audiences
+4. Use as PMax Audience Signal for expansion
 5. Remarketing via Google Display
 ```
 

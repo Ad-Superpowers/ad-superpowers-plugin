@@ -16,6 +16,8 @@ compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 
 This skill helps create high-quality Lookalike Audiences by selecting the right source audiences, choosing optimal percentages, and applying advanced strategies for maximum performance.
 
+> **2026 Context:** Meta increasingly recommends Advantage+ Audience (broad targeting with audience suggestions) over manual Lookalikes for most campaign types. Lookalikes remain valuable as **audience suggestions** within Advantage+ campaigns, and for specific use cases where you need more targeting control. For Advantage+ Sales Campaigns (ASC), upload your Customer Match list as an audience signal instead of creating standalone LALs. Note: "Advantage+ Shopping Campaigns" branding was deprecated in API v25.0 — the unified product is now called **Advantage+ Sales Campaigns**.
+
 ## Lookalike Fundamentals
 
 ### How Meta Lookalikes Work
@@ -337,3 +339,21 @@ SOURCE AUDIENCE CHECKLIST:
 3. What is your daily budget for prospecting?
 
 With that info I can fine-tune the percentages and build out a layered strategy!"
+
+## MCP Tool Usage
+
+### Pull existing custom audiences to select the best LAL source:
+
+```python
+# List custom audiences to identify your highest-quality source options
+meta_query(
+    account_id="act_XXXXXXXXX",
+    query_type="customaudiences",
+    params={
+        "fields": ["name", "subtype", "approximate_count", "data_source", "time_updated"],
+        "filtering": [{"field": "subtype", "operator": "IN", "value": ["CUSTOM", "WEBSITE", "OFFLINE_CONVERSION"]}]
+    }
+)
+```
+
+Look for audiences with `approximate_count` > 1,000 and recent `time_updated`. Purchaser audiences (OFFLINE_CONVERSION or WEBSITE with Purchase event) in the 500–10,000 range are ideal LAL sources. Avoid audiences with counts below 300 or last updated more than 180 days ago.

@@ -38,9 +38,11 @@ Invoke when user mentions:
 |--------|--------|--------|
 | iOS App Tracking Transparency | Active (since 2021) | 40-60% signal loss on mobile |
 | GDPR Consent Requirements | Active | ~50% opt-in rates in EU |
-| Chrome 3rd Party Cookie Deprecation | In progress (2025) | Major impact pending |
+| Chrome 3rd Party Cookie Deprecation | Active (phasing out 2025-2026) | Major ongoing impact — not a future risk |
 | Meta Aggregated Event Measurement | Active | Limited to 8 priority events |
-| Google Privacy Sandbox | Rolling out | Topics API, Protected Audiences |
+| Google Privacy Sandbox | Deployed | Topics API, Protected Audiences replacing cookie-based targeting |
+
+> **Cookie deprecation is happening now, not in the future.** Chrome began restricting third-party cookies in 2024 and is continuing the phase-out through 2025-2026. Safari and Firefox have blocked third-party cookies for years. The practical impact on tracking is already visible in attribution gaps. First-party data strategy is not preparation for a future change — it is the fix for a current problem.
 
 ### Signal Loss by Region
 
@@ -224,37 +226,46 @@ Invoke when user mentions:
 
 ---
 
-## Part 4: Consent Mode V2 (Google)
+## Part 4: Consent Mode v2 (Google)
 
-### What is Consent Mode V2?
+### What is Consent Mode v2?
 
-Consent Mode allows Google tags to adjust behavior based on user consent status, while still enabling conversion modeling for non-consented users.
+Consent Mode v2 is Google's framework that allows tags to adjust behavior based on user consent status, while still enabling conversion modeling for non-consented users. **Consent Mode v2 has been mandatory for EEA advertisers since March 2024.** Version 1 is no longer sufficient.
 
-### Consent Mode Parameters
+### What's New in v2 vs v1
 
-| Parameter | What It Controls | Default Without Consent |
-|-----------|------------------|------------------------|
-| ad_storage | Advertising cookies | Denied (no cookies) |
-| analytics_storage | Analytics cookies | Denied (no cookies) |
-| ad_user_data | Sending user data to Google | Denied |
-| ad_personalization | Personalized ads | Denied |
+Consent Mode v2 added two parameters on top of the original two:
+
+| Parameter | Version | What It Controls | Default Without Consent |
+|-----------|---------|------------------|------------------------|
+| `ad_storage` | v1 | Advertising cookies | `denied` (no cookies) |
+| `analytics_storage` | v1 | Analytics cookies | `denied` (no cookies) |
+| `ad_user_data` | **v2 new** | Sending user data to Google for ads | `denied` |
+| `ad_personalization` | **v2 new** | Personalized / remarketing ads | `denied` |
+
+**Failing to implement `ad_user_data` and `ad_personalization` means:**
+- Google may restrict audience list creation in the EEA
+- Smart Bidding signals are degraded
+- Remarketing audiences shrink
 
 ### Implementation Levels
 
 | Level | Description | Data Recovery |
 |-------|-------------|---------------|
 | **Basic** | Block all tags when no consent | 0% |
-| **Advanced** | Send cookieless pings | 40-70% recovery |
-| **Full** | With Enhanced Conversions | 70-85% recovery |
+| **Advanced** | Send cookieless pings, modeling enabled | 40-70% recovery |
+| **Full** | Advanced + Enhanced Conversions | 70-85% recovery |
+
+Use **Advanced** mode minimum. Basic mode gives up all recovery potential.
 
 ### Setup Checklist
 
-- [ ] Implement CMP (Consent Management Platform)
-- [ ] Configure consent mode parameters
-- [ ] Pass consent state to all Google tags
+- [ ] Confirm CMP supports Consent Mode v2 (most major CMPs updated in 2024)
+- [ ] Configure all four consent mode parameters (not just the original two)
+- [ ] Pass consent state to all Google tags via GTM or gtag.js
 - [ ] Enable conversion modeling in Google Ads
-- [ ] Test with Tag Assistant
-- [ ] Monitor consent rates in GA4
+- [ ] Test with Tag Assistant (check for v2 parameters in network requests)
+- [ ] Monitor consent rates in GA4 (Admin > Privacy > Consent overview)
 
 ### Recommended CMP Providers
 
@@ -338,14 +349,16 @@ Consent Mode allows Google tags to adjust behavior based on user consent status,
 | **Website visitors** | Analytics | All | Retargeting |
 | **App users** | App analytics | Meta, TikTok | Re-engagement |
 
-### Lookalike/Similar Audiences
+### Lookalike & Expansion Audiences
 
-**Quality Factors:**
+> Note: Google Ads deprecated "Similar Audiences" in May 2023. Use Optimized Targeting (Display/YouTube) or PMax Audience Signals instead. Meta and TikTok still support Lookalike Audiences natively.
 
-| Factor | Impact on Lookalike Quality |
+**Quality Factors (Meta/TikTok Lookalikes & Google Audience Signals):**
+
+| Factor | Impact on Expansion Quality |
 |--------|----------------------------|
 | Source audience size | 1K-50K optimal |
-| Source quality | Higher LTV → better lookalike |
+| Source quality | Higher LTV → better expansion |
 | Data recency | Last 90 days best |
 | Country scope | Single country performs better |
 

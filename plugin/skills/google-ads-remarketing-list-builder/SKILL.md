@@ -14,6 +14,37 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Remarketing List Builder
 
 Complete guide for setting up effective remarketing lists and RLSA strategies for lead generation with advanced segmentation and messaging sequences.
+
+
+
+## GAQL: Check Remarketing List Sizes + RLSA Coverage
+
+Use `google_ads_run_gaql` to audit remarketing list health and RLSA coverage:
+
+```sql
+-- All remarketing/customer match lists with sizes
+SELECT user_list.name, user_list.type,
+    user_list.size_for_search, user_list.size_for_display,
+    user_list.membership_life_span, user_list.eligible_for_search,
+    user_list.eligible_for_display
+FROM user_list
+ORDER BY user_list.size_for_search DESC
+LIMIT 50
+```
+
+```sql
+-- RLSA audiences active in Search campaigns (observation + targeting)
+SELECT campaign.name, ad_group.name,
+    ad_group_criterion.user_list.user_list,
+    ad_group_criterion.type, ad_group_criterion.bid_modifier,
+    metrics.impressions, metrics.clicks, metrics.conversions
+FROM ad_group_audience_view
+WHERE campaign.advertising_channel_type = 'SEARCH'
+AND segments.date DURING LAST_30_DAYS
+ORDER BY metrics.impressions DESC
+LIMIT 100
+```
+
 ## Remarketing List Setup
 
 ### Google Ads Remarketing Tag

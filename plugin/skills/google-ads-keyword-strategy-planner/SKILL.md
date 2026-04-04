@@ -4,7 +4,7 @@ description: |
   Google Ads keyword strategy and match type planner. Use when: selecting match types (Broad, Phrase, Exact), building negative keyword lists, analyzing search terms reports, clustering keywords into ad groups, implementing query sculpting, or planning keyword research. Do NOT use for: bid strategy selection (use bid-strategy-selector), campaign structure decisions (use campaign-structure-advisor), or Quality Score optimization (use quality-score-optimizer).
 metadata:
   author: "AdSuperpowers"
-  version: "1.0.0"
+  version: "1.1.0"
   platform: "google_ads"
   phase: "fase-4-ecommerce-advanced"
 compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
@@ -12,6 +12,42 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Keyword Strategy Planner
 
 Complete guide for setting up an effective Google Ads keyword strategy with match types, negatives, and search terms analysis.
+
+## Pull Search Terms Data via MCP First
+
+Always start with real data before planning strategy:
+
+```
+# Get search term performance for the account
+google_ads_run_gaql(query="
+  SELECT search_term_view.search_term,
+         search_term_view.status,
+         metrics.clicks, metrics.impressions, metrics.ctr,
+         metrics.conversions, metrics.cost_micros,
+         metrics.cost_per_conversion,
+         campaign.name, ad_group.name
+  FROM search_term_view
+  WHERE segments.date DURING LAST_30_DAYS
+    AND metrics.clicks > 5
+  ORDER BY metrics.conversions DESC
+  LIMIT 100
+")
+
+# Get keyword performance with Quality Score
+google_ads_run_gaql(query="
+  SELECT ad_group_criterion.keyword.text,
+         ad_group_criterion.keyword.match_type,
+         ad_group_criterion.quality_info.quality_score,
+         metrics.clicks, metrics.conversions,
+         metrics.cost_per_conversion, metrics.search_impression_share
+  FROM keyword_view
+  WHERE segments.date DURING LAST_30_DAYS
+    AND campaign.status = 'ENABLED'
+    AND ad_group_criterion.status = 'ENABLED'
+  ORDER BY metrics.cost_per_conversion DESC
+  LIMIT 50
+")
+```
 
 ## Quick Decision Guide
 
@@ -36,7 +72,14 @@ WHICH MATCH TYPE STRATEGY FITS YOUR CASE?
 │       ├── Premium bidding
 │       └── Quality traffic
 │
-└──► MODERN BEST PRACTICE (2025+)
+├──► AI MAX CAMPAIGN (2026)
+│   └──► KEYWORDS ARE OPTIONAL SIGNALS
+│       ├── AI Max matches based on landing page + assets
+│       ├── Keywords guide intent, not control reach
+│       ├── Focus on strong negatives + audience signals
+│       └── Smart Bidding Exploration enabled by default
+│
+└──► MODERN BEST PRACTICE (2026+)
     └──► HYBRID APPROACH
         ├── Broad Match + Smart Bidding (discovery)
         ├── Phrase Match (core volume)
@@ -46,10 +89,10 @@ WHICH MATCH TYPE STRATEGY FITS YOUR CASE?
 
 ## Match Type Comparison
 
-### 2025 Match Type Behavior
+### 2026 Match Type Behavior
 
 ```
-MATCH TYPE EVOLUTION (2025)
+MATCH TYPE EVOLUTION (2026)
 ═══════════════════════════
 
 ┌─────────────┬────────────────────────────────────────────────────┐
@@ -71,11 +114,15 @@ MATCH TYPE EVOLUTION (2025)
 │             │ Maximum control, premium bids                      │
 └─────────────┴────────────────────────────────────────────────────┘
 
-IMPORTANT CHANGE 2024+:
+IMPORTANT (2024-2026):
    - Broad Match Modifier (BMM) no longer exists
    - Phrase Match has taken over BMM functionality
-   - Broad Match is much broader than before
-   - AI-based matching on intent, not just words
+   - Broad Match is much broader than before — AI-based matching on intent, not words
+   - Smart Bidding Exploration (v21+): Smart Bidding may intentionally explore
+     queries with lower historical conversion rates to discover new opportunities
+   - AI Max (2026): New Search subtype where Google controls query matching
+     entirely — keywords are intent signals, not auction triggers
+   - Similar Audiences: Fully removed Aug 2023 → use Optimized Targeting instead
 ```
 
 ### Match Type Selection Matrix
@@ -104,7 +151,7 @@ BUDGET ALLOCATION GUIDELINE:
 
 ## Keyword Structure Strategies
 
-### Modern Account Structure (2025)
+### Modern Account Structure (2026)
 
 ```
 RECOMMENDED KEYWORD STRUCTURE

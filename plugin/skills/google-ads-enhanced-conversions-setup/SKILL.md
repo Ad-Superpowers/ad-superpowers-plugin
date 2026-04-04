@@ -14,6 +14,33 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Enhanced Conversions Setup
 
 Complete guide for implementing Enhanced Conversions for better conversion attribution in a privacy-first world with first-party data and consent management.
+
+
+
+## GAQL: Check Enhanced Conversion Status
+
+Use `google_ads_run_gaql` to verify conversion actions and enhanced conversion setup:
+
+```sql
+SELECT conversion_action.name, conversion_action.status,
+    conversion_action.type, conversion_action.category,
+    conversion_action.attribution_model_settings.attribution_model,
+    conversion_action.tag_snippets
+FROM conversion_action
+WHERE conversion_action.status = 'ENABLED'
+ORDER BY conversion_action.name
+```
+
+```sql
+-- Check conversion volume (to see if EC is capturing data)
+SELECT conversion_action.name, metrics.conversions,
+    metrics.all_conversions, metrics.all_conversions_value
+FROM conversion_action
+WHERE segments.date DURING LAST_30_DAYS
+AND conversion_action.status = 'ENABLED'
+ORDER BY metrics.all_conversions DESC
+```
+
 ## Enhanced Conversions Overview
 
 ### What Are Enhanced Conversions?
@@ -655,6 +682,10 @@ TRIGGER:
 Event Name: purchase, form_submit, etc.
 Condition: user_data present
 ```
+
+
+
+
 
 ## Output: Enhanced Conversions Implementation Plan
 

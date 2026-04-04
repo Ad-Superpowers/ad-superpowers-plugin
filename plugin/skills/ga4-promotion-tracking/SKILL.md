@@ -205,6 +205,7 @@ ANALYSIS:
 +-- Compare CTR per creative_name
 +-- Track conversions per variant
 +-- Calculate statistical significance
+
 METHOD 2: USER PROPERTY FOR TEST GROUP
 ---------------------------------------
 // On page load, set test group
@@ -216,6 +217,7 @@ ADVANTAGES:
 +-- User-level tracking
 +-- Cross-session consistency
 +-- Easier to segment
+
 METHOD 3: GA4 + EXTERNAL A/B TOOL
 ----------------------------------
 +-- (Google Optimize is deprecated)
@@ -223,6 +225,7 @@ METHOD 3: GA4 + EXTERNAL A/B TOOL
 +-- Send experiment ID to GA4
 +-- Analyze in custom exploration
 ```
+
 ## Output: Promotion Analysis Report Template
 
 ```markdown

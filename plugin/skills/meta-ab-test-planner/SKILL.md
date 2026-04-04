@@ -181,8 +181,9 @@ SETUP IN META:
 └── Duration: 14 days
 
 WHEN RELEVANT:
-├── You suspect Audience Network wastes budget
+├── You suspect Meta Audience Network wastes budget
 ├── You want to isolate Stories performance
+├── You want to test Threads as a standalone placement
 └── New account without placement data
 ```
 
@@ -412,3 +413,23 @@ PRIORITY ORDER:
 ---
 
 **Would you like me to also write a UGC script you can test?**"
+
+## MCP Tool Usage
+
+### Pull current creative performance before setting up a test:
+
+```python
+# Get performance data to establish your baseline metrics
+meta_query(
+    account_id="act_XXXXXXXXX",
+    query_type="insights",
+    params={
+        "fields": ["ad_name", "impressions", "clicks", "ctr", "cpc", "cpa", "spend", "actions"],
+        "date_preset": "last_30d",
+        "level": "ad",
+        "breakdowns": []
+    }
+)
+```
+
+Use this to identify which creatives to test against and what your current CTR/CPA baseline is before writing your hypothesis.

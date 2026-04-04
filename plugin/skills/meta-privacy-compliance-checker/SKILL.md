@@ -29,7 +29,8 @@ This skill helps check and implement privacy-compliant Meta Ads setups, includin
 │  2023: Google delays 3rd party cookie deprecation               │
 │  2024: DSA (Digital Services Act) enforcement EU                │
 │  2025: Chrome 3rd party cookie phase-out begins                 │
-│  2026: Fully cookieless advertising era                         │
+│  Jan 2026: Meta removes 7d_view and 28d_view attribution        │
+│  2026: Fully cookieless advertising era / Andromeda engine      │
 │                                                                 │
 │  IMPACT ON META ADS:                                            │
 │  ├── Signal loss: ~50% less tracking data                       │
@@ -112,17 +113,21 @@ gtag('consent', 'update', {
 });
 ```
 
-## iOS 14+ Compliance
+## ATT & Signal Loss (Baseline Since 2021)
 
-### ATT Framework Impact
+### Current State
 
 ```
-iOS 14+ IMPACT ASSESSMENT
-=========================
+ATT IMPACT (standard operating conditions since iOS 14.5)
+=========================================================
 
-ATTRIBUTION CHANGES:
-├── 28-day click: Limited to 7-day
-├── 28-day view: Limited to 1-day
+ATTRIBUTION CHANGES (updated Jan 2026):
+├── Default attribution window: 7d click + 1d view
+├── 7d view attribution: REMOVED (was available, now gone)
+├── 28d view attribution: REMOVED
+├── 28d click attribution: REMOVED
+├── IMPORTANT: Historical data using old windows cannot be
+│   compared with data from Jan 2026 onwards
 ├── Real-time reporting: Delayed (up to 72 hours)
 └── Breakdown: Less granular
 
@@ -347,13 +352,15 @@ SECTION 3: CAPI COMPLIANCE
 □ DPA in place
 Score: ___/4
 
-SECTION 4: iOS 14+ SETUP
-───────────────────────
+SECTION 4: iOS 14+ SETUP & ATTRIBUTION
+──────────────────────────────────────
 □ Domain verified
 □ AEM configured
 □ Event prioritization
 □ Value optimization
-Score: ___/4
+□ Attribution window updated to 7d_click + 1d_view (28d/7d view removed Jan 2026)
+□ Historical reports using old windows flagged/replaced
+Score: ___/6
 
 SECTION 5: AUDIENCE COMPLIANCE
 ─────────────────────────────
@@ -375,6 +382,20 @@ ACTION ITEMS:
 1. [Item]
 2. [Item]
 3. [Item]
+```
+
+## MCP Tool Integration
+
+### Checking Signal Quality with Live Data
+
+```
+1. Verify CAPI event volumes and EMQ:
+→ meta_query(account_id="...", fields=["action_values","actions","cost_per_action_type"], date_preset="last_7d", level="account")
+
+2. Check for attribution window configuration issues:
+→ meta_query(account_id="...", fields=["campaign_name","spend","purchase_roas","cost_per_result"], date_preset="last_7d", level="campaign")
+   Note: Confirm results align with 7d_click + 1d_view default.
+   Any reports showing anomalies vs history may reflect the Jan 2026 attribution change.
 ```
 
 ## Example Interaction

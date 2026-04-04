@@ -12,6 +12,7 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Remarketing Setup Guide
 
 Complete guide for exporting and activating GA4 audiences in Google Ads for effective remarketing campaigns.
+
 ## Step 1: Verify Google Ads Link
 
 ```
@@ -80,7 +81,9 @@ SETUP:
 
 GDPR CONSIDERATIONS:
 ├── Requires cookie consent for personalization
-├── Consent mode must be correctly implemented
+├── Consent Mode v2 required for EEA since March 2024
+│   └─► Must send analytics_storage AND ad_storage signals
+│   └─► Without v2: audience match rates significantly lower in EEA
 ├── Not all users will be matched (opt-in required)
 └── May activate data thresholding in reports
 ```
@@ -440,6 +443,7 @@ DON'Ts
 └── Trust GA4 size = Google Ads size
     └─► Match rates cause differences
 ```
+
 ## Output: Remarketing Setup Recommendation Template
 
 ```markdown

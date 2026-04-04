@@ -109,7 +109,7 @@ Level 4: Monetization
 
 WHAT IS SKAN?
 ─────────────
-Apple's privacy-preserving attribution framework for iOS 14.5+.
+Apple's privacy-preserving attribution framework (standard since iOS 14.5, 2021).
 NO device-level tracking. NO real-time data. Limited conversion values.
 
 SKAN METRICS AVAILABLE:
@@ -232,7 +232,7 @@ Total latency: 2-4 days from install to data visibility
 | Android | <10% | 10-20% | >20% |
 | iOS (SKAN) | <30% | 30-50% | >50% |
 
-## iOS 14+ Best Practices
+## iOS SKAN Best Practices
 
 ### SKAN Optimization Strategy
 
@@ -356,6 +356,16 @@ LEARNING PHASE STATUS:
 ✅ Completed: Ready to scale
 ```
 
+### Campaign Type Selection
+
+| Campaign Type | Best For | Notes |
+|---------------|----------|-------|
+| **Standard App Install** | Testing, control | Manual targeting and bidding |
+| **Smart+ App** | Scaling, automation | TikTok's automated campaign (like Meta Advantage+); algorithm handles audience + creative rotation; needs 5+ ad variants |
+| **Value-Based Optimization** | ROAS-focused | Requires in-app purchase events |
+
+**Smart+ App campaigns** (part of TikTok's Smart+ suite, expanded Jan 2026) are recommended once you have 50+ installs/week of history. They reduce manual audience management and typically improve CPI by 10-20% after the learning phase.
+
 ### Bid Strategy Selection
 
 | Objective | Strategy | When to Use |
@@ -364,6 +374,7 @@ LEARNING PHASE STATUS:
 | **Target CPI** | Cost Cap | Know your target CPI, want control |
 | **Value optimization** | Value-Based | Have purchase data, optimize ROAS |
 | **iOS campaigns** | Lowest Cost | SKAN works best with volume |
+| **Smart+ App** | Auto (algorithm-managed) | Let TikTok optimize bids automatically |
 
 ### Scaling Decision Tree
 
@@ -472,6 +483,29 @@ When analyzing TikTok app performance, provide:
 - [ ] iOS vs Android performance split
 - [ ] Creative performance by install rate
 - [ ] Seasonal patterns identification
+
+## MCP Tool Examples
+
+Pull app install and funnel metrics:
+
+```
+# Get install counts and funnel events
+tiktok_get_ad_insights(
+  advertiser_id="...",
+  dimensions=["campaign_id", "stat_time_day"],
+  metrics=["app_install", "real_time_app_install", "cost_per_install",
+           "registration", "purchase", "spend",
+           "skan_app_install", "skan_cost_per_result"],
+  start_date="2026-03-28",
+  end_date="2026-04-04"
+)
+
+# List campaigns to identify app install campaigns
+tiktok_get_campaigns(
+  advertiser_id="...",
+  fields=["campaign_name", "objective_type", "campaign_type", "status", "budget"]
+)
+```
 
 ---
 

@@ -68,44 +68,63 @@ Invoke when user mentions:
 
 ## CRM Integration Options
 
-### Option 1: Native LinkedIn CRM Integration
+### Option 1: LinkedIn Revenue Attribution Reports (RAR) — Native (Launched April 2025)
+
+LinkedIn's native CRM-connected attribution, launched April 2025. This is now the recommended first step before investing in third-party tools.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                    LINKEDIN REVENUE ATTRIBUTION REPORT (RAR)                 │
+│              LINKEDIN REVENUE ATTRIBUTION REPORTS (RAR) — NATIVE            │
+│              Launched: April 2025 | Recommended first integration           │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 SUPPORTED CRMs:
 ───────────────
-├─ Salesforce (native integration)
-├─ HubSpot (native integration)
-├─ Microsoft Dynamics 365 (native integration)
-└─ Others via manual upload
+├─ Salesforce (native OAuth integration)
+├─ HubSpot (native OAuth integration)
+├─ Microsoft Dynamics 365 (native OAuth integration)
+└─ Others via manual CSV upload
 
 SETUP STEPS:
 ────────────
-1. Go to Campaign Manager → Analyze → Conversion Tracking
-2. Click "Create Revenue Attribution Report"
-3. Connect your CRM via OAuth
-4. Map LinkedIn campaigns to CRM opportunity fields
-5. Set attribution window (30, 60, 90, 180 days)
+1. Go to Campaign Manager → Analyze → Revenue Attribution Reports
+2. Click "Connect CRM" and authenticate via OAuth
+3. Map LinkedIn campaigns/ad accounts to CRM opportunity fields
+4. Set attribution window (30, 60, 90, or 180 days — match your sales cycle)
+5. Set "Oppty type" filter (e.g., only count Closed Won)
+
+WHAT RAR DOES DIFFERENTLY FROM INSIGHT TAG:
+────────────────────────────────────────────
+├─ Insight Tag: Tracks website conversions (last-click, short window)
+├─ RAR: Pulls closed deals directly from CRM and matches to LinkedIn ad exposure
+├─ RAR covers the FULL sales cycle, not just the last 30-day window
+├─ No cookie dependency — CRM match works even with GDPR consent blocking
 
 METRICS AVAILABLE (after integration):
 ──────────────────────────────────────
 ├─ rar_revenue_won: Revenue from closed-won opportunities
-├─ rar_roas: CRM-attributed ROAS
-├─ closed_won_opportunities: Count of won deals
-├─ open_opportunities: Current pipeline count
-├─ pipeline_value: Value of open opportunities
+├─ rar_roas: CRM-attributed ROAS (LinkedIn spend / rar_revenue_won)
+├─ closed_won_opportunities: Count of won deals touched by LinkedIn
+├─ open_opportunities: Current pipeline count influenced by LinkedIn
+├─ pipeline_value: Value of open opportunities (LinkedIn influenced)
 ├─ pipeline_count: Number of deals in pipeline
 ├─ average_deal_size: Average closed deal value
 ├─ average_days_to_conversion: Sales cycle length
+├─ rar_pipeline_roas: Pipeline value / LinkedIn spend (leading indicator)
 
 TIME TO VALUE:
 ──────────────
-Initial data: 7-14 days after setup
-Meaningful data: 90+ days (one sales cycle minimum)
+Initial data: 7-14 days after setup (historical data is backfilled 180 days)
+Meaningful data: 90+ days (one full sales cycle)
 Full picture: 180+ days (multiple cycles)
+
+ADVANTAGES OF RAR OVER IN-PLATFORM TRACKING:
+─────────────────────────────────────────────
+├─ Captures deals that went "dark" (Google search, direct visit after LinkedIn touch)
+├─ Works across the full 180-day attribution window
+├─ Removes cookie consent tracking gaps (~50% EU opt-out issue)
+├─ C-suite credibility: CRM data is the source of truth sales teams trust
+└─ Enables pipeline ROAS, not just lead ROAS
 ```
 
 ### Option 2: Manual CRM Data Upload
@@ -467,6 +486,41 @@ CAUSE 5: View-Through Undercount
 ├─ Many "view-only" impressions aren't counted
 ├─ Fix: Use influenced metrics, not just attributed
 ```
+
+## MCP Tool Usage
+
+Pull attribution and pipeline data using the MCP tools:
+
+```
+# Get in-platform conversion metrics (Insight Tag based)
+linkedin_get_analytics(
+  account_id="YOUR_ACCOUNT_ID",
+  entity="campaigns",
+  metrics=["costInLocalCurrency", "externalWebsiteConversions",
+           "externalWebsitePostClickConversions", "externalWebsitePostViewConversions",
+           "oneClickLeads", "leads"],
+  date_range={"start": "YYYY-MM-DD", "end": "YYYY-MM-DD"}
+)
+
+# Get RAR pipeline metrics (requires CRM integration via Revenue Attribution Reports)
+linkedin_get_analytics(
+  account_id="YOUR_ACCOUNT_ID",
+  entity="campaigns",
+  metrics=["costInLocalCurrency", "rar_revenue_won", "rar_roas",
+           "closed_won_opportunities", "open_opportunities",
+           "pipeline_value", "average_deal_size", "average_days_to_conversion"],
+  date_range={"start": "YYYY-MM-DD", "end": "YYYY-MM-DD"}
+)
+
+# Get campaign details to contextualize attribution (objective, date range)
+linkedin_query(
+  account_id="YOUR_ACCOUNT_ID",
+  entity="campaigns",
+  fields=["id", "name", "objectiveType", "status", "runSchedule", "costType"]
+)
+```
+
+Note: RAR metrics (`rar_revenue_won`, `pipeline_value`, etc.) only populate after CRM integration is set up in Campaign Manager → Revenue Attribution Reports.
 
 ## Output Template
 

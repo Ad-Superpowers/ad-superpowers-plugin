@@ -286,7 +286,7 @@ CURIOSITY
 
 ## Platform-Specific Tips
 
-### Facebook vs Instagram vs Audience Network
+### Facebook vs Instagram vs Threads vs Meta Audience Network
 
 ```
 FACEBOOK:
@@ -301,11 +301,22 @@ INSTAGRAM:
 ├── Lifestyle & aspirational tone
 └── Under 125 characters ideal
 
+THREADS (400M+ MAU, launched as ad placement March 2026):
+├── Conversational, community-first tone
+├── Shorter copy — feels like a post
+├── Avoid hard-sell language
+└── Works well for brand awareness and engagement
+
 STORIES/REELS:
 ├── Ultra short (< 50 characters)
 ├── Native, casual tone
 ├── Emojis as visual elements
 └── Urgency works well
+
+META AUDIENCE NETWORK:
+├── Works with same copy as Feed
+├── Banner + interstitial formats
+└── Often excluded in manual placement tests
 ```
 
 ## Character Limits & Best Practices
@@ -419,3 +430,30 @@ Limited time: €297 (normally €397)
 ---
 
 Want me to create more variations with a different angle?"
+
+## MCP Tool Usage
+
+### Pull top-performing ad copy to inform new variations:
+
+```python
+# Retrieve existing ad performance to identify winning copy patterns
+meta_query(
+    account_id="act_XXXXXXXXX",
+    query_type="insights",
+    params={
+        "fields": ["ad_name", "ad_id", "impressions", "ctr", "spend", "actions", "cost_per_action_type"],
+        "date_preset": "last_30d",
+        "level": "ad",
+        "sort": ["ctr_descending"]
+    }
+)
+
+# Then pull the actual creative text from top performers
+meta_get_creatives(
+    account_id="act_XXXXXXXXX",
+    scope="ads",
+    filters={"ad_ids": ["<top_ad_id_1>", "<top_ad_id_2>"]}
+)
+```
+
+Use these to analyze which hooks, benefit statements, and CTAs are currently winning before generating new copy variants.

@@ -16,7 +16,15 @@ Generator for creating diverse, high-converting Meta Ads creative concepts. Base
 
 ## Core Principle
 
-**Creative = The New Targeting.** With Andromeda and broad audiences, creative diversification is the #1 lever for performance. Aim for 8-15 unique concepts per campaign.
+**Creative = The New Targeting.** With Andromeda and broad audiences, creative diversification is the #1 lever for performance. Meta recommends a minimum of **15+ distinct creative variations** per campaign — Andromeda's retrieval engine matches users to ads based on creative quality signals, so volume and diversity directly improve reach efficiency.
+
+**Format length limits (2026):**
+- Reels: max **90 seconds**
+- Stories: max **60 seconds** — no "swipe-up"; use **tap / link sticker** for CTAs
+- Feed video: up to 241 minutes (but 15-30s optimal)
+- Threads: new placement (March 2026, 400M+ MAU) — text-first, image-supported
+
+**AI creative tools now available in Ads Manager:** Video Expansion, Background Generation, Dynamic Media — useful for rapid variation testing.
 
 ## Creative Generation Workflow
 
@@ -462,10 +470,10 @@ For quick brainstorm, generate:
 5. Feature highlight Reel
 ```
 
-### Full Strategy (15 concepts)
+### Full Strategy (15+ concepts)
 
 ```
-For complete creative strategy:
+For complete creative strategy (min 15 per Andromeda guidelines):
 
 VIDEO (5):
 - UGC testimonial
@@ -486,7 +494,16 @@ CAROUSEL (3):
 - Customer journey
 - How-to guide
 
-STORIES/REELS (2):
-- Quick tip format
-- Trending audio format
+STORIES/REELS (4):
+- Quick tip Reel (max 90 sec) — hook in first 2 seconds
+- Stories format (max 60 sec) — CTA via link sticker, NOT swipe-up
+- Trending audio Reel
+- Threads text + image (new March 2026 placement)
+```
+
+### MCP: Pull Current Creative Performance
+
+```python
+# Get ad-level performance to identify winning creative patterns
+meta_get_creatives(account_id="act_XXXXX", scope="ads", fields=["id","name","spend","impressions","ctr","frequency","actions","quality_ranking","engagement_rate_ranking"], date_range="last_14d")
 ```

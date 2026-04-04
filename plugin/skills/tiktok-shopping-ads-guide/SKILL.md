@@ -39,6 +39,17 @@ Invoke when user mentions:
 
 ## Part 1: TikTok Shopping Ad Formats
 
+### Automated Shopping Campaign Types
+
+TikTok offers two automated campaign types optimized for shopping outcomes:
+
+| Campaign Type | What It Does | Best For |
+|---|---|---|
+| **Smart+ Shopping Campaigns** | Fully automated targeting, bidding, and creative optimization using AI | Accounts with sufficient pixel data (50+ purchases/week), hands-off scaling |
+| **GMV Max** | Maximizes Gross Merchandise Value across TikTok Shop organics + paid ads | TikTok Shop sellers wanting to maximize total store revenue |
+
+**Smart+ vs Manual:** Smart+ often outperforms manual setup once the algorithm has learned (typically after 7-14 days and 50+ conversions). Start manual to establish baseline data, then test Smart+. GMV Max is only available for TikTok Shop (in-app checkout) sellers.
+
 ### Format Overview
 
 ```

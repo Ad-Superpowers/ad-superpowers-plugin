@@ -2,7 +2,7 @@
 name: ecommerce-funnel-optimizer
 description: |
   E-commerce advertising funnel optimization across Meta, Google, TikTok, and LinkedIn. Covers full funnel design from product discovery through retention, dynamic product ad setup, retargeting window strategy, ROAS targets by funnel stage, AOV optimization, and seasonal strategy.
-  Use when: (1) user wants to build or optimize an e-commerce advertising funnel across platforms, (2) user asks about retargeting windows, DPA setup, or ROAS targets by stage, (3) user needs help with cart abandonment campaigns, product-level ROAS, or seasonal ad strategy.
+  Use when: (1) user wants to build or optimize an e-commerce advertising funnel across platforms, (2) user asks about retargeting windows, Advantage+ Catalog Ads setup, or ROAS targets by stage, (3) user needs help with cart abandonment campaigns, product-level ROAS, or seasonal ad strategy.
   Do NOT use for: single-platform campaign structure (use platform-specific skills), attribution discrepancies (use attribution-reconciler), or creative fatigue diagnosis (use creative-fatigue-analyzer).
 metadata:
   author: "AdSuperpowers"
@@ -23,7 +23,7 @@ Guide advertisers through building, analyzing, and optimizing a full-funnel e-co
 Invoke when user mentions:
 - **Funnel design:** "How do I structure my e-commerce funnel?"
 - **Retargeting:** "What retargeting windows should I use?"
-- **DPA/DABA:** "How do I set up dynamic product ads?"
+- **Catalog Ads:** "How do I set up Advantage+ Catalog Ads / dynamic product ads?"
 - **ROAS targets:** "What ROAS should I target for prospecting vs retargeting?"
 - **Cart abandonment:** "How do I recover abandoned carts with ads?"
 - **Product-level analysis:** "Which products should I push in ads?"
@@ -51,7 +51,7 @@ STAGE 2: CONSIDERATION (Middle of Funnel)
 │
 STAGE 3: CART & PURCHASE (Bottom of Funnel)
 │  Goal: Convert intent into transactions
-│  Platforms: Google Search (Brand + Product), Meta DPA, Google Shopping
+│  Platforms: Google Search (Brand + Product), Meta Advantage+ Catalog Ads, Google Shopping
 │  KPIs: ROAS, CPA, Conversion Rate
 │  Budget: 25-35% of total
 │
@@ -82,8 +82,8 @@ STAGE 4: RETENTION & UPSELL (Post-Purchase)
 
 | Tier | Audience | Window | Platform | Priority |
 |------|----------|--------|----------|----------|
-| **Tier 1** | Cart abandoners | 1-14 days | Meta DPA, Google RLSA | Highest |
-| **Tier 2** | Product viewers (no cart) | 1-30 days | Meta DPA, Google Shopping | High |
+| **Tier 1** | Cart abandoners | 1-14 days | Meta Advantage+ Catalog Ads, Google RLSA | Highest |
+| **Tier 2** | Product viewers (no cart) | 1-30 days | Meta Advantage+ Catalog Ads, Google Shopping | High |
 | **Tier 3** | Category browsers | 1-30 days | Meta, Google Display | Medium |
 | **Tier 4** | All website visitors | 1-180 days | Meta, Google Display | Lower |
 | **Tier 5** | Past purchasers (cross-sell) | 30-365 days | Meta Custom Audience | Medium-High |
@@ -134,18 +134,18 @@ Always exclude to prevent wasted spend and bad experience:
 
 ---
 
-## Part 3: Dynamic Product Ads (DPA) Setup
+## Part 3: Advantage+ Catalog Ads Setup
 
-### Meta DPA Configuration
+### Meta Advantage+ Catalog Ads Configuration
 
 **Prerequisites:**
 1. Product catalog uploaded to Meta Commerce Manager
 2. Meta Pixel with standard e-commerce events (ViewContent, AddToCart, Purchase)
-3. Conversions API (CAPI) for server-side event matching
+3. Conversions API (CAPI) — mandatory for reliable signal matching
 
 **Campaign Structure:**
 ```
-Campaign: DPA Retargeting (Advantage+ Shopping or Manual)
+Campaign: DPA Retargeting (Advantage+ Catalog Ads or Manual)
 ├── Ad Set: Cart Abandoners (1-14 days)
 │   ├── Audience: AddToCart but NOT Purchase (14 days)
 │   ├── Product Set: All products
@@ -160,14 +160,14 @@ Campaign: DPA Retargeting (Advantage+ Shopping or Manual)
     └── Creative: Collection ad with lifestyle imagery
 ```
 
-**Use `meta_get_insights` to monitor DPA performance:**
+**Use `meta_get_insights` to monitor Advantage+ Catalog Ads performance:**
 ```
 Breakdowns: product_id, placement
 Metrics: spend, purchases, purchase_roas, cost_per_purchase
 Date range: last 14 days for retargeting optimization
 ```
 
-### Google Shopping & PMax DPA
+### Google Shopping & PMax Dynamic Ads
 
 **Google Merchant Center Requirements:**
 1. Product feed with required attributes (id, title, description, price, image_link, availability)
@@ -189,7 +189,7 @@ WHERE segments.date DURING LAST_30_DAYS
 ORDER BY metrics.conversions_value DESC
 ```
 
-### TikTok DPA Setup
+### TikTok Dynamic Showcase Ads Setup
 
 **Requirements:**
 1. TikTok Pixel with e-commerce events

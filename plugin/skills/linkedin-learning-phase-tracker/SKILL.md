@@ -1,532 +1,358 @@
 ---
 name: linkedin-learning-phase-tracker
 description: |
-  Understand and navigate LinkedIn's implicit learning phase for campaign optimization. Unlike Meta and TikTok, LinkedIn does NOT have a formally labeled "learning phase" in the UI, but the algorithm DOES go through a learning period. This skill helps advertisers recognize, support, and exit the learning phase faster.
-  Use when: user asks about LinkedIn learning phase, why LinkedIn campaigns have high variance in the first weeks, how long to wait before optimizing LinkedIn campaigns, or budget requirements for LinkedIn optimization.
-  Do NOT use for: LinkedIn bid strategy selection (use linkedin-bid-strategy-selector), LinkedIn performance troubleshooting (use linkedin-performance-troubleshooter), or LinkedIn benchmark lookups (use linkedin-benchmark-database).
+  Meta Ads learning phase management and edit impact analyzer. Use when: assessing learning phase status, predicting significant edit impact, learning phase exit strategies, calculating budget change impact, ad set health checks.
+  Do NOT use for: campaign structure decisions (use campaign-structure-advisor), performance troubleshooting (use performance-troubleshooter), bid strategy selection (use bid-strategy-selector).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
-  platform: "linkedin"
+  platform: "meta"
   phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
+compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
-# LinkedIn Learning Phase Tracker
+# Learning Phase Tracker
 
-## Purpose
+Analyzer for Meta Ads learning phase management. Predicts edit impact and advises on optimal timing for changes.
 
-Understand and navigate LinkedIn's implicit learning phase for campaign optimization. Unlike Meta and TikTok, LinkedIn does NOT have a formally labeled "learning phase" in the UI. However, the algorithm DOES go through a learning period that significantly impacts performance. This skill helps advertisers recognize, support, and exit the learning phase faster.
+## Learning Phase Basics
 
-## LinkedIn's Hidden Learning Phase
+### What Is Learning Phase?
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    THE LEARNING PHASE THAT DOESN'T EXIST (BUT DOES)         │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  WHAT LINKEDIN SAYS:                                                        │
-│  ───────────────────                                                        │
-│  "There is no official learning phase on LinkedIn."                         │
-│                                                                              │
-│  WHAT ACTUALLY HAPPENS:                                                     │
-│  ─────────────────────                                                      │
-│  ├─ Week 1: High variance in CPC, CPL, delivery                            │
-│  ├─ Week 2: Algorithm finds efficient pockets                               │
-│  ├─ Week 3+: Performance stabilizes                                         │
-│  └─ Requires: Minimum conversion/event signals                              │
-│                                                                              │
-│  WHY LINKEDIN DOESN'T LABEL IT:                                             │
-│  ──────────────────────────────                                             │
-│  ├─ B2B sales cycles are much longer than B2C                              │
-│  ├─ Conversion events are less frequent                                     │
-│  ├─ LinkedIn doesn't want to commit to a specific timeframe                │
-│  └─ Smaller audiences = harder to define "learned"                          │
-│                                                                              │
-│  KEY INSIGHT:                                                               │
-│  ═══════════                                                                │
-│  LinkedIn DOES have a learning phase - they just call it                    │
-│  "campaign optimization" and don't show you a status indicator.             │
-│                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+A period during which Meta's algorithm learns who to target and how to bid. Ad sets show "Learning" status until sufficient data has been collected.
 
-## When to Use This Skill
-
-Invoke when user mentions:
-- **Learning phase:** "Does LinkedIn have a learning phase?"
-- **Performance variance:** "My LinkedIn results are inconsistent"
-- **New campaign stability:** "When will my campaign stabilize?"
-- **Budget requirements:** "How much budget does LinkedIn need to learn?"
-- **Optimization changes:** "Should I change my LinkedIn campaign?"
-- **Stuck campaigns:** "My campaign isn't improving"
-
-## Platform Comparison: Learning Phase
+### Exit Criteria (2026 Update)
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    LEARNING PHASE COMPARISON                                 │
-└─────────────────────────────────────────────────────────────────────────────┘
+Traditional rule: 50 optimization events per ad set per week
 
-                     META            TIKTOK          LINKEDIN
-                     ────            ──────          ────────
-UI Indicator?        YES ("Learning") YES ("Learning") NO
-Explicit Threshold?  ~50 conversions  ~50 conversions  IMPLICIT
-Typical Duration     3-7 days         3-7 days         7-14 days
-Stability Signals    Clear label      Clear label      Infer from data
-Reset Triggers       Documented       Documented       Undocumented
+2026 Update: Some accounts see 10 conversions over 3 days
+as the new threshold (Meta continues to refine this).
+With ASC campaigns (unified structure since v25.0), the
+algorithm has more flexibility — combined ad sets learn faster.
 
-WHY LINKEDIN IS DIFFERENT:
-──────────────────────────
-1. SMALLER AUDIENCES
-   ├─ Meta: Billions of users
-   ├─ LinkedIn: 900M professionals (fraction active)
-   └─ Less data = slower learning
-
-2. FEWER CONVERSIONS
-   ├─ Meta: €50 budget → 5+ conversions possible
-   ├─ LinkedIn: €50 budget → maybe 0-1 conversions
-   └─ Need higher budgets for same signal volume
-
-3. LONGER CYCLES
-   ├─ Meta: Days to conversion
-   ├─ LinkedIn: Weeks to conversion (B2B)
-   └─ Algorithm needs patience
-
-4. PROFESSIONAL TARGETING
-   ├─ Specific job titles = small pools
-   ├─ Algorithm has less room to explore
-   └─ Needs more time to find efficient audiences
+Practical rule of thumb: Plan for 50/week, but monitor
+whether faster exit is possible.
 ```
 
-## Inferred Learning Phase Framework
+### Learning Phase Statuses
 
-### Learning Phase Thresholds (Inferred from Data)
+| Status | Meaning | Action |
+|--------|---------|--------|
+| **Learning** | Algorithm is collecting data | Don't change, wait |
+| **Active** | Exited, optimization is stable | Monitor and optimize |
+| **Learning Limited** | Insufficient events | Increase budget or use broader targeting |
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    LINKEDIN LEARNING THRESHOLDS                              │
-└─────────────────────────────────────────────────────────────────────────────┘
+## Edit Impact Matrix
 
-BY CAMPAIGN OBJECTIVE:
-──────────────────────
+### Significant Edits (Trigger Learning Reset)
 
-WEBSITE VISITS / TRAFFIC
-├─ Minimum events for learning: ~100-200 clicks
-├─ Typical time to exit: 5-10 days
-├─ Budget implication: ~€200-400 at €2-4 CPC
-└─ Stability indicator: CPC variance <20% day-over-day
+| Edit Type | Impact | Learning Reset? |
+|-----------|--------|-----------------|
+| Budget >20% increase | High | Usually yes |
+| Budget >20% decrease | High | Usually yes |
+| Audience change | High | Yes |
+| New creative | High | Yes |
+| Optimization goal change | High | Yes |
+| Bid strategy change | High | Yes |
+| Placement change | Medium | Often yes |
 
-ENGAGEMENT (Likes, Comments, Shares)
-├─ Minimum events for learning: ~100-150 engagements
-├─ Typical time to exit: 5-7 days
-├─ Budget implication: ~€150-300 at €1-2 CPE
-└─ Stability indicator: Engagement rate stable
+### Non-Significant Edits (Usually Safe)
 
-VIDEO VIEWS
-├─ Minimum events for learning: ~200-500 video views (50%+)
-├─ Typical time to exit: 3-7 days
-├─ Budget implication: ~€100-250 at €0.05-0.10 CPV
-└─ Stability indicator: VTR stable
+| Edit Type | Impact | Learning Reset? |
+|-----------|--------|-----------------|
+| Budget <20% change | Low | Usually no |
+| Ad name change | None | No |
+| Campaign name change | None | No |
+| Adding new ad (2026) | Variable | Sometimes not anymore |
+| Minor copy tweak | Low | Usually no |
 
-LEAD GENERATION (Lead Gen Forms)
-├─ Minimum events for learning: ~15-30 leads
-├─ Typical time to exit: 7-14 days
-├─ Budget implication: ~€1,500-3,000 at €100 CPL
-└─ Stability indicator: CPL variance <25%
+### 2026 Updates
 
-WEBSITE CONVERSIONS
-├─ Minimum events for learning: ~15-30 conversions
-├─ Typical time to exit: 10-21 days (longest!)
-├─ Budget implication: ~€2,000-5,000 at €150 CPA
-└─ Stability indicator: CPA variance <30%
+Meta now shows messages like:
+> "You can increase your budget to €[X] without restarting learning"
 
-BRAND AWARENESS
-├─ Minimum events for learning: ~5,000-10,000 impressions
-├─ Typical time to exit: 3-5 days
-├─ Budget implication: ~€200-500 at €40-50 CPM
-└─ Stability indicator: CPM stable
-```
+This provides specific safe thresholds per ad set.
 
-### Budget Requirements by Objective
+## Budget Change Impact Calculator
+
+### Safe Budget Increase Zones
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    MINIMUM BUDGET FOR LEARNING                               │
-└─────────────────────────────────────────────────────────────────────────────┘
+Current Daily Budget: €[X]
+Learning Phase Status: [Learning/Active/Limited]
 
-FORMULA:
-────────
-Daily Budget ≥ (Target CPA × Learning Events) / Learning Days
+SAFE ZONE (No Reset):
+├── Increase: Up to 20% (€[X x 1.2])
+└── Decrease: Up to 20% (€[X x 0.8])
 
-RECOMMENDATIONS BY OBJECTIVE:
-─────────────────────────────
+YELLOW ZONE (Possible Reset):
+├── Increase: 20-50% (€[X x 1.2] - €[X x 1.5])
+└── Decrease: 20-50%
+└── Recommendation: Do in 2 steps over 3-4 days
 
-│ Objective          │ Min Daily │ Min Weekly  │ Learning Period │
-├────────────────────┼───────────┼─────────────┼─────────────────┤
-│ Brand Awareness    │ €30       │ €200        │ 3-5 days        │
-│ Video Views        │ €30       │ €200        │ 3-7 days        │
-│ Engagement         │ €40       │ €300        │ 5-7 days        │
-│ Website Visits     │ €50       │ €350        │ 5-10 days       │
-│ Lead Generation    │ €100-200  │ €700-1,500  │ 7-14 days       │
-│ Conversions        │ €200-300  │ €1,500-2,000│ 10-21 days      │
-└────────────────────┴───────────┴─────────────┴─────────────────┘
-
-EXAMPLE CALCULATION:
-────────────────────
-Lead Generation campaign:
-├─ Target CPL: €100
-├─ Learning events needed: ~20 leads
-├─ Learning period: 10 days
-├─ Daily budget = (€100 × 20) / 10 = €200/day minimum
-└─ Weekly budget: €1,400
+RED ZONE (Likely Reset):
+├── Increase: >50%
+└── Decrease: >50%
+└── Recommendation: Duplicate ad set with new budget
 ```
 
-## Stability Indicators
-
-### How to Know You've Exited Learning
+### Budget Change Decision Tree
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    LEARNING EXIT SIGNALS                                     │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-QUANTITATIVE SIGNALS:
-─────────────────────
-
-1. COST VARIANCE REDUCTION
-   ├─ Learning: CPC/CPL varies >30% day-to-day
-   ├─ Stable: CPC/CPL varies <15% day-to-day
-   └─ Measure: Standard deviation over 7 days
-
-2. DELIVERY CONSISTENCY
-   ├─ Learning: Spend fluctuates >25% vs daily budget
-   ├─ Stable: Spend within ±10% of daily budget
-   └─ Measure: Daily spend vs budget ratio
-
-3. CONVERSION RATE STABILIZATION
-   ├─ Learning: CVR varies >50% week-to-week
-   ├─ Stable: CVR varies <20% week-to-week
-   └─ Measure: Rolling 7-day CVR
-
-QUALITATIVE SIGNALS:
-────────────────────
-
-1. AUDIENCE DELIVERY
-   ├─ Learning: Algorithm testing wide audience segments
-   ├─ Stable: Delivery concentrated in best-performing segments
-   └─ Check: Compare week 1 vs week 3 demographic breakdown
-
-2. CREATIVE PERFORMANCE
-   ├─ Learning: All creatives getting similar delivery
-   ├─ Stable: Clear winners emerging
-   └─ Check: CTR/CVR variance between ads
-
-3. TIME-OF-DAY PATTERNS
-   ├─ Learning: Even distribution across hours
-   ├─ Stable: Concentrated in high-performing hours
-   └─ Check: Delivery by hour of day
+Want to increase budget?
+│
+├─► <20% increase
+│   └─► Safe, implement directly
+│
+├─► 20-50% increase
+│   ├─► Ad set in Learning?
+│   │   └─► Wait until Active, then increase
+│   └─► Ad set Active?
+│       └─► Do in 2 steps (10% + 10%)
+│
+└─► >50% increase
+    └─► Duplicate ad set with new budget
+        └─► Keep original running as backup
 ```
 
-### Learning Status Assessment
+## Learning Phase Exit Strategies
+
+### Quick Exit Tactics
 
 ```
-LEARNING STATUS FRAMEWORK:
-──────────────────────────
+Tactic 1: Budget Boost
+├── Increase budget to 3x CPA x 50 / 7 days
+├── Example: CPA €20 → Budget €429/week = €61/day
+└── After exit: Scale back to desired level
 
-┌─────────────────────────────────────────────────────────────────┐
-│ Status      │ Variance │ Events   │ Duration │ Action          │
-├─────────────┼──────────┼──────────┼──────────┼─────────────────┤
-│ LAUNCHING   │ High     │ <25%     │ <3 days  │ Don't touch     │
-│ LEARNING    │ Medium   │ 25-75%   │ 3-10 days│ Minor tweaks ok │
-│ STABLE      │ Low      │ >75%     │ 10+ days │ Optimize freely │
-│ STUCK       │ High     │ <25%     │ >14 days │ Major changes   │
-└─────────────┴──────────┴──────────┴──────────┴─────────────────┘
+Tactic 2: Broader Targeting
+├── Use Advantage+ Audience
+├── Remove interest restrictions
+├── Expand age ranges
+└── More conversion opportunities = faster learning
 
-How to calculate "Events" percentage:
-├─ Lead Gen: Leads / 20 × 100
-├─ Conversions: Conversions / 25 × 100
-├─ Clicks: Clicks / 150 × 100
-├─ Engagement: Engagements / 100 × 100
-└─ Video: 50%+ Views / 300 × 100
+Tactic 3: Higher-Funnel Event
+├── Temporarily optimize for AddToCart instead of Purchase
+├── More events = faster learning
+├── After exit: Switch back to Purchase
+└── Note: May affect traffic quality
+
+Tactic 4: Consolidation
+├── Merge small ad sets
+├── Combine budgets
+├── One strong ad set > multiple weak ones
+└── Aggregated data = faster learning
 ```
 
-## What Resets Learning (Undocumented but Observed)
+### Learning Limited Solutions
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    LEARNING RESET TRIGGERS                                   │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-SIGNIFICANT RESET (Likely restart learning):
-────────────────────────────────────────────
-├─ Budget change >50% (up or down)
-├─ Bid strategy change (Manual ↔ Auto)
-├─ Objective change
-├─ New ad creative (major reset)
-├─ Audience change >30%
-├─ Conversion event change
-└─ Pause >7 days
-
-MINOR IMPACT (May extend learning):
-───────────────────────────────────
-├─ Budget change 20-50%
-├─ Minor bid cap adjustment
-├─ Adding/removing 1-2 targeting criteria
-├─ Adding new ad to existing creative set
-├─ Schedule change
-└─ Pause <7 days
-
-MINIMAL IMPACT (Usually safe):
-──────────────────────────────
-├─ Budget change <20%
-├─ Name changes
-├─ Adding more budget (if already learning)
-├─ Enabling/disabling Audience Network
-└─ Minor copy tweaks (same creative)
-
-BEST PRACTICE:
-══════════════
-During learning phase:
-├─ Resist the urge to optimize!
-├─ Wait 7-14 days before significant changes
-├─ Make only ONE change at a time
-└─ Document when changes were made
+Diagnosis: Why Learning Limited?
+│
+├─► Budget too low
+│   └─► Increase to €[CPA x 50 / 7] per day
+│
+├─► Audience too small
+│   └─► Broader targeting or merge audiences
+│
+├─► Too few creatives
+│   └─► Add more ads (not just 1 ad per ad set)
+│
+├─► Event too rare
+│   └─► Switch to higher-funnel event
+│
+└─► Competition too high
+    └─► Increase budget or adjust bid strategy
 ```
 
-## Troubleshooting Stuck Learning
+## Edit Timing Best Practices
 
-### Diagnosis Flowchart
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    STUCK LEARNING DIAGNOSIS                                  │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-                    Campaign running >14 days with high variance?
-                                        │
-                                        ▼
-                    Check conversion events received
-                                        │
-                    ┌───────────────────┼───────────────────┐
-                    │                   │                   │
-                    ▼                   ▼                   ▼
-               <25% of target      25-75%              >75%
-                    │                   │                   │
-                    ▼                   ▼                   ▼
-              INSUFFICIENT         SLOW LEARNING       OTHER ISSUE
-                BUDGET                  │                   │
-                    │                   │                   │
-         ┌──────────┴──────────┐       │          ┌────────┴────────┐
-         │                     │       │          │                 │
-         ▼                     ▼       ▼          ▼                 ▼
-    Increase budget      Broaden     Wait       Creative        Tracking
-    by 50-100%          audience    7 more days  fatigue         issue
-                                               (refresh ads)   (check pixel)
-```
-
-### Common Issues and Solutions
-
-| Issue | Symptoms | Solution |
-|-------|----------|----------|
-| **Insufficient Budget** | <5 conversions/week | Increase daily budget or switch to higher-funnel objective |
-| **Audience Too Narrow** | <10K audience size, low impressions | Expand targeting: function vs title, broader industries |
-| **Bid Too Restrictive** | Under-delivery, <50% budget spent | Raise bid cap by 25% or switch to auto bidding |
-| **Creative Fatigue** | CTR declining week-over-week | Refresh creative, test new formats |
-| **Wrong Objective** | Many impressions, few conversions | Consider traffic/engagement as interim step |
-| **Tracking Issues** | Conversions in CRM but not LinkedIn | Audit Insight Tag, check conversion setup |
-| **Seasonality** | Works in Q3, fails in Q4 | Account for B2B buying cycles |
-
-### Unsticking Strategies
+### When to Make Changes
 
 ```
-STRATEGY 1: HIGHER-FUNNEL FIRST
-───────────────────────────────
-Instead of: Direct Lead Gen (€150 CPL target)
-Do: Traffic → Retarget with Lead Gen
-
-Week 1-2: Run website traffic campaign (€30-50/day)
-Week 3+: Retarget website visitors with Lead Gen Forms
-Result: Warm audience = faster learning, better CPL
-
-STRATEGY 2: AUDIENCE LAYERING
-─────────────────────────────
-Instead of: Job Title + Industry + Seniority + Location
-Do: Broader first, narrow later
-
-Week 1-2: Job Function + Location only
-Week 3: Add Industry filter
-Week 4: Add Seniority filter
-Result: More volume during learning, then refine
-
-STRATEGY 3: BUDGET FRONT-LOADING
-────────────────────────────────
-Instead of: €100/day for 30 days
-Do: €200/day for 10 days → €75/day for 20 days
-
-Spend more in learning phase to exit faster
-Then optimize at lower daily spend
-Result: Faster learning, same total budget
-
-STRATEGY 4: CONVERSION GOAL STEPPING
-────────────────────────────────────
-Instead of: Optimize for purchases immediately
-Do: Start with micro-conversions
-
-Phase 1: Optimize for website visits
-Phase 2: Optimize for content downloads
-Phase 3: Optimize for demo requests
-Phase 4: Optimize for opportunities
-Result: Build signal progressively
+BEST TIMING:
+├── Beginning of the week (Monday/Tuesday)
+│   └─► Gives algorithm weekdays to learn
+│
+├── After stable 5-7 days of performance
+│   └─► Baseline data available for comparison
+│
+└── NOT during:
+    ├── Learning phase (wait for exit)
+    ├── Weekend (less data)
+    ├── Peak periods (Black Friday, etc.)
+    └── Right after previous change (<3 days)
 ```
 
-## Output Template
-
-When assessing LinkedIn learning status, provide:
+### Batch Edits Strategy
 
 ```
-## LinkedIn Learning Phase Assessment
-
-### Campaign Overview
-| Metric | Value | Status |
-|--------|-------|--------|
-| Campaign Name | [name] | - |
-| Objective | [objective] | - |
-| Duration | X days | - |
-| Total Spend | €X | - |
-
-### Learning Progress
-| Metric | Current | Target | Progress |
-|--------|---------|--------|----------|
-| Conversion Events | X | ~25 | X% |
-| Days Active | X | 7-14 | X% |
-| Cost Variance (7d) | X% | <20% | [✅/⚠️/❌] |
-| Delivery Consistency | X% | >90% | [✅/⚠️/❌] |
-
-### Learning Status: [LAUNCHING / LEARNING / STABLE / STUCK]
-
-**Explanation:** [Why this status was assigned]
-
-### Variance Analysis (Last 7 Days)
-| Day | Spend | CPC/CPL | vs Avg |
-|-----|-------|---------|--------|
-| -6 | €X | €X | +X% |
-| -5 | €X | €X | +X% |
-| -4 | €X | €X | -X% |
-| -3 | €X | €X | +X% |
-| -2 | €X | €X | -X% |
-| -1 | €X | €X | +X% |
-| Today | €X | €X | +X% |
-
-**7-Day Standard Deviation:** €X (X% of mean)
-**Status:** [High Variance / Moderate / Stable]
-
-### Budget Assessment
-| Metric | Current | Recommended | Gap |
-|--------|---------|-------------|-----|
-| Daily Budget | €X | €X | €X |
-| Weekly Budget | €X | €X | €X |
-| Days to Exit (est.) | X | - | - |
-
-### Audience Health
-| Metric | Value | Status |
-|--------|-------|--------|
-| Audience Size | X | [✅ >50K / ⚠️ 10-50K / ❌ <10K] |
-| Frequency | X | [✅ <3 / ⚠️ 3-5 / ❌ >5] |
-| Reach % | X% | [✅ >10% / ⚠️ 5-10% / ❌ <5%] |
-
-### Recommendations
-
-**If LAUNCHING (Days 1-3):**
-- [ ] Do not make any changes
-- [ ] Monitor but don't optimize
-- [ ] Expected variance is normal
-
-**If LEARNING (Days 3-14):**
-- [ ] Consider increasing budget if < recommended
-- [ ] Only make minor adjustments if necessary
-- [ ] Document any changes made
-
-**If STABLE:**
-- [ ] Safe to optimize targeting
-- [ ] Test new creatives
-- [ ] Consider scaling budget
-
-**If STUCK:**
-1. [Primary recommendation based on diagnosis]
-2. [Secondary option]
-3. [Fallback strategy]
-
-### Timeline Expectation
-| Milestone | Expected | Current |
-|-----------|----------|---------|
-| Exit Learning | Day X | Day X |
-| Stable Performance | Day X | - |
-| Optimization Ready | Day X | - |
+Multiple edits needed?
+│
+├─► Option 1: Batch all edits together
+│   ├── Advantage: One learning reset instead of multiple
+│   └─► Use when: Major refresh/overhaul
+│
+└─► Option 2: Staggered edits
+    ├── Advantage: Isolate impact per change
+    ├── Wait 3-5 days between edits
+    └─► Use when: Testing hypotheses
 ```
 
-## Monitoring Checklist
+## Ad Set Health Check
 
-### Daily (During Learning)
-- [ ] Budget delivery (spending full budget?)
-- [ ] Major cost variance (>30% vs yesterday?)
-- [ ] Any conversion events received?
-- [ ] No changes made (discipline!)
+### Quick Health Assessment
 
-### Weekly (Learning Phase)
-- [ ] Events progress (% toward threshold)
-- [ ] Variance trend (improving or not?)
-- [ ] Delivery patterns (finding efficient pockets?)
-- [ ] Audience saturation check (frequency <5?)
+```
+AD SET HEALTH CHECK
 
-### At Exit Assessment (Day 10-14)
-- [ ] Variance stabilized (<20%)?
-- [ ] Conversion threshold met?
-- [ ] Clear performance patterns emerged?
-- [ ] Ready for optimization phase?
+□ Learning Phase Status: [Learning/Active/Limited]
+□ Days in current status: [X]
+□ Conversions last 7 days: [X]
+□ Daily budget: €[X]
+□ Estimated CPA: €[X]
+□ Frequency: [X]
+□ CTR: [X]%
+□ Delivery status: [Active/Limited/Off]
 
-## Common Questions Answered
+HEALTH SCORE:
+├── Green (Healthy): Active + 50+ conv/week + Frequency <4
+├── Yellow (Watch): Learning >7 days OR 25-50 conv/week
+└── Red (Action needed): Limited OR <25 conv/week OR Frequency >5
+```
 
-### "Does LinkedIn have a learning phase?"
+### Recommended Actions by Status
 
-**Technically no, practically yes.**
+```
+STATUS: Learning (Normal)
+├── Days in learning: <7
+├── Action: Wait, don't make changes
+└── Check again: After 7 days
 
-LinkedIn doesn't label it in the UI like Meta/TikTok, but the algorithm absolutely goes through a learning period. Use the signals in this skill to infer learning status.
+STATUS: Learning (Extended)
+├── Days in learning: >7
+├── Action: Evaluate budget/audience/event
+└── Consider: Tactic 1-4 from Exit Strategies
 
-### "How long before my LinkedIn campaign stabilizes?"
+STATUS: Learning Limited
+├── Action: Immediate intervention
+├── Primary: Increase budget
+├── Secondary: Broader audience
+└── Tertiary: Higher-funnel event
 
-**Typical timelines by objective:**
+STATUS: Active (Healthy)
+├── Action: Monitor, no changes needed
+├── Optimize: Test new creatives (add, don't replace)
+└── Scale: 20% budget increase if performance is stable
 
-| Objective | Learning Period | When to Expect Stability |
-|-----------|-----------------|--------------------------|
-| Awareness | 3-5 days | Week 1 |
-| Engagement | 5-7 days | Week 1-2 |
-| Traffic | 5-10 days | Week 2 |
-| Lead Gen | 7-14 days | Week 2-3 |
-| Conversions | 10-21 days | Week 3-4 |
+STATUS: Active (Declining)
+├── Symptoms: Rising CPA, falling ROAS
+├── Diagnose: Creative fatigue? Audience saturation?
+├── Action: Refresh creatives, expand audience
+└── Avoid: Major restructuring (resets learning)
+```
 
-### "Why is Meta faster to learn than LinkedIn?"
+## Edit Impact Simulator
 
-**Three reasons:**
+### Input Template
 
-1. **More data:** Meta has 3B+ users vs LinkedIn's 900M
-2. **More conversions:** Meta advertisers typically see more events per €
-3. **Shorter cycles:** B2C decisions faster than B2B
+```
+CURRENT AD SET:
+- Daily budget: €[X]
+- Learning status: [Learning/Active/Limited]
+- Days in status: [X]
+- Conv. last 7 days: [X]
+- Current CPA: €[X]
 
-**Implication:** Accept that LinkedIn learning takes 2-3x longer than Meta. Budget and patience accordingly.
+PROPOSED CHANGE:
+- Change type: [budget/audience/creative/bid/event]
+- Change details: [specifics]
+```
 
-### "Should I change my campaign that's not performing?"
+### Output Template
 
-**The 14-day rule:**
+```
+EDIT IMPACT ANALYSIS
 
-- Days 1-7: **NO changes** (too early)
-- Days 7-14: **Minor changes only** if critically underperforming
-- Days 14+: **Optimize freely** if learning exited, OR **major reset** if stuck
+Proposed Change: [description]
 
-**Before any change, ask:**
-1. Have I reached minimum event threshold?
-2. Is variance still decreasing?
-3. Will this change reset learning?
+RISK ASSESSMENT:
+├── Learning Reset Risk: [Low/Medium/High]
+├── Performance Impact: [Minimal/Moderate/Significant]
+└── Recovery Time: [X] days
 
----
+RECOMMENDATION:
+[Proceed/Proceed with caution/Delay/Alternative approach]
 
-*Based on 2025-2026 LinkedIn Ads research and practitioner experience. LinkedIn's implicit learning phase is real - respect it by giving campaigns time and adequate budget to learn.*
+ALTERNATIVE APPROACH (if risky):
+[Safer alternative to achieve same goal]
+
+TIMING ADVICE:
+[When to implement if proceeding]
+
+POST-CHANGE MONITORING:
+- Day 1-3: [what to monitor]
+- Day 4-7: [evaluation criteria]
+- Action triggers: [when to intervene]
+```
+
+## MCP: Check Learning Phase Status
+
+```python
+# Get learning phase status for all active ad sets
+meta_query(account_id="act_XXXXX", entity="adsets", fields=["id","name","status","learning_phase_status","daily_budget","optimization_goal","bid_strategy"], filters={"effective_status":["ACTIVE","LEARNING","LEARNING_LIMITED"]})
+```
+
+## Common Scenarios
+
+### Scenario 1: Doubling Budget
+
+```
+Situation: Ad set performing well, want to 2x budget
+Risk: High (>50% increase)
+
+Recommendation:
+1. Duplicate ad set with 2x budget
+2. Keep original running on current budget
+3. After 7 days: Evaluate which performs better
+4. Pause the underperformer
+```
+
+### Scenario 2: Creative Refresh
+
+```
+Situation: CTR declining, want to replace all ads
+Risk: High (triggers reset)
+
+Recommendation:
+1. Add new ads to existing ad set (don't replace)
+2. Let algorithm test new vs old
+3. Pause underperformers after 5-7 days
+4. Avoid full creative swap
+```
+
+### Scenario 3: Audience Change
+
+```
+Situation: Want to add interest targeting
+Risk: High (audience change = reset)
+
+Recommendation:
+1. Create new ad set with new audience
+2. Keep original running in parallel
+3. Compare performance after 7-14 days
+4. Scale winner, pause loser
+```
+
+### Scenario 4: Stuck in Learning
+
+```
+Situation: 14 days in Learning, no progress
+Diagnosis: Budget €30/day, CPA €25, 8 conv/week
+
+Recommendation:
+1. Increase budget to €90/day (€25 CPA x 50 / 7 x 0.5 buffer)
+2. OR switch to AddToCart event temporarily
+3. OR merge with other ad sets
+4. After exit: Optimize back to desired setup
+```

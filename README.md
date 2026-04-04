@@ -8,14 +8,14 @@ AI-powered advertising intelligence across 8 platforms. Manage, analyze, and opt
 
 | Platform | Skills | MCP Tools | Capabilities |
 |----------|--------|-----------|--------------|
-| **Meta Ads** | 23 | 8 | Campaign management, creative fatigue analysis, audience targeting, ad creation, budget optimization |
-| **Google Ads** | 32 | 4 | GAQL queries, Performance Max, keyword strategy, bid optimization, campaign creation |
+| **Meta Ads** | 21 | 8 | Campaign management, creative fatigue analysis, audience targeting, ad creation, budget optimization |
+| **Google Ads** | 30 | 4 | GAQL queries, Performance Max, keyword strategy, bid optimization, campaign creation |
 | **Google Analytics 4** | 18 | 2 | Event tracking, attribution models, audience building, ecommerce analysis |
 | **Google Search Console** | 2 | 3 | SEO performance, keyword rankings, indexing diagnostics, sitemap management |
-| **Google Tag Manager** | 1 | 3 | Container auditing, tag management, configuration |
-| **LinkedIn Ads** | 7 | 4 | B2B lead gen optimization, CPL troubleshooting, campaign analytics |
-| **TikTok Ads** | 6 | 6 | Creative fatigue tracking, video performance, audience targeting |
-| **Cross-Platform** | 9 | — | Attribution reconciliation, SEO vs SEA gaps, budget allocation, competitive analysis |
+| **Google Tag Manager** | 5 | 3 | Container auditing, consent mode, server-side tagging, conversion setup |
+| **LinkedIn Ads** | 11 | 4 | B2B lead gen, ABM targeting, revenue attribution, Thought Leader Ads, CTV |
+| **TikTok Ads** | 10 | 6 | Creative fatigue, video performance, Smart+ campaigns, Search Ads, Shop |
+| **Cross-Platform** | 14 | — | Attribution reconciliation, SEO vs SEA gaps, budget allocation, competitive analysis |
 
 ## Install
 
@@ -23,7 +23,7 @@ AI-powered advertising intelligence across 8 platforms. Manage, analyze, and opt
 /plugin install ad-superpowers@claude-plugins-official
 ```
 
-That's it. The MCP server, all 94 skills, 26 workflow commands, and safety confirmations are bundled.
+That's it. The MCP server, all 111 skills, 30 workflow commands, and safety confirmations are bundled.
 
 ## Setup
 
@@ -55,7 +55,7 @@ No API keys to configure. No manual MCP setup. Authentication is handled via OAu
 | `/ad-superpowers:anomaly-detective` | Detect performance anomalies across campaigns |
 | `/ad-superpowers:competitive-landscape-analyzer` | Competitive positioning analysis |
 
-[See all 26 commands →](commands/)
+[See all 30 commands →](commands/)
 
 ### Specialized agents
 

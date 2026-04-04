@@ -389,6 +389,42 @@ OPTIONAL BUT VALUABLE:
 +-- unit_pricing_measure: Price per unit
 +-- unit_pricing_base_measure: Base unit
 ```
+
+
+
+## GAQL: Feed Diagnostics via Google Ads API
+
+Use `google_ads_run_gaql` to diagnose Shopping feed performance directly from Google Ads (without Merchant Center UI):
+
+```sql
+-- Products with impressions + disapproval status
+SELECT segments.product_title, segments.product_item_id,
+    segments.product_brand, segments.product_type_l1,
+    metrics.impressions, metrics.clicks, metrics.cost_micros,
+    metrics.conversions
+FROM shopping_performance_view
+WHERE segments.date DURING LAST_30_DAYS
+ORDER BY metrics.impressions DESC
+LIMIT 100
+```
+
+```sql
+-- Find products with zero impressions (feed/approval issue)
+SELECT segments.product_title, segments.product_item_id,
+    metrics.impressions, metrics.clicks
+FROM shopping_performance_view
+WHERE segments.date DURING LAST_30_DAYS
+AND metrics.impressions = 0
+LIMIT 50
+```
+
+```sql
+-- Check Merchant Center link
+SELECT customer.id, customer_client_link.client_customer,
+    customer_client_link.status
+FROM customer_client_link
+```
+
 ## Resolving Disapprovals
 
 ### Most Common Disapprovals

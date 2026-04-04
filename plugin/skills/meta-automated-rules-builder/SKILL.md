@@ -408,13 +408,38 @@ RULE AUDIT CHECKLIST
 └── Document changes
 ```
 
+## MCP Tool Integration
+
+### Pulling Live Data Before Setting Thresholds
+
+Before building rules, always check current account performance to set realistic thresholds:
+
+```
+STEP 1: Get recent CPA baseline
+→ meta_query(account_id="...", fields=["cost_per_result"], date_preset="last_7d", level="adset")
+
+STEP 2: Check frequency levels
+→ meta_query(account_id="...", fields=["frequency","impressions"], date_preset="last_7d", level="adset")
+
+STEP 3: Review current learning phase status
+→ meta_query(account_id="...", fields=["delivery_info","spend"], date_preset="last_3d", level="adset")
+```
+
+Use the actual CPA from `meta_query` results to set rule thresholds — never guess.
+
 ## Example Interaction
 
 **User**: "I want to set up rules so my ads automatically stop if the CPA gets too high. My target CPA is $15."
 
 **Claude response**:
 
-"I'll help you with a complete rule set for CPA protection. With a target CPA of $15, I'd suggest the following:
+"Let me first check your current account performance to set accurate thresholds.
+
+```
+meta_query(account_id="...", fields=["adset_name","cost_per_result","impressions","spend"], date_preset="last_7d", level="adset")
+```
+
+Based on those results, I'll build a complete rule set for CPA protection. With a target CPA of $15, I'd suggest the following:
 
 ---
 
@@ -469,5 +494,10 @@ Schedule: Daily at 09:00
 - Do NOT set an auto-pause rule during learning phase
 - Wait until you've had at least 50 conversions
 - Check after 1 week whether the thresholds are working well
+
+After rules are live, monitor via:
+```
+meta_query(account_id="...", fields=["adset_name","cost_per_result","delivery_info","spend"], date_preset="last_3d", level="adset")
+```
 
 Would you like me to also add scaling rules for when CPA is below target?"

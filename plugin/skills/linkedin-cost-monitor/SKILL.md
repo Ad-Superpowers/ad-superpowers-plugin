@@ -489,6 +489,51 @@ When analyzing LinkedIn costs, provide:
      - Outbound sales
      - Direct mail
 
+## MCP Tool Usage
+
+Use MCP tools to pull cost data for analysis and trend detection:
+
+```
+# Get weekly cost trends across all campaigns
+linkedin_get_analytics(
+  account_id="YOUR_ACCOUNT_ID",
+  entity="campaigns",
+  metrics=["costInLocalCurrency", "cpc", "cpm", "cpl", "clicks", "impressions",
+           "leads", "frequency"],
+  date_range={"start": "YYYY-MM-DD", "end": "YYYY-MM-DD"}
+)
+
+# Get account-level totals for efficiency score calculation
+linkedin_get_analytics(
+  account_id="YOUR_ACCOUNT_ID",
+  entity="accounts",
+  metrics=["costInLocalCurrency", "cpc", "cpm", "cpl", "totalEngagements", "impressions"],
+  date_range={"start": "YYYY-MM-DD", "end": "YYYY-MM-DD"}
+)
+
+# Get campaign details to check for bid strategy changes that may explain spikes
+linkedin_query(
+  account_id="YOUR_ACCOUNT_ID",
+  entity="campaigns",
+  fields=["id", "name", "costType", "unitCost", "dailyBudget", "lastModified", "status"]
+)
+```
+
+Tip: Compare CPC/CPM/CPL week-over-week across multiple campaigns. Spike in one campaign = creative/audience issue. Spike across all campaigns = seasonality or market-wide trend (check DDMA data).
+
+## New Ad Format Cost Benchmarks
+
+Cost profiles for 2025-2026 formats vs. standard Sponsored Content:
+
+| Format | CPM vs Single Image | CPC vs Single Image | Notes |
+|--------|--------------------|--------------------|-------|
+| Document Ads | -5 to -15% | -10 to -20% | In-feed reading drives higher engagement at similar cost |
+| Thought Leader Ads | -20 to -40% | -15 to -30% | Employee posts get organic distribution boost |
+| CTV Ads | CPM only ($40-80) | N/A (awareness) | Household-level B2B reach; no click-based pricing |
+| Conversation Ads | N/A (open rate) | Per-open: ~$0.80-2 | Charged per message open, not click |
+
+**Strategic implication:** If Sponsored Content CPM is trending up (as per DDMA +20% YoY), rotating budget to Thought Leader Ads and Document Ads can offset cost increases while maintaining or improving engagement.
+
 ## Monitoring Checklist
 
 ### Weekly Cost Review

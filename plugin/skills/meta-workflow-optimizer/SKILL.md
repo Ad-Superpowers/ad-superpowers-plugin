@@ -209,7 +209,8 @@ MONTHLY ACCOUNT AUDIT
 
 □ AUDIENCE AUDIT (30 min)
 ├── Custom audiences up-to-date?
-├── Lookalike refresh needed?
+├── Lookalike audiences still active? (Note: Lookalikes deprioritized in 2026 — Advantage+ Audience preferred)
+├── Advantage+ Audience enabled on prospecting ad sets?
 ├── Audience overlap check
 ├── Exclusions correct?
 └── New audience ideas
@@ -289,7 +290,7 @@ SETUP CHECKLIST
 ───────────────
 □ Campaign level:
   ├── Correct objective
-  ├── Budget type (CBO vs ABO)
+  ├── Budget type (Advantage Campaign Budget vs Ad Set Budget)
   ├── A/B test setup if needed
   └── Campaign budget set
 
@@ -458,6 +459,27 @@ ADVANCED (Scale):
 ├── Foreplay (creative research)
 └── Supermetrics (reporting automation)
 ```
+
+## MCP Tool Integration
+
+### Automating the Daily Check
+
+Replace manual Ads Manager browsing with direct data pulls:
+
+```
+DAILY CHECK (2 minutes with MCP):
+
+1. Performance snapshot (all active ad sets):
+→ meta_query(account_id="...", fields=["adset_name","spend","cost_per_result","roas","impressions","frequency"], date_preset="today", level="adset")
+
+2. Weekly trend (top/bottom performers):
+→ meta_query(account_id="...", fields=["campaign_name","spend","cost_per_result","purchase_roas"], date_preset="last_7d", level="campaign")
+
+3. Creative health check:
+→ meta_get_creatives(account_id="...", scope="active")
+```
+
+Paste the `meta_query` output directly into any analysis prompt from Category 3 above for instant AI-powered interpretation.
 
 ## Example Interaction
 

@@ -1,939 +1,547 @@
 ---
 name: campaign-structure-advisor
 description: |
-  Google Ads Campaign Structure advisor for optimal account organization. Use when: restructuring or consolidating accounts, selecting campaign types, organizing ad groups, migrating from SKAGs to modern structure, or optimizing for Smart Bidding. Do NOT use for: bid strategy selection (use bid-strategy-selector), keyword strategy (use keyword-strategy-planner), or performance diagnosis (use performance-troubleshooter).
+  Meta Ads 4-tier funnel structure and creative testing framework for e-commerce and lead generation.
+  Use when: setting up or auditing account structure, creative testing workflows, determining winner criteria,
+  optimizing budget allocation, scaling strategy.
+  Do NOT use for: bid strategy selection (use bid-strategy-selector), creative brainstorming (use creative-diversification-generator),
+  full-funnel design across platforms (use full-funnel-designer).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
-  platform: "google_ads"
-  phase: "fase-4-measurement-attribution"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
+  platform: "meta"
+  phase: "fase-1-foundation"
+compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
-# Campaign Structure Advisor
+# Meta Ads Campaign Structure Advisor
 
-Complete guide for structuring and optimizing Google Ads accounts with focus on modern, Smart Bidding-optimized architectures.
-## Modern Account Structure
+Framework for setting up and optimizing Meta Ads account structures using the 4-tier funnel methodology. Based on Meta's Performance 5 framework and proven agency best practices 2025-2026.
 
-### Fundamental Principles
+> **April 2026 API Update:** Meta API v25.0 (Feb 2026) unifies Advantage+ Sales Campaigns (ASC) into a single campaign type with 3 automation levers (budget, audience, placement). The legacy `smart_promotion_type` / AAC distinction is deprecated (deadline May 19, 2026). `advantage_state_info` is the new field. In practice, the 4-tier structure below remains valid — ASC is the SCALE campaign type. **New placement:** Threads (400M+ MAU, March 2026) — add to placement mix for scale campaigns.
 
-```
-MODERN GOOGLE ADS STRUCTURE PRINCIPLES
-═══════════════════════════════════════
+## Core Principle
 
-PRINCIPLE 1: CONSOLIDATION OVER FRAGMENTATION
-──────────────────────────────────────────────
-OLD: Many small campaigns with little data
-NEW: Fewer campaigns with more conversions
+**Creative = Targeting.** Meta's Andromeda algorithm selects ads based on creative quality, not audience parameters. Creative diversification and systematic testing are the primary growth levers.
 
-Why:
-├── Smart Bidding learns faster with more data
-├── Less management overhead
-├── Better budget allocation
-└── Faster Learning Phase
+**Simplification = Better Performance.** Accounts with 2-4 campaigns perform 32% better on CPA than fragmented structures.
 
-PRINCIPLE 2: MACHINE LEARNING FIRST
-────────────────────────────────────
-OLD: Manual bids, exact match focus
-NEW: Smart Bidding, broad match allowed
+## 4-Tier Funnel Structure
 
-Why:
-├── Google's AI sees signals you can't
-├── Real-time bid optimization per auction
-├── Broad match + Smart Bidding = powerful combo
-└── Focus on strategy, not tactics
+| Tier | Campaign Type | Budget | Goal |
+|------|---------------|--------|------|
+| **SCALE** | Advantage+ Sales (ASC) | 60-70% | Scale proven winners |
+| **TEST** | Manual Sales (ABO) | 10-20% | Identify new winners |
+| **RETARGET** | Manual Sales | 15-25% | Convert warm traffic |
+| **RETAIN** | Manual Sales | 5-10% | Maximize customer LTV |
 
-PRINCIPLE 3: THEME-BASED AD GROUPS
-───────────────────────────────────
-OLD: SKAG (Single Keyword Ad Groups)
-NEW: STAG (Single Theme Ad Groups)
+### SCALE Campaign (ASC) - 60-70% budget
+- **Targeting:** 100% Broad (Advantage+ Audience)
+- **Creatives:** Only validated winners - no new tests here
+- **Goal:** Maximum scale with proven performers
 
-Why:
-├── Enough variation for AI to learn
-├── Ads still relevant
-├── Manageable scale
-└── Flexible for query expansion
+### TEST Campaign (Prospecting) - 10-20% budget
+- **Broad Pack [date]** - Contains 3-5 new creatives for testing
+- **Broad Pack [date]** - New batch of creatives (weekly/biweekly)
+- **Interest #1 Winners** - Receives graduated winners for interest targeting
+- **Interest #2 Winners** - Receives graduated winners for other interests
+- **Goal:** Systematically test new creatives and identify winners
 
-PRINCIPLE 4: BUDGET = BUSINESS CONSTRAINT
-─────────────────────────────────────────
-Separate campaigns only for:
-├── Different budget pools
-├── Different geographic targets
-├── Different business units/products
-├── Different performance targets (CPA/ROAS)
-└── Regulatory/compliance requirements
-```
+### RETARGET Campaign - 15-25% budget
+- **14 Day FB/IG Engagers** - Social engagement retargeting
+- **30 Day Website Visitors** - Site visitor retargeting
+- **90 Day ATC/IC** - Add to Cart / Initiate Checkout retargeting
+- **Goal:** Convert warm traffic with high purchase intent
 
-### Ideal Account Structure
+### RETAIN Campaign - 5-10% budget
+- **All Time Purchasers** - Upsell/Cross-sell messaging
+- **180 Day Purchasers** - Replenishment/New Products messaging
+- **Goal:** Reactivate existing customers and increase LTV
+
+---
+
+## Creative Flow: How Ads Move Through the System
+
+This is the exact flow of how creatives are tested, evaluated, and graduated.
+
+### Step 1: New Creatives Start in TEST
+
+All new creatives begin in the **TEST campaign**, specifically in a **Broad Pack ad set**:
 
 ```
-RECOMMENDED ACCOUNT ARCHITECTURE
-═════════════════════════════════
-
-E-COMMERCE STRUCTURE:
-─────────────────────
-Account
-├── Campaign 1: Brand Search
-│   ├── Budget: 10-15% of total
-│   ├── Bidding: Max Conversions or tCPA
-│   ├── Keywords: Branded terms (exact/phrase)
-│   └── Purpose: Capture branded intent
-│
-├── Campaign 2: Performance Max
-│   ├── Budget: 40-50% of total
-│   ├── Bidding: Max Conv Value + tROAS
-│   ├── Asset Groups: By product category
-│   └── Purpose: Full-funnel automation
-│
-├── Campaign 3: Non-Brand Search
-│   ├── Budget: 30-40% of total
-│   ├── Bidding: tCPA or tROAS
-│   ├── Ad Groups: By product theme/intent
-│   └── Purpose: High-intent traffic
-│
-└── Campaign 4: Display Remarketing (optional)
-    ├── Budget: 5-10% of total
-    ├── Bidding: tCPA
-    └── Purpose: Re-engage visitors
-
-LEAD GEN STRUCTURE:
-───────────────────
-Account
-├── Campaign 1: Brand Search
-│   ├── Budget: 10-15%
-│   └── Low CPA, high conversion rate
-│
-├── Campaign 2: High-Intent Non-Brand
-│   ├── Budget: 50-60%
-│   ├── Keywords: [service] + [action terms]
-│   └── Focus: Qualified leads
-│
-├── Campaign 3: Consideration/Research
-│   ├── Budget: 20-25%
-│   ├── Keywords: [service] + [question terms]
-│   └── Focus: Top-funnel leads
-│
-└── Campaign 4: Performance Max (optional)
-    ├── Budget: 10-15%
-    └── Broader reach
+New creative made
+         ↓
+    TEST Campaign
+         ↓
+  Broad Pack [date]
+    (Ad Set with ABO)
 ```
 
-### Ad Group Organization
+**Why Broad Pack?**
+- Broad targeting gives the algorithm maximum freedom to find the best audience
+- ABO (Ad Set Budget Optimization) ensures equal budget distribution between creatives
+- Date in name makes tracking creative batches simple
+
+### Step 2: Evaluation Against Winner Criteria
+
+After sufficient spend and time, each creative is evaluated:
 
 ```
-AD GROUP BEST PRACTICES
-═══════════════════════
-
-STAG (Single Theme Ad Groups):
-──────────────────────────────
-= Keywords with the same intent grouped together
-
-EXAMPLE - Product Theme:
-Ad Group: "Running Shoes"
-├── running shoes
-├── buy running shoes
-├── best running shoes
-├── running sneakers
-├── running shoes online
-└── trail running shoes
-
-GUIDELINES:
-───────────
-□ 10-20 keywords per ad group
-□ All keywords same intent/theme
-□ Same landing page
-□ 2-3 RSAs per ad group
-□ Specific ad copy for theme
-
-MATCH TYPE STRATEGY (Modern):
-─────────────────────────────
-Recommended with Smart Bidding:
-├── Broad Match: 40-60% (with good negatives)
-├── Phrase Match: 30-40%
-└── Exact Match: 10-20% (top performers)
-
-Legacy accounts:
-├── Start with phrase/exact
-├── Add broad with monitoring
-├── Expand based on search term performance
-
-NEGATIVES ARE CRUCIAL:
-──────────────────────
-With broad match:
-□ Account-level negative list
-□ Campaign-level specifics
-□ Weekly search term review
-□ Proactive negatives (irrelevant terms)
+Creative in Broad Pack
+         ↓
+  Spend >= minimum threshold?
+  (e.g., 3x CPA or 3x AOV)
+         ↓
+    NO → Keep testing OR kill if underperforming
+    YES → Evaluate performance
+         ↓
+  ROAS >= threshold AND conversions >= minimum?
+         ↓
+    NO → Kill or keep testing
+    YES → WINNER! Go to Step 3
 ```
 
-## Campaign Consolidation
+### Step 3: Winner Graduation (Three Destinations)
 
-### When to Consolidate
+**Important:** A winner goes to MULTIPLE destinations simultaneously, not just one.
+
+When a creative reaches winner status, it is copied to:
+
+**Destination A: SCALE Campaign (ASC)**
+```
+Winner Creative
+      ↓
+ SCALE Campaign (ASC)
+      ↓
+ 100% Broad Ad Set
+ (alongside other winners)
+```
+- Creative is added to the ASC campaign
+- Runs with 100% broad targeting on Advantage Campaign Budget
+- Receives the largest share of budget (60-70%)
+
+**Destination B: Interest #1 Winners Ad Set**
+```
+Winner Creative
+      ↓
+  TEST Campaign
+      ↓
+Interest #1 Winners
+   (Ad Set)
+```
+- Same creative, but now with interest targeting
+- Tests whether the winner also performs with specific interest audiences
+- Provides diversification alongside pure broad scaling
+
+**Destination C: Interest #2 Winners Ad Set**
+```
+Winner Creative
+      ↓
+  TEST Campaign
+      ↓
+Interest #2 Winners
+   (Ad Set)
+```
+- Same creative with different interest targeting
+- Multiple interest ad sets possible depending on product/market
+
+### Complete Flow Summary
 
 ```
-CONSOLIDATION ASSESSMENT
-════════════════════════
-
-CONSOLIDATE WHEN:
-─────────────────
-
-✓ CONVERSION VOLUME TOO LOW
-  └── <50 conversions per campaign per month
-  └── Smart Bidding in "Learning Limited"
-
-✓ OVERLAPPING KEYWORDS
-  └── Same keywords in multiple campaigns
-  └── Internal competition
-  └── Fragmented data
-
-✓ SAME TARGETS
-  └── Campaigns with identical CPA/ROAS targets
-  └── No reason for separation
-
-✓ FRAGMENTED BUDGET
-  └── Small budgets spread across many campaigns
-  └── No single campaign has enough for learning
-
-✓ MANAGEMENT OVERHEAD
-  └── Too much time on small campaigns
-  └── Difficult to optimize
-
-KEEP SEPARATE CAMPAIGNS WHEN:
-─────────────────────────────
-
-✗ DIFFERENT BUDGETS
-  └── Separate funding pools
-  └── Client/business unit separation
-
-✗ DIFFERENT GEO TARGETS
-  └── Different countries
-  └── Different languages
-  └── Different bid landscapes
-
-✗ SIGNIFICANTLY DIFFERENT TARGETS
-  └── Brand vs Non-brand (often different CPA)
-  └── High-value vs Volume
-  └── Different margins
-
-✗ COMPLIANCE/ORGANIZATIONAL
-  └── Regulatory requirements
-  └── Reporting requirements
-  └── Organizational structure
+[NEW CREATIVE]
+        │
+        ▼
+┌───────────────────┐
+│   TEST Campaign   │
+│                   │
+│  Broad Pack [date]│ ◄── Starting point for all new creatives
+│    (ABO budget)   │
+└────────┬──────────┘
+         │
+         ▼
+   [EVALUATION]
+   Meets winner criteria?
+         │
+    ┌────┴────┐
+    │         │
+   NO        YES
+    │         │
+    ▼         ▼
+  [KILL]   [WINNER]
+    or        │
+ [KEEP       │
+ TESTING]    ├──────────────────────────────────────┐
+             │                                      │
+             ▼                                      ▼
+┌────────────────────────┐          ┌───────────────────────────┐
+│    SCALE Campaign      │          │      TEST Campaign        │
+│         (ASC)          │          │                           │
+│                        │          │  ┌─────────────────────┐  │
+│  ┌──────────────────┐  │          │  │ Interest #1 Winners │  │
+│  │   100% Broad     │  │          │  └─────────────────────┘  │
+│  │   (all winners)  │  │          │  ┌─────────────────────┐  │
+│  └──────────────────┘  │          │  │ Interest #2 Winners │  │
+│                        │          │  └─────────────────────┘  │
+│  Budget: 60-70%        │          │                           │
+│  Goal: Maximum scale   │          │  Goal: Interest targeting │
+└────────────────────────┘          │        with winners       │
+                                    └───────────────────────────┘
 ```
 
-### Consolidation Strategy
+### Flow Rules Summary
+
+| Rule | Description |
+|------|-------------|
+| New creatives → Broad Pack | All new creatives start in TEST campaign, Broad Pack ad set |
+| Winner = multi-destination | Winners go to SCALE (ASC) AND Interest Winners ad sets |
+| No new tests in SCALE | SCALE campaign contains only proven winners, no experiments |
+| Interest Winners ≠ new tests | Interest Winners ad sets contain graduated winners, not new creatives |
+| Retarget/Retain = separate creatives | These campaigns use specific messaging, not the same test creatives |
+
+### When Does a Creative NOT Advance?
+
+A creative is paused (killed) and does not advance when:
+
+1. **No conversions after 2-3x CPA spend** → Pause immediately
+2. **ROAS < 50% of target after significant spend** → Pause
+3. **CTR < 0.5% with €100+ spend** → Pause or iterate
+4. **Hook rate < 20% after 10,000+ impressions** → Creative problem, iterate
+
+### Practical Example
 
 ```
-CONSOLIDATION STEP-BY-STEP PLAN
-════════════════════════════════
+Scenario: E-commerce brand, AOV €80, Target ROAS 4x, Target CPA €20
 
-PHASE 1: ANALYSIS (Week 1)
-───────────────────────────
-□ Export all campaign data (30/90 days)
-□ Identify campaigns for consolidation
-□ Map keyword overlap
-□ Document current performance baselines
-□ Plan new structure
-
-Consolidation candidates:
-┌─────────────────────────────────────────────────────────┐
-│ Campaign          │ Conv/month │ CPA    │ Overlap? │ ?  │
-├───────────────────┼────────────┼────────┼──────────┼────┤
-│ Product A Search  │ 15         │ €45    │ Yes      │ ✓  │
-│ Product B Search  │ 22         │ €48    │ Yes      │ ✓  │
-│ Brand Search      │ 150        │ €12    │ No       │ ✗  │
-│ Display Retarget  │ 35         │ €28    │ No       │ ✗  │
-└───────────────────┴────────────┴────────┴──────────┴────┘
-
-PHASE 2: BUILD NEW STRUCTURE (Week 2)
-─────────────────────────────────────
-□ Create new consolidated campaigns
-□ Import/reorganize keywords
-□ Create new ad groups (themed)
-□ Write new RSAs
-□ Setup extensions
-□ Configure bid strategy
-□ TEST: Verify setup
-
-New structure example:
-├── [Old] Product A Search →
-├── [Old] Product B Search → [New] Products Search (combined)
-└── [Old] Product C Search →
-
-PHASE 3: MIGRATION (Week 3)
-────────────────────────────
-Option A: Hard switch
-├── Pause old campaigns
-├── Enable new campaigns
-└── Monitor intensively
-
-Option B: Soft transition (recommended)
-├── Reduce old budgets by 50%
-├── Enable new with 50% budget
-├── Shift gradually over 7-14 days
-└── Pause old when new is stable
-
-PHASE 4: OPTIMIZATION (Week 4+)
-────────────────────────────────
-□ Monitor Learning Phase
-□ Adjust targets if needed
-□ Optimize negatives
-□ Review search terms
-□ Fine-tune ad copy
-```
-
-### Portfolio Bid Strategies
-
-```
-PORTFOLIO BID STRATEGIES
-════════════════════════
-
-WHAT: One bid strategy across multiple campaigns
-
-WHEN TO USE:
-────────────
-✓ Campaigns too small for individual learning
-✓ Same business objective
-✓ Want centralized bid management
-✓ Want to aggregate data
-
-SETUP:
-──────
-Tools → Shared Library → Bid Strategies → +
-
-PORTFOLIO OPTIONS:
-──────────────────
-1. Target CPA Portfolio
-   └── Multiple lead gen campaigns
-   └── Same CPA target
-
-2. Target ROAS Portfolio
-   └── Multiple e-commerce campaigns
-   └── Same margin target
-
-3. Maximize Conversions Portfolio
-   └── New/small campaigns
-   └── Data aggregation for learning
-
-EXAMPLE SETUP:
-──────────────
-Portfolio: "Non-Brand Search - tCPA €50"
-├── Campaign: Generic Keywords
-├── Campaign: Competitor Keywords
-├── Campaign: Long-tail Keywords
-└── Shared target: €50 CPA
-
-ADVANTAGES:
-├── Aggregated learning
-├── Faster learning phase
-├── Centralized management
-├── Budget flexibility
-
-DISADVANTAGES:
-├── Less granular control
-├── Shared targets not always optimal
-├── Reporting more complex
-└── Suboptimal if campaigns are very different
-```
-
-## SKAG to Modern Migration
-
-### SKAG Problems
-
-```
-WHY SKAG NO LONGER WORKS
-═════════════════════════
-
-SKAG = Single Keyword Ad Groups
-= One keyword per ad group (exact match)
-
-WHY IT WAS POPULAR:
-├── Maximum keyword-ad relevance
-├── Perfect Quality Score
-├── Granular bid control
-└── Pre-Smart Bidding logic
-
-WHY IT DOESN'T WORK NOW:
-─────────────────────────
-
-1. SMART BIDDING NEEDS DATA
-   ├── SKAG = few conversions per ad group
-   ├── AI can't learn from small samples
-   └── "Learning Limited" everywhere
-
-2. CLOSE VARIANTS MAKE IT POINTLESS
-   ├── [running shoes] also triggers "sneakers running"
-   ├── Exact match is no longer exact
-   └── SKAG advantage gone
-
-3. MANAGEMENT NIGHTMARE
-   ├── Thousands of ad groups
-   ├── Difficult to optimize
-   ├── RSA needs headroom that isn't there
-   └── Time better spent elsewhere
-
-4. BROAD MATCH + SMART BIDDING IS BETTER
-   ├── AI selects best queries
-   ├── More reach
-   ├── Automatic query expansion
-   └── Focus on outcomes, not structure
-```
-
-### Migration Strategy
-
-```
-SKAG → MODERN MIGRATION
-════════════════════════
-
-STEP 1: INVENTORY
-─────────────────
-□ Export all SKAGs
-□ Group keywords by theme/intent
-□ Identify top performers (preserve intent)
-□ Note best performing ad copy
-
-Grouping example:
-SKAGs:
-├── [running shoes]
-├── [running shoes men]
-├── [best running shoes]
-├── [buy running shoes]
-└── [running shoes sale]
-
-→ New Ad Group: "Running Shoes"
-  (all above + variations)
-
-STEP 2: DEFINE NEW STRUCTURE
-────────────────────────────
-From: 500 SKAGs
-To: 30-50 themed ad groups in 3-5 campaigns
-
-Rules of thumb:
-├── Max 5-10 ad groups per campaign
-├── Max 20 keywords per ad group
-├── Min 50 conv/campaign/month target
-└── Themed groupings
-
-STEP 3: AD COPY CONSOLIDATION
-──────────────────────────────
-From: 500 exact-match ads
-To: 100-150 RSAs with variation
-
-Per ad group:
-├── 2-3 RSAs
-├── Use best performers as base
-├── Vary headlines/descriptions
-└── Use keyword insertion where logical
-
-STEP 4: MIGRATION EXECUTION
-────────────────────────────
 Week 1:
-├── Build new campaigns alongside SKAG
-├── Mirror best keywords and ads
-├── Setup bid strategy (start conservative)
-└── Enable with 20% budget
+- Launch Broad Pack 2025-01-15 with Creative A, B, C, D
+- Each creative gets equal budget (ABO)
 
-Week 2:
-├── Monitor new campaigns
-├── Shift budget: 50% new, 50% SKAG
-├── Check search terms
-└── Add negatives
+Week 2 (after €60+ spend per creative):
+- Creative A: €65 spend, 4 purchases, €400 revenue → ROAS 6.15x ✓
+- Creative B: €70 spend, 2 purchases, €160 revenue → ROAS 2.29x (below threshold)
+- Creative C: €55 spend, 0 purchases → KILL
+- Creative D: €60 spend, 3 purchases, €280 revenue → ROAS 4.67x ✓
 
-Week 3:
-├── If stable: 80% new, 20% SKAG
-├── Pause low performers in SKAG
-└── Continue monitoring
-
-Week 4:
-├── Pause all SKAG campaigns
-├── 100% on new structure
-├── Delete/archive old campaigns
-└── Full optimization mode
-
-STEP 5: POST-MIGRATION
-───────────────────────
-□ Monitor Learning Phase (2-4 weeks)
-□ Optimize bid targets
-□ Expand with broad match (gradually)
-□ Continue negative keyword management
-□ Document learnings
+Actions:
+- Creative A → Copy to SCALE + Interest #1 Winners + Interest #2 Winners
+- Creative B → Keep testing (ROAS positive but below 3x threshold)
+- Creative C → Pause (no conversions after 2.75x CPA)
+- Creative D → Copy to SCALE + Interest #1 Winners + Interest #2 Winners
 ```
 
-## Enterprise Account Structure
+## Campaign Settings per Tier
 
-### Multi-Product/Region Accounts
+### SCALE - Advantage+ Sales Campaign (ASC)
 
+| Setting | Value |
+|---------|-------|
+| Campaign Type | Advantage+ Sales Campaign |
+| Budget Type | Advantage Campaign Budget (formerly CBO) |
+| Targeting | 100% Broad (Advantage+ Audience) |
+| Existing Customer Cap | 0-10% (for pure acquisition) |
+| Creatives | Only validated winners |
+| Max ads | 150 per campaign, 50 per ad set |
+
+**Scaling rules:**
+- Increase budget by max 20-25% per 24-48 hours
+- Monitor frequency: >3.0 = creative fatigue risk
+- Add new winners, don't immediately pause old ones
+
+### TEST - Prospecting Campaign
+
+| Setting | Value |
+|---------|-------|
+| Campaign Type | Manual Sales Campaign |
+| Budget Type | ABO (Ad Set Budget Optimization) |
+| Targeting | Broad (Broad Packs) + Interest (Winners) |
+| Structure | 3-5 creatives per Broad Pack ad set |
+| Test duration | Minimum 5-7 days |
+
+**Broad Pack naming:**
 ```
-ENTERPRISE ACCOUNT ARCHITECTURE
-════════════════════════════════
-
-ORGANIZATION PRINCIPLES:
-────────────────────────
-
-1. CAMPAIGN = BUDGET ALLOCATION UNIT
-   └── Separate campaigns for separate budgets
-   └── Not: Separate campaigns for organization
-
-2. LABELS = ORGANIZATION
-   └── Product lines
-   └── Teams/ownership
-   └── Initiatives
-   └── Reporting groups
-
-3. MCC FOR TRUE SEPARATION
-   └── Different business units
-   └── Different billing
-   └── Compliance requirements
-
-STRUCTURE EXAMPLE:
-──────────────────
-
-Large E-commerce (3 product lines, 2 regions):
-
-Account
-├── Campaign: NL - Brand Search
-│   ├── Labels: [Netherlands] [Brand]
-│   └── All product lines (shared brand)
-│
-├── Campaign: NL - Electronics Search
-│   ├── Labels: [Netherlands] [Electronics] [Non-Brand]
-│   ├── Ad Groups: TVs, Laptops, Phones
-│   └── Bidding: tROAS 400%
-│
-├── Campaign: NL - Home & Living Search
-│   ├── Labels: [Netherlands] [Home] [Non-Brand]
-│   ├── Ad Groups: Furniture, Decor, Kitchen
-│   └── Bidding: tROAS 350%
-│
-├── Campaign: NL - Performance Max
-│   ├── Labels: [Netherlands] [Full-funnel]
-│   ├── Asset Groups: Per category
-│   └── All products feed
-│
-├── Campaign: BE - Brand Search
-│   ├── Labels: [Belgium] [Brand]
-│   └── Belgian brand terms
-│
-├── Campaign: BE - Non-Brand (Combined)
-│   ├── Labels: [Belgium] [Non-Brand]
-│   └── Smaller market = combined
-│
-└── Campaign: Retargeting (All regions)
-    ├── Labels: [Remarketing] [Cross-region]
-    └── Shared audiences
-
-BUDGET MANAGEMENT:
-──────────────────
-□ Shared budgets per region/product line
-□ Portfolio bid strategies where relevant
-□ Seasonal budget rules
-□ Automated rules for pacing
+Ad Set: "Broad Pack [YYYY-MM-DD]"
+├── Creative #1: [Format]_[Concept]_[Hook]_V1
+├── Creative #2: [Format]_[Concept]_[Hook]_V2
+├── Creative #3: [Format]_[Concept]_[Hook]_V3
+└── Creative #4: [Format]_[Concept]_[Hook]_V4
 ```
 
-### Budget & Target Hierarchies
+### RETARGET - Retargeting Campaign
 
+| Audience | Window | Creative Approach |
+|----------|--------|-------------------|
+| FB/IG Engagers | 14 days | Social proof, testimonials |
+| Website Visitors | 30 days | Product benefits, urgency |
+| ATC/IC | 90 days | Abandoned cart, discount offers |
+
+**Retargeting creative types:**
+- Evergreen content (always relevant)
+- Objection handlers (FAQ, guarantees)
+- Sales/discount promotions
+- Low barrier offers (free shipping, samples)
+- Product-specific retargeting (Advantage+ Catalog Ads)
+
+### RETAIN - Retention Campaign
+
+| Audience | Creative Approach |
+|----------|-------------------|
+| All Time Purchasers | Cross-sell, new collections, VIP offers |
+| 180 Day Purchasers | Replenishment, loyalty rewards, referral |
+
+**Retention creative types:**
+- Subscription/membership upsells
+- Bundle offers
+- Exclusive early access
+- Referral programs
+
+## Winner Criteria Framework
+
+### Step 1: Determine Client Parameters
+
+**Always ask the user first:**
+1. What is the average order value (AOV)?
+2. What is the target CPA or ROAS?
+3. What is the business model? (e-commerce low/high AOV, lead gen)
+4. How much budget is available for testing?
+
+### Step 2: Calculate Winner Thresholds
+
+**Formula for E-commerce:**
 ```
-BUDGET HIERARCHY
-════════════════
-
-LEVEL 1: ACCOUNT TOTAL
-──────────────────────
-= Total monthly budget for all advertising
-
-Allocation to:
-├── Per market/region
-├── Per business unit
-└── Per objective
-
-LEVEL 2: CAMPAIGN GROUPS
-────────────────────────
-= Grouped campaigns with shared budget
-
-Example:
-├── Brand Protection: €5,000/month
-│   └── Campaigns: NL Brand, BE Brand
-│
-├── Volume Drivers: €30,000/month
-│   └── Campaigns: NL Non-Brand, BE Non-Brand, PMax
-│
-└── Efficiency Focus: €15,000/month
-    └── Campaigns: High-ROAS campaigns
-
-LEVEL 3: INDIVIDUAL CAMPAIGNS
-─────────────────────────────
-= Daily budgets per campaign
-
-Setting:
-├── Standard: Even spread over month
-├── Accelerated: Spend as fast as possible (riskier)
-└── Shared: Pool budget over campaigns
-
-TARGET HIERARCHY:
-─────────────────
-
-Account Target:
-├── Blended ROAS: 380%
-└── Blended CPA: N/A (e-commerce)
-
-Campaign Targets:
-├── Brand: ROAS 800% (low cost, high return)
-├── Non-Brand: ROAS 350% (acquisition)
-├── Retargeting: ROAS 500% (warm audience)
-└── PMax: ROAS 400% (blended)
-
-Ad Group Targets:
-└── Inherited from campaign (Smart Bidding)
+Minimum Spend = MAX(3 x Target CPA, 3 x AOV)
+Minimum Conversions = Depends on AOV tier (see table)
+ROAS Threshold = Depends on business model (see table)
 ```
 
-## Google Ads Script: Structure Analyzer
+**Winner Criteria per Business Model:**
 
-```javascript
-/**
- * Account Structure Analyzer
- *
- * Analyzes account structure and provides recommendations
- * for consolidation and optimization.
- *
- * Setup:
- * 1. Adjust CONFIG
- * 2. Run manually or schedule monthly
- */
+| Business Model | Min. Conversions | Min. Spend | ROAS Threshold |
+|----------------|-----------------|------------|----------------|
+| Low AOV (<€50) | 8-10 purchases | 3x CPA or ~€200-400 | >=4x ROAS |
+| Medium AOV (€50-200) | 5-8 purchases | 3x CPA or ~€300-600 | >=3x ROAS |
+| High AOV (>€200) | 3-5 purchases | 3x CPA or ~€500-1000 | >=2.5x ROAS |
+| Lead Generation | 10-15 leads | 3x CPL or ~€200-500 | Lead Quality Score |
 
-var CONFIG = {
-  EMAIL: 'your@email.com',
-  DATE_RANGE: 'LAST_30_DAYS',
+**Example calculation (Medium AOV):**
+```
+AOV = €100
+Target CPA = €25
+Target ROAS = 4x (€100/€25)
 
-  // Thresholds
-  MIN_CONVERSIONS_PER_CAMPAIGN: 30,
-  MIN_CONVERSIONS_PER_ADGROUP: 5,
-  MAX_KEYWORDS_PER_ADGROUP: 30,
-  MIN_KEYWORDS_PER_ADGROUP: 3
-};
-
-function main() {
-  var report = {
-    overview: {},
-    consolidationCandidates: [],
-    structureIssues: [],
-    recommendations: []
-  };
-
-  // Account overview
-  report.overview = getAccountOverview();
-
-  // Analyze campaigns
-  var campaigns = AdsApp.campaigns()
-    .withCondition('Status = ENABLED')
-    .get();
-
-  while (campaigns.hasNext()) {
-    var campaign = campaigns.next();
-    var analysis = analyzeCampaign(campaign);
-
-    if (analysis.isConsolidationCandidate) {
-      report.consolidationCandidates.push(analysis);
-    }
-
-    report.structureIssues = report.structureIssues.concat(analysis.issues);
-  }
-
-  // Generate recommendations
-  report.recommendations = generateStructureRecommendations(report);
-
-  // Send report
-  sendStructureReport(report);
-
-  Logger.log('Structure analysis complete');
-  Logger.log('Consolidation candidates: ' + report.consolidationCandidates.length);
-  Logger.log('Issues found: ' + report.structureIssues.length);
-}
-
-function getAccountOverview() {
-  var stats = AdsApp.currentAccount().getStatsFor(CONFIG.DATE_RANGE);
-
-  var campaigns = AdsApp.campaigns()
-    .withCondition('Status = ENABLED')
-    .get();
-
-  var adGroups = AdsApp.adGroups()
-    .withCondition('Status = ENABLED')
-    .get();
-
-  var keywords = AdsApp.keywords()
-    .withCondition('Status = ENABLED')
-    .get();
-
-  var campaignCount = 0;
-  while (campaigns.hasNext()) { campaigns.next(); campaignCount++; }
-
-  var adGroupCount = 0;
-  while (adGroups.hasNext()) { adGroups.next(); adGroupCount++; }
-
-  var keywordCount = 0;
-  while (keywords.hasNext()) { keywords.next(); keywordCount++; }
-
-  return {
-    campaigns: campaignCount,
-    adGroups: adGroupCount,
-    keywords: keywordCount,
-    conversions: stats.getConversions(),
-    cost: stats.getCost(),
-    avgConvPerCampaign: stats.getConversions() / Math.max(campaignCount, 1),
-    avgKeywordsPerAdGroup: keywordCount / Math.max(adGroupCount, 1)
-  };
-}
-
-function analyzeCampaign(campaign) {
-  var name = campaign.getName();
-  var stats = campaign.getStatsFor(CONFIG.DATE_RANGE);
-  var conversions = stats.getConversions();
-  var cost = stats.getCost();
-
-  var analysis = {
-    name: name,
-    conversions: conversions,
-    cost: cost,
-    adGroups: 0,
-    keywords: 0,
-    isConsolidationCandidate: false,
-    issues: []
-  };
-
-  // Count ad groups and keywords
-  var adGroups = campaign.adGroups()
-    .withCondition('Status = ENABLED')
-    .get();
-
-  while (adGroups.hasNext()) {
-    var adGroup = adGroups.next();
-    analysis.adGroups++;
-
-    var agStats = adGroup.getStatsFor(CONFIG.DATE_RANGE);
-    var agConversions = agStats.getConversions();
-
-    // Count keywords in ad group
-    var keywords = adGroup.keywords()
-      .withCondition('Status = ENABLED')
-      .get();
-
-    var kwCount = 0;
-    while (keywords.hasNext()) {
-      keywords.next();
-      kwCount++;
-      analysis.keywords++;
-    }
-
-    // Check ad group structure
-    if (kwCount > CONFIG.MAX_KEYWORDS_PER_ADGROUP) {
-      analysis.issues.push({
-        campaign: name,
-        adGroup: adGroup.getName(),
-        type: 'TOO_MANY_KEYWORDS',
-        detail: kwCount + ' keywords (max ' + CONFIG.MAX_KEYWORDS_PER_ADGROUP + ')'
-      });
-    }
-
-    if (kwCount === 1) {
-      analysis.issues.push({
-        campaign: name,
-        adGroup: adGroup.getName(),
-        type: 'SKAG_DETECTED',
-        detail: 'Single keyword ad group - consider consolidating'
-      });
-    }
-  }
-
-  // Check if consolidation candidate
-  if (conversions < CONFIG.MIN_CONVERSIONS_PER_CAMPAIGN && cost > 0) {
-    analysis.isConsolidationCandidate = true;
-    analysis.consolidationReason = 'Low conversion volume (' + conversions.toFixed(0) + '/month)';
-  }
-
-  return analysis;
-}
-
-function generateStructureRecommendations(report) {
-  var recs = [];
-
-  // SKAG detection
-  var skagCount = report.structureIssues.filter(function(i) {
-    return i.type === 'SKAG_DETECTED';
-  }).length;
-
-  if (skagCount > 10) {
-    recs.push({
-      priority: 'HIGH',
-      category: 'SKAG_MIGRATION',
-      action: skagCount + ' SKAGs detected. Migrate to themed ad groups.',
-      impact: 'Improved Smart Bidding performance, easier management'
-    });
-  }
-
-  // Consolidation opportunity
-  if (report.consolidationCandidates.length > 2) {
-    var totalConv = report.consolidationCandidates.reduce(function(sum, c) {
-      return sum + c.conversions;
-    }, 0);
-
-    recs.push({
-      priority: 'HIGH',
-      category: 'CONSOLIDATION',
-      action: 'Consolidate ' + report.consolidationCandidates.length +
-              ' low-volume campaigns (' + totalConv.toFixed(0) + ' total conv/month)',
-      impact: 'Faster learning, better optimization'
-    });
-  }
-
-  // Account complexity
-  if (report.overview.campaigns > 20 &&
-      report.overview.avgConvPerCampaign < 50) {
-    recs.push({
-      priority: 'MEDIUM',
-      category: 'SIMPLIFICATION',
-      action: 'Account has ' + report.overview.campaigns +
-              ' campaigns with avg ' + report.overview.avgConvPerCampaign.toFixed(0) +
-              ' conv/campaign',
-      impact: 'Consider reducing campaign count for better data aggregation'
-    });
-  }
-
-  return recs;
-}
-
-function sendStructureReport(report) {
-  var subject = 'Account Structure Analysis - ' + AdsApp.currentAccount().getName();
-  var body = 'Account Structure Analysis Report\n';
-  body += '==================================\n\n';
-
-  body += 'ACCOUNT OVERVIEW:\n';
-  body += '• Campaigns: ' + report.overview.campaigns + '\n';
-  body += '• Ad Groups: ' + report.overview.adGroups + '\n';
-  body += '• Keywords: ' + report.overview.keywords + '\n';
-  body += '• Avg conversions/campaign: ' + report.overview.avgConvPerCampaign.toFixed(1) + '\n';
-  body += '• Avg keywords/ad group: ' + report.overview.avgKeywordsPerAdGroup.toFixed(1) + '\n\n';
-
-  if (report.consolidationCandidates.length > 0) {
-    body += 'CONSOLIDATION CANDIDATES:\n';
-    body += '─────────────────────────\n';
-
-    for (var i = 0; i < report.consolidationCandidates.length; i++) {
-      var c = report.consolidationCandidates[i];
-      body += '• ' + c.name + '\n';
-      body += '  Conv: ' + c.conversions.toFixed(0) + ' | Reason: ' + c.consolidationReason + '\n\n';
-    }
-  }
-
-  if (report.structureIssues.length > 0) {
-    body += 'STRUCTURE ISSUES (first 20):\n';
-    body += '────────────────────────────\n';
-
-    var issuesToShow = report.structureIssues.slice(0, 20);
-    for (var j = 0; j < issuesToShow.length; j++) {
-      var issue = issuesToShow[j];
-      body += '• [' + issue.type + '] ' + issue.campaign;
-      if (issue.adGroup) body += ' / ' + issue.adGroup;
-      body += '\n  ' + issue.detail + '\n\n';
-    }
-
-    if (report.structureIssues.length > 20) {
-      body += '... and ' + (report.structureIssues.length - 20) + ' more issues\n\n';
-    }
-  }
-
-  if (report.recommendations.length > 0) {
-    body += 'RECOMMENDATIONS:\n';
-    body += '────────────────\n';
-
-    for (var k = 0; k < report.recommendations.length; k++) {
-      var rec = report.recommendations[k];
-      body += '[' + rec.priority + '] ' + rec.category + '\n';
-      body += 'Action: ' + rec.action + '\n';
-      body += 'Impact: ' + rec.impact + '\n\n';
-    }
-  }
-
-  body += '\n---\nGenerated by Account Structure Analyzer';
-
-  MailApp.sendEmail(CONFIG.EMAIL, subject, body);
-}
+Winner Criteria:
+- Minimum spend: MAX(3 x €25, 3 x €100) = €300
+- Minimum conversions: 5-8 purchases
+- ROAS threshold: >=3x (conservative) or >=4x (target)
 ```
 
-## Output: Structure Recommendation Template
+### Step 3: Early Performance Signals (Video)
+
+**Evaluate after 24-48 hours and 10,000+ impressions:**
+
+| Metric | Benchmark | Action if Below |
+|--------|-----------|-----------------|
+| Hook Rate | >=25% (target: 30-45%) | Iterate first 3 seconds |
+| Hold Rate | >=40% (target: 60%+) | Check pacing and narrative |
+| CTR | >=1% (target: 2%+) | Test other hooks/angles |
+| CPC | <= account average | Monitor, don't pause yet |
+
+### Step 4: Kill Criteria
+
+**Pause creative when:**
+- No conversions after 2-3x target CPA spend
+- ROAS <50% of target after 5+ days
+- CTR <0.5% with significant spend (>€100)
+- Frequency >3.0 with declining performance
+- Hook rate <20% after 10,000+ impressions
+
+## Creative Velocity Guidelines
+
+**How many new creatives per month?**
+
+| Monthly Ad Spend | New Creatives | Structure |
+|-----------------|---------------|-----------|
+| €0-10k | 1-2 per month | Test on-demand at fatigue |
+| €10-25k | 3-4 per month | Weekly iteration cycle |
+| €25-50k | 4-8 per month | 1-2 per week |
+| €50-100k | 8-16 per month | 2-4 per week |
+| €100k+ | 15-50+ per month | Dedicated creative team |
+
+**Creative production breakdown:**
+- ~50% iterations on proven concepts
+- ~30% new concepts within proven formats
+- ~20% experimental new formats/angles
+
+**Win rate expectations:**
+- ~2% of creatives become true scale winners
+- ~10% show initial profitability
+- Iterations on winners often outperform originals
+
+## Budget Allocation Templates
+
+### Template A: Growth Focus (Recommended)
+```
+SCALE (ASC):     60%
+TEST:            20%
+RETARGET:        15%
+RETAIN:           5%
+```
+
+### Template B: Efficiency Focus
+```
+SCALE (ASC):     50%
+TEST:            15%
+RETARGET:        25%
+RETAIN:          10%
+```
+
+### Template C: New Account / Launch
+```
+SCALE (ASC):     40%  (or 0% until first winners)
+TEST:            40%
+RETARGET:        15%
+RETAIN:           5%
+```
+
+## Account Audit Checklist
+
+### Identifying Red Flags
+
+| Red Flag | Impact | Action |
+|----------|--------|--------|
+| >5 active campaigns | Data fragmentation | Consolidate to 4-tier model |
+| Ad sets <50 conv/week | Learning Limited | Merge or increase budget |
+| >50% budget in learning | Inefficiency | Consolidate, increase budgets |
+| No dedicated test campaign | No pipeline | Implement TEST tier |
+| Retargeting >30% budget | Over-investment | Reduce, focus on prospecting |
+| Frequency >4 on scale | Creative fatigue | Refresh creatives, add new |
+
+### Audit Questions
+
+1. **Structure:** How many active campaigns? (Ideal: 2-4)
+2. **Learning:** How many ad sets in "Learning Limited"? (Ideal: <20%)
+3. **Testing:** Is there a dedicated test campaign? (Must: Yes)
+4. **Winners:** How are winners identified and scaled?
+5. **Creative velocity:** How many new creatives per month?
+6. **Attribution:** Is CAPI implemented with EMQ >=6?
+
+### MCP: Pull Account Structure for Audit
+
+```python
+# Get active campaigns with delivery status and budget
+meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","status","daily_budget","lifetime_budget","objective","buying_type"], filters={"effective_status":["ACTIVE"]})
+
+# Get ad sets for a campaign (learning status, audience info)
+meta_query(account_id="act_XXXXX", entity="adsets", fields=["id","name","status","learning_phase_status","daily_budget","targeting","optimization_goal"], filters={"campaign_id":"<campaign_id>","effective_status":["ACTIVE"]})
+```
+
+## Naming Convention
+
+**Campaign Level:**
+```
+[Tier]_[Objective]_[BudgetType]_[Geo]
+```
+Example: `SCALE_SALES_ACB_NL` or `TEST_SALES_ASB_EU`
+
+**Ad Set Level:**
+```
+[Tier]_[AudienceType]_[Date/Detail]
+```
+Example: `TEST_BROAD_2025-01-15` or `RT_WV30D_ALLPLC`
+
+**Ad Level:**
+```
+[Format]_[Concept]_[Hook]_[Version]
+```
+Example: `VID_UGC_PROBLEM_V2` or `IMG_LIFESTYLE_BENEFIT_V1`
+
+### Code Legend
+
+| Code | Meaning |
+|------|---------|
+| SCALE | Scaling campaign (ASC) |
+| TEST | Testing campaign |
+| RT | Retargeting |
+| RET | Retention |
+| BROAD | Advantage+ Audience / Broad |
+| INT | Interest targeting |
+| LAL | Lookalike Audience |
+| WV | Website Visitors |
+| ENG | Engagers (FB/IG) |
+| ATC | Add to Cart |
+| IC | Initiate Checkout |
+| PURCH | Purchasers |
+| VID | Video |
+| IMG | Static Image |
+| CAR | Carousel |
+| UGC | User Generated Content |
+
+## Implementation Plan
+
+### Week 1: Audit & Setup
+1. Audit current account structure
+2. Define winner criteria with client
+3. Set up 4-tier campaign structure
+4. Implement naming conventions
+
+### Week 2: Testing Launch
+1. Launch first Broad Pack with 4-6 creatives
+2. Set up tracking and reporting dashboard
+3. Monitor early signals (hook rate, CTR)
+
+### Week 3-4: Optimize & Scale
+1. Evaluate creatives against winner criteria
+2. Graduate winners to SCALE/Interest
+3. Kill underperformers
+4. Launch new test batch
+
+### Ongoing: Maintain Velocity
+1. Weekly creative refresh cycle
+2. Monthly structure audit
+3. Quarterly winner criteria review
+
+## Output Template: Account Restructuring Plan
 
 ```markdown
-# Account Structure Recommendation
+# Account Restructuring Plan: [Client Name]
 
-## Current State Analysis
+## Current Situation
+- Campaigns: [count]
+- Ad Sets: [count]
+- % in Learning Limited: [%]
+- Primary issues: [list]
 
-### Account Statistics
-- **Total campaigns:** [X]
-- **Total ad groups:** [X]
-- **Total keywords:** [X]
-- **Avg conversions/campaign/month:** [X]
-- **Avg keywords/ad group:** [X]
+## Winner Criteria (Client-Specific)
+- AOV: €[X]
+- Target CPA: €[X]
+- Target ROAS: [X]x
+- Min. spend for winner: €[X]
+- Min. conversions for winner: [X]
 
-### Structure Assessment
-| Aspect | Current | Best Practice | Status |
-|--------|---------|---------------|--------|
-| Campaign count | [X] | [Based on budget/conversions] | [OK/Issue] |
-| Ad groups/campaign | [X] | 5-15 | [OK/Issue] |
-| Keywords/ad group | [X] | 10-20 | [OK/Issue] |
-| Conv/campaign | [X] | 50+ | [OK/Issue] |
-| SKAG count | [X] | 0 | [OK/Issue] |
+## Proposed 4-Tier Structure
 
-## Recommended Structure
+### SCALE - ASC Campaign
+- Budget: €[X]/day ([%] of total)
+- Creatives: [current winners]
 
-### Proposed Architecture
-```
-[New Account Structure Diagram]
-├── Campaign 1: [Name]
-│   ├── Ad Groups: [List]
-│   ├── Budget: €[X]/day
-│   └── Bidding: [Strategy]
-├── Campaign 2: [Name]
-│   └── ...
-└── Campaign N: [Name]
-```
+### TEST - Prospecting Campaign
+- Budget: €[X]/day ([%] of total)
+- First Broad Pack: [date]
+- Creatives to test: [list]
 
-### Campaign Consolidation Plan
-| Old Campaigns | New Campaign | Reason |
-|---------------|--------------|--------|
-| [List] | [New name] | [Low volume/overlap] |
-| [List] | [New name] | [Same targets] |
+### RETARGET Campaign
+- Budget: €[X]/day ([%] of total)
+- Audiences: [list with windows]
 
-### Ad Group Reorganization
-| Current Ad Groups | New Ad Group | Theme |
-|-------------------|--------------|-------|
-| [SKAGs to merge] | [New name] | [Theme description] |
+### RETAIN Campaign
+- Budget: €[X]/day ([%] of total)
+- Focus: [upsell/cross-sell strategy]
 
-## Migration Plan
+## Migration Timeline
+- Week 1: [actions]
+- Week 2: [actions]
+- Week 3-4: [actions]
 
-### Phase 1: Preparation (Week 1)
-- [ ] Export current performance data
-- [ ] Map keyword overlap
-- [ ] Design new structure
-- [ ] Create new campaigns (paused)
-
-### Phase 2: Migration (Week 2-3)
-- [ ] Enable new campaigns with 50% budget
-- [ ] Reduce old campaigns to 50%
-- [ ] Monitor performance daily
-- [ ] Shift budget gradually
-
-### Phase 3: Consolidation (Week 4)
-- [ ] 100% on new structure
-- [ ] Pause old campaigns
-- [ ] Optimize new structure
-- [ ] Document changes
-
-## Expected Outcomes
-- Faster learning phase
-- Improved Smart Bidding performance
-- Reduced management overhead
-- Better budget allocation
-- Cleaner reporting
-
-## Monitoring Plan
-- Week 1-2: Daily performance check
-- Week 3-4: Learning phase monitoring
-- Month 2: Full optimization cycle
+## Expected Impact
+- CPA reduction: [%]
+- ROAS improvement: [%]
+- Learning Limited reduction: [%]
 ```

@@ -14,6 +14,7 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Event Tracking Setup
 
 Complete guide for implementing custom event tracking in Google Analytics 4 via Google Tag Manager.
+
 ## GA4 Event Model Basics
 
 ```
@@ -124,6 +125,7 @@ TAG SETUP (GA4 Event):
 │ ├── form_location: {{Page Path}}                               │
 │ └── method: "form"                                             │
 └────────────────────────────────────────────────────────────────┘
+
 METHOD 2: dataLayer Push (for complex forms)
 ─────────────────────────────────────────────
 
@@ -147,6 +149,7 @@ TAG (GA4 Event):
 ├── Event name: generate_lead
 ├── Parameters: Pull from Data Layer variables
 └── form_name: {{DLV - form_name}}
+
 METHOD 3: Thank You Page (fallback)
 ────────────────────────────────────
 
@@ -511,6 +514,7 @@ LOCATION: GA4 → Reports → Realtime
 ├── Check parameter values (click event card)
 └── Verify user count
 ```
+
 ## Event Tracking Checklist
 
 ```
@@ -536,13 +540,13 @@ PRE-LAUNCH EVENT TRACKING CHECKLIST
 ├── [] DebugView events verified
 ├── [] Parameter values correct
 ├── [] No duplicate events
-├── [] Consent mode working correctly
+├── [] Consent Mode v2 working correctly (EEA: analytics_storage + ad_storage signals)
 └── [] Cross-browser tested
 
 [] GA4 CONFIGURATION
 ├── [] Custom dimensions registered
 ├── [] Custom metrics registered (if needed)
-├── [] Key events (conversions) marked
+├── [] Key events marked (GA4 UI term since March 2024; still "Conversions" in Google Ads)
 └── [] Realtime reports show events
 
 [] DOCUMENTATION

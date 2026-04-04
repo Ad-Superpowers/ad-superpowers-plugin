@@ -364,7 +364,8 @@ GA4 PROPERTY AUDIT CHECKLIST
 ├── [] Google Signals enabled (for remarketing)
 ├── [] Data retention set to 14 months
 ├── [] User data reset on activity: ON
-└── [] Consent mode implemented (EU)
+├── [] Consent Mode v2 implemented (required for EEA since March 2024)
+└── [] analytics_storage and ad_storage consent signals verified
 
 [] PRODUCT LINKS
 ├── [] Google Ads linked
@@ -378,11 +379,11 @@ GA4 PROPERTY AUDIT CHECKLIST
 ├── [] Service accounts documented
 └── [] Audit log reviewed
 
-[] KEY EVENTS (CONVERSIONS)
-├── [] Key conversions set up
-├── [] Conversions tested in DebugView
-├── [] No duplicate conversions
-└── [] Primary conversions marked
+[] KEY EVENTS
+├── [] Key events configured in Admin → Key Events
+├── [] Key events tested in DebugView
+├── [] No duplicate key events
+└── [] Primary key events marked (for Google Ads import)
 
 [] AUDIENCES
 ├── [] Basic audiences created
@@ -452,6 +453,33 @@ Solution:
 ├── Aggregate to higher dimensions
 ├── Consider BigQuery export for raw data
 └── Accept that some data is not available
+```
+
+## New in 2026: Analytics Advisor & Cross-Channel Budgeting
+
+```
+GA4 2026 FEATURES OVERVIEW
+============================
+
+ANALYTICS ADVISOR (Gemini AI in GA4):
+├── AI-powered insights surface automatically in the GA4 interface
+├── Location: GA4 → Reports → Overview (AI Insights panel)
+├── Detects anomalies, trends, and optimization opportunities
+├── Ask questions in natural language about your data
+└── No extra setup required — available for all GA4 properties
+
+CROSS-CHANNEL BUDGETING (Beta, 2026):
+├── Budget planning tool that spans Meta, LinkedIn, TikTok, Snapchat + Google
+├── Location: GA4 → Advertising → Cross-channel budgeting
+├── Compares attributed conversions across platforms in one view
+├── Requires platform integrations (Meta, LinkedIn, TikTok data imports)
+└── Uses GA4's data-driven attribution as the single source of truth
+
+PER-CONVERSION ATTRIBUTION SETTINGS (Beta, 2026):
+├── Override the property-level model for individual key events
+├── Location: Admin → Key Events → [event] → Attribution Settings
+├── Useful for mixing DDA (purchases) with last-click (leads) in one property
+└── Does not affect Google Ads import — bidding uses Google Ads DDA
 ```
 
 ## Output: GA4 Property Setup Recommendation Template

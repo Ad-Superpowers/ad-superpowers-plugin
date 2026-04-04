@@ -403,6 +403,25 @@ SUCCESS METRICS:
 └── No learning phase resets
 ```
 
+## MCP Tool Integration
+
+### Validating Scaling Readiness with Live Data
+
+Before building a scale plan, always verify the pre-scaling checklist with real account data:
+
+```
+1. Performance stability check (last 7 days):
+→ meta_query(account_id="...", fields=["adset_name","cost_per_result","purchase_roas","spend","impressions","reach","frequency"], date_preset="last_7d", level="adset")
+
+2. Learning phase status:
+→ meta_query(account_id="...", fields=["adset_name","delivery_info","spend"], date_preset="last_3d", level="adset")
+
+3. Check current frequency (audience headroom):
+→ meta_query(account_id="...", fields=["adset_name","frequency","reach","impressions"], date_preset="last_14d", level="adset")
+```
+
+Use the results to fill in the scaling readiness checklist before committing to a timeline.
+
 ## Example Interaction
 
 **User**: "My campaign is doing well at $100/day and $15 CPA (target is $20). I want to scale to $500/day. How do I do that best?"
@@ -454,6 +473,11 @@ Stop and stabilize if:
 - Frequency > 2.5
 - CTR drops >15%
 
-**TIP:** Consider launching a test campaign with new audiences in parallel for horizontal scale.
+**TIP:** Consider launching a test campaign with new audiences in parallel for horizontal scale. With Advantage+ Audience (2026 recommended approach), Meta handles audience expansion automatically — so horizontal scale via new ad sets is less critical than it used to be when using Advantage+ campaigns.
+
+**MONITOR DAILY with MCP:**
+```
+meta_query(account_id="...", fields=["adset_name","spend","cost_per_result","purchase_roas","frequency","impressions"], date_preset="today", level="adset")
+```
 
 Would you like a detailed day-by-day tracking sheet?"

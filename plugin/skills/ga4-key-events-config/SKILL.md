@@ -98,7 +98,6 @@ STEPS:
 │ 5  │ Event is now a Key Event                                  │
 └────┴────────────────────────────────────────────────────────────┘
 
-
 METHOD 2: Via Admin → Key Events
 ─────────────────────────────────
 LOCATION: Admin → Data display → Key events
@@ -154,7 +153,6 @@ gtag('event', 'purchase', {
   'items': [...]
 });
 ```
-
 
 METHOD 2: Static Value (for lead gen)
 ──────────────────────────────────────
@@ -292,7 +290,6 @@ E-COMMERCE
 │ add_payment_info │ Secondary│ €3-7     │ Once per session    │
 └──────────────────┴──────────┴──────────┴─────────────────────┘
 
-
 LEAD GENERATION (B2B)
 ─────────────────────
 ┌──────────────────┬──────────┬──────────┬─────────────────────┐
@@ -308,7 +305,6 @@ LEAD GENERATION (B2B)
 │ pricing_view     │ Secondary│ €5-10    │ Once per session    │
 └──────────────────┴──────────┴──────────┴─────────────────────┘
 
-
 SAAS / SUBSCRIPTION
 ───────────────────
 ┌──────────────────┬──────────┬──────────┬─────────────────────┐
@@ -323,7 +319,6 @@ SAAS / SUBSCRIPTION
 ├──────────────────┼──────────┼──────────┼─────────────────────┤
 │ feature_activate │ Secondary│ €5-15    │ Once per session    │
 └──────────────────┴──────────┴──────────┴─────────────────────┘
-
 
 CONTENT / PUBLISHER
 ───────────────────
@@ -386,6 +381,21 @@ VERIFICATION:
 ├── Counting method correct
 ├── Value correctly configured
 └── No duplicate entries
+```
+
+## MCP Tool: Verify Key Event Performance
+
+Use `ga4_report()` to check key event counts and trends:
+
+```python
+# Check key event counts over last 30 days
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["keyEvents", "keyEventRate"],
+    dimensions=["eventName", "date"],
+    date_range={"start_date": "30daysAgo", "end_date": "yesterday"},
+    filters={"dimension": "eventName", "operator": "IN_LIST", "values": ["purchase", "generate_lead"]}
+)
 ```
 
 ## Google Ads Conversion Import Preparation

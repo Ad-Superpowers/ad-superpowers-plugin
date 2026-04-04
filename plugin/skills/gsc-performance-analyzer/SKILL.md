@@ -47,9 +47,11 @@ Invoke when user mentions:
 
 ### Expected CTR by Average Position (Web Search, 2024-2026 data)
 
+> **AI Overviews impact:** Google AI Overviews (formerly SGE) are shown for a large portion of informational queries. For queries where an AI Overview appears, CTR for positions 1-3 can drop 20-60% compared to the benchmarks below. The effect is strongest on "what is", "how to", and definition queries. Navigational, commercial, and brand queries are less affected.
+
 | Position | Expected CTR | Range | Interpretation |
 |----------|-------------|-------|----------------|
-| 1 | 27-32% | 22-39% | #1 should capture ~30% of clicks |
+| 1 | 27-32% | 22-39% | #1 should capture ~30% of clicks — lower if AI Overview shown |
 | 2 | 15-18% | 12-22% | Strong second position |
 | 3 | 10-13% | 8-16% | Still above the fold |
 | 4 | 7-9% | 5-11% | Often below ads on mobile |
@@ -62,6 +64,7 @@ Invoke when user mentions:
 
 | Factor | CTR Impact | Notes |
 |--------|-----------|-------|
+| AI Overview present | -20-60% | Informational queries most affected; answer shown inline |
 | Rich snippets (FAQ, How-to) | +20-50% | Higher visibility, more SERP real estate |
 | Sitelinks | +15-30% | Authority signal, more click targets |
 | Featured snippet (position 0) | +40-80% | Dominates SERP, but may reduce position 1 CTR |
@@ -111,10 +114,11 @@ To detect seasonality, query with `dimensions=["date"]` over 90+ days:
 |---------|-------------|-----------|
 | All queries drop equally | Algorithm update | Check Google Search Status dashboard |
 | Specific page drops | Lost ranking for key terms | Check position changes for that page |
-| Impressions up, clicks down | Position dropped below fold | CTR decline with impression growth |
+| Impressions stable, clicks drop, position stable | AI Overviews absorbing clicks | Check if query type is informational; AI Overview is answering the question in SERP |
+| Impressions up, clicks down | Position dropped below fold OR AI Overview | CTR decline with impression growth; check query types |
 | Impressions down, CTR stable | Lost rankings broadly | Compare positions period-over-period |
 | Single-day cliff | Technical issue | Check `gsc_manage_url(action="inspect")` for crawl errors |
-| Gradual decline over weeks | Content freshness decay | Content needs updating |
+| Gradual decline over weeks | Content freshness decay or AI Overview rollout | Content needs updating; check if informational queries are affected |
 | Mobile-only drop | Mobile usability issue | Check mobile-specific metrics |
 
 ---
@@ -227,8 +231,10 @@ Keywords where CTR is significantly below benchmark for their position:
 
 | Query | Position | Actual CTR | Expected CTR | Gap | Fix |
 |-------|----------|-----------|-------------|-----|-----|
-| [kw]  | 1.5      | 12%       | 28-32%      | -16% | Improve title tag |
+| [kw]  | 1.5      | 12%       | 28-32%      | -16% | Improve title tag — OR check if AI Overview present |
 | [kw]  | 3.2      | 4%        | 10-13%      | -6%  | Add rich snippets |
+
+Note: If an AI Overview is shown for an informational query, low CTR at positions 1-3 is expected and may not be fixable via on-page optimization. The strategic response is to target commercial/navigational queries where AI Overviews are less prevalent, or to optimize content to be cited within the AI Overview itself (structured data, E-E-A-T).
 
 TREND ANALYSIS
 ──────────────

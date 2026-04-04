@@ -8,7 +8,7 @@ metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
   platform: "linkedin"
-  phase: "fase-3-lead-generation"
+  phase: "fase-1-foundation"
 compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
 # LinkedIn Lead Gen Form Optimizer
@@ -275,6 +275,53 @@ Reason: [Based on goals, audience, and current performance]
 ### A/B Tests to Run
 1. [Test recommendation with hypothesis]
 2. [Test recommendation with hypothesis]
+```
+
+## New Format Opportunities for Lead Gen
+
+Beyond classic Sponsored Content with Lead Gen Forms, test these 2025-2026 formats:
+
+| Format | Lead Gen Application | Expected Outcome |
+|--------|---------------------|------------------|
+| **Document Ads** | Gate a whitepaper/case study — reader views in-feed, then form appears | 8-12% CVR, higher quality than cold form submits |
+| **Thought Leader Ads** | Boost a founder/expert post with a lead gen CTA | Lower CPM, higher trust, better for niche B2B audiences |
+| **Conversation Ads** | Multi-path message ad with CTA branches | Good for event registrations and qualification flows |
+
+**Thought Leader Ads for lead gen:** Works best when boosting a post that already has a relevant CTA link (e.g., "Read the full report → [form URL]"). Lower cost per reach than brand ads.
+
+## Predictive Audiences for Lead Quality
+
+**Predictive Audiences** are LinkedIn's AI-powered lookalikes — significantly outperform standard demographic targeting for lead gen:
+
+- Require a seed of 300+ contacts or conversion events
+- Deliver ~21% lower CPL vs standard targeting (LinkedIn internal data)
+- Combine with qualifying questions on forms to maintain SQL rate
+- Best seeds: CRM contact upload of closed-won customers, or Insight Tag conversion events
+
+To enable: Campaign Manager → Audiences → Predictive Audiences. Requires Matched Audiences (contact upload or Insight Tag).
+
+## MCP Tool Usage
+
+Pull lead gen performance data to analyze CPL and form completion:
+
+```
+# Get CPL and lead volume per campaign
+linkedin_get_analytics(
+  account_id="YOUR_ACCOUNT_ID",
+  entity="campaigns",
+  metrics=["costInLocalCurrency", "leads", "cpl", "clicks", "impressions", "oneClickLeadFormOpens"],
+  date_range={"start": "YYYY-MM-DD", "end": "YYYY-MM-DD"}
+)
+
+# Get form completion rate: leads / oneClickLeadFormOpens
+# If this ratio is <40%, form has friction — reduce fields or simplify questions
+
+# Get campaign details to check targeting and objective
+linkedin_query(
+  account_id="YOUR_ACCOUNT_ID",
+  entity="campaigns",
+  fields=["id", "name", "objectiveType", "targetingCriteria", "dailyBudget", "costType"]
+)
 ```
 
 ## Hybrid Strategy Playbook

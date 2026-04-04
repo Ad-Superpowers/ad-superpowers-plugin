@@ -164,7 +164,25 @@ When `gsc_manage_url(action="inspect")` returns different `google_canonical` vs 
 
 ---
 
-## Part 4: Mobile Usability
+## Part 4: Core Web Vitals & Mobile Usability
+
+### Core Web Vitals (as of 2024-2026)
+
+Google uses Core Web Vitals as a ranking signal. The three active metrics are:
+
+| Metric | What It Measures | Good | Needs Improvement | Poor |
+|--------|-----------------|------|------------------|------|
+| **LCP** (Largest Contentful Paint) | Loading speed of main content | < 2.5s | 2.5-4.0s | > 4.0s |
+| **INP** (Interaction to Next Paint) | Responsiveness to user input | < 200ms | 200-500ms | > 500ms |
+| **CLS** (Cumulative Layout Shift) | Visual stability | < 0.1 | 0.1-0.25 | > 0.25 |
+
+> **INP replaced FID (First Input Delay) in March 2024.** INP measures the full interaction latency (from input to next frame paint), not just the initial response delay. If you have old references to FID in your performance reports, those are outdated. Focus on INP.
+
+**Common INP issues:**
+- Heavy JavaScript executing during user interactions
+- Long tasks blocking the main thread
+- React/Vue re-renders triggered by click handlers
+- Third-party scripts (chat widgets, analytics) delaying response
 
 ### Mobile Verdicts from URL Inspection
 
@@ -239,3 +257,18 @@ RECOMMENDATIONS
 | New page indexing | Within 48h of publish | `gsc_manage_url(action="inspect")` |
 | After technical changes | Immediately | `gsc_manage_url(action="inspect")` + `gsc_list_sites(include_sitemaps=true)` |
 | Full technical audit | Monthly | All GSC tools combined |
+
+### AI Overviews: Technical SEO Implications
+
+Google AI Overviews (launched broadly 2024) directly affect organic performance. From a technical SEO perspective:
+
+- **Structured data matters more:** Pages with well-implemented schema (FAQ, HowTo, Article) are more likely to be cited in AI Overviews
+- **E-E-A-T signals:** Author markup, About pages, and expertise signals help Google trust your content for AI sourcing
+- **Indexing is still required:** Pages must be indexed to appear in AI Overviews
+- **Monitor CTR separately:** Impressions may remain stable while clicks drop — this is often AI Overviews, not an indexing problem
+
+```
+gsc_search_analytics(site_url="...", dimensions=["query"], days=90)
+```
+
+Compare CTR trends against position trends. If position is stable but CTR is declining on informational queries, AI Overviews are likely the cause — not a technical issue.

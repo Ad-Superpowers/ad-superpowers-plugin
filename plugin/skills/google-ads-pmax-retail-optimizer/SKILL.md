@@ -444,13 +444,47 @@ WHEN NOT TO EXCLUDE:
 +-- Budget is too low for all products (increase budget)
 ```
 
+## Check Search Terms & Apply Negative Keywords (v20+)
+
+```
+PMax now supports campaign-level negative keywords (added in v20, 2024).
+Use search term data to find irrelevant queries and add negatives.
+
+STEP 1: Pull search terms
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    campaign_search_term_view.search_term,
+    campaign_search_term_view.status,
+    metrics.impressions,
+    metrics.clicks,
+    metrics.cost_micros,
+    metrics.conversions
+  FROM campaign_search_term_view
+  WHERE campaign.advertising_channel_type = 'PERFORMANCE_MAX'
+    AND segments.date DURING LAST_30_DAYS
+    AND metrics.cost_micros > 0
+  ORDER BY metrics.cost_micros DESC
+  LIMIT 200
+")
+
+STEP 2: Identify irrelevant high-spend terms
++-- Terms with high cost but 0 conversions
++-- Competitor brand names (if not desired)
++-- Category terms outside your scope
+
+STEP 3: Add campaign-level negative keywords via google_ads_mutate
++-- Use campaign_criterion with negative=true on PMax campaign
++-- Start with exact match negatives for clearly irrelevant terms
+```
+
 ## Optimization Cadence
 
 ```
 WEEKLY:
 +-- Check zombie product rate
 +-- Review asset group spend distribution
-+-- Scan search terms for irrelevance
++-- Scan search terms for irrelevance (use campaign_search_term_view)
 +-- Monitor ROAS trends per asset group
 
 BIWEEKLY:

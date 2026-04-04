@@ -14,6 +14,13 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Conversion Tracking Setup
 
 Complete guide for correctly setting up and optimizing Google Ads conversion tracking, including Enhanced Conversions and offline conversion import.
+
+
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+
+
 ## Conversion Actions Configuration
 
 ### Conversion Action Types
@@ -21,6 +28,12 @@ Complete guide for correctly setting up and optimizing Google Ads conversion tra
 ```
 CONVERSION ACTION TYPES
 =======================
+
+NOTE: New in v23.1 — YOUTUBE_FOLLOW_ON_VIEWS conversion category
++-- Tracks YouTube views that lead to subsequent organic views
++-- Category: YOUTUBE_FOLLOW_ON_VIEWS
++-- Use for: YouTube campaign brand awareness attribution
++-- Visible in "All Conversions" column
 
 PURCHASE (E-commerce)
 +-- Category: Purchase
@@ -238,6 +251,11 @@ TYPES:
 +-- Enhanced Conversions for Web: Website purchases/leads
 +-- Enhanced Conversions for Leads: Offline lead tracking
 +-- Customer Match: Audience building
+
+NEW IN v20+: user_ip_address field
++-- You can now send the user's IP address as an additional match signal
++-- Improves match rates for server-side conversions
++-- Field: user_ip_address (plain text, not hashed)
 ```
 
 ### Enhanced Conversions for Web (GTM)
@@ -295,6 +313,8 @@ FIELDS (minimum email):
       'postal_code': '1012AB',
       'country': 'NL'
     }
+    // user_ip_address: available for server-side Enhanced Conversions (v20+)
+    // Improves match rates — send plain text IP, not hashed
   });
 
   // Then conversion event
@@ -469,6 +489,13 @@ EAIaIQobChMI...,Closed Won,2025-01-28 15:45:00,5000,EUR
 Email,Conversion Name,Conversion Time,Conversion Value,Conversion Currency
 customer@email.com,Qualified Lead,2025-01-28 14:30:00,50,EUR
 ```
+
+
+
+See [api-patterns.md](references/api-patterns.md) for details.
+
+
+
 ## Consent Mode v2
 
 ### Consent Mode Implementation
@@ -535,6 +562,32 @@ CONSENT TYPES:
     updateConsent(true, true);
   });
 </script>
+```
+
+## MCP Tool: Audit Conversion Actions
+
+```
+Before setting up or modifying conversion tracking, pull the current
+conversion action inventory:
+
+google_ads_run_gaql(query="
+  SELECT
+    conversion_action.name,
+    conversion_action.status,
+    conversion_action.category,
+    conversion_action.type,
+    conversion_action.counting_type,
+    conversion_action.include_in_conversions_metric,
+    conversion_action.value_settings.default_value,
+    conversion_action.value_settings.always_use_default_value,
+    conversion_action.click_through_lookback_window_days
+  FROM conversion_action
+  ORDER BY conversion_action.name ASC
+")
+
+This shows: all conversion actions, their include/exclude status,
+counting type (ONE_PER_CLICK vs MANY_PER_CLICK), and lookback windows.
+Use to verify setup before go-live.
 ```
 
 ## Tracking Verification

@@ -328,7 +328,6 @@ INSIGHTS:
 +-- Where are optimization opportunities?
 +-- Category growth trends
 
-
 EXPLORATION 2: DEVICE REVENUE COMPARISON
 =========================================
 
@@ -347,7 +346,6 @@ INSIGHTS:
 +-- Mobile vs Desktop conversion gaps
 +-- Where is mobile optimization needed?
 +-- Cross-device journey impact
-
 
 EXPLORATION 3: NEW VS RETURNING PURCHASERS
 ==========================================
@@ -436,7 +434,6 @@ Solution:
 +-- Wait for data processing
 +-- Remove report filters and test again
 
-
 PROBLEM: AOV unrealistically high/low
 --------------------------------------
 Causes:
@@ -452,7 +449,6 @@ Solution:
 +-- Verify currency matching
 +-- Review value calculation in code
 +-- Audit quantity parameters
-
 
 PROBLEM: Product data not visible
 ----------------------------------
@@ -470,7 +466,6 @@ Solution:
 +-- Wait 24-48 hours for processing
 +-- Select longer date range
 
-
 PROBLEM: Funnel shows no data
 ------------------------------
 Causes:
@@ -486,6 +481,34 @@ Solution:
 +-- Make funnel "open" for testing
 +-- Remove or broaden segments
 +-- Select longer date range
+```
+
+## MCP Tool: Pull Revenue Reports
+
+```python
+# Overall revenue by source/medium (last 30 days)
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["totalRevenue", "ecommercePurchases", "averagePurchaseRevenue", "keyEventRate"],
+    dimensions=["sessionSourceMedium"],
+    date_range={"start_date": "30daysAgo", "end_date": "yesterday"}
+)
+
+# Top products by revenue
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["itemRevenue", "itemsPurchased", "itemsViewed"],
+    dimensions=["itemName", "itemCategory"],
+    date_range={"start_date": "30daysAgo", "end_date": "yesterday"}
+)
+
+# Revenue trend by day (for anomaly detection)
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["totalRevenue", "ecommercePurchases", "averagePurchaseRevenue"],
+    dimensions=["date"],
+    date_range={"start_date": "60daysAgo", "end_date": "yesterday"}
+)
 ```
 
 ## Output: Revenue Analysis Report Template

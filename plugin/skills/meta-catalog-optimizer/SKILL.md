@@ -1,7 +1,7 @@
 ---
 name: catalog-optimizer
 description: |
-  Optimizes Meta Product Catalogs for better DPA (Dynamic Product Ads) performance with feed optimization, product set strategies, and troubleshooting. Use when: working with catalogs, DPAs, or Advantage+ Shopping.
+  Optimizes Meta Product Catalogs for better Advantage+ Catalog Ads (formerly DPA) performance with feed optimization, product set strategies, and troubleshooting. Use when: working with catalogs, Advantage+ Catalog Ads, or Advantage+ Sales.
   Do NOT use for: campaign structure (use campaign-structure-advisor), creative diversification (use creative-diversification-generator), full-funnel design (use full-funnel-designer).
 metadata:
   author: "AdSuperpowers"
@@ -14,7 +14,7 @@ compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 
 ## Overview
 
-This skill helps optimize Meta Product Catalogs for maximum DPA and Advantage+ Shopping performance, including feed optimization, product set strategies, and troubleshooting of common issues.
+This skill helps optimize Meta Product Catalogs for maximum Advantage+ Catalog Ads and Advantage+ Sales performance, including feed optimization, product set strategies, and troubleshooting of common issues.
 
 ## Catalog Fundamentals
 
@@ -37,9 +37,8 @@ This skill helps optimize Meta Product Catalogs for maximum DPA and Advantage+ S
 │         │                                                       │
 │         v                                                       │
 │  AD TYPES                                                       │
-│  ├── Dynamic Product Ads (DPA)                                  │
-│  ├── Advantage+ Catalog Ads                                     │
-│  ├── Advantage+ Shopping Campaigns                              │
+│  ├── Advantage+ Catalog Ads (formerly DPA)                      │
+│  ├── Advantage+ Sales Campaigns                              │
 │  └── Collection Ads with catalog                                │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -229,12 +228,12 @@ COMBINATION FILTERS:
         availability = "in stock"
 ```
 
-## DPA Campaign Structure
+## Advantage+ Catalog Ads Campaign Structure
 
-### Retargeting DPA Setup
+### Retargeting Setup
 
 ```
-DPA RETARGETING STRUCTURE
+CATALOG ADS RETARGETING STRUCTURE
 =========================
 
 CAMPAIGN: [Brand]_DPA_Retargeting
@@ -245,26 +244,26 @@ CAMPAIGN: [Brand]_DPA_Retargeting
 AD SET 1: Viewed Not Purchased (3d)
 ├── Audience: ViewContent 3d, exclude Purchase 7d
 ├── Product Set: All products
-├── Budget: 40% of DPA budget
+├── Budget: 40% of catalog ads budget
 └── Expected ROAS: 6-12x
 
 AD SET 2: Add to Cart (7d)
 ├── Audience: AddToCart 7d, exclude Purchase 7d
 ├── Product Set: All products
-├── Budget: 35% of DPA budget
+├── Budget: 35% of catalog ads budget
 └── Expected ROAS: 8-15x
 
 AD SET 3: Past Purchasers - Cross-sell (30d)
 ├── Audience: Purchase 30d
 ├── Product Set: Complementary products
-├── Budget: 25% of DPA budget
+├── Budget: 25% of catalog ads budget
 └── Expected ROAS: 4-8x
 ```
 
-### Prospecting DPA Setup
+### Prospecting Setup
 
 ```
-DPA PROSPECTING STRUCTURE
+CATALOG ADS PROSPECTING STRUCTURE
 =========================
 
 CAMPAIGN: [Brand]_DPA_Prospecting
@@ -291,13 +290,14 @@ AD SET 3: Lookalike Purchasers
 └── Expected ROAS: 3-5x
 ```
 
-## Advantage+ Shopping Campaigns
+## Advantage+ Sales Campaigns
 
-### ASC Optimization
+### Advantage+ Sales Campaign Optimization
 
 ```
-ADVANTAGE+ SHOPPING SETUP
-=========================
+ADVANTAGE+ SALES CAMPAIGN SETUP
+================================
+(Correct term as of v25.0 API — "Advantage+ Shopping" is deprecated)
 
 WHEN TO USE:
 ├── E-commerce with 50+ conversions/week
@@ -306,22 +306,28 @@ WHEN TO USE:
 └── Focus on volume + efficiency
 
 SETUP:
-├── Campaign: Advantage+ Shopping
+├── Campaign type: Advantage+ Sales Campaign
 ├── Catalog: Full catalog (or bestseller set)
 ├── Budget: Start with 2x normal CPA x 50
 ├── Existing customer budget cap: 30-50%
 └── Countries: Focus markets
 
-CREATIVE INPUT:
-├── 3-5 lifestyle images
-├── 3-5 product images
-├── 3-5 video assets
+CREATIVE INPUT (Andromeda engine — quality matters most):
+├── 15+ distinct creative assets recommended
+├── Mix: lifestyle images, product images, video (Reels-format 9:16)
+├── Strong hooks in first 2 seconds of video
 └── Headlines & primary text variations
 
+AUTOMATION LEVERS (2026 — 3 unified controls):
+├── Budget automation: Advantage Campaign Budget (no "+" sign)
+├── Audience automation: Advantage+ Audience (replaces manual targeting)
+└── Placement automation: Advantage+ Placements (includes Threads as of Mar 2026)
+
 OPTIMIZATION TIPS:
-├── Give ASC at least 7 days without changes
+├── Give campaign at least 7 days without changes
 ├── Review "Audience segments" for insights
-├── Use existing customer cap wisely
+├── Use existing customer cap wisely (30-50%)
+├── Andromeda: creative quality drives results more than audience selection
 └── Combine with separate retargeting if needed
 ```
 
@@ -345,7 +351,7 @@ PROBLEM: Feed sync errors
 ├── Check: Encoding issues (UTF-8)?
 └── Fix: Validate feed with Facebook Debug Tool
 
-PROBLEM: Low delivery in DPA
+PROBLEM: Low delivery in Catalog Ads
 ├── Check: Product set too small? (min 20 products)
 ├── Check: Audience too narrow?
 ├── Check: All products in stock?
@@ -357,7 +363,7 @@ PROBLEM: Wrong products shown
 ├── Check: Pixel events firing correctly?
 └── Fix: Verify content_id mapping
 
-PROBLEM: High CPA in DPA
+PROBLEM: High CPA in Catalog Ads
 ├── Check: Product set quality
 ├── Check: Catalog completeness
 ├── Check: Image quality
@@ -403,13 +409,30 @@ CATALOG AUDIT CHECKLIST
 └── Regular feed optimization?
 ```
 
+## MCP Tool Integration
+
+### Diagnosing Catalog Ad Performance with Live Data
+
+```
+1. Check catalog campaign ROAS and delivery:
+→ meta_query(account_id="...", fields=["campaign_name","spend","purchase_roas","cost_per_result","impressions","frequency"], date_preset="last_14d", level="campaign")
+
+2. Ad set level — check audience segments:
+→ meta_query(account_id="...", fields=["adset_name","spend","purchase_roas","cost_per_result","reach","frequency"], date_preset="last_14d", level="adset")
+
+3. Creative performance across catalog ads:
+→ meta_get_creatives(account_id="...", scope="active")
+```
+
+Use results to identify which product sets, audience windows, or creative overlays are dragging ROAS down.
+
 ## Example Interaction
 
-**User**: "My DPA campaigns are performing poorly. The ROAS is only 1.5x while I expected 3x. What can I do?"
+**User**: "My Advantage+ Catalog Ads are performing poorly. The ROAS is only 1.5x while I expected 3x. What can I do?"
 
 **Claude response**:
 
-"Let's systematically troubleshoot your DPA performance:
+"Let's systematically troubleshoot your Catalog Ads performance:
 
 ---
 
@@ -421,7 +444,7 @@ CATALOG AUDIT CHECKLIST
    - Are titles optimized?
 
 2. **Campaign Setup:**
-   - Retargeting or prospecting DPA?
+   - Retargeting or prospecting catalog ads?
    - Which product sets are you using?
    - What is your audience window?
 

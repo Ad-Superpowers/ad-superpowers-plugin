@@ -97,7 +97,7 @@ Use `gtm_audit` to get a comprehensive GTM container audit, then verify:
 | 1 | Google Analytics 4 properly installed | `gtm_audit` | ☐ | Critical |
 | 2 | GA4 key events configured (purchase, lead, etc.) | `ga4_run_report` | ☐ | Critical |
 | 3 | Meta Pixel firing on all pages | `gtm_audit` | ☐ | Critical |
-| 4 | Meta Conversions API (CAPI) active | Meta Events Manager | ☐ | High |
+| 4 | Meta Conversions API (CAPI) active | Meta Events Manager | ☐ | Critical (mandatory for signal quality) |
 | 5 | Google Ads conversion tracking active | `google_ads_run_gaql` | ☐ | Critical |
 | 6 | Enhanced conversions enabled (Google) | Google Ads UI | ☐ | High |
 | 7 | TikTok Pixel installed (if using TikTok) | `gtm_audit` | ☐ | Critical for TikTok |

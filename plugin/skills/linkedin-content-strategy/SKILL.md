@@ -1,7 +1,7 @@
 ---
 name: linkedin-content-strategy
 description: |
-  LinkedIn ad format selection and B2B content strategy. Provides decision trees for choosing between Sponsored Content (single image, carousel, video, document), Message Ads, Conversation Ads, and Text Ads based on campaign objectives. Includes thought leadership positioning, content funnel mapping, and format-specific creative best practices.
+  LinkedIn ad format selection and B2B content strategy. Provides decision trees for choosing between Sponsored Content (single image, carousel, video, document), Message Ads, Text Ads, and Thought Leader Ads based on campaign objectives. Includes thought leadership positioning, content funnel mapping, and format-specific creative best practices. Note: Conversation Ads are deprecated in EU/EEA and being phased out globally.
   Use when: (1) user asks which LinkedIn ad format to use, (2) user wants to build a B2B content funnel on LinkedIn, (3) user needs creative best practices for LinkedIn ad formats.
   Do NOT use for: lead form optimization (use linkedin-lead-gen-optimizer), campaign scaling (use linkedin-campaign-scaling-guide), or ABM targeting (use linkedin-abm-targeting-strategy).
 metadata:
@@ -48,7 +48,7 @@ Invoke when user mentions:
 | Video | 0.30-0.50% | €20-40 | €7-15 | Brand awareness, thought leadership | €50/day |
 | Document Ads | 0.50-0.80% | €15-35 | €4-10 | Gated content, education | €30/day |
 | Message Ads (InMail) | 25-40% open rate | N/A | €0.50-1.50/send | Direct outreach, events, high-value offers | €50/day |
-| Conversation Ads | 40-60% open rate | N/A | €0.30-1.00/send | Multi-path journeys, qualification | €50/day |
+| Conversation Ads | 40-60% open rate | N/A | €0.30-1.00/send | Multi-path journeys, qualification (deprecated EU/EEA; being phased out globally) | €50/day |
 | Text Ads | 0.02-0.05% | €5-15 | €3-8 | Low-budget awareness, retargeting | €10/day |
 | Dynamic Ads | 0.08-0.15% | €10-25 | €8-20 | Follower growth, job applicants | €25/day |
 | Event Ads | 0.45-0.70% | €20-40 | €5-12 | Event registration, webinars | €30/day |
@@ -278,6 +278,8 @@ Formula 5: "Exclusive invite: [event/offer] for [their industry]"
 ```
 
 ### Conversation Ads
+
+> **Deprecation notice:** Conversation Ads are no longer available in the EU/EEA due to privacy regulations, and LinkedIn is phasing them out globally. For markets where they are still available, the guidance below applies. For EU/EEA campaigns, use Message Ads for direct outreach or Sponsored Content for qualification flows.
 
 **Specs:**
 - Multiple CTA buttons per message (max 5)

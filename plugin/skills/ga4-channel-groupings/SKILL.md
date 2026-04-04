@@ -12,13 +12,19 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Channel Groupings Guide
 
 Complete guide for configuring and optimizing channel groupings in Google Analytics 4 for accurate traffic categorization.
+
 ## Default Channel Groups
 
 ```
 GA4 DEFAULT CHANNEL GROUPS
 ===========================
 
-THE 18 STANDARD CHANNELS:
+NOTE: GA4 introduced the "Primary Channel Group" concept in March 2024.
+This is now the default grouping shown in Acquisition reports. The ~20
+default channels below are unchanged. Custom channel groups are still
+available under Admin → Data display → Custom channel groups.
+
+THE ~20 STANDARD CHANNELS:
 ┌─────────────────────┬───────────────────────────────────────────┐
 │ Channel             │ When triggered                            │
 ├─────────────────────┼───────────────────────────────────────────┤
@@ -339,6 +345,28 @@ PRINCIPLE:
 ├── Direct and Unassigned always last
 └── Test order with sample data
 ```
+
+## MCP Tool: Analyze Channel Distribution
+
+```python
+# Check traffic and conversions by channel group
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["sessions", "keyEvents", "totalRevenue", "keyEventRate"],
+    dimensions=["sessionDefaultChannelGroup"],
+    date_range={"start_date": "30daysAgo", "end_date": "yesterday"}
+)
+
+# Find "Unassigned" traffic to diagnose missing UTMs
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["sessions"],
+    dimensions=["sessionDefaultChannelGroup", "sessionSourceMedium"],
+    date_range={"start_date": "30daysAgo", "end_date": "yesterday"},
+    filters={"dimension": "sessionDefaultChannelGroup", "operator": "EXACT", "value": "Unassigned"}
+)
+```
+
 ## Output: Channel Configuration Template
 
 ```markdown

@@ -170,8 +170,12 @@ Ad Set A: Interest Stack 1
 Ad Set B: Interest Stack 2
 └── Exclude: Custom Audience from Interest Stack 1
 
-OR use Advantage Campaign Budget (CBO) to let Meta
-automatically distribute budget without overlap issues
+OR use Advantage Campaign Budget (API field: campaign_budget_optimization)
+to let Meta automatically distribute budget without overlap issues.
+
+NOTE (2026): With Advantage+ Audience enabled, Meta's Andromeda engine
+handles much of the overlap routing automatically. Manual exclusions
+are still recommended for funnel separation (TOFU/MOFU/BOFU).
 ```
 
 ## Account Audit Checklist
@@ -291,3 +295,21 @@ Budget Spend Rate   │  Uneven    │   Even    │ Consistent
 If you go to **Ads Manager → Audiences** and select 2 or more audiences, you can see the exact overlap via **Actions → Show Audience Overlap**.
 
 Share those percentages and I'll help you with a solution plan!"
+
+## MCP Tool Usage
+
+### Retrieve active campaigns and ad sets to audit for overlap:
+
+```python
+# List all active ad sets with their audiences and delivery metrics
+meta_query(
+    account_id="act_XXXXXXXXX",
+    query_type="adsets",
+    params={
+        "fields": ["name", "targeting", "status", "daily_budget", "impressions", "reach", "frequency", "effective_status"],
+        "filtering": [{"field": "effective_status", "operator": "IN", "value": ["ACTIVE"]}]
+    }
+)
+```
+
+Then cross-reference the audience IDs in `targeting.custom_audiences` across ad sets to spot duplicates. Use Meta's native Audience Overlap tool (Ads Manager → Audiences → Actions → Show Audience Overlap) to confirm the percentages.

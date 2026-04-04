@@ -1,21 +1,20 @@
 ---
 name: linkedin-benchmark-database
 description: |
-  Reference database with industry benchmarks for LinkedIn Ads metrics by industry, campaign type, and funnel stage. Use this skill when you want to know if LinkedIn metrics are performing well or when you need to set targets.
-  Use when: linkedin benchmark, linkedin CPL, linkedin CTR, linkedin CPC, is my CPL good, linkedin average, B2B benchmark, LinkedIn performance evaluation, LinkedIn target setting.
-  Do NOT use for: LinkedIn bid strategy selection (use linkedin-bid-strategy-selector), LinkedIn lead gen optimization (use linkedin-lead-gen-optimizer), LinkedIn performance troubleshooting (use linkedin-performance-troubleshooter).
+  Reference database with industry benchmarks for Meta Ads metrics by vertical, funnel stage, and campaign type. Use when: evaluating whether your metrics are performing well, or setting targets for new campaigns.
+  Do NOT use for: performance diagnostics (use performance-troubleshooter), account audits (use account-auditor), scaling decisions (use scaling-calculator).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
-  platform: "linkedin"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
+  platform: "meta"
+  phase: "fase-5-advanced"
+compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
-# LinkedIn Ads Benchmark Database
+# Benchmark Database
 
 ## Overview
 
-This skill provides a comprehensive database of LinkedIn Ads benchmarks by industry, ad format, funnel stage, and campaign type, so you can assess how your B2B metrics perform compared to market standards.
+This skill provides an extensive database of Meta Ads benchmarks by industry, funnel stage, and campaign type, so you can assess how your metrics perform relative to market standards.
 
 ## Benchmark Disclaimer
 
@@ -23,244 +22,259 @@ This skill provides a comprehensive database of LinkedIn Ads benchmarks by indus
 IMPORTANT CONTEXT
 
 These benchmarks are based on:
-+-- Aggregated industry data (2024-2026)
-+-- Sources: LinkedIn, AdBacklog, GrackerAI, Factors.ai
-+-- Primarily focused on Western European/North American markets
-+-- B2B focus (LinkedIn's core market)
+├── Aggregated industry data (2025-2026)
+├── Multiple sources (Meta, WordStream, AdEspresso, etc.)
+├── Primarily focused on Western markets
+├── Attribution: 7d click + 1d view (Meta default since Jan 2026 — 28d view removed)
+└── Subject to seasonal fluctuations
 
 Benchmarks are GUIDELINES, not absolute truths:
-+-- Your specific niche may deviate significantly
-+-- Enterprise vs SMB has enormous impact
-+-- Sales cycle length affects CPL acceptance
-+-- Always compare with your own LTV:CAC ratio
+├── Your specific niche may differ significantly
+├── Product pricing strongly influences metrics
+├── Audience quality determines a lot
+└── Always compare with your own historical data
 ```
 
-## CPL Benchmarks by Industry
+## Benchmarks by Industry
+
+### E-commerce
 
 ```
-COST PER LEAD (CPL) BY INDUSTRY
-===============================
+E-COMMERCE BENCHMARKS
+=====================
 
-Industry              | Poor    | Average | Good    | Excellent
-----------------------+---------+---------+---------+----------
-Finance & Insurance   | >$120   | $90-120 | $60-90  | <$60
-Healthcare            | >$150   | $100-150| $70-100 | <$70
-SaaS / Software       | >$120   | $80-120 | $50-80  | <$50
-Education             | >$80    | $60-80  | $40-60  | <$40
-Marketing / Agencies  | >$120   | $80-120 | $50-80  | <$50
-Professional Services | >$100   | $70-100 | $45-70  | <$45
-Manufacturing         | >$130   | $90-130 | $60-90  | <$60
-Technology (Hardware) | >$140   | $100-140| $65-100 | <$65
-Consulting            | >$110   | $75-110 | $50-75  | <$50
-Recruitment / HR Tech | >$90    | $60-90  | $40-60  | <$40
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR (All)       │ <0.5%   │ 0.5-1%  │ 1-2%    │ >2%
+CTR (Link)      │ <0.8%   │ 0.8-1.5%│ 1.5-2.5%│ >2.5%
+CPC             │ >$1.50  │ $0.80-1.50│ $0.40-0.80│ <$0.40
+CPM             │ >$15    │ $8-15   │ $5-8    │ <$5
+CPA (Purchase)  │ >$50    │ $25-50  │ $15-25  │ <$15
+ROAS            │ <1.5x   │ 1.5-2.5x│ 2.5-4x  │ >4x
+Add to Cart Rate│ <3%     │ 3-6%    │ 6-10%   │ >10%
+Conversion Rate │ <1%     │ 1-2%    │ 2-4%    │ >4%
 
-CONTEXT FACTORS:
-+-- Enterprise deals ($50k+ ACV): CPL $150-300+ acceptable
-+-- SMB deals ($5k ACV): CPL <$50 target
-+-- Freemium SaaS: CPL <$30 ideal
-+-- High-touch sales: Higher CPL OK if SQL rate is high
+SUBCATEGORIES:
+├── Fashion: CPA $20-40, ROAS 2.5-4x
+├── Beauty: CPA $15-30, ROAS 3-5x
+├── Electronics: CPA $30-60, ROAS 2-3x
+├── Home & Garden: CPA $25-45, ROAS 2.5-4x
+└── Food & Beverage: CPA $10-25, ROAS 3-6x
 ```
 
-## CPC & CPM Benchmarks
+### SaaS / Software
 
 ```
-COST PER CLICK (CPC) BY INDUSTRY
-================================
+SAAS BENCHMARKS
+===============
 
-Industry              | Poor    | Average | Good    | Excellent
-----------------------+---------+---------+---------+----------
-Finance & Insurance   | >$8.00  | $5-8    | $3-5    | <$3.00
-SaaS / Software       | >$10.00 | $6-10   | $4-6    | <$4.00
-Technology            | >$9.00  | $5-9    | $3-5    | <$3.00
-Healthcare            | >$7.00  | $4-7    | $2.50-4 | <$2.50
-Education             | >$6.00  | $3.50-6 | $2-3.50 | <$2.00
-Manufacturing         | >$7.50  | $4.50-7.5| $3-4.50| <$3.00
-Professional Services | >$6.50  | $4-6.50 | $2.50-4 | <$2.50
-General B2B           | >$7.00  | $4-7    | $2.50-4 | <$2.50
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR             │ <0.4%   │ 0.4-0.8%│ 0.8-1.5%│ >1.5%
+CPC             │ >$3.00  │ $1.50-3 │ $0.80-1.50│ <$0.80
+CPM             │ >$20    │ $12-20  │ $6-12   │ <$6
+CPL (Lead)      │ >$80    │ $40-80  │ $20-40  │ <$20
+CPA (Trial)     │ >$150   │ $80-150 │ $40-80  │ <$40
+CPA (Paid)      │ >$300   │ $150-300│ $80-150 │ <$80
+Trial to Paid   │ <5%     │ 5-15%   │ 15-25%  │ >25%
 
 NOTES:
-+-- LinkedIn CPC is 3-5x higher than Meta/Google
-+-- But: B2B audience quality often compensates
-+-- Focus on CPL/CPA, not just CPC
+├── B2B SaaS: Higher CPA acceptable (LTV!)
+├── Freemium: Focus on trial signups
+└── Enterprise: CPA can be $500+ (high LTV)
 ```
 
-```
-COST PER MILLE (CPM) BY TARGETING
-=================================
-
-Targeting Type         | Range
------------------------+------------
-Broad Professional     | $25-35
-Job Title Targeting    | $35-50
-Job Function           | $30-45
-Industry + Seniority   | $40-60
-Matched Audiences      | $20-30
-Lookalike Audiences    | $25-40
-ABM / Account Lists    | $50-80
-C-Suite Only           | $60-100
-
-CONTEXT FACTORS:
-+-- US/UK markets: +20-30% vs EU
-+-- Small audiences (<50k): Premium pricing
-+-- Q4: +15-25% seasonal increase
-```
-
-## CTR Benchmarks by Ad Format
+### Lead Generation / Services
 
 ```
-CLICK-THROUGH RATE (CTR) BY FORMAT
-==================================
+LEAD GEN BENCHMARKS
+===================
 
-Ad Format               | Poor    | Average   | Good      | Excellent
-------------------------+---------+-----------+-----------+----------
-Sponsored Content       | <0.35%  | 0.35-0.55%| 0.55-0.80%| >0.80%
-Video Ads               | <0.30%  | 0.30-0.45%| 0.45-0.65%| >0.65%
-Carousel Ads            | <0.40%  | 0.40-0.60%| 0.60-0.90%| >0.90%
-Message Ads (InMail)    | <2.00%  | 2.00-3.50%| 3.50-5.00%| >5.00%
-Text Ads                | <0.015% | 0.015-0.03%| 0.03-0.05%| >0.05%
-Dynamic Ads             | <0.05%  | 0.05-0.10%| 0.10-0.20%| >0.20%
-Lead Gen Forms (CVR)    | <6%     | 6-10%     | 10-15%    | >15%
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR             │ <0.5%   │ 0.5-1%  │ 1-2%    │ >2%
+CPC             │ >$2.50  │ $1-2.50 │ $0.50-1 │ <$0.50
+CPM             │ >$18    │ $10-18  │ $5-10   │ <$5
+CPL             │ >$50    │ $20-50  │ $10-20  │ <$10
+Form Fill Rate  │ <10%    │ 10-20%  │ 20-35%  │ >35%
+Lead Quality    │ <5% SQL │ 5-15%   │ 15-30%  │ >30%
+
+INDUSTRY SPECIFIC:
+├── Real Estate: CPL $30-80
+├── Finance/Insurance: CPL $40-100
+├── Legal: CPL $50-150
+├── Healthcare: CPL $25-60
+├── Education: CPL $15-40
+└── B2B Services: CPL $50-200
+```
+
+### Local Business
+
+```
+LOCAL BUSINESS BENCHMARKS
+=========================
+
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR             │ <0.6%   │ 0.6-1.2%│ 1.2-2%  │ >2%
+CPC             │ >$1.50  │ $0.70-1.50│$0.30-0.70│ <$0.30
+CPM             │ >$12    │ $6-12   │ $3-6    │ <$3
+Cost per Store Visit │ >$15│ $8-15  │ $4-8    │ <$4
+Cost per Call   │ >$20    │ $10-20  │ $5-10   │ <$5
+Cost per Direction│>$8    │ $4-8    │ $2-4    │ <$2
 
 NOTES:
-+-- Message Ads: Higher CTR but limited volume
-+-- Lead Gen Forms: Measure CVR (form completion), not CTR
-+-- Video: Focus on View Rate (25/50/75% completion)
-+-- Carousel: Swipe rate 30-50% = healthy
+├── Radius targeting: Tight radius = higher CPM
+├── Store visits: Not available for all locations
+└── Calls: Most trackable local metric
 ```
 
-## Conversion Rate Benchmarks by Funnel Stage
+## Benchmarks by Funnel Stage
+
+### TOFU (Top of Funnel)
 
 ```
-CONVERSION RATE BY FUNNEL STAGE
+TOFU BENCHMARKS - AWARENESS
+===========================
+
+Objective: Reach / Brand Awareness / Video Views
+
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CPM             │ >$10    │ $5-10   │ $3-5    │ <$3
+Reach (per $)   │ <100    │ 100-200 │ 200-350 │ >350
+Frequency/week  │ >4      │ 2.5-4   │ 1.5-2.5 │ 1-1.5
+Video Views     │ <20%    │ 20-40%  │ 40-60%  │ >60%
+ThruPlay Rate   │ <10%    │ 10-20%  │ 20-35%  │ >35%
+Cost/ThruPlay   │ >$0.10  │ $0.05-0.10│$0.02-0.05│<$0.02
+3-sec View Rate │ <30%    │ 30-50%  │ 50-70%  │ >70%
+```
+
+### MOFU (Middle of Funnel)
+
+```
+MOFU BENCHMARKS - CONSIDERATION
 ===============================
 
-Funnel Stage           | Poor    | Average | Good    | Excellent
------------------------+---------+---------+---------+----------
-TOFU (Awareness)
-+-- Video View Rate    | <15%    | 15-25%  | 25-40%  | >40%
-+-- Engagement Rate    | <0.5%   | 0.5-1%  | 1-2%    | >2%
-+-- Brand Lift         | <3%     | 3-8%    | 8-15%   | >15%
+Objective: Traffic / Engagement / Lead Gen
 
-MOFU (Consideration)
-+-- Landing Page CVR   | <2%     | 2-4%    | 4-6%    | >6%
-+-- Content Download   | <4%     | 4-8%    | 8-12%   | >12%
-+-- Webinar Signup     | <3%     | 3-6%    | 6-10%   | >10%
-
-BOFU (Conversion)
-+-- Demo Request       | <1.5%   | 1.5-3%  | 3-5%    | >5%
-+-- Free Trial         | <2%     | 2-4%    | 4-7%    | >7%
-+-- Contact Form       | <1%     | 1-2.5%  | 2.5-4%  | >4%
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR             │ <0.8%   │ 0.8-1.5%│ 1.5-2.5%│ >2.5%
+CPC             │ >$1.50  │ $0.80-1.50│$0.40-0.80│<$0.40
+Landing Page View Rate│<60%│60-75%  │ 75-85%  │ >85%
+Bounce Rate     │ >70%    │ 50-70%  │ 30-50%  │ <30%
+Time on Site    │ <30s    │ 30-60s  │ 60-120s │ >120s
+Content Eng.    │ <2%     │ 2-5%    │ 5-10%   │ >10%
+Email Signup    │ <1%     │ 1-3%    │ 3-6%    │ >6%
 ```
 
-## Lead Gen Forms vs Landing Pages
+### BOFU (Bottom of Funnel)
 
 ```
-LEAD GEN FORMS vs LANDING PAGES
-===============================
+BOFU BENCHMARKS - CONVERSION
+============================
 
-Metric                  | Lead Gen Forms | Landing Pages
-------------------------+----------------+---------------
-Conversion Rate         | 10-13%         | 4-6%
-Cost per Lead           | 15-25% lower   | Higher
-SQL Rate (quality)      | 20-40% lower   | Higher
-Mobile Experience       | Excellent      | Variable
-Form Fields Limit       | Up to 12       | Unlimited
-Custom Validation       | Limited        | Full control
-Retargeting Data        | Limited        | Full pixel
+Objective: Conversions / Catalog Sales
 
-WHEN TO USE WHAT:
-
-LEAD GEN FORMS (Native)
-+-- High-volume lead generation
-+-- Mobile-first audience
-+-- Simple qualification (job title, company)
-+-- TOFU/MOFU content offers
-+-- Lower friction = higher volume, lower quality
-
-LANDING PAGES
-+-- Complex qualification needed
-+-- Multi-step forms
-+-- Custom validation rules
-+-- BOFU demo/trial requests
-+-- Higher friction = lower volume, higher quality
-
-HYBRID APPROACH (Best Practice)
-+-- Use Lead Gen Forms for initial capture
-+-- Add 1-2 qualifying questions to filter
-+-- Retarget form submitters with LP ads
-+-- Measure SQL rate, not just lead volume
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR             │ <1%     │ 1-2%    │ 2-3.5%  │ >3.5%
+CPC             │ >$1.20  │ $0.60-1.20│$0.30-0.60│<$0.30
+Conv. Rate      │ <2%     │ 2-4%    │ 4-8%    │ >8%
+CPA             │ varies by industry (see above)
+ROAS            │ varies by industry (see above)
+Cart Abandon    │ >80%    │ 70-80%  │ 60-70%  │ <60%
+Checkout Comp.  │ <30%    │ 30-50%  │ 50-70%  │ >70%
 ```
 
-## SQL Rate & Pipeline Benchmarks
+## Benchmarks by Ad Format
+
+### Static Image Ads
 
 ```
-LEAD QUALITY BENCHMARKS
+STATIC IMAGE BENCHMARKS
 =======================
 
-Metric                  | Poor    | Average | Good    | Excellent
-------------------------+---------+---------+---------+----------
-MQL to SQL Rate         | <10%    | 10-20%  | 20-35%  | >35%
-SQL to Opportunity      | <20%    | 20-35%  | 35-50%  | >50%
-Opportunity to Close    | <15%    | 15-25%  | 25-40%  | >40%
-Lead Gen Form SQL Rate  | <8%     | 8-15%   | 15-25%  | >25%
-Landing Page SQL Rate   | <15%    | 15-30%  | 30-45%  | >45%
-
-B2B SALES CYCLE CONTEXT:
-+-- Avg LinkedIn-sourced cycle: 200+ days
-+-- Multi-touch attribution: 6-12 touches average
-+-- First touch to opportunity: 30-90 days
-+-- Don't judge CPL without SQL rate data
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR             │ <0.8%   │ 0.8-1.5%│ 1.5-2.5%│ >2.5%
+Engagement Rate │ <1%     │ 1-2%    │ 2-4%    │ >4%
+Save Rate       │ <0.1%   │ 0.1-0.5%│ 0.5-1%  │ >1%
+Share Rate      │ <0.05%  │ 0.05-0.2%│0.2-0.5% │ >0.5%
 ```
 
-## Engagement Benchmarks
+### Video Ads
 
 ```
-ENGAGEMENT RATE BENCHMARKS
-==========================
+VIDEO AD BENCHMARKS
+===================
 
-Metric                  | Poor    | Average   | Good      | Excellent
-------------------------+---------+-----------+-----------+----------
-Total Engagement Rate   | <0.3%   | 0.3-0.6%  | 0.6-1%    | >1%
-Like Rate               | <0.15%  | 0.15-0.3% | 0.3-0.5%  | >0.5%
-Comment Rate            | <0.02%  | 0.02-0.05%| 0.05-0.1% | >0.1%
-Share Rate              | <0.01%  | 0.01-0.03%| 0.03-0.06%| >0.06%
-Follow Rate (per ad)    | <0.05%  | 0.05-0.1% | 0.1-0.2%  | >0.2%
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+3-sec View Rate │ <25%    │ 25-40%  │ 40-60%  │ >60%
+ThruPlay Rate   │ <8%     │ 8-15%   │ 15-25%  │ >25%
+Avg Watch Time  │ <3s     │ 3-6s    │ 6-10s   │ >10s
+Video Complete  │ <5%     │ 5-12%   │ 12-20%  │ >20%
+CTR (post-view) │ <0.5%   │ 0.5-1%  │ 1-2%    │ >2%
+Cost/ThruPlay   │ >$0.12  │ $0.06-0.12│$0.03-0.06│<$0.03
+```
 
-VIDEO SPECIFIC:
-+-- 25% View Rate       | <20%    | 20-35%  | 35-50%  | >50%
-+-- 50% View Rate       | <10%    | 10-20%  | 20-35%  | >35%
-+-- 75% View Rate       | <5%     | 5-12%   | 12-20%  | >20%
-+-- 100% Completion     | <3%     | 3-8%    | 8-15%   | >15%
+### Carousel Ads
+
+```
+CAROUSEL AD BENCHMARKS
+======================
+
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+CTR             │ <1%     │ 1-1.8%  │ 1.8-3%  │ >3%
+Cards Viewed    │ <2      │ 2-3     │ 3-4     │ >4
+Swipe Rate      │ <30%    │ 30-50%  │ 50-70%  │ >70%
+Exit Card       │ Card 1-2│ Card 3-4│ Card 5+ │ Last card
+```
+
+### Collection/Instant Experience
+
+```
+COLLECTION AD BENCHMARKS
+========================
+
+Metric          │ Poor    │ Average │ Good    │ Excellent
+────────────────┼─────────┼─────────┼─────────┼──────────
+Click to Open   │ <3%     │ 3-6%    │ 6-10%   │ >10%
+Time in IE      │ <15s    │ 15-30s  │ 30-60s  │ >60s
+Outbound CTR    │ <2%     │ 2-5%    │ 5-10%   │ >10%
+Product Views   │ <3      │ 3-6     │ 6-10    │ >10
 ```
 
 ## Seasonal Adjustment Factors
 
 ```
-SEASONAL VARIATIONS (B2B)
-================================
+SEASONAL VARIATIONS
+====================
 
-Period               | CPM Factor | CPL Factor | Notes
----------------------+------------+------------+--------------
-Q1 (Jan-Mar)         |   0.90     |   0.95     | Budget resets
-April-May            |   0.95     |   1.00     | Baseline
-June                 |   0.92     |   0.98     | Summer start
-July-August          |   0.85     |   1.05     | Vacation mode
-September            |   1.00     |   1.00     | Back to work
-October              |   1.05     |   1.00     | Q4 planning
-November             |   1.15     |   1.05     | Budget flush
-December 1-15        |   1.20     |   1.10     | Year-end push
-December 16-31       |   0.80     |   1.15     | Holiday shutdown
+MONTH           │ CPM Factor │ CPA Factor │ Notes
+────────────────┼────────────┼────────────┼───────────────
+January         │   0.85     │   0.90     │ Low competition
+February        │   0.90     │   0.95     │ Valentine's spike
+March           │   0.95     │   1.00     │ Baseline
+April           │   0.95     │   1.00     │ Baseline
+May             │   1.00     │   1.00     │ Baseline
+June            │   0.95     │   0.98     │ Summer start
+July            │   0.90     │   0.95     │ Summer lull
+August          │   0.88     │   0.92     │ Summer lull
+September       │   1.00     │   1.00     │ Back to school
+October         │   1.10     │   1.05     │ Q4 start
+November        │   1.35     │   1.20     │ Black Friday
+December        │   1.40     │   1.25     │ Holiday peak
 
-B2B SPECIFIC PATTERNS:
-+-- Decision makers OOO: Jul-Aug, Dec 20-Jan 3
-+-- Budget cycles: Jan (resets), Nov-Dec (use-or-lose)
-+-- Conference season: Spring/Fall = more noise
-+-- Summer: Lower CPM but lower response rates
+Usage: Benchmark x Factor = Seasonally Adjusted Benchmark
 ```
 
 ## Benchmark Comparison Template
 
-### When a user asks to evaluate their metrics:
+### When user asks to evaluate metrics:
 
 ```
 METRIC EVALUATION - [ACCOUNT]
@@ -268,108 +282,79 @@ METRIC EVALUATION - [ACCOUNT]
 
 YOUR METRICS vs BENCHMARKS
 
-Metric      | Your Value | Benchmark | Difference | Status
-------------+------------+-----------+------------+--------
-CPL         |   $[X]     |   $[Y]    |  [+/-Z%]   | [Good/OK/Poor]
-CPC         |   $[X]     |   $[Y]    |  [+/-Z%]   | [Good/OK/Poor]
-CTR         |   [X]%     |   [Y]%    |  [+/-Z%]   | [Good/OK/Poor]
-CVR (Form)  |   [X]%     |   [Y]%    |  [+/-Z%]   | [Good/OK/Poor]
-SQL Rate    |   [X]%     |   [Y]%    |  [+/-Z%]   | [Good/OK/Poor]
-Eng. Rate   |   [X]%     |   [Y]%    |  [+/-Z%]   | [Good/OK/Poor]
+Metric      │ Your Value  │ Benchmark │ Difference │ Status
+────────────┼─────────────┼───────────┼────────────┼────────
+CTR         │   [X]%      │   [Y]%    │  [+/-Z%]   │ [green/yellow/red]
+CPC         │   $[X]      │   $[Y]    │  [+/-Z%]   │ [green/yellow/red]
+CPM         │   $[X]      │   $[Y]    │  [+/-Z%]   │ [green/yellow/red]
+CPA         │   $[X]      │   $[Y]    │  [+/-Z%]   │ [green/yellow/red]
+ROAS        │   [X]x      │   [Y]x    │  [+/-Z%]   │ [green/yellow/red]
+Conv Rate   │   [X]%      │   [Y]%    │  [+/-Z%]   │ [green/yellow/red]
 
 INTERPRETATION:
-Good = Above benchmark (>10% better)
-OK   = On benchmark (+/-10%)
-Poor = Below benchmark (>10% worse)
-
-CONTEXT FACTORS:
-+-- Industry: [specified]
-+-- Funnel Stage: [TOFU/MOFU/BOFU]
-+-- Ad Format: [specified]
-+-- Target Audience: [specified]
+Green: Above benchmark (>10% better)
+Yellow: At benchmark (+/-10%)
+Red: Below benchmark (>10% worse)
 
 RECOMMENDATIONS:
-+-- [Focus area 1]
-+-- [Focus area 2]
-+-- [Focus area 3]
+├── [Focus area 1]
+├── [Focus area 2]
+└── [Focus area 3]
 ```
 
-## LTV:CAC Framework
+## MCP Tool Integration
+
+### Pulling Real Data for Benchmark Comparison
+
+Never benchmark against user-provided numbers alone — always pull live account data first:
 
 ```
-LINKEDIN ADS ROI EVALUATION
-==========================
+1. Get current metrics (last 30 days):
+→ meta_query(account_id="...", fields=["campaign_name","spend","ctr","cpc","cpm","cost_per_result","purchase_roas","impressions"], date_preset="last_30d", level="campaign")
 
-Step 1: Calculate Customer Acquisition Cost (CAC)
-+-- Total LinkedIn Spend: $[X]
-+-- Number of Customers: [Y]
-+-- CAC = $[X] / [Y] = $[Z]
-
-Step 2: Determine Customer Lifetime Value (LTV)
-+-- Average Contract Value: $[X]
-+-- Average Customer Lifespan: [Y] years
-+-- Gross Margin: [Z]%
-+-- LTV = $[X] x [Y] x [Z]% = $[W]
-
-Step 3: Evaluate LTV:CAC Ratio
-+-- <1:1 = Unprofitable
-+-- 1:1 - 3:1 = Break-even to marginal
-+-- 3:1 - 5:1 = Healthy (target range)
-+-- 5:1 - 7:1 = Excellent
-+-- >7:1 = Under-investing in growth?
-
-LINKEDIN TYPICAL LTV:CAC:
-+-- SaaS B2B: 4:1 - 6:1 target
-+-- Enterprise: 5:1 - 8:1 (long sales cycle)
-+-- SMB: 3:1 - 5:1 (shorter cycle)
-+-- Services: 4:1 - 7:1
+2. Drill into ad set level for audience-specific benchmarks:
+→ meta_query(account_id="...", fields=["adset_name","ctr","cpc","cost_per_result","purchase_roas","frequency"], date_preset="last_30d", level="adset")
 ```
+
+Then compare the returned metrics against the benchmark tables above, applying seasonal adjustment factors if relevant.
 
 ## Example Interaction
 
-**User**: "My LinkedIn campaign for SaaS has a CPL of $95 and an SQL rate of 18%. Is that good?"
+**User**: "My e-commerce fashion campaign has a CTR of 1.2%, CPA of $35 and ROAS of 2.8x. Is that good?"
 
 **Claude response**:
 
-"Let me compare your metrics with SaaS benchmarks:
+"Let me compare your metrics against e-commerce fashion benchmarks:
 
 ---
 
-**BENCHMARK COMPARISON - SaaS B2B:**
+**BENCHMARK COMPARISON - Fashion E-commerce:**
 
 | Metric | Your Value | Benchmark Range | Status |
-|--------|-------------|-----------------|--------|
-| CPL | $95 | $80-120 (average) | Good |
-| SQL Rate | 18% | 10-20% (average-good) | Good |
-| Effective Cost per SQL | $528 | $400-600 (calculated) | OK |
+|--------|------------|-----------------|--------|
+| CTR | 1.2% | 1-2% (average-good) | Good |
+| CPA | $35 | $20-40 (average) | OK |
+| ROAS | 2.8x | 2.5-4x (average-good) | Good |
 
 ---
 
 **INTERPRETATION:**
 
-**CPL ($95)** - Right in the middle of the average range for SaaS. Acceptable.
+**CTR (1.2%)** - You're in the 'good' range. Your creatives are grabbing attention.
 
-**SQL Rate (18%)** - Above average. This significantly compensates for the CPL.
+**CPA ($35)** - Average for fashion. There's room for improvement.
 
-**Cost per SQL ($528)** - This is the metric that truly matters. $95 / 18% = $528 per qualified lead.
+**ROAS (2.8x)** - Healthy. Above breakeven, room to scale.
 
 ---
 
-**CONTEXT QUESTION:**
-What is your Average Contract Value (ACV)?
-- If ACV >$10k: Excellent performance
-- If ACV $5-10k: Healthy
-- If ACV <$5k: CPL optimization needed
-
 **RECOMMENDATIONS:**
 
-1. **Maintain SQL rate** - This is your strong point. Don't add extra friction.
+1. **Lowering CPA** is your biggest opportunity
+   - Test more creatives (UGC is often cheaper)
+   - Optimize landing page conversion
+   - Check audience overlap
 
-2. **Test CPL reduction** via:
-   - Broader targeting (can lower CPL 15-20%)
-   - Organic content boost (thought leadership)
-   - Lead Gen Forms vs Landing Page A/B test
+2. **Scale potential**: With 2.8x ROAS you can increase budget if CPA stays stable
 
-3. **Track LTV:CAC ratio** - If it's >3:1, you can safely scale up.
-
-Would you like me to analyze your Cost per SQL against your ACV?"
+Would you like specific benchmarks for another metric or a comparison with last period?"

@@ -17,6 +17,8 @@ compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 
 Framework for setting up and optimizing Meta Ads account structures using the 4-tier funnel methodology. Based on Meta's Performance 5 framework and proven agency best practices 2025-2026.
 
+> **April 2026 API Update:** Meta API v25.0 (Feb 2026) unifies Advantage+ Sales Campaigns (ASC) into a single campaign type with 3 automation levers (budget, audience, placement). The legacy `smart_promotion_type` / AAC distinction is deprecated (deadline May 19, 2026). `advantage_state_info` is the new field. In practice, the 4-tier structure below remains valid — ASC is the SCALE campaign type. **New placement:** Threads (400M+ MAU, March 2026) — add to placement mix for scale campaigns.
+
 ## Core Principle
 
 **Creative = Targeting.** Meta's Andromeda algorithm selects ads based on creative quality, not audience parameters. Creative diversification and systematic testing are the primary growth levers.
@@ -114,7 +116,7 @@ Winner Creative
  (alongside other winners)
 ```
 - Creative is added to the ASC campaign
-- Runs with 100% broad targeting on CBO
+- Runs with 100% broad targeting on Advantage Campaign Budget
 - Receives the largest share of budget (60-70%)
 
 **Destination B: Interest #1 Winners Ad Set**
@@ -233,7 +235,7 @@ Actions:
 | Setting | Value |
 |---------|-------|
 | Campaign Type | Advantage+ Sales Campaign |
-| Budget Type | CBO (Campaign Budget Optimization) |
+| Budget Type | Advantage Campaign Budget (formerly CBO) |
 | Targeting | 100% Broad (Advantage+ Audience) |
 | Existing Customer Cap | 0-10% (for pure acquisition) |
 | Creatives | Only validated winners |
@@ -276,7 +278,7 @@ Ad Set: "Broad Pack [YYYY-MM-DD]"
 - Objection handlers (FAQ, guarantees)
 - Sales/discount promotions
 - Low barrier offers (free shipping, samples)
-- Product-specific retargeting (DPA)
+- Product-specific retargeting (Advantage+ Catalog Ads)
 
 ### RETAIN - Retention Campaign
 
@@ -421,13 +423,23 @@ RETAIN:           5%
 5. **Creative velocity:** How many new creatives per month?
 6. **Attribution:** Is CAPI implemented with EMQ >=6?
 
+### MCP: Pull Account Structure for Audit
+
+```python
+# Get active campaigns with delivery status and budget
+meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","status","daily_budget","lifetime_budget","objective","buying_type"], filters={"effective_status":["ACTIVE"]})
+
+# Get ad sets for a campaign (learning status, audience info)
+meta_query(account_id="act_XXXXX", entity="adsets", fields=["id","name","status","learning_phase_status","daily_budget","targeting","optimization_goal"], filters={"campaign_id":"<campaign_id>","effective_status":["ACTIVE"]})
+```
+
 ## Naming Convention
 
 **Campaign Level:**
 ```
 [Tier]_[Objective]_[BudgetType]_[Geo]
 ```
-Example: `SCALE_SALES_CBO_NL` or `TEST_SALES_ABO_EU`
+Example: `SCALE_SALES_ACB_NL` or `TEST_SALES_ASB_EU`
 
 **Ad Set Level:**
 ```

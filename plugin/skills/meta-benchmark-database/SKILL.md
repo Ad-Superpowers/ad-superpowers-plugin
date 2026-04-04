@@ -22,9 +22,10 @@ This skill provides an extensive database of Meta Ads benchmarks by industry, fu
 IMPORTANT CONTEXT
 
 These benchmarks are based on:
-├── Aggregated industry data (2024-2025)
+├── Aggregated industry data (2025-2026)
 ├── Multiple sources (Meta, WordStream, AdEspresso, etc.)
 ├── Primarily focused on Western markets
+├── Attribution: 7d click + 1d view (Meta default since Jan 2026 — 28d view removed)
 └── Subject to seasonal fluctuations
 
 Benchmarks are GUIDELINES, not absolute truths:
@@ -300,6 +301,22 @@ RECOMMENDATIONS:
 ├── [Focus area 2]
 └── [Focus area 3]
 ```
+
+## MCP Tool Integration
+
+### Pulling Real Data for Benchmark Comparison
+
+Never benchmark against user-provided numbers alone — always pull live account data first:
+
+```
+1. Get current metrics (last 30 days):
+→ meta_query(account_id="...", fields=["campaign_name","spend","ctr","cpc","cpm","cost_per_result","purchase_roas","impressions"], date_preset="last_30d", level="campaign")
+
+2. Drill into ad set level for audience-specific benchmarks:
+→ meta_query(account_id="...", fields=["adset_name","ctr","cpc","cost_per_result","purchase_roas","frequency"], date_preset="last_30d", level="adset")
+```
+
+Then compare the returned metrics against the benchmark tables above, applying seasonal adjustment factors if relevant.
 
 ## Example Interaction
 

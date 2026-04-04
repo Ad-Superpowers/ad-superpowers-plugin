@@ -181,6 +181,12 @@ without a consent check trigger or Consent Mode configuration.
 **Fix:** Implement Consent Mode v2. Add "consent granted" trigger to all marketing tags.
 Ensure tags default to `denied` before consent.
 
+> **Consent Mode v2 is mandatory for EEA advertisers since March 2024.** Consent Mode v2 adds two new required parameters beyond the original v1:
+> - `ad_user_data`: Controls whether user data can be sent to Google for advertising
+> - `ad_personalization`: Controls whether ads can be personalized for the user
+>
+> Both must be explicitly set. Without them, Google may restrict access to audience features and Smart Bidding in the EEA. Check that your CMP (Cookiebot, OneTrust, Usercentrics, etc.) is configured to pass all four parameters: `ad_storage`, `analytics_storage`, `ad_user_data`, `ad_personalization`.
+
 ---
 
 ## Part 5: Tag Type Classification
@@ -270,13 +276,23 @@ TAG INVENTORY
 | Old UA Tag | UA | All Pages | Paused | ⚠️ Deprecated |
 
 ═══════════════════════════════════
-CONSENT COMPLIANCE CHECK
+CONSENT COMPLIANCE CHECK (Consent Mode v2)
 ═══════════════════════════════════
 Marketing tags found: [N]
 Tags with consent trigger: [N]
 Tags WITHOUT consent check: [N] ← [Compliant / RISK]
 
+Consent Mode v2 status:
+  ad_storage configured:        [Yes / No / Unknown]
+  analytics_storage configured: [Yes / No / Unknown]
+  ad_user_data configured:      [Yes / No / Unknown]  ← v2 required
+  ad_personalization configured:[Yes / No / Unknown]  ← v2 required
+
 [List non-compliant tags if any]
+
+Note: All four Consent Mode v2 parameters are mandatory for EEA advertisers
+(required by Google since March 2024). Missing ad_user_data or ad_personalization
+will restrict Smart Bidding and audience features in Google Ads.
 
 ═══════════════════════════════════
 REMEDIATION ROADMAP
@@ -294,6 +310,34 @@ Month 1 — Medium priority:
 ESTIMATED EFFORT: [X] hours
 EXPECTED DATA ACCURACY IMPROVEMENT: [X]%
 ```
+
+---
+
+## Part 6b: Server-Side Tagging Assessment
+
+Server-side GTM (sGTM) is now mainstream and directly relevant to container audits. When auditing a web container, assess whether server-side tagging should be recommended.
+
+### Signs Server-Side Tagging Would Help
+
+| Observation | Recommendation |
+|-------------|---------------|
+| 15+ tags on All Pages | Move heavy tags (Meta Pixel, GA4) to server-side |
+| Ad blockers impacting conversion data | Server-side bypasses most ad blockers |
+| ITP/cookie restrictions on Safari | Server-side extends cookie lifetime |
+| CAPI or Enhanced Conversions not implemented | sGTM is the easiest path to server-side |
+| Page load > 3s with GTM contributing | Offload tag execution server-side |
+
+### sGTM vs Web GTM Responsibilities
+
+| Function | Web GTM | Server GTM |
+|----------|---------|------------|
+| Data layer push | Yes | No |
+| Event collection (GA4) | Can be replaced | Preferred |
+| Ad pixels (Meta, TikTok, LinkedIn) | High risk (consent/blocking) | Better — consent-aware server call |
+| Conversion tracking (Google Ads) | Fine | Also fine via Enhanced Conversions |
+| Custom HTML tags | Full control | Limited (server-side only) |
+
+When a web container has many marketing tags AND no server container is in use, flag this in the audit with a recommendation to consider sGTM as a Phase 2 improvement.
 
 ---
 

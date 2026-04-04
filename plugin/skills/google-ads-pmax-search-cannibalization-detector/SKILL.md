@@ -82,14 +82,19 @@ ORDER BY metrics.cost_micros DESC
 
 ### 1D: PMax Channel-Level Breakdown (where the budget goes)
 
+Available from API v22+: `segments.ad_network_type` works in PMax campaigns, enabling per-channel cost/conversion breakdown.
+
 ```sql
-SELECT campaign.name, segments.conversion_action_category,
+SELECT campaign.name, segments.ad_network_type,
     metrics.impressions, metrics.clicks, metrics.cost_micros,
-    metrics.conversions
+    metrics.conversions, metrics.conversions_value
 FROM campaign
 WHERE campaign.advertising_channel_type = 'PERFORMANCE_MAX'
 AND segments.date DURING LAST_30_DAYS
+ORDER BY metrics.cost_micros DESC
 ```
+
+Network type values: `SEARCH`, `SEARCH_PARTNERS`, `CONTENT` (Display/YouTube), `MIXED`.
 
 ## Step 2: Brand Traffic Analysis
 
@@ -334,6 +339,13 @@ Total Account:
 +-- ROAS: Same or better (fairer distribution)
 +-- CPA: Same or better
 ```
+
+## 2026 Updates: PMax Negative Keywords + Search Term Reporting
+
+- **Campaign-level negative keywords** are now supported in PMax (API v20+). Use `google_ads_mutate` Recipe #7 with `campaignCriterionOperation` — no longer limited to account-level negative lists.
+- **Search term reporting** for PMax is available (API v21+): query `search_term_view` with `PERFORMANCE_MAX` filter (Step 1A above). This was not possible before v21 — if you had old reports showing no data, rerun.
+- **`url_expansion_opt_out`** was removed in v22; URL expansion is now controlled via asset group settings.
+- **Asset performance labels** (Best/Good/Low) were removed from the API in v22 — do not reference them in scripts.
 
 ## Benchmarks & Red Flags
 

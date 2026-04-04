@@ -12,6 +12,7 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Conversion Import Guide
 
 Complete guide for importing GA4 conversions into Google Ads for optimal Smart Bidding performance.
+
 ## Google Ads Link Verification
 
 ```
@@ -58,6 +59,12 @@ TROUBLESHOOTING LINK ISSUES:
 ```
 GA4 KEY EVENTS (CONVERSIONS) SETUP
 ====================================
+
+TERMINOLOGY NOTE:
+├── GA4 UI calls them "Key Events" (since March 2024)
+├── Google Ads still calls them "Conversions" after import — this is correct
+├── Do not confuse the names: the data is the same, only the label differs
+└── When a client says "I don't see conversions in GA4" → show them "Key Events"
 
 LOCATION: GA4 Admin → Data display → Events → Mark as key event
 
@@ -333,6 +340,7 @@ Lead type tiers:
 │ Whitepaper download │ EUR 25     │ Research phase                │
 └─────────────────────┴────────────┴───────────────────────────────┘
 ```
+
 ## Output: Conversion Import Checklist Template
 
 ```markdown

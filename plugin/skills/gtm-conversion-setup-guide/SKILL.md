@@ -274,7 +274,7 @@ fbq('track', 'Lead', {
 
 ### Meta Conversions API (Server-Side)
 
-For best results, Meta recommends sending events both client-side (Pixel) and server-side (CAPI). The server-side component is covered in the gtm-server-side-tagging-guide skill. Key point: include an `event_id` parameter in both the Pixel event and the CAPI event for deduplication.
+Meta Conversions API (CAPI) is mandatory for maintaining signal quality — client-side Pixel alone is no longer sufficient due to browser restrictions and iOS privacy changes. Implement both client-side (Pixel) and server-side (CAPI) for redundant event matching. The server-side component is covered in the gtm-server-side-tagging-guide skill. Key point: include an `event_id` parameter in both the Pixel event and the CAPI event for deduplication.
 
 ```html
 <script>

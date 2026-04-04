@@ -452,6 +452,24 @@ MIGRATION: PMAX -> STANDARD SHOPPING (switching back)
 +-- After 4 weeks: Evaluate, potentially pause PMax
 ```
 
+## 2026 Updates: PMax Negative Keywords
+
+- **Campaign-level negative keywords** are now fully supported in PMax (API v20+). No need to use brand exclusion lists as a workaround — add negatives directly to PMax campaigns via `google_ads_mutate` Recipe #7.
+- **Search term reporting** now available for PMax (API v21+) — use `search_term_view` with `PERFORMANCE_MAX` filter to see which queries PMax is serving.
+- **`url_expansion_opt_out`** was removed in API v22 — this parameter no longer exists.
+- **Smart Bidding Exploration** (v21+): An optional signal that lets Smart Bidding test broader traffic to find new converting segments. Can be enabled per campaign.
+
+### GAQL: Check Existing PMax Negative Keywords
+
+```sql
+SELECT campaign.name, campaign_criterion.keyword.text,
+    campaign_criterion.keyword.match_type,
+    campaign_criterion.negative
+FROM campaign_criterion
+WHERE campaign.advertising_channel_type = 'PERFORMANCE_MAX'
+AND campaign_criterion.negative = TRUE
+```
+
 ## Tools Reference
 
 | Action | Tool | Recipe/Query |

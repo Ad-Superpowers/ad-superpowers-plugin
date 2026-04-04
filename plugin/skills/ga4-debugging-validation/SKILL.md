@@ -12,6 +12,7 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Debugging & Validation Guide
 
 Complete guide for debugging GA4 implementations and ensuring data quality.
+
 ## GA4 DebugView Setup
 
 ```
@@ -44,6 +45,7 @@ NOTE:
 ├── Extension must be ON
 ├── Can take 1-2 minutes for device to appear
 └── Multiple devices may be visible
+
 METHOD 2: GTM PREVIEW MODE
 ───────────────────────────
 1. Open GTM → Preview
@@ -57,6 +59,7 @@ METHOD 2: GTM PREVIEW MODE
    └── GA4 DebugView
 
 ADVANTAGE: See GTM tag firing + GA4 simultaneously
+
 METHOD 3: DEBUG PARAMETER
 ──────────────────────────
 Add parameter to URL:
@@ -70,6 +73,7 @@ OR in GTM tag configuration:
 
 OR via dataLayer:
 gtag('config', 'G-XXXXXXXXXX', { 'debug_mode': true });
+
 METHOD 4: MOBILE APP DEBUGGING
 ───────────────────────────────
 iOS:
@@ -108,7 +112,7 @@ EVENT COLOR CODES:
 Green     → Automatically collected events (first_visit, session_start)
 Blue      → Enhanced Measurement events (scroll, click, etc.)
 Purple    → Custom events (your implementation)
-Yellow    → Conversions (key events)
+Yellow    → Key Events (marked as conversions)
 Red       → Errors or issues
 
 CHECKING EVENT PARAMETERS:
@@ -246,12 +250,14 @@ dataLayer.push({
   event: 'test_event',
   test_param: 'test_value'
 });
+
 ELEMENTS TAB:
 ─────────────
 ├── Verify GTM container snippet is present
-├── Check for gtag.js or analytics.js conflicts
+├── Check for gtag.js conflicts (analytics.js / Universal Analytics fully retired July 2024)
 ├── Inspect data attributes on elements
 └── Check consent management implementation
+
 APPLICATION TAB:
 ────────────────
 ├── Cookies: Check _ga, _gid cookies
@@ -272,7 +278,7 @@ DAILY CHECKS:
 ├─────────────────────────┼──────────────────────────────────────────┤
 │ Events coming in        │ Realtime report > 0 users                │
 ├─────────────────────────┼──────────────────────────────────────────┤
-│ Key events tracking     │ Conversions report has data              │
+│ Key events tracking     │ Key Events report has data               │
 ├─────────────────────────┼──────────────────────────────────────────┤
 │ E-commerce data         │ Monetization report has revenue          │
 ├─────────────────────────┼──────────────────────────────────────────┤
@@ -302,7 +308,7 @@ SIGNIFICANT DEVIATION THRESHOLDS:
 ├── Users: > 30% difference vs previous week
 ├── Sessions: > 30% difference
 ├── Pageviews: > 30% difference
-├── Conversions: > 20% difference
+├── Key Events: > 20% difference
 ├── Revenue: > 20% difference
 └── Bounce rate: > 10 percentage points
 
@@ -341,6 +347,7 @@ CHECK:
 ├── No unexpected event names
 ├── Event counts in expected range
 └── No events with 0 users (ghost events)
+
 EXPLORATION 2: PARAMETER FILL RATE
 ───────────────────────────────────
 Technique: Free form
@@ -353,6 +360,7 @@ Setup:
 ├── Filter: Specific event type
 
 Note: Parameter fill rate requires BigQuery or calculated metric
+
 EXPLORATION 3: ECOMMERCE FUNNEL VALIDATION
 ───────────────────────────────────────────
 Technique: Funnel exploration
@@ -370,6 +378,7 @@ RED FLAGS:
 ├── 0% completion rate → broken tracking
 ├── Completion > 100% → sequence issues
 └── Large gaps → missing events
+
 EXPLORATION 4: SOURCE/MEDIUM QUALITY
 ─────────────────────────────────────
 Technique: Free form
@@ -424,16 +433,19 @@ GA4 IMPLEMENTATION AUDIT
 ├── [ ] Currency correct
 └── [ ] Items array populated
 
-[ ] CONVERSIONS
-├── [ ] Key events marked
-├── [ ] Conversion counting correct
+[ ] KEY EVENTS
+├── [ ] Key events marked in GA4 Admin
+├── [ ] Key event counting correct
 ├── [ ] Attribution settings correct
 └── [ ] Google Ads import (if linked)
 
 [ ] USER TRACKING
 ├── [ ] user_id correctly implemented (if needed)
 ├── [ ] User properties correctly set
-├── [ ] Consent mode working
+├── [ ] Consent Mode v2 implemented (required for EEA since March 2024)
+│   ├── [ ] analytics_storage signal firing correctly
+│   ├── [ ] ad_storage signal firing correctly
+│   └── [ ] Modeled conversions visible in GA4 (confirms v2 working)
 └── [ ] PII compliance (no PII in data)
 
 [ ] GTM CONFIGURATION
@@ -450,6 +462,7 @@ GA4 IMPLEMENTATION AUDIT
 ├── [ ] BigQuery linked (optional)
 └── [ ] Third-party tools working
 ```
+
 ## Automated Testing Setup
 
 ```
@@ -514,6 +527,7 @@ test('GA4 purchase fires with correct revenue', async ({ page }) => {
   // Complete checkout flow...
   // Verify purchase event with transaction_id and value
 });
+
 CYPRESS TEST EXAMPLE:
 ─────────────────────
 // cypress/support/commands.ts
@@ -543,10 +557,11 @@ describe('GA4 Tracking', () => {
     });
   });
 });
+
 CI/CD INTEGRATION:
 ──────────────────
 # .github/workflows/ga4-tests.yml
-name: GA4 Tracking Tests
+name: ga4-debugging-validation
 
 on:
   push:

@@ -4,7 +4,7 @@ description: |
   Google Ads Scripts library with top 15 automation scripts for monitoring, optimization, and reporting. Use when: setting up account monitoring scripts, automating bid adjustments, implementing budget pacing alerts, detecting performance anomalies, automating N-gram analysis, or checking for broken URLs. Do NOT use for: manual campaign optimization (use performance-troubleshooter), keyword strategy planning (use keyword-strategy-planner), or Quality Score improvement (use quality-score-optimizer).
 metadata:
   author: "AdSuperpowers"
-  version: "1.0.0"
+  version: "1.1.0"
   platform: "google_ads"
   phase: "fase-4-ecommerce-advanced"
 compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
@@ -12,6 +12,31 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Google Ads Scripts Library
 
 Complete library with 15 production-ready Google Ads Scripts for automation, monitoring, and optimization.
+
+## 2026 Context: Scripts vs. MCP Tools
+
+Google Ads Scripts run inside the Google Ads UI and use the legacy AdsApp object. They are useful for scheduled, account-level automation that runs without human intervention. For ad-hoc analysis and conversational workflows, use the AdSuperpowers MCP tools instead:
+
+```
+# Pull anomaly data via MCP (no script required):
+google_ads_run_gaql(query="
+  SELECT campaign.name, metrics.cost_micros,
+         metrics.conversions, metrics.cost_per_conversion
+  FROM campaign
+  WHERE segments.date DURING YESTERDAY
+    AND campaign.status = 'ENABLED'
+  ORDER BY metrics.cost_micros DESC
+  LIMIT 20
+")
+
+# Scripts are best for: unattended scheduled alerts,
+# automated pausing/bidding, and spreadsheet exports.
+# MCP is best for: analysis, diagnosis, recommendations.
+```
+
+**Smart Bidding note (2026):** Scripts that manually adjust bids (e.g., device/dayparting modifiers) can conflict with Smart Bidding signals. Only apply manual bid adjustments to campaigns using Manual CPC or non-Smart strategies. For Smart Bidding campaigns, use budget and target adjustments instead.
+
+**AI Max (2026):** Search campaigns with AI Max subtype use fully automated query matching — search term scripts still work but you cannot add exact/phrase negatives via script directly. Use campaign-level negative keyword lists.
 
 ## Scripts Overview
 
@@ -351,6 +376,18 @@ function sendPacingReport(report, dayOfMonth, daysInMonth) {
 }
 ```
 
+
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+
+
+
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+
+
 ## Script 5: Low Performer Pauser
 
 ```javascript
@@ -362,6 +399,18 @@ function sendPacingReport(report, dayOfMonth, daysInMonth) {
  *
  * WARNING: This script makes changes!
  * Test first with DRY_RUN = true
+ *
+ * SMART BIDDING NOTE (2026):
+ * Pausing keywords in Smart Bidding campaigns reduces
+ * the data pool for bid optimization. Prefer raising
+ * tCPA/lowering tROAS targets instead of pausing.
+ * Use this script primarily for Manual CPC campaigns
+ * or keywords with zero impressions for 30+ days.
+ *
+ * AI MAX NOTE (2026):
+ * Keywords in AI Max Search campaigns use automated
+ * query matching — pausing keywords may have limited
+ * effect. Monitor search term insights instead.
  *
  * Schedule: Weekly
  */
@@ -516,6 +565,13 @@ function sendPauseReport(keywords, ads) {
   MailApp.sendEmail(CONFIG.EMAIL, subject, body);
 }
 ```
+
+
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+
+
 ## Additional Scripts Quick Reference
 
 ```

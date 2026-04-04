@@ -12,9 +12,9 @@ compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # CAPI Implementation Guide
 
-Guide for implementing Meta's Conversions API (CAPI) for server-side tracking.
+Guide for implementing Meta's Conversions API (CAPI) for server-side tracking. CAPI is practically mandatory for any account spending >€1k/month — without it, you lose **20-40% of conversion signals** (higher in markets with strong privacy regulations or high iOS share). Target Event Match Quality (EMQ) of **6.0+**, with 7+ for Purchase events.
 
-## Why CAPI Is Essential
+## Why CAPI Is Mandatory (Not Optional)
 
 ```
 Browser Tracking Challenges:
@@ -196,7 +196,7 @@ def send_capi_event(event_name, email, event_id, value=None):
         "access_token": access_token
     }
 
-    url = f"https://graph.facebook.com/v18.0/{pixel_id}/events"
+    url = f"https://graph.facebook.com/v25.0/{pixel_id}/events"
     response = requests.post(url, json=payload)
     return response.json()
 ```
@@ -391,6 +391,16 @@ Direct API Route:
 3. Hash all PII (SHA256)
 4. Include event_id for dedup
 5. Send to Graph API endpoint
+```
+
+## MCP: Verify CAPI Health
+
+```python
+# Check pixel/CAPI event match quality and diagnostics via meta_query
+meta_query(account_id="act_XXXXX", entity="pixels", fields=["id","name","last_fired_time","is_unavailable","diagnostics","event_stats"])
+
+# Review recent ad performance — if ROAS looks lower than expected, check EMQ first
+meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","spend","actions","cost_per_action_type","website_purchase_roas"], date_range="last_7d")
 ```
 
 ## Maintenance

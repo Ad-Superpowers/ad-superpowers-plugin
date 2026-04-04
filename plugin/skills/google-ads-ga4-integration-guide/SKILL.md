@@ -14,6 +14,37 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # GA4 Integration Guide
 
 Complete guide for linking Google Ads with Google Analytics 4 for better audience targeting, conversion attribution, and cross-platform insights.
+
+
+
+## GAQL: Verify GA4 Conversion Import + Attribution
+
+Use `google_ads_run_gaql` to check which conversions are imported and how they are attributed:
+
+```sql
+SELECT conversion_action.name, conversion_action.status,
+    conversion_action.type, conversion_action.category,
+    conversion_action.attribution_model_settings.attribution_model,
+    conversion_action.counting_type,
+    metrics.conversions, metrics.all_conversions
+FROM conversion_action
+WHERE conversion_action.status = 'ENABLED'
+ORDER BY metrics.all_conversions DESC
+LIMIT 50
+```
+
+```sql
+-- Campaign performance with GA4-imported conversions
+SELECT campaign.name, campaign.advertising_channel_type,
+    metrics.impressions, metrics.clicks, metrics.cost_micros,
+    metrics.conversions, metrics.conversions_value,
+    metrics.all_conversions
+FROM campaign
+WHERE segments.date DURING LAST_30_DAYS
+AND campaign.status = 'ENABLED'
+ORDER BY metrics.conversions DESC
+```
+
 ## Google Ads ↔ GA4 Linking
 
 ### Linking Setup
@@ -197,6 +228,9 @@ SYNC TIMING:
 □ Up to 24 hours delay possible
 □ Historical data: not retroactive
 ```
+
+
+
 ## GA4 Audiences to Google Ads
 
 ### Audience Export Setup
@@ -547,6 +581,12 @@ After cost import you can calculate:
 ├── ROAS = Revenue / Cost
 └── CPM = (Cost / Impressions) * 1000
 ```
+
+
+
+
+
+
 ## Output: GA4 Integration Checklist
 
 ```markdown

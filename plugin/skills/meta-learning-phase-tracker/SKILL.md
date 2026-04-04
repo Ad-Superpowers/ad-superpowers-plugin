@@ -20,13 +20,15 @@ Analyzer for Meta Ads learning phase management. Predicts edit impact and advise
 
 A period during which Meta's algorithm learns who to target and how to bid. Ad sets show "Learning" status until sufficient data has been collected.
 
-### Exit Criteria (2025 Update)
+### Exit Criteria (2026 Update)
 
 ```
 Traditional rule: 50 optimization events per ad set per week
 
-2025 Update: Some accounts see 10 conversions over 3 days
-as the new threshold (Meta is testing this).
+2026 Update: Some accounts see 10 conversions over 3 days
+as the new threshold (Meta continues to refine this).
+With ASC campaigns (unified structure since v25.0), the
+algorithm has more flexibility — combined ad sets learn faster.
 
 Practical rule of thumb: Plan for 50/week, but monitor
 whether faster exit is possible.
@@ -61,10 +63,10 @@ whether faster exit is possible.
 | Budget <20% change | Low | Usually no |
 | Ad name change | None | No |
 | Campaign name change | None | No |
-| Adding new ad (2025) | Variable | Sometimes not anymore |
+| Adding new ad (2026) | Variable | Sometimes not anymore |
 | Minor copy tweak | Low | Usually no |
 
-### 2025 Updates
+### 2026 Updates
 
 Meta now shows messages like:
 > "You can increase your budget to €[X] without restarting learning"
@@ -292,6 +294,13 @@ POST-CHANGE MONITORING:
 - Day 1-3: [what to monitor]
 - Day 4-7: [evaluation criteria]
 - Action triggers: [when to intervene]
+```
+
+## MCP: Check Learning Phase Status
+
+```python
+# Get learning phase status for all active ad sets
+meta_query(account_id="act_XXXXX", entity="adsets", fields=["id","name","status","learning_phase_status","daily_budget","optimization_goal","bid_strategy"], filters={"effective_status":["ACTIVE","LEARNING","LEARNING_LIMITED"]})
 ```
 
 ## Common Scenarios

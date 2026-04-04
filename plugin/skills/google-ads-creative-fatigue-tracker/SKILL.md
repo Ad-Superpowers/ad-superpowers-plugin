@@ -28,7 +28,9 @@ Detect and prevent creative fatigue on Google Ads across Display, Performance Ma
 │  ──────────                ──────────               ─────────                │
 │                                                                              │
 │  Fatigue onset: 4-8 weeks  Fatigue onset: 3-7 days  Fatigue onset: ~14 days │
-│  Indicator: Asset Ratings  Indicator: Frequency     Indicator: Frequency    │
+│  Indicator: Ad Strength    Indicator: Frequency     Indicator: Frequency    │
+│  (PMax); Asset Labels      (Display still uses                               │
+│  (Display/RDA only)        performance labels)                               │
 │  CTR decline: Very gradual CTR decline: Cliff       CTR decline: Gradual    │
 │  (~0.5%/week)              (-20-25%/day)            (~2%/day)               │
 │                                                                              │
@@ -58,16 +60,24 @@ Invoke when user mentions:
 
 ## Google Ads Fatigue Detection: Asset Ratings
 
-### Understanding Asset Ratings (The Primary Indicator)
+### Understanding Asset Ratings (Primary Indicator for Display/RDA — Removed for PMax)
 
-Unlike Meta/TikTok which use frequency, Google Ads uses **asset performance ratings**:
+Google Ads uses **asset performance ratings** for Display (RDA) campaigns. Note the critical API change:
 
 ```
 GOOGLE ADS ASSET RATING SYSTEM
 ══════════════════════════════
 
-RATING MEANINGS:
-───────────────
+⚠️ CRITICAL API CHANGE (v22, 2025):
+   Asset performance labels (Best/Good/Low/Pending) were REMOVED for
+   Performance Max campaigns in API v22. They are still available for
+   Display (RDA) campaigns.
+
+   For PMax fatigue detection, use PERFORMANCE TRENDS instead of asset labels.
+   See "PMax Fatigue Detection" section below.
+
+RATING MEANINGS (Display/RDA only):
+─────────────────────────────────────
 ┌─────────────┬─────────────────────────────────────────────────────────────┐
 │ Rating      │ What It Means                                               │
 ├─────────────┼─────────────────────────────────────────────────────────────┤
@@ -77,7 +87,7 @@ RATING MEANINGS:
 │ Pending     │ Insufficient data - WAIT (needs 2-4 weeks minimum)          │
 └─────────────┴─────────────────────────────────────────────────────────────┘
 
-⚠️ CRITICAL: Ratings are RELATIVE within your asset group
+⚠️ Ratings are RELATIVE within your asset group
    "Low" doesn't mean bad in absolute terms - just worse than others
 
 ⚠️ Minimum assets needed for meaningful ratings: 3-5 per type
@@ -92,21 +102,54 @@ RATING MEANINGS:
 PMAX CREATIVE FATIGUE DETECTION
 ═══════════════════════════════
 
-SIGNAL 1: ASSET RATING DEGRADATION (Primary)
-────────────────────────────────────────────
-Track changes over time:
-├── "Best" → "Good": Minor concern, monitor
-├── "Good" → "Low": Warning signal
-├── Multiple assets shifting to "Low": Fatigue likely
-└── All headlines/images at "Low": Critical - immediate refresh
+⚠️ NOTE: Asset performance labels (Best/Good/Low) were REMOVED for PMax
+   in API v22. For PMax, rely on performance trends and search term data.
 
-SIGNAL 2: PERFORMANCE TRENDS (Secondary)
-────────────────────────────────────────
+SIGNAL 1: PERFORMANCE TRENDS (Primary for PMax)
+────────────────────────────────────────────────
 Weekly tracking:
 ├── CTR decline: >10% week-over-week for 2+ weeks
 ├── Conv Rate decline: >15% from baseline
 ├── CPM rise: >20% without competition changes
 └── ROAS decline: >15% sustained over 2+ weeks
+
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    segments.week,
+    metrics.impressions,
+    metrics.clicks,
+    metrics.ctr,
+    metrics.cost_micros,
+    metrics.conversions,
+    metrics.conversions_value
+  FROM campaign
+  WHERE campaign.advertising_channel_type = 'PERFORMANCE_MAX'
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY campaign.name, segments.week ASC
+")
+
+SIGNAL 2: SEARCH TERM QUALITY (v21+ PMax feature)
+────────────────────────────────────────────────────
+Declining search query quality = early creative/signal fatigue signal:
+
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    campaign_search_term_view.search_term,
+    campaign_search_term_view.status,
+    metrics.impressions,
+    metrics.clicks,
+    metrics.cost_micros,
+    metrics.conversions
+  FROM campaign_search_term_view
+  WHERE campaign.advertising_channel_type = 'PERFORMANCE_MAX'
+    AND segments.date DURING LAST_14_DAYS
+    AND metrics.cost_micros > 0
+  ORDER BY metrics.cost_micros DESC
+  LIMIT 100
+")
+→ Surge in irrelevant search terms + declining conv rate = creative/audience signal fatigue
 
 SIGNAL 3: ASSET GROUP PERFORMANCE
 ─────────────────────────────────
@@ -148,12 +191,28 @@ FATIGUE TIMELINE (PMAX):
 DISPLAY / RDA CREATIVE FATIGUE DETECTION
 ════════════════════════════════════════
 
-SIGNAL 1: ASSET PERFORMANCE LABELS
-──────────────────────────────────
-Same rating system as PMax:
+SIGNAL 1: ASSET PERFORMANCE LABELS (Still available for Display/RDA)
+──────────────────────────────────────────────────────────────────────
+Rating system for Display (RDA) — unlike PMax, still active for Display:
 ├── Best/Good/Low/Pending
 ├── Check Ads → Assets → View asset details
 └── Replace "Low" after 30+ days consistent
+
+google_ads_run_gaql(query="
+  SELECT
+    ad_group.name,
+    campaign.name,
+    ad_group_ad.ad.responsive_display_ad.headlines,
+    asset_group_asset.performance_label,
+    metrics.impressions,
+    metrics.ctr,
+    metrics.cost_micros,
+    metrics.conversions
+  FROM ad_group_ad
+  WHERE campaign.advertising_channel_type = 'DISPLAY'
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY metrics.cost_micros DESC
+")
 
 SIGNAL 2: AD PERFORMANCE METRICS
 ────────────────────────────────
@@ -219,6 +278,18 @@ YOUTUBE FATIGUE TIMELINE:
 ├── Week 12+: Most videos show some fatigue
 └── Typical video lifespan: 8-16 weeks
 ```
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
 
 ## Prevention Strategies
 
@@ -505,7 +576,10 @@ CREATIVE FATIGUE: GOOGLE ADS vs OTHERS
 │ Factor              │ Google Ads  │ Meta        │ TikTok      │
 ├─────────────────────┼─────────────┼─────────────┼─────────────┤
 │ Fatigue onset       │ 4-8 weeks   │ ~14 days    │ 3-7 days    │
-│ Primary indicator   │ Asset Rating│ Frequency   │ Frequency   │
+│ Primary indicator   │ Ad Strength │ Frequency   │ Frequency   │
+│                     │ (PMax v22+) │             │             │
+│                     │ Asset Label │             │             │
+│                     │ (Display)   │             │             │
 │ Decline pattern     │ Very gradual│ Gradual     │ Cliff/sudden│
 │ Refresh frequency   │ Monthly     │ Bi-weekly   │ Every 3-5d  │
 │ Assets needed       │ 15+ per AG  │ 4-6 per set │ 8-12 per    │
@@ -520,6 +594,11 @@ CREATIVE FATIGUE: GOOGLE ADS vs OTHERS
 When diagnosing Google Ads creative fatigue, provide:
 
 ```
+
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+
 
 ## Monitoring Checklist
 

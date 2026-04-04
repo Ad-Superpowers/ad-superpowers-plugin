@@ -4,7 +4,7 @@ description: |
   Google Display Network campaign optimization. Use when: (1) Responsive Display Ads setup, (2) Display placement targeting, (3) Display audience strategy, (4) Banner formats and specs, (5) Viewability optimization, (6) Brand safety configuration. Do NOT use for: search campaign optimization (use search-campaign-optimizer), Performance Max setup (use pmax-strategy-builder), or bid strategy selection (use bid-strategy-selector). Triggers: display, banner, gdn, responsive display, placements, display network, remarketing display, programmatic.
 metadata:
   author: "AdSuperpowers"
-  version: "1.0.0"
+  version: "1.1.0"
   platform: "google_ads"
   phase: "fase-5-full-funnel-automation"
 compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
@@ -12,6 +12,13 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Display Campaign Optimizer
 
 Complete guide for Google Display Network (GDN) campaigns - from Responsive Display Ads to placement targeting and viewability optimization.
+
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
+
 ## Display Network Overview
 
 ### What is the Google Display Network?
@@ -303,17 +310,19 @@ Highest value, lowest volume
 ├── Channel subscribers
 └── Video engagers (likes, comments)
 
-LAYER 2: SIMILAR AUDIENCES
-──────────────────────────
-Based on first-party data
+LAYER 2: OPTIMIZED TARGETING
+─────────────────────────────
+Expands beyond selected audiences using Google AI
 
-□ Similar to Converters
-├── Similar to buyers
+□ Based on Converters list
+├── Add converter list as targeting signal
+├── Optimized Targeting finds similar users automatically
 └── High conversion potential
 
-□ Similar to Cart Abandoners
+□ Based on Cart Abandoners
 ├── High purchase intent signals
-└── Mid-funnel targeting
+├── Google expands to users with similar patterns
+└── Monitor via "Targeting expansion" report
 
 LAYER 3: IN-MARKET AUDIENCES
 ────────────────────────────
@@ -399,6 +408,94 @@ Remarketing: Audience only (follow users everywhere)
 Prospecting: Audience + Topics/Keywords
 Premium: Placement targeting + Audience
 ```
+
+
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+## MCP Tool Integration
+
+```
+STEP 1: Display campaign performance overview
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    campaign.status,
+    campaign.bidding_strategy_type,
+    metrics.impressions,
+    metrics.clicks,
+    metrics.ctr,
+    metrics.average_cpc,
+    metrics.cost_micros,
+    metrics.conversions,
+    metrics.cost_per_conversion,
+    metrics.active_view_viewability
+  FROM campaign
+  WHERE campaign.advertising_channel_type = 'DISPLAY'
+    AND campaign.status = 'ENABLED'
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY metrics.cost_micros DESC
+")
+
+STEP 2: Placement performance (find non-converting placements)
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    detail_placement_view.display_name,
+    detail_placement_view.placement,
+    detail_placement_view.placement_type,
+    metrics.impressions,
+    metrics.clicks,
+    metrics.cost_micros,
+    metrics.conversions
+  FROM detail_placement_view
+  WHERE campaign.advertising_channel_type = 'DISPLAY'
+    AND segments.date DURING LAST_30_DAYS
+    AND metrics.impressions > 500
+  ORDER BY metrics.cost_micros DESC
+  LIMIT 100
+")
+
+STEP 3: Audience segment performance
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    ad_group.name,
+    ad_group_criterion.type,
+    ad_group_criterion.status,
+    metrics.impressions,
+    metrics.clicks,
+    metrics.conversions,
+    metrics.cost_micros,
+    metrics.cost_per_conversion
+  FROM ad_group_criterion
+  WHERE campaign.advertising_channel_type = 'DISPLAY'
+    AND ad_group_criterion.status = 'ENABLED'
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY metrics.cost_micros DESC
+  LIMIT 100
+")
+
+STEP 4: RDA asset performance
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    ad_group.name,
+    ad_group_ad.ad.name,
+    ad_group_ad.status,
+    metrics.impressions,
+    metrics.clicks,
+    metrics.conversions,
+    metrics.cost_micros
+  FROM ad_group_ad
+  WHERE campaign.advertising_channel_type = 'DISPLAY'
+    AND ad_group_ad.ad.type = 'RESPONSIVE_DISPLAY_AD'
+    AND ad_group_ad.status = 'ENABLED'
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY metrics.cost_micros DESC
+")
+```
+
 ## Bidding & Budget
 
 ### Bid Strategies
@@ -714,7 +811,7 @@ BY INDUSTRY:
 ### Prospecting
 - [ ] In-Market: [Categories]
 - [ ] Custom Audiences: [Keywords/URLs]
-- [ ] Similar Audiences: [Based on]
+- [ ] Optimized Targeting: [Enabled/Disabled, seed audiences]
 
 ## Creative Assets
 ### Responsive Display Ads

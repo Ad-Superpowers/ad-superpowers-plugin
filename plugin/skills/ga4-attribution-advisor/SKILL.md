@@ -391,6 +391,51 @@ Solution:
 └── Organic value is often higher than DDA shows
 ```
 
+## New in 2026: Per-Conversion Attribution Settings
+
+```
+PER-CONVERSION ATTRIBUTION (BETA, 2026)
+=========================================
+
+WHAT IT IS:
+├── Override the property-level attribution model for individual key events
+├── Location: Admin → Key Events → [event name] → Attribution Settings
+└── Available as a beta feature — check Admin for availability
+
+USE CASES:
+┌─────────────────────────────┬────────────────────────────────────────────┐
+│ Key Event                   │ Recommended Override                       │
+├─────────────────────────────┼────────────────────────────────────────────┤
+│ purchase (e-commerce)       │ Data-driven (ML, full journey credit)      │
+│ generate_lead (B2B)         │ Last click (simpler for sales team)        │
+│ sign_up (SaaS trial)        │ First click (credit awareness campaigns)   │
+│ newsletter_signup           │ Last click (simplest, low stakes)          │
+└─────────────────────────────┴────────────────────────────────────────────┘
+
+IMPORTANT:
+├── Does NOT affect Google Ads Smart Bidding (uses its own DDA model)
+├── Affects GA4 reports and Advertising → Attribution reports
+├── Changes are NOT retroactive
+└── Useful when different stakeholders need different attribution logic
+
+ANALYTICS ADVISOR INTEGRATION:
+├── The Gemini AI in GA4 will surface attribution anomalies proactively
+├── Example: "Organic search is getting more first-click credit this month"
+└── Check: GA4 → Reports → Overview → AI Insights panel
+```
+
+## MCP Tool: Run Attribution Comparison
+
+```python
+# Compare conversions by channel for attribution analysis
+ga4_report(
+    property_id="YOUR_PROPERTY_ID",
+    metrics=["keyEvents", "keyEventRate", "totalRevenue"],
+    dimensions=["sessionDefaultChannelGroup", "date"],
+    date_range={"start_date": "90daysAgo", "end_date": "yesterday"}
+)
+```
+
 ## Output: Attribution Analysis Template
 
 ```markdown

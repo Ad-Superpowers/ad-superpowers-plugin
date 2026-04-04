@@ -159,15 +159,14 @@ BUDGET & BIDDING SCORING
 ### Data Retrieval
 
 ```sql
--- Asset performance per asset group
+-- Asset list per asset group (performance_label NOT available for PMax since v22)
 SELECT asset_group.name, asset_group_asset.field_type,
-    asset.name, asset.type, asset.text_asset.text,
-    asset_group_asset.performance_label
+    asset.name, asset.type, asset.text_asset.text
 FROM asset_group_asset
 ```
 
 ```sql
--- Ad Strength per asset group
+-- Ad Strength per asset group (still available for PMax)
 SELECT asset_group.name, asset_group.ad_strength,
     asset_group.status
 FROM asset_group
@@ -179,20 +178,17 @@ FROM asset_group
 ASSET QUALITY SCORING
 =========================
 
-[ ] Ad Strength (8 points)
-+-- All asset groups "Excellent" -> 8/8
-+-- Mix of "Excellent" and "Good" -> 6/8
-+-- All "Good" -> 5/8
-+-- Mix with "Average" -> 3/8
-+-- Any "Poor" -> 1/8
-+-- All "Poor" or "Incomplete" -> 0/8
+⚠️ NOTE: asset_group_asset.performance_label was REMOVED for Performance Max
+   campaigns in API v22 (2025). Ad Strength (asset_group.ad_strength) remains
+   available and is now the primary asset quality signal for PMax.
 
-[ ] Performance Labels (6 points)
-+-- >50% assets "Best" or "Good" -> 6/6
-+-- 30-50% "Best"/"Good" -> 4/6
-+-- <30% "Best"/"Good" -> 2/6
-+-- >30% "Low" -> 1/6
-+-- No performance data (insufficient data) -> 3/6
+[ ] Ad Strength (14 points — replaces Performance Labels for PMax)
++-- All asset groups "Excellent" -> 14/14
++-- Mix of "Excellent" and "Good" -> 10/14
++-- All "Good" -> 8/14
++-- Mix with "Average" -> 5/14
++-- Any "Poor" -> 2/14
++-- All "Poor" or "Incomplete" -> 0/14
 
 [ ] Asset Completeness (6 points)
 +-- All asset types at maximum -> 6/6
@@ -207,29 +203,28 @@ ASSET QUALITY SCORING
 +-- Below minimums -> 0/6
 ```
 
-### Asset Replacement Decision Matrix
+### Asset Quality Decision Matrix
 
-| Performance Label | Asset Age | Action |
-|------------------|-----------|-------|
-| Best | Any | Keep, create variations |
-| Good | <30 days | Let it run |
-| Good | >30 days | Consider new variation |
-| Low | <14 days | Still in learning |
-| Low | 14-30 days | Replace if Ad Strength drops |
-| Low | >30 days | Replace |
-| Pending | <7 days | Normal, wait |
-| Pending | >7 days | Check if asset is approved |
+| Ad Strength | Campaign Age | Action |
+|-------------|-------------|-------|
+| Excellent | Any | Keep structure, add more asset variety |
+| Good | <30 days | Let it run, monitor trends |
+| Good | >30 days | Add new headline/image angles |
+| Average | Any | Review and add more diverse assets |
+| Poor | Any | Immediate asset overhaul needed |
+| Incomplete | Any | Add missing required asset types |
 
 ## 4. Search Term Quality Audit (15 points)
 
 ### Data Retrieval
 
 ```sql
--- PMax search terms
-SELECT campaign.name, search_term_view.search_term,
+-- PMax search terms (use campaign_search_term_view, NOT search_term_view — v21+)
+SELECT campaign.name, campaign_search_term_view.search_term,
+    campaign_search_term_view.status,
     metrics.impressions, metrics.clicks,
     metrics.cost_micros, metrics.conversions
-FROM search_term_view
+FROM campaign_search_term_view
 WHERE campaign.advertising_channel_type = 'PERFORMANCE_MAX'
 AND segments.date DURING LAST_30_DAYS
 ORDER BY metrics.cost_micros DESC
@@ -256,10 +251,12 @@ SEARCH TERM QUALITY SCORING
 +-- No Brand Search campaign active -> -2 points
 
 [ ] Negative keyword hygiene (5 points)
-+-- Active negative keyword list for PMax -> 3/5
++-- Campaign-level negatives active on PMax (v20+ feature) -> 3/5
 +-- Regularly updated (last 30 days) -> +2/5
 +-- No negatives set -> 0/5
 +-- Irrelevant terms in report without negatives -> 0/5
++-- Note: Campaign-level negatives for PMax added in API v20 (2024)
++--       Account-level negative keyword lists also apply to PMax
 ```
 
 ### Check Existing Negatives
@@ -278,7 +275,19 @@ AND campaign.advertising_channel_type = 'PERFORMANCE_MAX'
 
 ### Data Retrieval
 
-PMax distributes budget across Search, Shopping, Display, YouTube, Discover, Gmail. Direct channel-level reporting is limited in GAQL, but you can infer from:
+PMax distributes budget across Search, Shopping, Display, YouTube, Discover, Gmail. Use `segments.ad_network_type` for direct channel breakdown (v22+):
+
+```sql
+-- PMax performance by network/channel (v22+ ad_network_type breakdown)
+SELECT campaign.name, segments.ad_network_type,
+    metrics.impressions, metrics.clicks, metrics.cost_micros,
+    metrics.conversions, metrics.conversions_value,
+    metrics.view_through_conversions
+FROM campaign
+WHERE campaign.advertising_channel_type = 'PERFORMANCE_MAX'
+AND segments.date DURING LAST_30_DAYS
+ORDER BY metrics.cost_micros DESC
+```
 
 ```sql
 -- PMax campaign-level metrics (including conv action breakdown)
