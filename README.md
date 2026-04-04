@@ -2,7 +2,7 @@
 
 AI-powered advertising intelligence across 8 platforms. Manage, analyze, and optimize your ad campaigns through natural language in Claude Code and Cowork.
 
-**98 expert skills** | **26 workflow commands** | **6 specialized agents** | **29 MCP tools**
+**98 expert skills** | **26 workflow commands** | **9 specialized agents** | **29 MCP tools**
 
 ## Platforms
 
@@ -68,6 +68,9 @@ Claude automatically delegates to the right agent based on your task:
 | **budget-optimizer** | Cross-platform budget allocation and pacing | "optimize my budget", "where should I spend more" |
 | **reporting-agent** | Structured performance reports | "weekly report", "monthly summary" |
 | **seo-sea-analyst** | Organic vs paid search analysis | "keyword overlap", "SEO vs SEA" |
+| **gtm-specialist** | GTM container audits and tracking validation | "audit my GTM", "check conversion tracking" |
+| **campaign-builder** | Campaign creation and ad duplication | "create a campaign", "duplicate winning ads" |
+| **audience-strategist** | Audience targeting and lookalike strategies | "audience overlap", "build lookalike audiences" |
 | **performance-marketing-agent** | General cross-platform strategy | Multi-platform analysis, strategy questions |
 
 ### Expert skills (auto-invoked)

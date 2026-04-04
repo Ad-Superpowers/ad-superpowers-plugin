@@ -4,6 +4,13 @@ description: Generates structured performance reports — weekly summaries, mont
 model: sonnet
 color: blue
 maxTurns: 25
+tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput
+skills:
+  - meta-benchmark-database
+  - google-ads-benchmark-database
+  - linkedin-benchmark-database
+  - tiktok-benchmark-database
+  - ga4-channel-groupings
 ---
 
 # Reporting Agent

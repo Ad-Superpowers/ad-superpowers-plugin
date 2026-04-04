@@ -2,6 +2,17 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [1.2.0] - 2026-04-04
+
+### Added
+
+- **3 new specialized agents** to cover tool gaps:
+  - `gtm-specialist` — GTM container audits, tracking validation, tag optimization
+  - `campaign-builder` — Campaign creation, ad duplication, account structuring
+  - `audience-strategist` — Audience targeting, lookalike strategies, overlap detection
+- Added `tools` field to all 9 agents (principle of least privilege per Anthropic best practices)
+- Added `skills` field to all 9 agents (injecting platform-specific expertise at startup)
+
 ## [1.1.0] - 2026-04-03
 
 ### Added

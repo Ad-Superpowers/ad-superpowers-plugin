@@ -4,6 +4,13 @@ description: Optimizes advertising budget allocation across platforms and campai
 model: sonnet
 color: green
 maxTurns: 20
+tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput
+skills:
+  - meta-scaling-calculator
+  - google-ads-scaling-calculator
+  - meta-bid-strategy-selector
+  - google-ads-bid-strategy-selector
+  - linkedin-bid-strategy-selector
 ---
 
 # Budget Optimizer

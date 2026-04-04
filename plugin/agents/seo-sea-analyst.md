@@ -4,6 +4,12 @@ description: Analyzes the interplay between organic search (SEO via Google Searc
 model: sonnet
 color: orange
 maxTurns: 20
+tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput
+skills:
+  - seo-sea-keyword-gap-analyzer
+  - gsc-performance-analyzer
+  - technical-seo-monitor
+  - google-ads-gaql-query-guide
 ---
 
 # SEO-SEA Analyst

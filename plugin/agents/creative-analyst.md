@@ -4,6 +4,12 @@ description: Analyzes creative performance, detects fatigue signals, and recomme
 model: sonnet
 color: purple
 maxTurns: 20
+tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput
+skills:
+  - meta-creative-fatigue-analyzer
+  - google-ads-creative-fatigue-tracker
+  - tiktok-creative-fatigue-tracker
+  - meta-creative-diversification-generator
 ---
 
 # Creative Analyst

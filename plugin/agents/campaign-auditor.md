@@ -4,6 +4,12 @@ description: Performs comprehensive campaign audits for Meta, Google Ads, Linked
 model: sonnet
 color: red
 maxTurns: 25
+tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput
+skills:
+  - meta-account-auditor
+  - google-ads-account-auditor
+  - linkedin-performance-troubleshooter
+  - attribution-reconciler
 ---
 
 # Campaign Auditor
