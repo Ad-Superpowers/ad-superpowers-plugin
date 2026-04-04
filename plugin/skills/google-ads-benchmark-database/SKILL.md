@@ -555,13 +555,6 @@ QUALITY SCORE       │ 1-4       │ 5-6       │ 7-8       │ 9-10
 - **Industry:** [Industry]
 - **Report Period:** [Date Range]
 - **Compared Against:** Industry Benchmarks 2024/2025
-
-
-
-See [benchmarks.md](references/benchmarks.md) for details.
-
-
-
 ## Priority Improvements
 
 ### High Priority (Below Average)

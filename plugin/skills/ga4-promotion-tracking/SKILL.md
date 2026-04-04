@@ -13,18 +13,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 
 Complete guide for tracking internal promotions, coupon codes, and sales campaigns in Google Analytics 4.
 
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## DataLayer Implementation
 
 ### view_promotion Event
@@ -135,30 +123,6 @@ document.querySelectorAll('.promo-banner').forEach(banner => {
 });
 ```
 
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
-
-
-See [benchmarks.md](references/benchmarks.md) for details.
-
-
-
 ## Coupon Custom Dimension Setup
 
 ```
@@ -241,8 +205,6 @@ ANALYSIS:
 +-- Compare CTR per creative_name
 +-- Track conversions per variant
 +-- Calculate statistical significance
-
-
 METHOD 2: USER PROPERTY FOR TEST GROUP
 ---------------------------------------
 // On page load, set test group
@@ -254,8 +216,6 @@ ADVANTAGES:
 +-- User-level tracking
 +-- Cross-session consistency
 +-- Easier to segment
-
-
 METHOD 3: GA4 + EXTERNAL A/B TOOL
 ----------------------------------
 +-- (Google Optimize is deprecated)
@@ -263,13 +223,6 @@ METHOD 3: GA4 + EXTERNAL A/B TOOL
 +-- Send experiment ID to GA4
 +-- Analyze in custom exploration
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Output: Promotion Analysis Report Template
 
 ```markdown

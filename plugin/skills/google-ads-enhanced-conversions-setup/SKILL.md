@@ -14,13 +14,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Enhanced Conversions Setup
 
 Complete guide for implementing Enhanced Conversions for better conversion attribution in a privacy-first world with first-party data and consent management.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Enhanced Conversions Overview
 
 ### What Are Enhanced Conversions?
@@ -662,18 +655,6 @@ TRIGGER:
 Event Name: purchase, form_submit, etc.
 Condition: user_data present
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
 
 ## Output: Enhanced Conversions Implementation Plan
 

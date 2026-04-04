@@ -14,13 +14,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # GA4 Integration Guide
 
 Complete guide for linking Google Ads with Google Analytics 4 for better audience targeting, conversion attribution, and cross-platform insights.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Google Ads ↔ GA4 Linking
 
 ### Linking Setup
@@ -204,13 +197,6 @@ SYNC TIMING:
 □ Up to 24 hours delay possible
 □ Historical data: not retroactive
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## GA4 Audiences to Google Ads
 
 ### Audience Export Setup
@@ -561,13 +547,6 @@ After cost import you can calculate:
 ├── ROAS = Revenue / Cost
 └── CPM = (Cost / Impressions) * 1000
 ```
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## Output: GA4 Integration Checklist
 
 ```markdown

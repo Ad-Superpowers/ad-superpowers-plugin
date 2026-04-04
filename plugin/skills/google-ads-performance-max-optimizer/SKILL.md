@@ -14,25 +14,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Performance Max Optimizer
 
 Complete guide for setting up, optimizing and scaling Google Ads Performance Max campaigns for e-commerce and lead generation.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## Audience Signals
 
 ### Important Nuance: Signals != Targeting
@@ -156,13 +137,6 @@ TIPS:
 +-- Check Search Terms report for ideas
 +-- Update monthly based on performance
 ```
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## Channel Performance Analysis
 
 ### Insights Reporting (2025+)
@@ -215,18 +189,6 @@ Monthly:
 +-- Seasonal updates
 +-- Analyze performance trends
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
 
 ## Google Ads Script: PMax Performance Monitor
 

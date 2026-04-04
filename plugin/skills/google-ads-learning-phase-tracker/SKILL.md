@@ -12,13 +12,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Learning Phase Tracker
 
 Complete guide for monitoring, understanding, and optimizing Google Ads Smart Bidding learning phases for faster and more stable performance.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Learning Phase Fundamentals
 
 ### What Is Learning Phase?
@@ -286,13 +279,6 @@ HANDLE WITH CAUTION:
    └── Adding new audiences = OK
    └── Removing audiences = minor impact
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Learning Phase Best Practices
 
 ### Pre-Launch Checklist
@@ -424,13 +410,6 @@ For known seasonal events:
 ├── Informs AI about expected change
 └── Prevents unnecessary "re-learning"
 ```
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## Output: Learning Phase Status Template
 
 ```markdown

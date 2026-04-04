@@ -14,13 +14,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Audience Strategy Planner
 
 Complete guide for setting up an effective Google Ads audience strategy with first-party data, Google audiences, and layering strategies for lead generation.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Audience Types Overview
 
 ### Google Ads Audience Types

@@ -14,13 +14,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Audience Exclusions Guide
 
 Complete guide for effectively excluding audiences and frequency capping to maximize advertising budget.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Exclusion Types Overview
 
 ```
@@ -74,8 +67,6 @@ Do NOT exclude from:
 ├── Cross-sell campaigns (different products)
 ├── Loyalty/VIP campaigns
 └── Replenishment reminders (after X days)
-
-
 2. ALL CONVERTERS (LIFETIME)
 ─────────────────────────────
 Name: "All Purchasers - Lifetime"
@@ -91,8 +82,6 @@ Exclude FROM:
 ├── Pure acquisition campaigns
 ├── First-time buyer promos
 └── New customer discounts
-
-
 3. LEADS (RECENT SUBMITTERS)
 ─────────────────────────────
 Name: "Leads - Last 14 Days"
@@ -108,8 +97,6 @@ Exclude FROM:
 ├── Lead generation campaigns
 ├── Demo request campaigns
 └── Generic awareness
-
-
 4. HIGH-VALUE CUSTOMERS (PROTECT)
 ──────────────────────────────────
 Name: "VIP Customers - LTV 500+"
@@ -125,8 +112,6 @@ Exclude FROM:
 ├── Discount campaigns
 ├── Win-back with large discounts
 └── Aggressive retargeting
-
-
 5. CART ABANDONERS (ALREADY TARGETED)
 ──────────────────────────────────────
 Name: "Active Cart Abandoners - 14d"
@@ -142,8 +127,6 @@ Exclude FROM:
 ├── General product remarketing
 ├── Awareness campaigns
 └── Top-of-funnel content
-
-
 6. BOUNCED VISITORS (LOW VALUE)
 ────────────────────────────────
 Name: "Bouncers - Single Page"
@@ -540,13 +523,6 @@ DON'Ts
 └── Never review exclusions
     └─► Outdated exclusions cost opportunities
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Output: Audience Exclusion Strategy Template
 
 ```markdown

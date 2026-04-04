@@ -13,13 +13,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Automated Rules Builder
 
 Complete guide to Google Ads automated rules — from budget management to performance alerts and bid optimization.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Automated Rules Overview
 
 ### What Are Automated Rules?
@@ -108,8 +101,6 @@ Example:
 ├── Max budget: €500/day
 ├── Condition: Cost > €475 (build in margin)
 └── Alert: Email on every execution
-
-
 RULE 2: INCREASE BUDGET FOR GOOD PERFORMANCE
 ─────────────────────────────────────────────
 Goal: Scale winning campaigns automatically
@@ -125,8 +116,6 @@ Frequency: Weekly (Monday 8:00)
 Max budget: €500/day (set a cap)
 
 Preview first! Check which campaigns are affected.
-
-
 RULE 3: DECREASE BUDGET FOR POOR PERFORMANCE
 ─────────────────────────────────────────────
 Goal: Limit spend on underperformers
@@ -140,8 +129,6 @@ Conditions:
 Date range: Previous 7 days
 Frequency: Weekly (Monday 8:00)
 Min budget: €20/day (don't go too low)
-
-
 RULE 4: MONTHLY BUDGET PACING
 ──────────────────────────────
 Goal: Prevent monthly overspend
@@ -177,8 +164,6 @@ Conditions:
 Date range: Previous 14 days
 Frequency: Weekly
 Max CPC: €5.00 (set a cap)
-
-
 RULE 6: DECREASE BID FOR UNDERPERFORMERS
 ─────────────────────────────────────────
 Goal: Reduce spend on poor keywords
@@ -193,8 +178,6 @@ Conditions:
 Date range: Previous 14 days
 Frequency: Weekly
 Min CPC: €0.50 (don't go too low for visibility)
-
-
 RULE 7: PAUSE KEYWORDS WITHOUT CONVERSIONS
 ───────────────────────────────────────────
 Goal: Stop spend on non-converters
@@ -209,8 +192,6 @@ Frequency: Weekly
 
 WARNING: Always preview first!
 Check that no valuable awareness keywords get paused.
-
-
 RULE 8: REACTIVATE PAUSED KEYWORDS (Seasonal)
 ──────────────────────────────────────────────
 Goal: Reactivate keywords for seasonal periods
@@ -244,8 +225,6 @@ Conditions:
 ├── Cost > €100
 Date range: Previous 3 days
 Frequency: Daily (9:00)
-
-
 RULE 10: CTR DROP ALERT
 ────────────────────────
 Goal: Detect possible ad fatigue or issues
@@ -257,8 +236,6 @@ Conditions:
 ├── Impressions > 500
 Date range: Previous 7 days
 Frequency: Weekly
-
-
 RULE 11: QUALITY SCORE DROP ALERT
 ──────────────────────────────────
 Goal: Monitor Quality Score declines
@@ -271,8 +248,6 @@ Conditions:
 ├── Impressions > 100
 Date range: Previous 30 days
 Frequency: Weekly
-
-
 RULE 12: ZERO IMPRESSIONS ALERT
 ────────────────────────────────
 Goal: Detect campaigns without delivery
@@ -284,8 +259,6 @@ Conditions:
 ├── Budget > €10
 Date range: Yesterday
 Frequency: Daily (10:00)
-
-
 RULE 13: CONVERSION TRACKING ISSUE ALERT
 ─────────────────────────────────────────
 Goal: Detect possible tracking problems
@@ -319,8 +292,6 @@ RULE B - Enable Monday morning:
 Apply to: Paused campaigns with label "Weekdays-Only"
 Action: ENABLE campaign
 Frequency: Weekly, Monday at 06:00
-
-
 RULE 15: BUSINESS HOURS ONLY
 ─────────────────────────────
 Goal: Only advertise during business hours
@@ -334,8 +305,6 @@ RULE B - Pause evening:
 Apply to: Campaigns with label "Business-Hours"
 Action: PAUSE campaign
 Frequency: Daily (Weekdays), at 18:00
-
-
 RULE 16: SEASONAL CAMPAIGN ACTIVATION
 ──────────────────────────────────────
 Goal: Automatic activation for promotional periods
@@ -349,8 +318,6 @@ Pause Rule:
 Apply to: Campaigns with label "BlackFriday2025"
 Action: PAUSE campaign
 Frequency: One time, specific date (e.g., Dec 2 23:00)
-
-
 RULE 17: PAYDAY BUDGET BOOST
 ─────────────────────────────
 Goal: Increase budget around paydays (25th-5th)
@@ -445,13 +412,6 @@ Google Ads → Campaigns/Ad Groups/Keywords
 Tip: Create labels before creating rules.
      Rules can only target existing labels.
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Rule Management Best Practices
 
 ### Setup Checklist
@@ -606,13 +566,6 @@ Filter: Automated rules
 - **Account ID:** [XXX-XXX-XXXX]
 - **Rules Owner:** [Name]
 - **Last Review:** [Date]
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## Labels in Use
 | Label | Purpose | Applied To |
 |-------|---------|-----------|

@@ -14,13 +14,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Predictive Audiences Guide
 
 Complete guide for using GA4's machine learning predictive audiences for advanced remarketing and Smart Bidding optimization.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Predictive Metrics Overview
 
 ```
@@ -401,13 +394,6 @@ DON'Ts
 └── Forget to review audiences
     └─► Predictive updates daily, review performance
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Output: Predictive Audience Recommendation Template
 
 ```markdown

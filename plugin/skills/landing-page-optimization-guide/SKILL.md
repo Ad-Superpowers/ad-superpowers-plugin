@@ -28,13 +28,6 @@ Invoke when user mentions:
 - **A/B testing:** "What should I test on my landing page?"
 
 ---
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## The Landing Page Scorecard (100 Points)
 
 ### Scoring Categories
@@ -50,61 +43,6 @@ See [detailed-reference.md](references/detailed-reference.md) for details.
 | Technical Performance | 10 | Speed and tracking |
 
 ---
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
-
-
-See [benchmarks.md](references/benchmarks.md) for details.
-
-
-
-
-
-See [benchmarks.md](references/benchmarks.md) for details.
-
-
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## Quick Audit Framework
 
 ### 30-Second Audit
@@ -204,8 +142,3 @@ Look at the page for 5 seconds, then answer:
 When auditing a landing page, provide:
 
 ```
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-

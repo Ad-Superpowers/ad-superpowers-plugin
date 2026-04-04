@@ -524,13 +524,6 @@ Your response:
 ├── Avoid direct competition during peaks
 └── Capture traffic when they normalize
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Competitive Monitoring Setup
 
 ### Automated Alerts

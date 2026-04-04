@@ -12,13 +12,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Campaign Structure Advisor
 
 Complete guide for structuring and optimizing Google Ads accounts with focus on modern, Smart Bidding-optimized architectures.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Modern Account Structure
 
 ### Fundamental Principles

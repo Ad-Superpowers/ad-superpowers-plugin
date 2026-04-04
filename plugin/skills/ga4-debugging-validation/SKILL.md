@@ -12,13 +12,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Debugging & Validation Guide
 
 Complete guide for debugging GA4 implementations and ensuring data quality.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## GA4 DebugView Setup
 
 ```
@@ -51,8 +44,6 @@ NOTE:
 ├── Extension must be ON
 ├── Can take 1-2 minutes for device to appear
 └── Multiple devices may be visible
-
-
 METHOD 2: GTM PREVIEW MODE
 ───────────────────────────
 1. Open GTM → Preview
@@ -66,8 +57,6 @@ METHOD 2: GTM PREVIEW MODE
    └── GA4 DebugView
 
 ADVANTAGE: See GTM tag firing + GA4 simultaneously
-
-
 METHOD 3: DEBUG PARAMETER
 ──────────────────────────
 Add parameter to URL:
@@ -81,8 +70,6 @@ OR in GTM tag configuration:
 
 OR via dataLayer:
 gtag('config', 'G-XXXXXXXXXX', { 'debug_mode': true });
-
-
 METHOD 4: MOBILE APP DEBUGGING
 ───────────────────────────────
 iOS:
@@ -259,16 +246,12 @@ dataLayer.push({
   event: 'test_event',
   test_param: 'test_value'
 });
-
-
 ELEMENTS TAB:
 ─────────────
 ├── Verify GTM container snippet is present
 ├── Check for gtag.js or analytics.js conflicts
 ├── Inspect data attributes on elements
 └── Check consent management implementation
-
-
 APPLICATION TAB:
 ────────────────
 ├── Cookies: Check _ga, _gid cookies
@@ -358,8 +341,6 @@ CHECK:
 ├── No unexpected event names
 ├── Event counts in expected range
 └── No events with 0 users (ghost events)
-
-
 EXPLORATION 2: PARAMETER FILL RATE
 ───────────────────────────────────
 Technique: Free form
@@ -372,8 +353,6 @@ Setup:
 ├── Filter: Specific event type
 
 Note: Parameter fill rate requires BigQuery or calculated metric
-
-
 EXPLORATION 3: ECOMMERCE FUNNEL VALIDATION
 ───────────────────────────────────────────
 Technique: Funnel exploration
@@ -391,8 +370,6 @@ RED FLAGS:
 ├── 0% completion rate → broken tracking
 ├── Completion > 100% → sequence issues
 └── Large gaps → missing events
-
-
 EXPLORATION 4: SOURCE/MEDIUM QUALITY
 ─────────────────────────────────────
 Technique: Free form
@@ -473,13 +450,6 @@ GA4 IMPLEMENTATION AUDIT
 ├── [ ] BigQuery linked (optional)
 └── [ ] Third-party tools working
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Automated Testing Setup
 
 ```
@@ -544,8 +514,6 @@ test('GA4 purchase fires with correct revenue', async ({ page }) => {
   // Complete checkout flow...
   // Verify purchase event with transaction_id and value
 });
-
-
 CYPRESS TEST EXAMPLE:
 ─────────────────────
 // cypress/support/commands.ts
@@ -575,8 +543,6 @@ describe('GA4 Tracking', () => {
     });
   });
 });
-
-
 CI/CD INTEGRATION:
 ──────────────────
 # .github/workflows/ga4-tests.yml

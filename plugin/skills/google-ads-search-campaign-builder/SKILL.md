@@ -14,13 +14,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Search Campaign Builder
 
 Complete guide for setting up high-performance Google Ads Search campaigns specifically for lead generation with RSA best practices and full ad extensions setup.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Campaign Structure for Lead Gen
 
 ### Recommended Account Structure
@@ -179,13 +172,6 @@ QUICKLY IMPROVE AD STRENGTH:
 □ Add location headlines
 □ Mix short and long headlines
 ```
-
-
-
-See [api-patterns.md](references/api-patterns.md) for details.
-
-
-
 ## Ad Extensions Setup
 
 ### Required Extensions for Lead Gen

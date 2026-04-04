@@ -12,13 +12,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # YouTube Ads Strategist
 
 Complete guide for YouTube advertising strategy, video ad formats, targeting, and campaign optimization within Google Ads.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## YouTube Ad Formats Overview
 
 ### Format Comparison
@@ -555,13 +548,6 @@ Campaign subtype: Ad sequence
     ├── Step 2: View-based (25%+ of step 1)
     └── Step 3: View-based (50%+ of step 2)
 ```
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## Measurement & Optimization
 
 ### Key Metrics per Campaign Type

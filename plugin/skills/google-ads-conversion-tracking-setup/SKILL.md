@@ -14,13 +14,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Conversion Tracking Setup
 
 Complete guide for correctly setting up and optimizing Google Ads conversion tracking, including Enhanced Conversions and offline conversion import.
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## Conversion Actions Configuration
 
 ### Conversion Action Types
@@ -476,13 +469,6 @@ EAIaIQobChMI...,Closed Won,2025-01-28 15:45:00,5000,EUR
 Email,Conversion Name,Conversion Time,Conversion Value,Conversion Currency
 customer@email.com,Qualified Lead,2025-01-28 14:30:00,50,EUR
 ```
-
-
-
-See [api-patterns.md](references/api-patterns.md) for details.
-
-
-
 ## Consent Mode v2
 
 ### Consent Mode Implementation

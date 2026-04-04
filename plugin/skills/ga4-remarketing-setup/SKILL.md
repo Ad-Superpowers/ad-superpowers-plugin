@@ -12,13 +12,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Remarketing Setup Guide
 
 Complete guide for exporting and activating GA4 audiences in Google Ads for effective remarketing campaigns.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Step 1: Verify Google Ads Link
 
 ```
@@ -447,13 +440,6 @@ DON'Ts
 └── Trust GA4 size = Google Ads size
     └─► Match rates cause differences
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Output: Remarketing Setup Recommendation Template
 
 ```markdown

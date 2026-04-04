@@ -12,13 +12,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Conversion Import Guide
 
 Complete guide for importing GA4 conversions into Google Ads for optimal Smart Bidding performance.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Google Ads Link Verification
 
 ```
@@ -340,13 +333,6 @@ Lead type tiers:
 │ Whitepaper download │ EUR 25     │ Research phase                │
 └─────────────────────┴────────────┴───────────────────────────────┘
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Output: Conversion Import Checklist Template
 
 ```markdown

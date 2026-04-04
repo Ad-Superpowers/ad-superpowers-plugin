@@ -13,13 +13,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Demand Gen Planner
 
 Complete guide to Google Ads Demand Gen campaigns — the successor to Discovery campaigns for visual, mid-funnel advertising on YouTube, Discover, Gmail, and YouTube Shorts.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## What is Demand Gen?
 
 ### From Discovery to Demand Gen
@@ -632,13 +625,6 @@ OPTIMIZATION PRIORITY:
 4. Budget allocation
 5. Campaign structure
 ```
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## Demand Gen vs Other Campaign Types
 
 ```

@@ -12,13 +12,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Cross-Platform Tracking Guide
 
 Complete guide for consistent tracking of all advertising platforms in Google Analytics 4 with UTM parameters and platform integrations.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## UTM Parameters Basics
 
 ```
@@ -222,18 +215,6 @@ NOTE:
 └── B2B: consider longer attribution windows
 ```
 
-
-
-See [api-patterns.md](references/api-patterns.md) for details.
-
-
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## GA4 Channel Groupings Impact
 
 ```
@@ -353,13 +334,6 @@ TEST CHECKLIST:
 [ ] Default channel grouping is correct
 [ ] No (not set) or (other) values
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Output: Cross-Platform Tracking Template
 
 ```markdown

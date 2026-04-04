@@ -14,13 +14,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Event Tracking Setup
 
 Complete guide for implementing custom event tracking in Google Analytics 4 via Google Tag Manager.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## GA4 Event Model Basics
 
 ```
@@ -131,8 +124,6 @@ TAG SETUP (GA4 Event):
 │ ├── form_location: {{Page Path}}                               │
 │ └── method: "form"                                             │
 └────────────────────────────────────────────────────────────────┘
-
-
 METHOD 2: dataLayer Push (for complex forms)
 ─────────────────────────────────────────────
 
@@ -156,8 +147,6 @@ TAG (GA4 Event):
 ├── Event name: generate_lead
 ├── Parameters: Pull from Data Layer variables
 └── form_name: {{DLV - form_name}}
-
-
 METHOD 3: Thank You Page (fallback)
 ────────────────────────────────────
 
@@ -522,13 +511,6 @@ LOCATION: GA4 → Reports → Realtime
 ├── Check parameter values (click event card)
 └── Verify user count
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Event Tracking Checklist
 
 ```

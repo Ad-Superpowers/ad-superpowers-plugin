@@ -220,18 +220,6 @@ YOUTUBE FATIGUE TIMELINE:
 └── Typical video lifespan: 8-16 weeks
 ```
 
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Prevention Strategies
 
 ### Asset Library Requirements
@@ -532,11 +520,6 @@ CREATIVE FATIGUE: GOOGLE ADS vs OTHERS
 When diagnosing Google Ads creative fatigue, provide:
 
 ```
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
 
 ## Monitoring Checklist
 

@@ -12,13 +12,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Attribution Model Advisor
 
 Complete guide for choosing, implementing, and evaluating Google Ads attribution models with focus on Data-Driven Attribution (DDA) and cross-channel measurement.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Attribution Models Overview
 
 ### Model Comparison
@@ -279,13 +272,6 @@ WHAT TO ANALYZE:
    Ratio > 1: Channel is "assister" (top-funnel)
    Ratio < 1: Channel is "closer" (bottom-funnel)
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Multi-Touch Attribution Strategy
 
 ### Assisted Conversions Analysis
@@ -386,13 +372,6 @@ HOW TO SET:
 Tools → Measurement → Conversions → [Action] →
 Edit settings → Lookback window
 ```
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## Output: Attribution Model Recommendation Template
 
 ```markdown
@@ -404,9 +383,3 @@ See [detailed-reference.md](references/detailed-reference.md) for details.
 - **Current attribution model:** [Last Click/DDA/etc.]
 - **Average path length:** [X touchpoints]
 - **Average time to conversion:** [X days]
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-

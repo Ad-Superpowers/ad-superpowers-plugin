@@ -14,13 +14,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Remarketing List Builder
 
 Complete guide for setting up effective remarketing lists and RLSA strategies for lead generation with advanced segmentation and messaging sequences.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Remarketing List Setup
 
 ### Google Ads Remarketing Tag

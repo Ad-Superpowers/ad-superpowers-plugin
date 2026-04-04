@@ -14,13 +14,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Data Layer Guide
 
 Complete guide for implementing a robust Data Layer for Google Analytics 4 via Google Tag Manager.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Data Layer Basics
 
 ```
@@ -85,14 +78,10 @@ PLACE IN <head>, BEFORE GTM snippet:
 <script>(function(w,d,s,l,i){...})(window,document,'script','dataLayer','GTM-XXXXX');</script>
 <!-- End Google Tag Manager -->
 ```
-
-
 STEP 2: GTM Container Code
 ───────────────────────────
 GTM snippet comes AFTER the Data Layer initialization.
 This ensures data is available at page load.
-
-
 ORDER IS CRITICAL:
 ──────────────────
 1. dataLayer = window.dataLayer || [];
@@ -129,8 +118,6 @@ NAMING CONVENTION:
 ├── Example: {{DLV - pageType}}
 ├── Example: {{DLV - user.membershipLevel}}
 └── Example: {{DLV - ecommerce.items}}
-
-
 NESTED VALUES:
 ──────────────
 dataLayer.push({
@@ -143,8 +130,6 @@ dataLayer.push({
 
 GTM Variable Name: user.id → returns '12345'
 GTM Variable Name: user.type → returns 'premium'
-
-
 ARRAY VALUES:
 ─────────────
 For e-commerce items (array):
@@ -183,8 +168,6 @@ dataLayer.push({
   'currency': 'EUR'
 });
 ```
-
-
 PAGE TYPE EXAMPLES:
 ───────────────────
 
@@ -249,8 +232,6 @@ dataLayer.push({
   }
 });
 ```
-
-
 ADD TO CART
 ───────────
 
@@ -273,8 +254,6 @@ dataLayer.push({
   }
 });
 ```
-
-
 BEGIN CHECKOUT
 ──────────────
 
@@ -303,8 +282,6 @@ dataLayer.push({
   }
 });
 ```
-
-
 PURCHASE
 ────────
 
@@ -372,8 +349,6 @@ dataLayer.push({
   }
 });
 ```
-
-
 PRIVACY-FRIENDLY IMPLEMENTATION:
 
 ```javascript
@@ -393,8 +368,6 @@ dataLayer.push({
   }
 });
 ```
-
-
 GTM SETUP FOR USER PROPERTIES:
 
 1. Data Layer Variables:
@@ -435,8 +408,6 @@ dataLayer.push({
   }
 });
 ```
-
-
 MULTI-STEP FORM TRACKING:
 
 ```javascript
@@ -471,8 +442,6 @@ dataLayer.push({
   }
 });
 ```
-
-
 GTM SETUP:
 
 Trigger:
@@ -505,8 +474,6 @@ dataLayer.push({
   'customKey': 'customValue'
 });
 ```
-
-
 EXAMPLES:
 
 VIDEO PLAY:
@@ -583,8 +550,6 @@ dataLayer.push = function(obj) {
   console.log('dataLayer push:', obj);
   Array.prototype.push.call(this, obj);
 };
-
-
 METHOD 2: GTM Preview Mode
 ───────────────────────────
 1. GTM → Preview
@@ -600,8 +565,6 @@ WHAT TO CHECK:
 ├── Values correct type (string/number/array)
 ├── No undefined values
 └── Timing: data present before tag fires
-
-
 METHOD 3: dataLayer Inspector Extension
 ────────────────────────────────────────
 Browser Extension: "dataLayer Inspector+"
@@ -609,8 +572,6 @@ Browser Extension: "dataLayer Inspector+"
 ├── Push history
 ├── Syntax highlighting
 └── Filter by event type
-
-
 METHOD 4: Console Snippet
 ──────────────────────────
 
@@ -628,18 +589,6 @@ METHOD 4: Console Snippet
 })();
 ```
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
 
 ## Data Layer Checklist
 
@@ -703,13 +652,6 @@ DATA LAYER IMPLEMENTATION CHECKLIST
 - **Platform:** [Shopify/WooCommerce/Custom/etc.]
 - **GTM Container:** GTM-XXXXXXX
 - **Implementation date:** [Date]
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## GTM Variables Required
 
 | Variable Name | Type | Data Layer Key |

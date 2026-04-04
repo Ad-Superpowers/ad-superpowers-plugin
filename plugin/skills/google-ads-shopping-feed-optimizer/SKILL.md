@@ -389,13 +389,6 @@ OPTIONAL BUT VALUABLE:
 +-- unit_pricing_measure: Price per unit
 +-- unit_pricing_base_measure: Base unit
 ```
-
-
-
-See [api-patterns.md](references/api-patterns.md) for details.
-
-
-
 ## Resolving Disapprovals
 
 ### Most Common Disapprovals

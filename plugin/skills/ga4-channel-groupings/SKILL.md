@@ -12,13 +12,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 # GA4 Channel Groupings Guide
 
 Complete guide for configuring and optimizing channel groupings in Google Analytics 4 for accurate traffic categorization.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Default Channel Groups
 
 ```
@@ -346,13 +339,6 @@ PRINCIPLE:
 ├── Direct and Unassigned always last
 └── Test order with sample data
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Output: Channel Configuration Template
 
 ```markdown
@@ -363,18 +349,6 @@ See [decision-trees.md](references/decision-trees.md) for details.
 - **Measurement ID:** G-XXXXXXXXXX
 - **Configuration date:** [Date]
 - **Last modified:** [Date]
-
-
-
-See [benchmarks.md](references/benchmarks.md) for details.
-
-
-
-
-
-See [benchmarks.md](references/benchmarks.md) for details.
-
-
 
 ## UTM Requirements per Channel
 

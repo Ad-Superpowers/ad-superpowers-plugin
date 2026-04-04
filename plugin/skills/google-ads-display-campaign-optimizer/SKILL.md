@@ -12,13 +12,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 # Display Campaign Optimizer
 
 Complete guide for Google Display Network (GDN) campaigns - from Responsive Display Ads to placement targeting and viewability optimization.
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Display Network Overview
 
 ### What is the Google Display Network?
@@ -406,13 +399,6 @@ Remarketing: Audience only (follow users everywhere)
 Prospecting: Audience + Topics/Keywords
 Premium: Placement targeting + Audience
 ```
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## Bidding & Budget
 
 ### Bid Strategies

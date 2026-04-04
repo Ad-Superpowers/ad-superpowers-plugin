@@ -13,42 +13,6 @@ compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connec
 
 Complete guide for using the GA4 Data API for custom reporting and automated dashboards.
 
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
-
-
-See [api-patterns.md](references/api-patterns.md) for details.
-
-
-
-
-
-See [api-patterns.md](references/api-patterns.md) for details.
-
-
-
-
-
-See [api-patterns.md](references/api-patterns.md) for details.
-
-
-
-
-
-See [api-patterns.md](references/api-patterns.md) for details.
-
-
-
-
-
-See [api-patterns.md](references/api-patterns.md) for details.
-
-
-
 ## Available Metrics & Dimensions
 
 ```
@@ -99,8 +63,6 @@ E-COMMERCE:
 ├── itemCategory
 ├── transactionId
 └── orderCoupon
-
-
 COMMONLY USED METRICS
 ======================
 
@@ -199,8 +161,6 @@ def daily_ga4_report(event, context):
 #   --schedule="0 6 * * *" \
 #   --uri="YOUR_CLOUD_FUNCTION_URL" \
 #   --http-method=POST
-
-
 OPTION 2: GITHUB ACTIONS
 ─────────────────────────
 # .github/workflows/ga4-report.yml
@@ -238,8 +198,6 @@ jobs:
         with:
           name: ga4-report
           path: output/*.csv
-
-
 OPTION 3: AIRFLOW DAG
 ─────────────────────
 from airflow import DAG
@@ -289,13 +247,6 @@ with DAG(
 
     extract >> transform >> load
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Output: API Integration Report Template
 
 ```markdown

@@ -1002,9 +1002,3 @@ After implementing all recommendations:
 
 *Report generated with Account Auditor Skill*
 ```
-
-
-
-See [api-patterns.md](references/api-patterns.md) for details.
-
-

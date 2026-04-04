@@ -223,13 +223,6 @@ Position 1: Pin your best CTR headline
 Position 2: Pin keyword-focused headline
 Position 3: Let Google test
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
 ## Landing Page Experience
 
 ### Landing Page Optimization Checklist
@@ -354,18 +347,6 @@ QUICK WINS:
 4. Remove unused code
 5. Optimize fonts (subset, preload)
 ```
-
-
-
-See [decision-trees.md](references/decision-trees.md) for details.
-
-
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
 
 ## Output: Quality Score Improvement Plan
 

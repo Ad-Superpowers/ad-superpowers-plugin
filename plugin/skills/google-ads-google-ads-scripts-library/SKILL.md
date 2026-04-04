@@ -351,18 +351,6 @@ function sendPacingReport(report, dayOfMonth, daysInMonth) {
 }
 ```
 
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## Script 5: Low Performer Pauser
 
 ```javascript
@@ -528,13 +516,6 @@ function sendPauseReport(keywords, ads) {
   MailApp.sendEmail(CONFIG.EMAIL, subject, body);
 }
 ```
-
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
-
-
-
 ## Additional Scripts Quick Reference
 
 ```
