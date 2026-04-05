@@ -295,16 +295,32 @@ Budget Spend Rate   │  Uneven    │   Even    │ Consistent
 - Ad sets stuck in learning phase for a long time
 - Inconsistent costs between similar ad sets
 
-If you go to **Ads Manager → Audiences** and select 2 or more audiences, you can see the exact overlap via **Actions → Show Audience Overlap**.
-
-Share those percentages and I'll help you with a solution plan!"
+Share your account ID and I'll check the overlap directly!"
 
 ## MCP Tool Usage
 
-### Retrieve active campaigns and ad sets to audit for overlap:
+### Step 1: List custom audiences to find IDs
 
 ```python
-# List all active ad sets with their audiences and delivery metrics
+meta_query(
+    account_id="act_XXXXXXXXX",
+    entity_type="customaudiences"
+)
+```
+
+### Step 2: Get overlap between any 2+ audiences
+
+```python
+meta_query(
+    account_id="act_XXXXXXXXX",
+    entity_type="audienceoverlap",
+    entity_id="AUDIENCE_ID_1,AUDIENCE_ID_2"
+)
+```
+
+### Step 3: List active ad sets to see which audiences are in use
+
+```python
 meta_query(
     account_id="act_XXXXXXXXX",
     entity_type="adsets",
@@ -313,4 +329,4 @@ meta_query(
 )
 ```
 
-Then cross-reference the audience IDs in `targeting.custom_audiences` across ad sets to spot duplicates. Use Meta's native Audience Overlap tool (Ads Manager → Audiences → Actions → Show Audience Overlap) to confirm the percentages.
+Cross-reference the audience IDs in `targeting.custom_audiences` across ad sets to spot duplicates, then use the overlap data from Step 2 to quantify the issue.

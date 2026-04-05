@@ -107,6 +107,23 @@ Daily `time_increment="1"` is essential — plot CTR over time and correlate wit
 | **Days active** | >10 days | >14 days |
 | **Platform alert** | "Creative Limited" | "Creative Fatigue" warning |
 
+### Step 4: Check Creative Depth (Andromeda Threshold)
+
+From the Step 1 results, count active creatives per campaign:
+
+```
+Count distinct ads with status=ACTIVE from meta_get_creatives output.
+Group by campaign_id to get creatives-per-campaign.
+```
+
+| Creative Depth | Status | Action |
+|---------------|--------|--------|
+| **15+ active** | Healthy | Andromeda has enough material to rotate |
+| **8-14 active** | Warning | Schedule 3-5 new creatives this week |
+| **<8 active** | Critical | Fatigue will hit fast — add creatives immediately |
+
+Low creative depth is the #1 predictor of premature fatigue under Andromeda. More variations = slower fatigue onset.
+
 ### Combined Signal (Critical)
 
 When you see ALL THREE:

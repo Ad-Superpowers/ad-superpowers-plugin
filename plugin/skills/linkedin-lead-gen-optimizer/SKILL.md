@@ -313,13 +313,14 @@ linkedin_query(
   status=["ACTIVE"]
 )
 
-# Step 2: Get account-level lead gen performance
+# Step 2: Get account-level lead gen performance (incl. Lead Gen Form metrics)
 linkedin_get_analytics(
   account_id="YOUR_ACCOUNT_ID",
   start_date="YYYY-MM-DD",
   end_date="YYYY-MM-DD",
-  fields=["costInLocalCurrency", "clicks", "impressions", "externalWebsiteConversions"]
+  fields=["costInLocalCurrency", "clicks", "impressions", "externalWebsiteConversions", "oneClickLeads", "oneClickLeadFormOpens"]
 )
+# Form completion rate = oneClickLeads / oneClickLeadFormOpens
 
 # Step 3: Get performance for a specific campaign
 linkedin_get_analytics(
@@ -328,11 +329,8 @@ linkedin_get_analytics(
   end_date="YYYY-MM-DD",
   level="campaign",
   entity_id="CAMPAIGN_ID",
-  fields=["costInLocalCurrency", "clicks", "impressions", "externalWebsiteConversions"]
+  fields=["costInLocalCurrency", "clicks", "impressions", "externalWebsiteConversions", "oneClickLeads", "oneClickLeadFormOpens"]
 )
-
-# Note: Lead Gen Form metrics (oneClickLeadFormOpens, leads) are available
-# in Campaign Manager UI. Via API, use externalWebsiteConversions for conversion tracking.
 ```
 
 ## Hybrid Strategy Playbook

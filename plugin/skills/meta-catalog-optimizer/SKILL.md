@@ -417,17 +417,22 @@ CATALOG AUDIT CHECKLIST
 ### Diagnosing Catalog Ad Performance with Live Data
 
 ```
-1. Check catalog campaign ROAS and delivery:
+1. List product catalogs and check health:
+→ meta_query(account_id="...", entity_type="productcatalogs")
+→ meta_query(account_id="...", entity_type="productcatalogs", entity_id="CATALOG_ID")
+   Returns: product count, feed count, diagnostics (errors/warnings/approved %)
+
+2. Check catalog campaign ROAS and delivery:
 → meta_get_insights(account_id="...", fields=["spend","purchase_roas","cost_per_action_type","impressions","frequency"], date_preset="last_14d", level="campaign")
 
-2. Ad set level — check audience segments:
+3. Ad set level — check audience segments:
 → meta_get_insights(account_id="...", fields=["spend","purchase_roas","cost_per_action_type","reach","frequency"], date_preset="last_14d", level="adset")
 
-3. Creative performance across catalog ads:
+4. Creative performance across catalog ads:
 → meta_get_creatives(account_id="...", scope="account")
 ```
 
-Use results to identify which product sets, audience windows, or creative overlays are dragging ROAS down.
+Use results to identify feed issues, which product sets, audience windows, or creative overlays are dragging ROAS down.
 
 ## Example Interaction
 
@@ -459,7 +464,7 @@ Use results to identify which product sets, audience windows, or creative overla
 
 **QUICK CHECKS (do now):**
 
-1. **Commerce Manager → Diagnostics** (⚠️ UI-only — catalog diagnostics not in API)
+1. **Catalog diagnostics** (use `meta_query(account_id, "productcatalogs", entity_id="CATALOG_ID")`):
    - Are there warnings/errors?
    - % approved products?
 
