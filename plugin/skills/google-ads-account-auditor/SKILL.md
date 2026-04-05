@@ -211,18 +211,27 @@ LOW (Fix within 1 month):
 ## Quick Audit (15 Minutes)
 
 ```
-Open Google Ads and check these 10 items:
+Run these GAQL queries to check 10 items:
 
-□ 1. Conversions in last 7 days? Yes/No, how many
+□ 1. Conversions in last 7 days?
+   → google_ads_run_gaql(query="SELECT metrics.conversions FROM customer WHERE segments.date DURING LAST_7_DAYS")
 □ 2. Campaigns with "Limited" status?
-□ 3. Learning phase issues? # campaigns in learning
+   → google_ads_run_gaql(query="SELECT campaign.name, campaign.serving_status FROM campaign WHERE campaign.serving_status != 'SERVING'")
+□ 3. Learning phase issues?
+   → Check campaign.bidding_strategy_type and recent budget changes
 □ 4. CPA/ROAS vs target?
-□ 5. Top campaign performance? Best/Worst
-□ 6. Search Terms check (random sample)? Irrelevant: Many/Few
-□ 7. Ad Strength distribution? Excellent %, Poor %
-□ 8. Budget spend rate? >90% / 70-90% / <70%
-□ 9. Impression Share (top campaign)? %, Lost to budget %
-□ 10. Recent changes (Change History)? By whom, what
+   → google_ads_run_gaql(query="SELECT campaign.name, metrics.cost_per_conversion, metrics.conversions_value, metrics.cost_micros FROM campaign WHERE segments.date DURING LAST_7_DAYS AND campaign.status = 'ENABLED' ORDER BY metrics.cost_micros DESC")
+□ 5. Top/Worst campaign performance?
+   → Same query as #4 — sort by cost_per_conversion ASC/DESC
+□ 6. Search Terms check (random sample)?
+   → google_ads_run_gaql(query="SELECT search_term_view.search_term, metrics.impressions, metrics.clicks, metrics.conversions FROM search_term_view WHERE segments.date DURING LAST_7_DAYS AND metrics.impressions > 5 ORDER BY metrics.clicks DESC LIMIT 50")
+□ 7. Ad Strength distribution?
+   → google_ads_run_gaql(query="SELECT ad_group_ad.ad.responsive_search_ad.ad_strength FROM ad_group_ad WHERE ad_group_ad.status = 'ENABLED'")
+□ 8. Budget spend rate?
+   → Compare metrics.cost_micros vs campaign.campaign_budget (budget resource)
+□ 9. Impression Share (top campaign)?
+   → google_ads_run_gaql(query="SELECT campaign.name, metrics.search_impression_share, metrics.search_budget_lost_impression_share FROM campaign WHERE segments.date DURING LAST_7_DAYS AND campaign.status = 'ENABLED' ORDER BY metrics.cost_micros DESC LIMIT 5")
+□ 10. Recent changes (Change History)? (⚠️ UI-only — change_event resource has limited API access)
 
 QUICK SCORE: ___/10 items OK
 ├── 9-10: Account healthy, monthly check

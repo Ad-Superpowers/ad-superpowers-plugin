@@ -64,7 +64,7 @@ Campaign: Acme_Conv_BOFU_NL_0126
     ├── Ad: UGC_Video_v2_BenefitHook
     └── Ad: Static_Image_v1_SocialProof
 └── Ad Set: Retarget_Cart30d_AllPlace
-    ├── Ad: DPA_Carousel_v1_Reminder
+    ├── Ad: Catalog_Carousel_v1_Reminder
     └── Ad: Static_Image_v1_Urgency
 ```
 

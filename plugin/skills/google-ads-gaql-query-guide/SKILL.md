@@ -192,6 +192,7 @@ age_range_view        - Age demographics
 video                 - Video campaign data
 youtube_video_stat    - YouTube video statistics
 shopping_performance_view - Product-level Shopping/PMax performance
+auction_insight        - Competitor domains, overlap, position above, outranking
 ```
 
 ## Core Metrics
@@ -353,6 +354,23 @@ FROM geographic_view
 WHERE segments.date DURING LAST_30_DAYS
 ORDER BY metrics.cost_micros DESC
 LIMIT 50
+```
+
+### Auction Insights (Competitor Analysis)
+
+```sql
+SELECT
+  auction_insight.display_domain,
+  metrics.auction_insight_search_impression_share,
+  metrics.auction_insight_search_overlap_rate,
+  metrics.auction_insight_search_position_above_rate,
+  metrics.auction_insight_search_outranking_share,
+  metrics.auction_insight_search_top_impression_percentage,
+  metrics.auction_insight_search_absolute_top_impression_percentage
+FROM auction_insight
+WHERE segments.date DURING LAST_30_DAYS
+ORDER BY metrics.auction_insight_search_impression_share DESC
+LIMIT 20
 ```
 
 ## Field Compatibility

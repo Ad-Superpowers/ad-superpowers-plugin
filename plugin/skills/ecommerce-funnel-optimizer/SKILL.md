@@ -147,7 +147,7 @@ Always exclude to prevent wasted spend and bad experience:
 
 **Campaign Structure:**
 ```
-Campaign: DPA Retargeting (Advantage+ Catalog Ads or Manual)
+Campaign: Catalog_Retargeting (Advantage+ Catalog Ads)
 ├── Ad Set: Cart Abandoners (1-14 days)
 │   ├── Audience: AddToCart but NOT Purchase (14 days)
 │   ├── Product Set: All products
@@ -260,14 +260,14 @@ Use `google_ads_run_gaql` and `meta_get_insights` to categorize products:
 | **Stars** | High | High | Scale spend, expand to new platforms |
 | **Cash Cows** | High | Medium | Maintain, optimize for efficiency |
 | **Question Marks** | Low | High | Test scaling, may be limited audience |
-| **Dogs** | Low | Low | Reduce spend, exclude from DPA if persistent |
+| **Dogs** | Low | Low | Reduce spend, exclude from catalog ads if persistent |
 
 ### Product Feed Optimization Checklist
 
 | Element | Impact | Action |
 |---------|--------|--------|
 | Title optimization | High | Include brand + product type + key attribute (size/color) |
-| Image quality | High | White background for Shopping, lifestyle for DPA |
+| Image quality | High | White background for Shopping, lifestyle for catalog ads |
 | Price competitiveness | High | Monitor competitor pricing, use sale_price when applicable |
 | Availability | Medium | Remove out-of-stock immediately, update feed hourly |
 | Product type | Medium | Use Google's taxonomy for better matching |
@@ -292,9 +292,9 @@ Use `google_ads_run_gaql` and `meta_get_insights` to categorize products:
 
 | Strategy | Implementation | Expected AOV Lift |
 |----------|---------------|------------------|
-| **Bundle ads** | Show product bundles in DPA carousel | +15-30% |
+| **Bundle ads** | Show product bundles in catalog ad carousel | +15-30% |
 | **Threshold offers** | "Free shipping over €75" in ad copy | +10-20% |
-| **Cross-sell DPA** | Show complementary products post-purchase | +10-25% |
+| **Cross-sell catalog ads** | Show complementary products post-purchase | +10-25% |
 | **Tiered discounts** | "10% off €50, 15% off €100" | +20-35% |
 | **Premium variants** | Lead with higher-priced product in carousel | +5-15% |
 
@@ -302,9 +302,9 @@ Use `google_ads_run_gaql` and `meta_get_insights` to categorize products:
 
 | Trigger | Timing | Message | Platform |
 |---------|--------|---------|----------|
-| First purchase | 3-7 days post | Complementary products | Meta DPA, Email |
+| First purchase | 3-7 days post | Complementary products | Meta Catalog Ads, Email |
 | Repeat purchase | 14-30 days post | Replenishment or upgrade | Meta, Google RLSA |
-| High AOV purchase | 7-14 days post | Accessories, add-ons | Meta DPA |
+| High AOV purchase | 7-14 days post | Accessories, add-ons | Meta Catalog Ads |
 | Category purchase | 7-21 days post | Adjacent categories | Meta, Google Shopping |
 
 ---

@@ -44,11 +44,11 @@ BENCHMARK DISCLAIMER
 ════════════════════
 
 These benchmarks are compiled from:
-├── Google Ads industry reports (2025/2026)
-├── WordStream benchmarks
-├── Semrush advertising data
-├── Agency experience and case studies
-└── Platform-specific reports
+├── WordStream/LOCALiQ "Google Ads Benchmarks 2025" (Sep 2025, ~16K campaigns)
+├── LOCALiQ "Search Advertising Benchmarks for 2025" (updated Feb 2026)
+├── WordStream "Conversion Rate Benchmarks" (updated Nov 2025)
+├── Tinuiti "Digital Ads Benchmark Report Q4 2025" (Jan 2026)
+└── Agency experience and case studies
 
 IMPORTANT NUANCES:
 ├── Benchmarks are AVERAGES

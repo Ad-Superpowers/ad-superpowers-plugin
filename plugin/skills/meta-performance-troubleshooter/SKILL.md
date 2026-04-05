@@ -47,9 +47,9 @@ WHAT IS THE PRIMARY SYMPTOM?
 
 ```
 FUNDAMENTALS CHECKLIST:
-□ Pixel firing correctly? (Check Events Manager)
+□ Pixel firing correctly? (⚠️ UI-only — no API for pixel diagnostics; check Events Manager)
 □ CAPI active? (Server events visible?)
-□ Event Match Quality? (Target: >7)
+□ Event Match Quality? (⚠️ UI-only — EMQ score not available via API; check Events Manager)
 □ Attribution window correct? (Match buying cycle)
 □ Budget sufficient? (Min €50/day for learning)
 □ Audience size adequate? (Min 1M+ for prospecting)
@@ -355,13 +355,13 @@ TRACKING DIAGNOSTIC:
 
 ```
 QUICK FIXES:
-□ Test Pixel with Meta Pixel Helper
-□ Check Events Manager for recent events
+□ Test Pixel with Meta Pixel Helper (⚠️ UI-only — browser extension)
+□ Check Events Manager for recent events (⚠️ UI-only — event diagnostics not in API)
 □ Verify domain is verified
 □ Confirm event parameters (value, currency)
 □ Check for duplicate events
 
-CAPI VERIFICATION:
+CAPI VERIFICATION (⚠️ all UI-only — Events Manager required):
 □ Server events visible in Events Manager?
 □ Deduplication working? (Same event from 2 sources)
 □ Event Match Quality >7?

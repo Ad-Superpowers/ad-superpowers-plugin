@@ -83,7 +83,21 @@ REFRESH CREATIVE            TEST NEW AUDIENCE          EXPAND AUDIENCE
 
 ## Fatigue Detection Algorithm
 
-### Warning Signs & Thresholds
+### Step 1: Pull Creative Performance Data
+
+```
+→ meta_get_creatives(account_id="act_XXXXXXXXX", scope="account", date_preset="last_14d", sort_by="spend")
+```
+This returns creative-level performance with text content. Identify ads with highest spend + longest runtime.
+
+### Step 2: Pull Daily Frequency & CTR Trends
+
+```
+→ meta_get_insights(account_id="act_XXXXXXXXX", level="ad", date_preset="last_14d", time_increment="1", fields=["impressions", "reach", "frequency", "ctr", "cpm", "spend", "actions"])
+```
+Daily `time_increment="1"` is essential — plot CTR over time and correlate with frequency curve. This is the core fatigue detection signal.
+
+### Step 3: Score Against Thresholds
 
 | Signal | Warning | Critical |
 |--------|---------|----------|
@@ -415,31 +429,4 @@ When diagnosing Meta creative fatigue, provide:
 
 ---
 
-## MCP Tool Usage
-
-### Diagnose creative fatigue with live data:
-
-```python
-# Pull creative-level performance with text content
-meta_get_creatives(
-    account_id="act_XXXXXXXXX",
-    scope="account",
-    date_preset="last_14d",
-    sort_by="spend"
-)
-
-# Then pull ad-level frequency and CTR trends (daily granularity)
-meta_get_insights(
-    account_id="act_XXXXXXXXX",
-    level="ad",
-    date_preset="last_14d",
-    time_increment="1",
-    fields=["impressions", "reach", "frequency", "ctr", "cpm", "spend", "actions"]
-)
-```
-
-Use daily `time_increment=1` to plot CTR trend over time and correlate with frequency curve — this is the core fatigue detection signal.
-
----
-
-*Based on 2025-2026 Meta Ads research (Revealbot 2025 Creative Benchmarks, Meta Business Help Center). Meta creative fatigue is more gradual than TikTok — plan for 2-week refresh cycles with monitoring. With Andromeda, maintaining 15+ creative variations is the most effective fatigue prevention strategy.*
+*Sources: Alison.ai "Creative Fatigue Report Q3 2025" (Sep 2025), Sovran Meta Ads benchmarks (Q1 2026), Meta Business Help Center. Meta creative fatigue is more gradual than TikTok — plan for 2-week refresh cycles with monitoring. With Andromeda, maintaining 15+ creative variations is the most effective fatigue prevention strategy.*

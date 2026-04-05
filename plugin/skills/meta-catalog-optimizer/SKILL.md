@@ -1,7 +1,7 @@
 ---
 name: catalog-optimizer
 description: |
-  This skill should be used when the user asks to "optimize product catalog", "improve DPA performance",
+  This skill should be used when the user asks to "optimize product catalog", "improve catalog ad performance",
   "fix catalog feed issues", or mentions "Advantage+ Catalog Ads", "product set strategy",
   or "catalog feed optimization". Do NOT use for: campaign structure
   (use campaign-structure-advisor), creative diversification
@@ -236,10 +236,10 @@ COMBINATION FILTERS:
 ### Retargeting Setup
 
 ```
-CATALOG ADS RETARGETING STRUCTURE
-=========================
+ADVANTAGE+ CATALOG ADS RETARGETING STRUCTURE
+=============================================
 
-CAMPAIGN: [Brand]_DPA_Retargeting
+CAMPAIGN: [Brand]_CatalogAds_Retargeting
 ├── Objective: Sales
 ├── Optimization: Purchase
 └── Catalog: [Your Catalog]
@@ -266,10 +266,10 @@ AD SET 3: Past Purchasers - Cross-sell (30d)
 ### Prospecting Setup
 
 ```
-CATALOG ADS PROSPECTING STRUCTURE
-=========================
+ADVANTAGE+ CATALOG ADS PROSPECTING STRUCTURE
+=============================================
 
-CAMPAIGN: [Brand]_DPA_Prospecting
+CAMPAIGN: [Brand]_CatalogAds_Prospecting
 ├── Objective: Sales
 ├── Optimization: Purchase
 └── Catalog: [Your Catalog]
@@ -459,17 +459,17 @@ Use results to identify which product sets, audience windows, or creative overla
 
 **QUICK CHECKS (do now):**
 
-1. **Commerce Manager → Diagnostics**
+1. **Commerce Manager → Diagnostics** (⚠️ UI-only — catalog diagnostics not in API)
    - Are there warnings/errors?
    - % approved products?
 
-2. **Events Manager → Test Events**
+2. **Events Manager → Test Events** (⚠️ UI-only — event testing not in API)
    - Are ViewContent/ATC/Purchase firing correctly?
    - Do content_ids match the feed?
 
-3. **Ad Set → Delivery Insights**
-   - Auction overlap?
-   - Audience saturation?
+3. **Ad performance data** (use `meta_get_insights` with `level="adset"`):
+   - Check frequency and delivery metrics
+   - Identify underperforming ad sets
 
 ---
 

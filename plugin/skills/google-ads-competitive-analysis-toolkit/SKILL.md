@@ -19,7 +19,7 @@ Complete guide for analyzing competition in Google Ads, from Auction Insights in
 
 ## Pull Competitive Data via MCP
 
-Auction Insights per-competitor data is only available in the Google Ads UI, but you can pull impression share and competitive proxy metrics via GAQL:
+### Impression Share Metrics (Campaign Level)
 
 ```
 google_ads_run_gaql(query="
@@ -44,7 +44,27 @@ Interpret:
 - `search_budget_lost_impression_share` rising → you are budget-capped
 - `search_absolute_top_impression_share` dropping → someone pushed you down
 
-For full Auction Insights (competitor domain names and overlap rates), use the Google Ads UI: Campaigns → [select] → Auction Insights.
+### Auction Insights (Competitor Domain Data)
+
+The `auction_insight` resource provides per-competitor overlap, position above, and outranking metrics via GAQL:
+
+```
+google_ads_run_gaql(query="
+  SELECT auction_insight.display_domain,
+         metrics.auction_insight_search_impression_share,
+         metrics.auction_insight_search_overlap_rate,
+         metrics.auction_insight_search_position_above_rate,
+         metrics.auction_insight_search_outranking_share,
+         metrics.auction_insight_search_top_impression_percentage,
+         metrics.auction_insight_search_absolute_top_impression_percentage
+  FROM auction_insight
+  WHERE segments.date DURING LAST_30_DAYS
+  ORDER BY metrics.auction_insight_search_impression_share DESC
+  LIMIT 20
+")
+```
+
+This returns the same data as the UI's Auction Insights report, including competitor domain names. Filter by campaign or ad group for segment-specific analysis.
 
 ## Auction Insights Metrics
 

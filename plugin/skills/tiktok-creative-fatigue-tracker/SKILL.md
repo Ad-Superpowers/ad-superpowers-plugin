@@ -56,7 +56,21 @@ Invoke when user mentions:
 
 ## Fatigue Detection Algorithm
 
-### Warning Signs & Thresholds
+### Step 1: Pull Ad-Level Performance Trends
+
+```
+→ tiktok_get_report(start_date="YYYY-MM-DD", end_date="YYYY-MM-DD", level="ad", metrics=["ctr", "cpm", "frequency", "spend", "impressions", "clicks"])
+```
+Pull 14 days of daily data. TikTok fatigue is fast — look for cliff patterns starting day 4-5.
+
+### Step 2: Identify Active Campaigns & Creatives
+
+```
+→ tiktok_query(entity_type="campaigns")
+```
+Cross-reference campaign launch dates with performance curves. Creatives older than 5 days are fatigue candidates.
+
+### Step 3: Score Against Thresholds
 
 | Signal | Warning | Critical | Severity |
 |--------|---------|----------|----------|
@@ -368,23 +382,6 @@ When diagnosing TikTok creative fatigue, provide:
 - [ ] Rotation cadence effectiveness
 - [ ] Budget allocation vs creative performance
 
-## MCP Tool Examples
-
-Pull fatigue signals directly:
-
-```
-# Get CTR, CPM, frequency trends by creative (last 14 days)
-tiktok_get_report(
-  start_date="2026-03-21",
-  end_date="2026-04-04",
-  level="ad",
-  metrics=["ctr", "cpm", "frequency", "spend", "impressions", "clicks"]
-)
-
-# List all campaigns to identify which have active creatives
-tiktok_query(entity_type="campaigns")
-```
-
 ---
 
-*Based on 2025-2026 TikTok Ads research (TikTok Creative Best Practices Guide 2025, Varos 2025 TikTok Benchmark Report). TikTok creative fatigue is fundamentally different from other platforms — plan for 4x faster refresh cycles.*
+*Sources: TikTok Creative Best Practices Guide 2025, Lebesgue "TikTok Ads Benchmarks" (Mar 2026), Alison.ai "Creative Fatigue Report Q3 2025" (Sep 2025). TikTok creative fatigue is fundamentally different from other platforms — plan for 4x faster refresh cycles.*

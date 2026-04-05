@@ -286,8 +286,8 @@ This section identifies money left on the table - features that are
 available but not being used, representing optimization opportunities.
 
 □ ADVANTAGE+ FEATURES (Underutilized?)
-├── Advantage+ Sales Campaigns (formerly ASC)
-│   └── E-commerce account with $5k+/month? ASC not active?
+├── Advantage+ Sales Campaigns
+│   └── E-commerce account with $5k+/month? Not using Advantage+ Sales?
 │       → Potential: 10-20% ROAS improvement
 ├── Advantage+ Placements
 │   └── Manual placements only? Missing reach opportunities

@@ -24,8 +24,10 @@ This skill provides a comprehensive database of TikTok Ads benchmarks by industr
 IMPORTANT CONTEXT
 
 These benchmarks are based on:
-+-- Aggregated industry data (2024-2026)
-+-- Sources: TikTok Ads Help Center, Advertisers, Industry Reports
++-- Lebesgue "TikTok Ads Benchmarks for CTR, CR, and CPM" (Mar 2026)
++-- Tinuiti "Digital Ads Benchmark Report Q4 2025" (Jan 2026)
++-- Jonas Agency "2026 Paid Social and Video Media Benchmarks" (Feb 2026)
++-- TikTok Creative Best Practices Guide 2025
 +-- Primarily focused on US/EU markets
 +-- Focus on e-commerce & DTC brands
 

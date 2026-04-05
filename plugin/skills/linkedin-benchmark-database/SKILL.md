@@ -24,8 +24,9 @@ This skill provides a comprehensive database of LinkedIn Ads benchmarks by indus
 IMPORTANT CONTEXT
 
 These benchmarks are based on:
-+-- Aggregated industry data (2024-2026)
-+-- Sources: LinkedIn, AdBacklog, GrackerAI, Factors.ai
++-- 42agency "B2B LinkedIn Ads Benchmarks 2026" (Feb 2026, 87 campaigns, $5M+ spend)
++-- CloselyHQ "LinkedIn Ad Benchmarks 2025" (Jan 2026)
++-- Tinuiti "Digital Ads Benchmark Report Q4 2025" (Jan 2026)
 +-- Primarily focused on Western European/North American markets
 +-- B2B focus (LinkedIn's core market)
 

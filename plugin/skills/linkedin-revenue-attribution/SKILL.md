@@ -88,7 +88,7 @@ SUPPORTED CRMs:
 
 SETUP STEPS:
 ────────────
-1. Go to Campaign Manager → Analyze → Revenue Attribution Reports
+1. Go to Campaign Manager → Analyze → Revenue Attribution Reports (⚠️ UI-only — CRM connection requires LinkedIn OAuth UI)
 2. Click "Connect CRM" and authenticate via OAuth
 3. Map LinkedIn campaigns/ad accounts to CRM opportunity fields
 4. Set attribution window (30, 60, 90, or 180 days — match your sales cycle)

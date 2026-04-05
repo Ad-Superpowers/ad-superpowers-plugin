@@ -25,11 +25,13 @@ This skill provides an extensive database of Meta Ads benchmarks by industry, fu
 IMPORTANT CONTEXT
 
 These benchmarks are based on:
-├── Aggregated industry data (2025-2026)
-├── Multiple sources (Meta, WordStream, AdEspresso, etc.)
+├── Sovran "Meta Ads CPM by Industry 2026" (Q1 2026, updated quarterly)
+├── Databox peer benchmarks "Facebook Ads CTR/CPC/CPM" (Feb 2026)
+├── Tinuiti "Digital Ads Benchmark Report Q4 2025" (Jan 2026)
 ├── Primarily focused on Western markets
 ├── Attribution: 7d click + 1d view (Meta default since Jan 2026 — 28d view removed)
 └── Subject to seasonal fluctuations
+Note: AdEspresso stopped publishing benchmarks after 2022 — removed as source.
 
 Benchmarks are GUIDELINES, not absolute truths:
 ├── Your specific niche may differ significantly

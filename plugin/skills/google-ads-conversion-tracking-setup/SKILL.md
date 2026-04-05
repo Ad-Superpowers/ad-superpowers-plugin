@@ -621,7 +621,8 @@ TRACKING VERIFICATION CHECKLIST
 
 [ ] REAL-TIME CHECK
 +-- Make test conversion
-+-- Check in Google Ads -> Conversions -> Recent
++-- Verify via GAQL: SELECT conversion_action.name, conversion_action.status,
+    metrics.conversions FROM conversion_action WHERE segments.date DURING LAST_7_DAYS
 +-- Verify value and details
 +-- Latency: Max 3-6 hours for visibility
 
