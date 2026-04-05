@@ -1,8 +1,7 @@
 ---
 name: seo-sea-keyword-gap-analyzer
 description: |
-  Compares organic keywords (GSC) with paid keywords (Google Ads) using a four-quadrant gap matrix to identify cannibalization, paid-only dependencies, organic winners, and blind spots. Includes savings estimation formulas and content ROI calculations.
-  Use when: user asks about SEO vs SEA keyword overlap, cannibalization detection, whether to stop bidding on organically ranking keywords, content gap opportunities from paid data, or budget savings from organic rankings.
+  This skill should be used when the user asks to "compare organic and paid keywords", "find SEO SEA cannibalization", "stop bidding on organic rankings", mentions "keyword overlap between GSC and Google Ads", "paid-only keyword dependencies", or "budget savings from organic".
   Do NOT use for: general GSC performance analysis (use gsc-performance-analyzer), Google Ads campaign optimization (use Google Ads platform skills), or competitor keyword research (use competitor-analysis-toolkit).
 metadata:
   author: "AdSuperpowers"

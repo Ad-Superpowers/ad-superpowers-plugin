@@ -1,7 +1,11 @@
 ---
 name: display-campaign-optimizer
 description: |
-  Google Display Network campaign optimization. Use when: (1) Responsive Display Ads setup, (2) Display placement targeting, (3) Display audience strategy, (4) Banner formats and specs, (5) Viewability optimization, (6) Brand safety configuration. Do NOT use for: search campaign optimization (use search-campaign-optimizer), Performance Max setup (use pmax-strategy-builder), or bid strategy selection (use bid-strategy-selector). Triggers: display, banner, gdn, responsive display, placements, display network, remarketing display, programmatic.
+  This skill should be used when the user asks to "optimize Display campaigns",
+  "set up Responsive Display Ads", "configure display placement targeting",
+  "improve viewability", or mentions "GDN", "banner formats",
+  "brand safety", or "Display Network".
+  Do NOT use for: search campaign optimization (use search-campaign-optimizer), Performance Max setup (use pmax-strategy-builder), or bid strategy selection (use bid-strategy-selector).
 metadata:
   author: "AdSuperpowers"
   version: "1.1.0"

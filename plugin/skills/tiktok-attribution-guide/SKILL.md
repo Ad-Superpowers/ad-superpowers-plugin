@@ -1,8 +1,9 @@
 ---
 name: tiktok-attribution-guide
 description: |
-  Understand and optimize TikTok's unique attribution model. TikTok's entertainment-first nature means view-through attribution (VTA) captures 40-60% of conversions that click-based tracking misses. Covers VTA vs CTA ratios, attribution windows, and cross-platform reconciliation.
-  Use when: user asks about TikTok view-through attribution, VTA/CTA ratio, why TikTok shows different conversions than GA4, how to measure TikTok's true impact, or attribution window recommendations.
+  This skill should be used when the user asks to "understand TikTok attribution",
+  "compare TikTok VTA vs CTA", "reconcile TikTok and GA4 conversions", or mentions
+  "TikTok view-through attribution", "TikTok attribution windows", or "measure TikTok true impact".
   Do NOT use for: TikTok app install attribution/MMP (use tiktok-app-performance-tracker), TikTok creative performance (use tiktok-video-performance-analyzer), or TikTok benchmark lookups (use tiktok-benchmark-database).
 metadata:
   author: "AdSuperpowers"
@@ -544,20 +545,16 @@ Pull CTA vs VTA breakdowns:
 
 ```
 # Get attribution split by campaign
-tiktok_get_ad_insights(
-  advertiser_id="...",
-  dimensions=["campaign_id", "stat_time_day"],
-  metrics=["cta_conversion", "vta_conversion", "cta_purchase", "vta_purchase",
-           "total_landing_page_view", "spend", "impressions"],
+tiktok_get_report(
   start_date="2026-03-01",
-  end_date="2026-04-04"
+  end_date="2026-04-04",
+  level="campaign",
+  metrics=["cta_conversion", "vta_conversion", "cta_purchase", "vta_purchase",
+           "total_landing_page_view", "spend", "impressions"]
 )
 
 # Get campaign list to understand campaign type and attribution context
-tiktok_get_campaigns(
-  advertiser_id="...",
-  fields=["campaign_name", "objective_type", "campaign_type", "status"]
-)
+tiktok_query(entity_type="campaigns")
 ```
 
 ---

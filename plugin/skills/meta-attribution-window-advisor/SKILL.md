@@ -1,8 +1,11 @@
 ---
 name: attribution-window-advisor
 description: |
-  Advises on optimal Meta Ads attribution window configuration based on product type, buying cycle, and goals. Use when: selecting attribution windows, comparing click vs view-through attribution, iOS 14+ attribution strategy, incremental attribution setup, cross-platform attribution comparison.
-  Do NOT use for: cross-platform attribution reconciliation (use cross-platform-attribution-reconciler), CAPI setup (use capi-implementation-guide), EMQ optimization (use emq-optimizer).
+  This skill should be used when the user asks to "choose an attribution window",
+  "compare click vs view-through attribution", "set up incremental attribution", or mentions
+  "Meta attribution settings", "iOS 14 attribution", or "attribution window configuration".
+  Do NOT use for: cross-platform attribution reconciliation (use cross-platform-attribution-reconciler),
+  CAPI setup (use capi-implementation-guide), EMQ optimization (use emq-optimizer).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -424,10 +427,10 @@ MEASURING VT CONTRIBUTION:
 
 ```python
 # Pull conversions broken down by attribution window to understand click vs view contribution
-meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","spend","actions","website_purchase_roas"], date_range="last_30d", action_attribution_windows=["1d_click","7d_click","1d_view"])
+meta_get_insights(account_id="act_XXXXX", level="campaign", fields=["campaign_name","spend","actions","website_purchase_roas"], date_preset="last_30d")
 
-# Compare 1d_click vs 7d_click vs 1d_view attribution for the same period
-meta_query(account_id="act_XXXXX", entity="adsets", fields=["id","name","actions","cost_per_action_type"], date_range="last_7d", action_attribution_windows=["1d_click","7d_click"])
+# Compare attribution at ad set level for the same period
+meta_get_insights(account_id="act_XXXXX", level="adset", fields=["adset_name","actions","cost_per_action_type"], date_preset="last_7d")
 ```
 
 ## Best Practices

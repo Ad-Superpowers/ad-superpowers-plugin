@@ -1,8 +1,10 @@
 ---
 name: enhanced-conversions-setup
 description: |
-  Google Ads Enhanced Conversions implementation guide. Covers first-party data integration, server-side tagging setup, Consent Mode V2 configuration, enhanced conversions for leads, offline conversion import, and customer data hashing.
-  Use when: enhanced conversions, first party data, server side tagging, consent mode, gdpr, offline conversions, customer match, data privacy, hashing, gtm server, conversion attribution, privacy first.
+  This skill should be used when the user asks to "implement Enhanced Conversions",
+  "set up server-side tagging", "configure Consent Mode V2", "hash customer data",
+  or mentions "first-party data integration", "GDPR compliance for Google Ads",
+  or "Enhanced Conversions for leads".
   Do NOT use for: general conversion tracking setup (use conversion-tracking-setup), conversion tracking debugging (use conversion-tracking-debugger), GA4 integration (use ga4-integration-guide).
 metadata:
   author: "AdSuperpowers"

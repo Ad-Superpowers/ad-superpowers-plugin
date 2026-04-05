@@ -1,7 +1,11 @@
 ---
 name: google-ads-scripts-library
 description: |
-  Google Ads Scripts library with top 15 automation scripts for monitoring, optimization, and reporting. Use when: setting up account monitoring scripts, automating bid adjustments, implementing budget pacing alerts, detecting performance anomalies, automating N-gram analysis, or checking for broken URLs. Do NOT use for: manual campaign optimization (use performance-troubleshooter), keyword strategy planning (use keyword-strategy-planner), or Quality Score improvement (use quality-score-optimizer).
+  This skill should be used when the user asks to "set up Google Ads Scripts",
+  "automate bid adjustments with scripts", "create budget pacing alerts",
+  "detect performance anomalies", or mentions "N-gram analysis script",
+  "broken URL checker", or "Google Ads automation scripts".
+  Do NOT use for: manual campaign optimization (use performance-troubleshooter), keyword strategy planning (use keyword-strategy-planner), or Quality Score improvement (use quality-score-optimizer).
 metadata:
   author: "AdSuperpowers"
   version: "1.1.0"

@@ -1,14 +1,15 @@
 ---
 name: linkedin-lead-gen-optimizer
 description: |
-  Optimize LinkedIn Lead Gen Forms vs landing page performance. Analyzes CPL, lead quality, conversion rates and recommends optimal strategy based on campaign goals. Addresses the core quality vs quantity tradeoff that plagues B2B advertisers.
-  Use when: user asks about LinkedIn Lead Gen Forms vs landing pages, improving lead quality from LinkedIn, what's a good CPL for their industry, or when to switch from forms to landing pages.
+  This skill should be used when the user asks to "optimize LinkedIn Lead Gen Forms",
+  "compare Lead Gen Forms vs landing pages", "improve LinkedIn lead quality",
+  "reduce LinkedIn CPL", or mentions "LinkedIn form conversion rate" or "B2B lead quality tradeoff".
   Do NOT use for: LinkedIn bid strategy questions (use linkedin-bid-strategy-selector), LinkedIn benchmark lookups (use linkedin-benchmark-database), or LinkedIn learning phase questions (use linkedin-learning-phase-tracker).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
   platform: "linkedin"
-  phase: "fase-1-foundation"
+  phase: "fase-3-lead-generation"
 compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
 # LinkedIn Lead Gen Form Optimizer
@@ -308,9 +309,10 @@ Pull lead gen performance data to analyze CPL and form completion:
 # Get CPL and lead volume per campaign
 linkedin_get_analytics(
   account_id="YOUR_ACCOUNT_ID",
-  entity="campaigns",
-  metrics=["costInLocalCurrency", "leads", "cpl", "clicks", "impressions", "oneClickLeadFormOpens"],
-  date_range={"start": "YYYY-MM-DD", "end": "YYYY-MM-DD"}
+  start_date="YYYY-MM-DD",
+  end_date="YYYY-MM-DD",
+  level="campaign",
+  fields=["costInLocalCurrency", "leads", "clicks", "impressions", "oneClickLeadFormOpens"]
 )
 
 # Get form completion rate: leads / oneClickLeadFormOpens
@@ -319,8 +321,7 @@ linkedin_get_analytics(
 # Get campaign details to check targeting and objective
 linkedin_query(
   account_id="YOUR_ACCOUNT_ID",
-  entity="campaigns",
-  fields=["id", "name", "objectiveType", "targetingCriteria", "dailyBudget", "costType"]
+  entity_type="campaigns"
 )
 ```
 
@@ -329,9 +330,9 @@ linkedin_query(
 ### When to Use Hybrid
 
 Use hybrid when:
-- You need volume but also quality
+- Volume and quality are both needed
 - Budget allows for two campaign tracks
-- You have retargeting capability
+- Retargeting capability is available
 - Time horizon is 30+ days
 
 ### Implementation Steps

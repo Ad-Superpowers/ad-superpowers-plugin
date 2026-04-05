@@ -1,14 +1,13 @@
 ---
 name: cross-platform-attribution-reconciler
 description: |
-  Reconciles conversion discrepancies between GA4, Meta, Google Ads, TikTok, and LinkedIn with expected-range benchmarks, investigation checklists, and decision frameworks for which number to trust. Includes O2O (Online-to-Offline) attribution for retail and EU/GDPR consent-rate impact data.
-  Use when: platforms report different conversion numbers, user asks "which data should I believe?", cross-channel budget allocation decisions, attribution window comparisons, store-visit attribution, or GDPR impact on tracking accuracy.
+  This skill should be used when the user asks to "reconcile attribution data", "compare conversions across platforms", "fix attribution discrepancies", mentions "which conversion number should I believe", "why do Meta and GA4 show different numbers", or "GDPR impact on tracking".
   Do NOT use for: single-platform optimization (use platform-specific skills), incrementality testing design (use incrementality-testing-guide), or first-party data / CAPI implementation details (use first-party-data-strategy).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
   platform: "cross-platform"
-  phase: "fase-1-foundation"
+  phase: "fase-3-attribution"
 compatibility: "Requires AdSuperpowers MCP server with multiple platform connections connection"
 ---
 # Cross-Platform Attribution Reconciler
@@ -35,14 +34,14 @@ Use these MCP tools to pull live data when diagnosing attribution discrepancies:
 | `ga4_run_report` | Pull GA4 Key Events (conversions) as neutral baseline |
 | `meta_query` | Pull Meta campaign conversions by attribution window |
 | `google_ads_run_gaql` | Pull Google Ads conversion data for comparison |
-| `tiktok_get_reports` | Pull TikTok conversion data |
+| `tiktok_get_report` | Pull TikTok conversion data |
 | `linkedin_get_analytics` | Pull LinkedIn conversion data |
 
 **Recommended diagnostic sequence:**
 ```
-1. ga4_run_report(metrics=["keyEvents"], dimensions=["date"], date_range=[last 28 days])
-2. meta_query(fields=["campaign_name","actions","spend"], date_preset="last_28d")
-3. google_ads_run_gaql(query="SELECT campaign.name, metrics.conversions, metrics.cost_micros FROM campaign WHERE segments.date DURING LAST_28_DAYS")
+1. ga4_run_report(property_id="...", start_date="28daysAgo", end_date="today", metrics=["keyEvents"], dimensions=["date"])
+2. meta_get_insights(account_id="act_...", level="campaign", date_preset="last_28d", fields=["campaign_name","actions","spend"])
+3. google_ads_run_gaql(customer_id="...", query="SELECT campaign.name, metrics.conversions, metrics.cost_micros FROM campaign WHERE segments.date DURING LAST_28_DAYS")
 ```
 
 ---
@@ -128,7 +127,7 @@ own data        or GA4           truth                          tests
 #### 1. Optimizing a Single Platform
 **Use: Platform's own data**
 
-The platform's algorithm optimizes based on its own signals. If you optimize Meta campaigns based on GA4 data, you're fighting the algorithm.
+The platform's algorithm optimizes based on its own signals. Optimizing Meta campaigns based on GA4 data means fighting the algorithm.
 
 *Example: Meta reports 100 conversions, GA4 shows 70. Optimize within Meta Ads Manager using Meta's 100.*
 
@@ -161,7 +160,7 @@ MMM accounts for upper-funnel impact, offline conversions, and cross-channel eff
 #### 5. Understanding True Incremental Value
 **Use: Incrementality testing**
 
-Only way to know what you'd lose if you turned off a channel.
+Only way to know what would be lost if a channel were turned off.
 
 **Methods:**
 - Geo holdouts (recommended)
@@ -343,7 +342,7 @@ Platform Accuracy = Platform Reported / Verified Conversions
 ### Method 3: Triangulation
 
 ```
-If you see:
+Example:
 - Meta: 100 conversions
 - Google: 80 conversions
 - GA4: 60 conversions

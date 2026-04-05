@@ -1,8 +1,10 @@
 ---
-name: meta-bid-strategy-selector
+name: bid-strategy-selector
 description: |
-  Selects optimal Meta Ads bid strategy (Lowest Cost, Cost Cap, Bid Cap, ROAS Goal) based on goals, budget, and account maturity. Use when: choosing bid strategy, comparing cost cap vs bid cap, budget allocation, scaling strategy, value rules setup.
-  Do NOT use for: Google Ads bidding (use google-bid-strategy-selector), campaign structure decisions (use campaign-structure-advisor), creative testing (use creative-diversification-generator).
+  This skill should be used when the user asks to "choose a bid strategy", "compare cost cap vs bid cap",
+  "set up value rules", or mentions "Meta bid strategy", "ROAS goal bidding", or "scaling bid approach".
+  Do NOT use for: Google Ads bidding (use google-bid-strategy-selector), campaign structure decisions
+  (use campaign-structure-advisor), creative testing (use creative-diversification-generator).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -353,10 +355,10 @@ Post-Migration:
 
 ```python
 # Pull campaign-level bid strategy and spend for active campaigns
-meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","bid_strategy","daily_budget","status"], filters={"effective_status":["ACTIVE"]})
+meta_query(account_id="act_XXXXX", entity_type="campaigns", effective_status=["ACTIVE"], fields=["id","name","bid_strategy","daily_budget","status"])
 
 # Pull ad set performance to evaluate current CPA vs target
-meta_query(account_id="act_XXXXX", entity="adsets", fields=["id","name","bid_strategy","bid_amount","optimization_goal","cost_per_result","spend","actions"], date_range="last_7d")
+meta_get_insights(account_id="act_XXXXX", level="adset", date_preset="last_7d", fields=["adset_name","bid_strategy","optimization_goal","cost_per_action_type","spend","actions"])
 ```
 
 ## Output: Strategy Recommendation Template

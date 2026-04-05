@@ -1,7 +1,9 @@
 ---
 name: ga4-api-reporting
 description: |
-  GA4 Data API for custom reporting and dashboards. Use when: GA4 Data API integration, automated reporting setup, custom dashboard building, data extraction scripts, API quota and limits understanding. Do NOT use for: GA4 UI reports (use ga4-revenue-analysis), BigQuery raw data (use ga4-bigquery-export), event tracking setup (use ga4-event-tracking-setup).
+  This skill should be used when the user asks to "use the GA4 Data API", "build automated reports",
+  "create a custom GA4 dashboard", or mentions "GA4 API quotas", "data extraction scripts", or "programmatic GA4 reporting".
+  Do NOT use for: GA4 UI reports (use ga4-revenue-analysis), BigQuery raw data (use ga4-bigquery-export), event tracking setup (use ga4-event-tracking-setup).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -15,14 +17,15 @@ Complete guide for using the GA4 Data API for custom reporting and automated das
 
 ## Quick Note: AdSuperpowers MCP Tool
 
-The AdSuperpowers MCP server wraps the GA4 Data API into the `ga4_report()` tool, which handles authentication and pagination automatically. Use it for ad-hoc analysis before building custom API integrations:
+The AdSuperpowers MCP server wraps the GA4 Data API into the `ga4_run_report()` tool, which handles authentication and pagination automatically. Use it for ad-hoc analysis before building custom API integrations:
 
 ```python
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["sessions", "activeUsers", "keyEvents"],
     dimensions=["date", "sessionDefaultChannelGroup"],
-    date_range={"start_date": "30daysAgo", "end_date": "yesterday"}
+    start_date="30daysAgo",
+    end_date="yesterday"
 )
 ```
 
@@ -182,7 +185,7 @@ def daily_ga4_report(event, context):
 OPTION 2: GITHUB ACTIONS
 ─────────────────────────
 # .github/workflows/ga4-report.yml
-name: ga4-api-reporting
+name: Daily GA4 Report
 
 on:
   schedule:

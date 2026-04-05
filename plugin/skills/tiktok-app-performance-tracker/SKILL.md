@@ -1,8 +1,9 @@
 ---
 name: tiktok-app-performance-tracker
 description: |
-  Track, analyze, and optimize TikTok app install campaigns. Covers app event metrics, MMP (AppsFlyer, Adjust, Branch) data reconciliation, iOS 14+ SKAN attribution, and CPI benchmarks by vertical (Gaming EUR2.10, Finance EUR6.50, E-commerce EUR3.20).
-  Use when: user asks about TikTok app installs, cost per install, MMP discrepancies, SKAN attribution, why TikTok and AppsFlyer numbers don't match, or app event tracking on TikTok.
+  This skill should be used when the user asks to "optimize TikTok app install campaigns",
+  "reconcile TikTok MMP data", "fix TikTok SKAN attribution", or mentions
+  "TikTok cost per install", "TikTok AppsFlyer numbers don't match", or "TikTok app event tracking".
   Do NOT use for: TikTok creative fatigue (use tiktok-creative-fatigue-tracker), TikTok video performance (use tiktok-video-performance-analyzer), or TikTok benchmark lookups (use tiktok-benchmark-database).
 metadata:
   author: "AdSuperpowers"
@@ -490,21 +491,17 @@ Pull app install and funnel metrics:
 
 ```
 # Get install counts and funnel events
-tiktok_get_ad_insights(
-  advertiser_id="...",
-  dimensions=["campaign_id", "stat_time_day"],
+tiktok_get_report(
+  start_date="2026-03-28",
+  end_date="2026-04-04",
+  level="campaign",
   metrics=["app_install", "real_time_app_install", "cost_per_install",
            "registration", "purchase", "spend",
-           "skan_app_install", "skan_cost_per_result"],
-  start_date="2026-03-28",
-  end_date="2026-04-04"
+           "skan_app_install", "skan_cost_per_result"]
 )
 
 # List campaigns to identify app install campaigns
-tiktok_get_campaigns(
-  advertiser_id="...",
-  fields=["campaign_name", "objective_type", "campaign_type", "status", "budget"]
-)
+tiktok_query(entity_type="campaigns")
 ```
 
 ---

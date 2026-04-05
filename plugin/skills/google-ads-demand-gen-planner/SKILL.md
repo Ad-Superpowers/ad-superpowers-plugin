@@ -1,7 +1,10 @@
 ---
 name: demand-gen-planner
 description: |
-  Demand Gen campaign strategy and optimization. Use for: (1) Demand Gen campaign setup, (2) Gmail ads configuration, (3) Feed-based creatives, (4) YouTube Shorts advertising, (5) Visual storytelling campaigns, (6) mid-funnel audience-based campaigns. Note: Demand Gen replaced Discovery campaigns (2024) and absorbed Video Action Campaigns (2025).
+  This skill should be used when the user asks to "set up Demand Gen campaigns",
+  "configure Gmail ads", "create feed-based creatives", "advertise on YouTube Shorts",
+  or mentions "Demand Gen", "Discovery campaign migration", "mid-funnel campaigns",
+  or "visual storytelling ads".
   Do NOT use for: Search campaign setup (use search-campaign-builder), Performance Max optimization (use performance-max-optimizer), or YouTube awareness/bumper strategy (use youtube-ads-strategist).
 metadata:
   author: "AdSuperpowers"

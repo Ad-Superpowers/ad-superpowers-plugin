@@ -1,8 +1,10 @@
 ---
 name: shopping-campaign-structure-advisor
 description: |
-  Shopping campaign structure advisor: Standard Shopping vs PMax vs hybrid. Covers choosing between Standard Shopping and PMax, campaign structure by budget/scale, product group subdivision strategy, priority-based Shopping structures, and migration from Standard Shopping to PMax or vice versa.
-  Use when: shopping structure, standard shopping vs pmax, shopping campaign setup, product groups, campaign priority, shopping migration, query sculpting.
+  This skill should be used when the user asks to "structure Shopping campaigns",
+  "choose between Standard Shopping and PMax", "set up product group subdivisions",
+  "migrate from Standard Shopping to PMax", or mentions "campaign priority",
+  "query sculpting", or "Shopping campaign setup".
   Do NOT use for: PMax general optimization (use performance-max-optimizer), PMax auditing (use pmax-audit-checklist), Shopping feed optimization (use shopping-feed-optimizer).
 metadata:
   author: "AdSuperpowers"

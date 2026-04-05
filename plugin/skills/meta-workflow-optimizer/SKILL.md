@@ -1,8 +1,11 @@
 ---
 name: workflow-optimizer
 description: |
-  Optimizes Meta Ads workflows with efficient processes, checklists, and time-saving techniques for daily, weekly, and monthly tasks. Use when: streamlining your work process or establishing standard operating procedures.
-  Do NOT use for: automated rules setup (use automated-rules-builder), campaign structure (use campaign-structure-advisor), performance diagnostics (use performance-troubleshooter).
+  This skill should be used when the user asks to "optimize my Meta Ads workflow",
+  "create a daily checklist", "build SOPs for ad management", or mentions "Meta Ads workflow",
+  "weekly review process", or "campaign management routine". Do NOT use for: automated rules
+  setup (use automated-rules-builder), campaign structure (use campaign-structure-advisor),
+  performance diagnostics (use performance-troubleshooter).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -470,13 +473,13 @@ Replace manual Ads Manager browsing with direct data pulls:
 DAILY CHECK (2 minutes with MCP):
 
 1. Performance snapshot (all active ad sets):
-→ meta_query(account_id="...", fields=["adset_name","spend","cost_per_result","roas","impressions","frequency"], date_preset="today", level="adset")
+→ meta_get_insights(account_id="...", fields=["adset_name","spend","cost_per_result","roas","impressions","frequency"], date_preset="today", level="adset")
 
 2. Weekly trend (top/bottom performers):
-→ meta_query(account_id="...", fields=["campaign_name","spend","cost_per_result","purchase_roas"], date_preset="last_7d", level="campaign")
+→ meta_get_insights(account_id="...", fields=["campaign_name","spend","cost_per_result","purchase_roas"], date_preset="last_7d", level="campaign")
 
 3. Creative health check:
-→ meta_get_creatives(account_id="...", scope="active")
+→ meta_get_creatives(account_id="...", scope="account")
 ```
 
 Paste the `meta_query` output directly into any analysis prompt from Category 3 above for instant AI-powered interpretation.

@@ -1,8 +1,11 @@
 ---
-name: meta-learning-phase-tracker
+name: learning-phase-tracker
 description: |
-  Meta Ads learning phase management and edit impact analyzer. Use when: assessing learning phase status, predicting significant edit impact, learning phase exit strategies, calculating budget change impact, ad set health checks.
-  Do NOT use for: campaign structure decisions (use campaign-structure-advisor), performance troubleshooting (use performance-troubleshooter), bid strategy selection (use bid-strategy-selector).
+  This skill should be used when the user asks to "check learning phase status", "predict edit impact",
+  "exit learning phase faster", or mentions "learning phase", "significant edit reset",
+  or "ad set health check". Do NOT use for: campaign structure decisions
+  (use campaign-structure-advisor), performance troubleshooting (use performance-troubleshooter),
+  bid strategy selection (use bid-strategy-selector).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -300,7 +303,7 @@ POST-CHANGE MONITORING:
 
 ```python
 # Get learning phase status for all active ad sets
-meta_query(account_id="act_XXXXX", entity="adsets", fields=["id","name","status","learning_phase_status","daily_budget","optimization_goal","bid_strategy"], filters={"effective_status":["ACTIVE","LEARNING","LEARNING_LIMITED"]})
+meta_query(account_id="act_XXXXX", entity_type="adsets", effective_status=["ACTIVE"], fields=["id","name","status","daily_budget","optimization_goal","bid_strategy"])
 ```
 
 ## Common Scenarios

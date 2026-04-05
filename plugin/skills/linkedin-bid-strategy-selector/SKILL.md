@@ -1,266 +1,479 @@
 ---
 name: linkedin-bid-strategy-selector
 description: |
-  Selects optimal Meta Ads bid strategy (Lowest Cost, Cost Cap, Bid Cap, ROAS Goal) based on goals, budget, and account maturity. Use when: choosing bid strategy, comparing cost cap vs bid cap, budget allocation, scaling strategy, value rules setup.
-  Do NOT use for: Google Ads bidding (use google-bid-strategy-selector), campaign structure decisions (use campaign-structure-advisor), creative testing (use creative-diversification-generator).
+  This skill should be used when the user asks to "optimize LinkedIn bid strategy",
+  "choose between Maximum Delivery and Manual Bidding", "set up LinkedIn Cost Cap",
+  "reduce LinkedIn CPC", or mentions "LinkedIn CPL too high" or "LinkedIn budget pacing".
+  Do NOT use for: LinkedIn benchmark lookups (use benchmark-database), LinkedIn lead gen form optimization (use linkedin-lead-gen-optimizer), LinkedIn performance troubleshooting (use linkedin-performance-troubleshooter).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
-  platform: "meta"
+  platform: "linkedin"
   phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
+compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
-# Bid Strategy Selector
+# LinkedIn Bid Strategy Selector
 
-Advisor for selecting the optimal Meta Ads bid strategy based on goals, budget, and account situation.
+Advisor for selecting the optimal LinkedIn Ads bid strategy based on goals, budget, and account situation.
 
 ## Quick Selection Guide
 
 ```
 WHAT IS YOUR PRIMARY GOAL?
-│
-├─► Maximum volume (leads/sales)
-│   └─► LOWEST COST (Highest Volume)
-│
-├─► Keep CPA under control
-│   └─► COST CAP
-│
-├─► Strict margin requirements
-│   └─► BID CAP
-│
-└─► Profitability focus (e-commerce)
-    └─► ROAS GOAL (Minimum ROAS)
+|
++---> Maximum volume & reach
+|   +---> MAXIMUM DELIVERY
+|       (Let LinkedIn optimize)
+|
++---> Keep CPL/CPA under control
+|   +---> COST CAP
+|       (Target cost with flexibility)
+|
++---> Full control over costs
+    +---> MANUAL BIDDING
+        (Fixed max bid per result)
 ```
 
 ## Bid Strategy Overview
 
-| Strategy | Control | Risk | Best For | Min. Data |
-|----------|---------|------|----------|-----------|
-| **Lowest Cost** | None | Low | Beginners, volume | Little |
-| **Cost Cap** | CPA target | Medium | CPA constraints | 50+ conv/week |
-| **Bid Cap** | Max bid | High | Competitive niches | 100+ conv/week |
-| **ROAS Goal** | Min ROAS | Medium | Profitability | 50+ conv/week + CAPI |
+```
+LINKEDIN BID STRATEGIES COMPARISON
+====================================
 
-## Lowest Cost (Highest Volume)
+Strategy         | Control | Risk | Best For            | Min. Budget
+-----------------+---------+------+---------------------+------------
+Maximum Delivery | None    | Low  | Beginners, volume   | $25/day
+Cost Cap         | Target  | Med  | CPL constraints     | $50/day
+Manual Bidding   | Exact   | High | Competitive auctions| $100/day
+
+OBJECTIVE COMPATIBILITY:
+
+                | Max Del | Cost Cap | Manual
+----------------+---------+----------+--------
+Brand Awareness |   Y     |    -     |   Y
+Website Visits  |   Y     |    Y     |   Y
+Engagement      |   Y     |    Y     |   Y
+Video Views     |   Y     |    Y     |   Y
+Lead Generation |   Y     |    Y     |   Y
+Conversions     |   Y     |    Y     |   Y
+Job Applicants  |   Y     |    -     |   Y
+```
+
+## Maximum Delivery (Automated Bidding)
 
 ### How It Works
-Meta gets as many results as possible within your budget, without a CPA limit.
+LinkedIn automatically optimizes your bids to get as many results as possible within your budget. No control over CPC/CPL.
 
 ### When to Use
-- New accounts with little historical data
-- Learning phase (first 2-4 weeks)
-- Volume more important than efficiency
-- Unsure about realistic CPA targets
+- New accounts with little benchmark data
 - Brand awareness campaigns
+- Fast learning phase completion
+- Uncertain about realistic bid ranges
+- Fully spending the budget is the priority
 
 ### When NOT to Use
-- Strict CPA requirements
-- Limited budget with margin pressure
-- Competitive auctions where CPA can spike
+- Strict CPL requirements
+- Competitive niches where costs can explode
+- When you already have benchmark data
 
 ### Setup
 ```
 Campaign Settings:
-├── Budget optimization: Advantage Campaign Budget or Ad Set Budget
-├── Bid strategy: Highest Volume
-├── No cost controls: Leave empty
-└── Conversion goal: Select optimization event
++-- Objective: [Based on goal]
++-- Bid type: Maximum Delivery
++-- Daily budget: Minimum $25/day
++-- Schedule: Continuous or custom
++-- Pacing: Standard (recommended)
+
+Expected Behavior:
++-- Day 1-3: Learning, CPC/CPL fluctuates
++-- Day 4-7: Stabilization
++-- Week 2+: Consistent delivery
++-- CPL: Typically 10-30% above market benchmark
 ```
 
 ### Expectations
-- CPA fluctuates day-to-day
-- AI optimizes for volume, not efficiency
-- Best baseline for new campaigns
+```
+MAXIMUM DELIVERY PERFORMANCE
+============================
+
+Positive:
++-- Budget is fully spent
++-- Maximum reach/impressions
++-- Fast data collection
++-- Little management needed
+
+Negative:
++-- No CPL/CPC control
++-- Can be expensive in competitive niches
++-- CPA variation day-to-day
++-- Less suitable for strict ROI targets
+```
 
 ## Cost Cap
 
 ### How It Works
-Meta keeps average CPA around your target. May temporarily exceed but balances over time.
+Set a target CPL/CPA. LinkedIn tries to stay around this amount on average, but can temporarily go over/under.
 
 ### When to Use
-- Known target CPA (from historical data)
-- Lead gen with fixed lead value
-- E-commerce with known break-even CPA
+- Known target CPL from historical data
+- Lead generation with established lead value
 - Scaling while monitoring efficiency
+- B2B with predictable sales cycles
 
 ### When NOT to Use
-- No idea of realistic CPA
-- Cap set too low (delivery stops)
-- New accounts without benchmarks
+- No benchmark CPL available
+- Target too ambitious (delivery stops)
+- New accounts without data
+
+### Cost Cap Calculation
+
+```
+DETERMINING YOUR COST CAP
+================
+
+Step 1: Determine your Lead Value
++-- Enterprise SaaS: Lead Value = ACV x Close Rate x 0.5
+|   Example: $50k x 5% x 0.5 = $1,250 lead value
+|
++-- SMB SaaS: Lead Value = ACV x Close Rate
+|   Example: $5k x 10% = $500 lead value
+|
++-- Services: Lead Value = Avg Deal x Close Rate
+    Example: $10k x 15% = $1,500 lead value
+
+Step 2: Calculate Break-Even CPL
++-- Formula: Lead Value x Target CAC Efficiency
++-- Efficiency factor: 0.10-0.20 (aggressive) to 0.30-0.40 (conservative)
+|
++-- Example Enterprise:
+|   $1,250 x 0.20 = $250 break-even CPL
+|
++-- Example SMB:
+    $500 x 0.15 = $75 break-even CPL
+
+Step 3: Set Cost Cap
++-- Start: 1.2x break-even CPL (learning room)
++-- Week 2: Tighten to 1.1x
++-- Week 3+: Target break-even
++-- Never: Start below historical average
+```
 
 ### Setup Best Practices
-```
-Cost Cap Calculation:
-├── Break-even CPA: [AOV x Margin] or [Lead Value x Conv Rate]
-├── Starting point: 1.2x break-even (room for learning)
-├── After 1-2 weeks: Tighten to 1.0-1.1x
-└── Never: Start below historical average
 
-Example E-commerce:
-- AOV: €80
-- Margin: 40%
-- Break-even CPA: €80 x 0.40 = €32
-- Starting Cost Cap: €38 (1.2x)
-- Target Cost Cap: €32-35
+```
+Cost Cap Implementation:
++-- Calculate break-even CPL: $[X]
++-- Start Cost Cap: $[X x 1.2]
++-- Daily Budget: Minimum $50/day
++-- Audience Size: >50,000 recommended
++-- Creative Rotation: 3-5 variants
+
+Optimization Timeline:
++-- Week 1: Monitor, don't adjust
++-- Week 2: Tighten cap 10% if CPL stable
++-- Week 3: Fine-tune based on SQL rate
++-- Ongoing: Adjust seasonally
 ```
 
 ### Troubleshooting
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| No delivery | Cap too low | Increase 10-20% |
-| CPA above cap | Learning phase | Wait 3-5 days |
-| Unstable delivery | Cap too tight | Increase to 1.1x target |
+```
+COST CAP ISSUES
+===============
 
-## Bid Cap
+Issue: No/Low Delivery
++-- Cause: Cap too low
++-- Check: Compare with benchmark CPL
++-- Fix: Increase cap 15-25%
++-- Alternative: Switch to Maximum Delivery temporarily
+
+Issue: CPL above Cap
++-- Cause: Learning phase or high competition
++-- Check: Is it consistent or incidental?
++-- Fix: Wait 5-7 days, increase cap 10%
++-- Alternative: Expand audience size
+
+Issue: Inconsistent Delivery
++-- Cause: Audience too small or cap too tight
++-- Check: Audience size (>50k?)
++-- Fix: Broaden targeting or loosen cap
++-- Alternative: Split into multiple campaigns
+```
+
+## Manual Bidding
 
 ### How It Works
-Set maximum bid per auction. Meta never bids more, even if it costs conversions.
+You set an exact maximum bid per click/impression/lead. LinkedIn never bids more, even if this costs delivery.
 
 ### When to Use
-- Competitive niches (finance, real estate, SaaS)
-- Strict margin requirements
-- Predictable costs are crucial
+- Competitive niches (Finance, SaaS, Enterprise)
 - Experienced advertisers with lots of data
+- Strict margin requirements
+- Auction dynamics well understood
+- A/B testing different bid levels
 
 ### When NOT to Use
-- Beginners (too complex)
+- Beginners
 - Low conversion volume
-- Unknown auction dynamics
+- Unknown bid ranges
 
-### Setup Strategy
-```
-Determining Bid Cap:
-├── Start: 1.5x your average CPA
-├── Week 1: Monitor delivery and CPA
-├── Week 2: Lower 10% if delivery is stable
-├── Repeat: Until sweet spot found
-└── Minimum: Never below historical lowest CPA
-
-Example:
-- Historical CPA: €25
-- Starting Bid Cap: €37.50
-- Week 2: €33.75
-- Week 3: €30
-- Sweet spot: €28-30
-```
-
-### Pro Tips
-- Test multiple bid caps in parallel across different ad sets
-- Seasonal adjustment: Increase 20-30% in Q4/peak periods
-- Monitor frequency: High frequency + low delivery = bid too low
-
-## ROAS Goal (Minimum ROAS)
-
-### How It Works
-Meta optimizes for minimum return per euro of ad spend.
-
-### When to Use
-- E-commerce with variable product values
-- Profitability more important than volume
-- Sufficient conversion volume (50+/week)
-- Strong CAPI implementation
-
-### When NOT to Use
-- Lead generation (no direct revenue)
-- Inconsistent product values
-- Weak tracking setup
-
-### Setup Requirements
-```
-Prerequisites:
-├── CAPI active with purchase value
-├── Event Match Quality >7
-├── Product catalog with accurate prices
-├── 50+ purchases per week
-└── 28+ days of conversion data
-
-Calculating ROAS Target:
-├── Break-even ROAS: 1 / Profit Margin
-├── Example: 40% margin → 1/0.40 = 2.5x break-even
-├── Starting target: 80% of break-even (2.0x)
-├── Scale up: Tighten toward break-even + buffer
-└── Aggressive: 1.2x break-even for growth
-```
-
-### Value Rules (2025 Enhancement)
-
-Value Rules let you adjust bids based on predicted ROAS per segment:
+### Determining Manual Bids
 
 ```
-Value Rule Setup:
-├── Segment: High-value customers
-│   ├── Criteria: Previous purchasers, high AOV
-│   └── Bid adjustment: +30%
-│
-├── Segment: Low-value segments
-│   ├── Criteria: Certain geos, devices
-│   └── Bid adjustment: -20%
-│
-└── Formula: Bid = BaseBid x (Predicted ROAS / Target ROAS)
+MANUAL BID STRATEGY
+====================
+
+For CPC Campaigns:
++-- Research: Check LinkedIn suggested bid range
++-- Start: Mid-range of suggestions
++-- Test: Run 3 ad sets with low/mid/high bids
++-- Evaluate: After 1000+ impressions per variant
++-- Optimize: Focus budget on best performing bid
+
+Suggested Bid Interpretation:
++-- "$5.00 - $8.00" = Low competition
++-- "$8.00 - $12.00" = Medium competition
++-- "$12.00 - $20.00" = High competition
++-- ">$20.00" = Very competitive (Finance, C-suite)
+
+Bid Positioning Strategy:
++-- Volume focus: Bid in top 25% of range
++-- Efficiency focus: Bid in bottom 50% of range
++-- Balanced: Bid at median
++-- Testing: Run parallel at different levels
 ```
 
-## Budget & Scaling Strategy
+### Bid Optimization Process
+
+```
+MANUAL BID OPTIMIZATION WORKFLOW
+================================
+
+Week 1: Discovery
++-- Set 3 bid levels: -20%, baseline, +20%
++-- Equal budget across ad sets
++-- Track: Impressions, clicks, conversions
++-- Minimum: 1000 impressions per variant
+
+Week 2: Analysis
++-- Compare CPC, CTR, conversion rate
++-- Calculate effective CPL per bid level
++-- Identify sweet spot
++-- Document: Bid vs Performance curve
+
+Week 3: Optimization
++-- Consolidate budget to winning bid level
++-- Fine-tune: Test +/-10% variations
++-- Scale: Increase budget 20%
++-- Monitor: Daily performance checks
+
+Ongoing:
++-- Adjust for seasonality
++-- React to competition changes
++-- Refresh bids monthly
++-- Test new ranges quarterly
+```
+
+## Bid Strategy by Campaign Objective
+
+### Lead Generation Campaigns
+
+```
+LEAD GEN BID STRATEGY SELECTION
+===============================
+
+Budget <$50/day
++---> Maximum Delivery
+    +-- Reason: Need volume for learning
+    +-- Expectation: CPL will be higher
+
+Budget $50-150/day
++---> Cost Cap (recommended)
+    +-- Start: Benchmark CPL x 1.2
+    +-- Target: Benchmark CPL
+    +-- Reason: Balance volume & efficiency
+
+Budget >$150/day
++---> Manual Bidding OR Cost Cap
+    +-- Manual: If competitive niche
+    +-- Cost Cap: If stable market
+    +-- Test: Run both parallel
+
+Lead Gen Forms vs Website Conversions:
++-- Forms: Typically 20-30% lower CPL
++-- Website: Higher quality, higher CPL
++-- Bid: Adjust expectations accordingly
+```
+
+### Website Visits / Traffic
+
+```
+TRAFFIC CAMPAIGN BIDDING
+========================
+
+Goal: Maximum Clicks
++---> Maximum Delivery + CPC billing
+    +-- Benefit: Optimize for clicks
+    +-- Risk: Quality may vary
+
+Goal: Quality Traffic
++---> Manual CPC Bidding
+    +-- Set: Target CPC x 0.9
+    +-- Benefit: Cost control
+    +-- Risk: Lower volume
+
+Recommended CPC Ranges by Industry:
++-- Technology: $4-8
++-- Finance: $6-12
++-- Healthcare: $4-8
++-- Education: $3-6
++-- Professional Services: $4-7
++-- General B2B: $3-6
+```
+
+### Brand Awareness / Video Views
+
+```
+AWARENESS CAMPAIGN BIDDING
+==========================
+
+Objective: Reach
++---> Maximum Delivery
+    +-- Billing: CPM
+    +-- Benefit: Maximum exposure
+    +-- Target CPM: $30-60
+
+Objective: Video Views
++---> Manual CPV OR Maximum Delivery
+    +-- CPV target: $0.05-0.15
+    +-- View threshold: 50%+ completion
+    +-- Benchmark: 25% view rate = good
+```
+
+## Budget & Pacing Strategy
 
 ### Budget Allocation Framework
 
 ```
-Total Monthly Budget: €[X]
-│
-├── Prospecting (TOF): 60-70%
-│   ├── Advantage+ Sales: 70% of TOF
-│   └── Manual testing: 30% of TOF
-│
-├── Retargeting (MOF/BOF): 20-30%
-│   ├── Website visitors: 60%
-│   └── Engagement: 40%
-│
-└── Creative Testing: 5-15%
-    └── New concepts validation
+LINKEDIN BUDGET ALLOCATION
+==========================
+
+Total Monthly Budget: $[X]
+|
++-- Lead Generation: 50-60%
+|   +-- Lead Gen Forms: 60%
+|   +-- Website Conversions: 40%
+|
++-- Retargeting: 20-30%
+|   +-- Website visitors: 50%
+|   +-- Video viewers: 25%
+|   +-- Form abandoners: 25%
+|
++-- Brand Awareness: 10-20%
+|   +-- Thought leadership: 60%
+|   +-- Video content: 40%
+|
++-- Testing: 5-10%
+    +-- New creatives & audiences
 ```
 
-### Scaling Rules
-
-**Vertical Scaling (Increasing Budget)**
-```
-Safe scaling protocol:
-├── Maximum increase: 20% per 3-4 days
-├── Never: >50% at once
-├── Monitor: CPA after each increase
-├── Trigger: ROAS >target AND stable 5+ days
-└── Stop: If CPA rises >20% after increase
-```
-
-**Horizontal Scaling (New Ad Sets)**
-```
-Horizontal expansion:
-├── Duplicate winning ad set
-├── Change ONE variable:
-│   ├── New audience segment
-│   ├── New creative set
-│   └── New geo/placement
-├── Run in parallel with original
-└── Consolidate winners after 7-14 days
-```
-
-### Peak Period Strategy
+### Pacing Options
 
 ```
-Peak Period Planning (Black Friday, etc.):
-├── 2 weeks before peak:
-│   ├── Increase budgets 30-50%
-│   ├── Loosen bid constraints 20%
-│   └── Test new creatives
-│
-├── Peak week:
-│   ├── Allocate 50-60% monthly budget
-│   ├── Monitor hourly
-│   └── Ready for quick scaling
-│
-└── Post-peak:
-    ├── Reduce budgets gradually
-    ├── Tighten bids
-    └── Continue retargeting
+PACING STRATEGY
+===============
+
+Standard Pacing (Recommended):
++-- Budget spread evenly across day
++-- Benefit: Consistent delivery
++-- Best for: Lead gen, conversions
++-- Use when: You want steady performance
+
+Accelerated Pacing:
++-- Spend budget as fast as possible
++-- Benefit: Quick results, testing
++-- Risk: May exhaust budget early
++-- Use when: Time-sensitive campaigns
+
+Budget Flight Recommendations:
++-- Short campaigns (<7 days): Accelerated
++-- Standard campaigns (7-30 days): Standard
++-- Always-on: Standard
++-- Peak periods: Increase budget, keep standard pacing
+```
+
+### Scaling Protocols
+
+```
+SCALING LINKEDIN CAMPAIGNS
+==========================
+
+Safe Scaling Rules:
++-- Maximum increase: 25% per 5-7 days
++-- Never: >50% at once (triggers learning)
++-- Monitor: CPL after each increase
++-- Trigger: CPL stable + SQL rate acceptable
++-- Stop: If CPL rises >25% after increase
+
+Scaling Example:
++-- Week 1: $100/day (baseline)
++-- Week 2: $125/day (+25%)
++-- Week 3: $156/day (+25%)
++-- Week 4: $195/day (+25%)
++-- Week 5: $244/day (+25%)
++-- Result: 2.5x scale in 5 weeks
+
+Horizontal Scaling:
++-- Duplicate winning campaign
++-- Change one variable:
+|   +-- New audience segment
+|   +-- New creative set
+|   +-- New geography
++-- Run parallel
++-- Consolidate after 14 days
+```
+
+## High CPL Diagnosis & Resolution
+
+```
+CPL TOO HIGH - DIAGNOSIS
+======================
+
+Check 1: Benchmark Alignment
++-- Compare to industry benchmark
++-- Finance CPL $90-120 is normal
++-- SaaS CPL $80-120 is normal
++-- If within range: Expectations issue
+
+Check 2: Audience Size
++-- <20,000: Significantly higher CPL expected
++-- 20-50,000: Moderately higher CPL
++-- 50-200,000: Optimal range
++-- >200,000: May be too broad
+
+Check 3: Targeting Precision
++-- Too narrow: High CPM, high CPL
++-- Too broad: Low relevance, high CPL
++-- Sweet spot: Qualified audience, reasonable size
+
+Check 4: Creative Performance
++-- CTR <0.4%: Creative issue
++-- CTR 0.4-0.6%: Normal
++-- CTR >0.6%: Strong creative
++-- Low CTR = High CPC = High CPL
+
+Check 5: Form Friction
++-- Many fields (>5): Lower CVR, higher CPL
++-- Custom questions: May filter but increase CPL
++-- Test: Reduce fields, measure SQL impact
+
+RESOLUTION MATRIX:
+
+If CPL High + CTR Low -> Creative refresh needed
+If CPL High + CTR Good -> Audience/targeting issue
+If CPL High + CVR Low -> Form optimization needed
+If CPL High + All Good -> Market rate, accept or narrow targeting
 ```
 
 ## Scenario-Based Recommendations
@@ -268,130 +481,224 @@ Peak Period Planning (Black Friday, etc.):
 ### Scenario 1: New Account Launch
 
 ```
+NEW ACCOUNT - 4 WEEK PLAN
+=========================
+
 Week 1-2:
-├── Strategy: Lowest Cost
-├── Budget: €50-100/day minimum
-├── Goal: Exit learning phase
-└── KPI: 50+ conversions
++-- Strategy: Maximum Delivery
++-- Budget: $50-75/day
++-- Goal: 30+ conversions for learning
++-- Focus: Gather benchmark data
++-- Expected CPL: 20-30% above market
 
-Week 3-4:
-├── Strategy: Cost Cap (1.2x achieved CPA)
-├── Evaluate: Is CPA sustainable?
-├── Adjust: Tighten cap 10% weekly
-└── Scale: If ROAS >break-even
+Week 3:
++-- Strategy: Transition to Cost Cap
++-- Cost Cap: Achieved CPL x 1.1
++-- Budget: Maintain $50-75/day
++-- Goal: Validate efficiency
++-- Monitor: Delivery consistency
 
-Week 5+:
-├── Strategy: Maintain Cost Cap or switch to ROAS Goal
-├── Focus: Scaling winners
-└── Testing: 10-15% budget for new concepts
+Week 4+:
++-- Strategy: Cost Cap (tightened)
++-- Cost Cap: Target benchmark
++-- Budget: Scale if CPL stable
++-- Goal: Sustainable acquisition
++-- Optimize: Creative testing
 ```
 
 ### Scenario 2: Scaling Profitable Campaign
 
 ```
-Current: ROAS 4x, spending €500/day
-Target: Scale to €2000/day
+SCALING SCENARIO
+================
 
-Approach:
-├── Week 1: €500 → €600 (+20%)
-├── Week 2: €600 → €750 (+25%)
-├── Week 3: €750 → €950 (+27%)
-├── Week 4: €950 → €1200 (+26%)
-├── Week 5: €1200 → €1500 (+25%)
-├── Week 6: €1500 → €2000 (+33%)
-└── Total: 6 weeks for 4x scale
+Current State:
++-- Spend: $75/day
++-- CPL: $85 (target: $100)
++-- SQL Rate: 22% (good)
++-- Goal: Scale to $200/day
 
-Safety checks per week:
-- ROAS drop >20%? Pause scaling
-- CPA spike >30%? Reduce budget 10%
-- Frequency >4? Refresh creatives
+Scaling Plan:
++-- Week 1: $75 -> $95 (+27%)
+|   +-- Monitor: CPL should stay <$95
+|
++-- Week 2: $95 -> $120 (+26%)
+|   +-- Monitor: Add new creative variants
+|
++-- Week 3: $120 -> $150 (+25%)
+|   +-- Monitor: Test audience expansion
+|
++-- Week 4: $150 -> $200 (+33%)
+|   +-- Monitor: Review SQL rate stability
+|
++-- Contingency:
+    +-- If CPL >$100: Pause scaling
+    +-- If CPL >$110: Reduce budget 15%
+    +-- If SQL rate drops: Tighten targeting
 ```
 
-### Scenario 3: Competitive Niche (Finance/Insurance)
+### Scenario 3: High-Competition Niche (Finance/Enterprise SaaS)
 
 ```
-Strategy: Bid Cap + Value Rules
+COMPETITIVE NICHE STRATEGY
+==========================
+
+Strategy: Manual Bidding + Premium Positioning
 
 Setup:
-├── Research: Competitor bid ranges
-├── Start: Premium bid cap (top 25% range)
-├── Value Rules:
-│   ├── High-intent keywords: +40%
-│   └── Low-quality signals: -30%
-├── Focus: Quality over volume
-└── Tracking: Lead-to-customer rate
++-- Research: Check suggested bid range
++-- Bid: Top 30% of range (win auctions)
++-- Budget: $100+/day (sufficient volume)
++-- Audience: Tight, qualified targeting
++-- Creative: Premium, thought leadership
 
-Optimization:
-├── Weekly bid adjustments
-├── Heavy creative testing (10+ variations)
-├── Audience refinement
-└── Landing page A/B testing
+Bid Strategy:
++-- Start: $12-15 CPC (Finance)
++-- Week 1: Evaluate win rate
++-- Adjust: If <60% impression share, increase bid
++-- Optimize: Test bid levels +/-20%
++-- Target: 70%+ impression share on target audience
+
+Cost Management:
++-- Accept higher CPC for better audience
++-- Focus on: SQL rate, not just CPL
++-- Calculate: Cost per SQL, not just cost per lead
++-- Expectation: CPL $100-150 acceptable if SQL rate >25%
 ```
 
-## Bid Strategy Migration Checklist
+## Ad Format Considerations by Bid Strategy
 
-When switching strategies:
+Different ad formats have distinct bidding dynamics. New formats available in 2025-2026:
+
+| Format | Best Bid Strategy | Notes |
+|--------|-------------------|-------|
+| Single Image (Sponsored Content) | Cost Cap or Max Delivery | Standard workhorse |
+| Video Ads | Max Delivery (CPV) | Optimize for view rate |
+| Carousel Ads | Cost Cap | Higher engagement, worth bidding for |
+| Document Ads | Cost Cap | Strong engagement for content offers; content is viewed in-feed |
+| Thought Leader Ads | Max Delivery | Boost employee posts; lower CPM than brand ads, no CPC control |
+| Message Ads / Conversation Ads | Manual CPC | Limited volume; bid on open rate |
+| CTV / Connected TV Ads | CPM only | Awareness only, no direct response bidding |
+| Dynamic Ads | Manual CPC | Personalized but smaller scale |
+| Lead Gen Forms (any format) | Cost Cap | Target CPL-based cap recommended |
+
+**Thought Leader Ads note:** These are boosted employee posts. Bidding works via Max Delivery only — you cannot set manual CPC. They typically achieve 20-40% lower CPM than standard brand Sponsored Content.
+
+**Document Ads note:** Users swipe through the document in-feed without leaving LinkedIn. Very high dwell time. Use Cost Cap with a CPL target; document downloads typically convert at 8-12%.
+
+## MCP Tool Usage
+
+To pull current bid and cost data for analysis:
 
 ```
-Pre-Migration:
-□ Document current performance (7-day average)
-□ Calculate new target (CPA/ROAS)
-□ Prepare for learning phase reset
+# Get campaign performance including cost and delivery metrics
+linkedin_get_analytics(
+  account_id="YOUR_ACCOUNT_ID",
+  start_date="YYYY-MM-DD",
+  end_date="YYYY-MM-DD",
+  level="campaign",
+  fields=["costInLocalCurrency", "clicks", "impressions", "leads"]
+)
 
-Migration:
-□ Implement new strategy
-□ Set conservative targets (1.2x current)
-□ Allow 3-5 days learning
-
-Post-Migration:
-□ Compare week-over-week
-□ Tighten targets if stable
-□ Document learnings
+# Get campaign details including bid strategy settings
+linkedin_query(
+  account_id="YOUR_ACCOUNT_ID",
+  entity_type="campaigns"
+)
 ```
 
-## MCP: Check Current Bid Strategy & Performance
-
-```python
-# Pull campaign-level bid strategy and spend for active campaigns
-meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","bid_strategy","daily_budget","status"], filters={"effective_status":["ACTIVE"]})
-
-# Pull ad set performance to evaluate current CPA vs target
-meta_query(account_id="act_XXXXX", entity="adsets", fields=["id","name","bid_strategy","bid_amount","optimization_goal","cost_per_result","spend","actions"], date_range="last_7d")
-```
+Use these to compare actual CPL vs bid caps, identify under-delivery (budget not spent), and spot bid strategy mismatches.
 
 ## Output: Strategy Recommendation Template
 
 ```markdown
-# Bid Strategy Recommendation
+# LinkedIn Bid Strategy Recommendation
 
 ## Current Situation
-- Monthly budget: €[X]
-- Current CPA/ROAS: [metric]
-- Conversion volume: [X]/week
-- Primary goal: [volume/efficiency/profitability]
+- Daily/Monthly budget: $[X]
+- Industry: [sector]
+- Target audience size: [X]
+- Current CPL/CPC: [metric] (if available)
+- Primary goal: [volume/efficiency/quality]
 
 ## Recommended Strategy
-**[Strategy Name]**
+**[Maximum Delivery / Cost Cap / Manual Bidding]**
 
 ### Why This Strategy
-[2-3 bullets explaining rationale]
+- [Reason 1 based on budget]
+- [Reason 2 based on goal]
+- [Reason 3 based on experience level]
 
 ### Implementation
-1. [Step 1]
-2. [Step 2]
-3. [Step 3]
+1. Campaign Setup: [specifics]
+2. Bid Configuration: [details]
+3. Budget Allocation: [breakdown]
 
 ### Targets
-- [Primary metric]: [target]
-- [Secondary metric]: [target]
+- Primary: CPL $[X] / CPC $[Y]
+- Secondary: CTR [X]%, CVR [Y]%
+- Quality: SQL Rate [X]%
 
 ### Timeline
-- Week 1: [actions]
-- Week 2: [actions]
-- Week 3+: [ongoing optimization]
+- Week 1: [Learning/baseline]
+- Week 2: [Optimization]
+- Week 3+: [Scaling/maintenance]
 
 ### Success Criteria
-- [Metric 1] achieves [target]
-- Learning phase exits within [X] days
-- Stable delivery maintained
+- CPL within [X]% of target
+- Delivery consistent (>90% budget spend)
+- SQL rate maintains [X]%+
 ```
+
+## Example Interaction
+
+**User**: "I have a $100/day budget for LinkedIn lead gen in the SaaS sector. What's the best bidding strategy?"
+
+**Claude response**:
+
+"For your situation ($100/day, SaaS, lead generation) I recommend:
+
+**Recommended Strategy: Cost Cap**
+
+### Why Cost Cap?
+
+1. **Budget is sufficient** - $100/day gives LinkedIn enough room to optimize
+2. **SaaS has benchmark data** - We can determine a realistic target CPL
+3. **Balance volume & efficiency** - Cost Cap prevents runaway costs
+
+### Implementation
+
+**Step 1: Determine your Cost Cap**
+```
+SaaS Benchmark CPL: $80-120
+Start Cost Cap: $120 (1.2x industry baseline)
+Week 2 target: $100
+Week 3+ target: $85-90
+```
+
+**Step 2: Campaign Setup**
+- Objective: Lead Generation
+- Bid type: Cost Cap
+- Cost Cap: $120
+- Daily budget: $100
+- Audience: >50,000 people
+
+**Step 3: Optimization Timeline**
+| Week | Action | Target CPL |
+|------|--------|------------|
+| 1 | Monitor, don't touch | $120 |
+| 2 | Tighten cap 15% | $100 |
+| 3 | Fine-tune based on SQL | $90 |
+| 4+ | Scale if stable | $85-90 |
+
+### Expected Results
+- Leads per week: ~8-12 (depending on niche)
+- Expected CPL: $85-100 after optimization
+- SQL rate target: 15-25%
+
+### Red Flags to Monitor
+- Delivery <80% budget? -> Increase cap
+- CPL >$140 after week 2? -> Check creative/targeting
+- CTR <0.4%? -> Refresh creatives
+
+Would you like me to validate your Cost Cap calculation based on your specific deal size and close rate?"

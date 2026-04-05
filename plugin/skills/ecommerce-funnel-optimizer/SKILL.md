@@ -1,8 +1,10 @@
 ---
 name: ecommerce-funnel-optimizer
 description: |
-  E-commerce advertising funnel optimization across Meta, Google, TikTok, and LinkedIn. Covers full funnel design from product discovery through retention, dynamic product ad setup, retargeting window strategy, ROAS targets by funnel stage, AOV optimization, and seasonal strategy.
-  Use when: (1) user wants to build or optimize an e-commerce advertising funnel across platforms, (2) user asks about retargeting windows, Advantage+ Catalog Ads setup, or ROAS targets by stage, (3) user needs help with cart abandonment campaigns, product-level ROAS, or seasonal ad strategy.
+  This skill should be used when the user asks to "build an e-commerce ad funnel",
+  "optimize retargeting windows", "set ROAS targets by funnel stage",
+  "recover abandoned carts with ads", or mentions "dynamic product ads",
+  "Advantage+ Catalog Ads", or "seasonal ad strategy".
   Do NOT use for: single-platform campaign structure (use platform-specific skills), attribution discrepancies (use attribution-reconciler), or creative fatigue diagnosis (use creative-fatigue-analyzer).
 metadata:
   author: "AdSuperpowers"

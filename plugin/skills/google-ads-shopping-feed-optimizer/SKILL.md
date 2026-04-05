@@ -1,8 +1,9 @@
 ---
 name: shopping-feed-optimizer
 description: |
-  Google Merchant Center and Shopping feed optimization. Covers product data quality improvement, title and description optimization, custom labels strategy, feed rules automation, disapproval resolution, and free listings optimization.
-  Use when: shopping feed, merchant center, product data, titles, custom labels, GMC, disapprovals, feed quality, product feed optimization.
+  This skill should be used when the user asks to "optimize Shopping feed", "fix product disapprovals",
+  "improve product titles", "set up custom labels", or mentions "Merchant Center",
+  "feed rules", "product data quality", or "free listings optimization".
   Do NOT use for: Shopping campaign structure advice (use shopping-campaign-structure-advisor), PMax retail optimization (use pmax-retail-optimizer), general PMax setup (use performance-max-optimizer).
 metadata:
   author: "AdSuperpowers"

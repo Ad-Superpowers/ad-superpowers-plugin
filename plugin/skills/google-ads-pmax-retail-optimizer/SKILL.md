@@ -1,8 +1,9 @@
 ---
 name: pmax-retail-optimizer
 description: |
-  PMax Retail optimization for e-commerce with product feeds. Covers zombie inventory detection and resolution, listing group filter optimization, custom label strategy for PMax, budget allocation between asset groups, and feed + PMax coexistence optimization.
-  Use when: PMax retail optimization, zombie products, listing group filters, custom labels, PMax e-commerce, product feed PMax, asset group budget allocation, Shopping feed optimization in PMax.
+  This skill should be used when the user asks to "optimize PMax retail campaigns",
+  "fix zombie products in PMax", "set up listing group filters", "configure custom labels for PMax",
+  or mentions "PMax e-commerce", "asset group budget allocation", or "product feed PMax".
   Do NOT use for: general PMax setup (use performance-max-optimizer), PMax auditing (use pmax-audit-checklist), Shopping feed optimization outside PMax (use shopping-feed-optimizer).
 metadata:
   author: "AdSuperpowers"

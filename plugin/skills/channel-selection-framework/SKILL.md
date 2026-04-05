@@ -1,8 +1,7 @@
 ---
 name: channel-selection-framework
 description: |
-  Decision framework for selecting advertising channels based on objectives, audience, budget, and platform strengths. Includes platform comparison matrices, minimum budget thresholds, audience-fit tables, funnel-stage recommendations, and proven multi-channel strategies.
-  Use when: user asks which platform to advertise on, compares Meta vs Google vs LinkedIn vs TikTok, plans media mix or budget allocation across channels, or needs channel strategy for a new campaign.
+  This skill should be used when the user asks to "choose an advertising platform", "compare Meta vs Google vs LinkedIn", "plan a media mix", mentions "which channel should I use", "budget allocation across platforms", or "best platform for my audience".
   Do NOT use for: cross-platform attribution issues (use attribution-reconciler), audience persona creation (use buyer-persona-framework), or market sizing for budget justification (use market-sizing-guide).
 metadata:
   author: "AdSuperpowers"
@@ -417,11 +416,12 @@ If the user has connected accounts, validate channel selection with actual traff
 
 ```python
 # See how existing traffic splits across channels — which are already performing?
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
+    start_date="30daysAgo",
+    end_date="today",
     metrics=["sessions", "keyEvents", "totalUsers"],
-    dimensions=["sessionDefaultChannelGroup"],
-    date_range="last_30d"
+    dimensions=["sessionDefaultChannelGroup"]
 )
 ```
 

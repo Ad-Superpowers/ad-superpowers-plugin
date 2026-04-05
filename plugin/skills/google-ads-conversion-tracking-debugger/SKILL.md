@@ -1,8 +1,9 @@
 ---
-name: google-ads-conversion-tracking-debugger
+name: conversion-tracking-debugger
 description: |
-  Diagnoses and fixes Google Ads conversion tracking issues. Covers missing conversions, duplicate conversions, GA4 vs Google Ads discrepancies, Enhanced Conversions issues, offline conversion problems, and tag firing issues.
-  Use when: conversions not showing, conversion missing, tracking broken, duplicate conversions, conversion discrepancy, tag not firing, GCLID issues, Enhanced Conversions not working.
+  This skill should be used when the user asks to "debug conversion tracking", "fix missing conversions",
+  "resolve duplicate conversions", "troubleshoot tag not firing", or mentions "GCLID issues",
+  "conversion discrepancy", or "Enhanced Conversions not working".
   Do NOT use for: initial conversion tracking setup (use conversion-tracking-setup), Meta conversion issues (use meta tools), GA4 event debugging (use ga4 tools).
 metadata:
   author: "AdSuperpowers"
@@ -81,11 +82,12 @@ google_ads_run_gaql(query="
 ")
 
 STEP 2: Compare with GA4 (if linked)
-ga4_report(
+ga4_run_report(
   property_id="YOUR_PROPERTY",
   metrics=["keyEvents", "sessions"],
   dimensions=["sessionDefaultChannelGroup"],
-  date_range="last30days"
+  start_date="30daysAgo",
+  end_date="today"
 )
 
 STEP 3: Check for tracking anomalies

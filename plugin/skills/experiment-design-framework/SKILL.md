@@ -1,8 +1,10 @@
 ---
 name: experiment-design-framework
 description: |
-  Advertising experiment design and testing framework covering A/B tests, geo lift studies, holdout tests, incrementality measurement, and multi-variate experiments. Includes sample size calculation, test duration guidelines, statistical significance interpretation, testing hierarchy, and common mistakes.
-  Use when: (1) user wants to design an A/B test or experiment for ads, (2) user asks about statistical significance, sample size, or test duration, (3) user needs help with incrementality testing or understanding which channel truly drives conversions.
+  This skill should be used when the user asks to "design an A/B test for ads",
+  "calculate sample size for an experiment", "measure incrementality",
+  "run a geo lift study", or mentions "statistical significance",
+  "holdout test", or "test duration".
   Do NOT use for: creative fatigue analysis (use creative-fatigue-analyzer), general campaign performance review (use platform-specific troubleshooters), or audience strategy (use buyer-persona-framework).
 metadata:
   author: "AdSuperpowers"

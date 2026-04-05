@@ -1,8 +1,10 @@
 ---
 name: tiktok-spark-ads-strategy
 description: |
-  Spark Ads strategy for TikTok advertising. Covers boosting organic and UGC content as paid ads, creator selection criteria, authorization code workflows, Spark vs standard ad performance comparison, and organic-to-paid bridge strategies. Includes creator brief templates and performance benchmarks.
-  Use when: (1) user asks about Spark Ads or boosting organic TikTok content, (2) user wants to use creator/UGC content in paid campaigns, (3) user is comparing Spark Ads vs standard TikTok ads.
+  This skill should be used when the user asks to "set up Spark Ads on TikTok",
+  "boost organic TikTok posts as ads", "use UGC in paid TikTok campaigns",
+  "get a TikTok authorization code", or mentions "Spark Ads",
+  "creator content in ads", or "organic-to-paid TikTok strategy".
   Do NOT use for: general TikTok creative optimization (use tiktok-creative-fatigue-tracker), hook optimization (use tiktok-hook-optimization-guide), or audience strategy (use tiktok-audience-strategy).
 metadata:
   author: "AdSuperpowers"

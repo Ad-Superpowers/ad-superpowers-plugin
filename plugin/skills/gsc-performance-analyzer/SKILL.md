@@ -1,13 +1,9 @@
 ---
 name: gsc-performance-analyzer
 description: |
-  Expert framework for analyzing Google Search Console data including CTR benchmarks by position,
-  seasonal pattern recognition, search appearance interpretation, data quality guidance, and
-  performance comparison across search types (web, discover, news, image, video).
-  
-  Use when: user asks about organic search performance, CTR optimization, keyword rankings,
-  position tracking, GSC data interpretation, seasonal SEO trends, search appearance analysis,
-  Google Discover performance, or when they want to understand their GSC metrics.
+  This skill should be used when the user asks to "analyze GSC performance", "optimize organic CTR",
+  "check keyword rankings", or mentions "position tracking", "seasonal SEO trends", or "Google Discover performance".
+  Do NOT use for: indexing problems or technical SEO issues (use technical-seo-monitor).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"

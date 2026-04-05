@@ -1,8 +1,11 @@
 ---
 name: emq-optimizer
 description: |
-  Optimizes Meta Event Match Quality (EMQ) score for better user matching and attribution accuracy. Use when: analyzing and improving EMQ scores, optimizing Customer Information Parameters, configuring Advanced Matching, matching diagnostics, EMQ troubleshooting.
-  Do NOT use for: CAPI implementation (use capi-implementation-guide), attribution window configuration (use attribution-window-advisor), pixel installation issues (use performance-troubleshooter).
+  This skill should be used when the user asks to "improve EMQ score", "optimize event match quality",
+  "configure Advanced Matching", or mentions "EMQ", "Customer Information Parameters",
+  or "match quality diagnostics". Do NOT use for: CAPI implementation
+  (use capi-implementation-guide), attribution window configuration
+  (use attribution-window-advisor), pixel installation issues (use performance-troubleshooter).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -209,8 +212,8 @@ hashed_phone = hash_parameter(normalized_phone)
 
 ```
 PIXEL HASHING (Automatic):
-- fbq() hashes automatically if you send raw values
-- You can also send pre-hashed values
+- fbq() hashes automatically when raw values are sent
+- Pre-hashed values are also accepted
 
 Sending pre-hashed:
 fbq('init', 'PIXEL_ID', {
@@ -353,11 +356,12 @@ SCORE 8-10 (Great):
 ## MCP: Check Current EMQ and Event Volume
 
 ```python
-# Pull pixel-level stats to assess event quality and volume
-meta_query(account_id="act_XXXXX", entity="pixels", fields=["id","name","last_fired_time","diagnostics","event_stats","match_rate_info"])
-
 # Cross-check ROAS — low EMQ typically shows as underreported ROAS
-meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","spend","website_purchase_roas","actions"], date_range="last_7d", filters={"effective_status":["ACTIVE"]})
+meta_get_insights(account_id="act_XXXXX", level="campaign", date_preset="last_7d", fields=["campaign_name","spend","website_purchase_roas","actions"])
+
+# Check pixel health via Events Manager UI (pixel diagnostics are not exposed via meta_query)
+# Events Manager → Data Sources → Pixel → Diagnostics → Match Quality tab
+# This shows EMQ per event and which Customer Information Parameters are received
 ```
 
 > **EMQ Minimum Bar:** Meta's own CAPI guidance sets 6.0 as the minimum acceptable EMQ for production campaigns. Below 6.0, algorithm optimization quality degrades measurably. Target 7+ for Purchase events.

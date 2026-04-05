@@ -1,8 +1,8 @@
 ---
 name: ga4-audience-builder
 description: |
-  GA4 custom audience builder and segmentation guide. Covers creating custom audiences based on behavior, events and user properties, sequential audiences for customer journeys, comparison audiences, and preparing remarketing audiences for export.
-  Use when: user asks about GA4 audiences, segments, audience builder, targeting, user segments, remarketing audiences, or custom audiences.
+  This skill should be used when the user asks to "build GA4 audiences", "create custom segments",
+  "set up audience targeting", or mentions "sequential audiences", "user segments", or "remarketing audiences in GA4".
   Do NOT use for: audience exclusions (use ga4-audience-exclusions), predictive audiences (use ga4-predictive-audiences), or exporting audiences to Google Ads (use ga4-remarketing-setup).
 metadata:
   author: "AdSuperpowers"
@@ -524,11 +524,12 @@ If the user has connected their GA4 account, pull segment sizes to validate audi
 
 ```python
 # Check user counts per key segment to estimate audience sizes
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["totalUsers", "sessions"],
     dimensions=["sessionDefaultChannelGroup"],
-    date_range="last_30d"
+    start_date="30daysAgo",
+    end_date="today"
 )
 ```
 

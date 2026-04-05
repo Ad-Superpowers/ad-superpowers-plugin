@@ -1,8 +1,10 @@
 ---
 name: pmax-search-cannibalization-detector
 description: |
-  Detects and resolves PMax vs Search campaign cannibalization. Covers identifying brand traffic in PMax, analyzing ROAS inflation from branded traffic, setting up brand exclusions, incrementality testing, and comparing search terms between PMax and Search campaigns.
-  Use when: PMax cannibalizing Search, brand traffic in PMax, Search cannibalization, branded ROAS inflation, PMax stealing traffic, brand exclusion setup, incrementality testing.
+  This skill should be used when the user asks to "detect PMax Search cannibalization",
+  "check if PMax is stealing brand traffic", "analyze branded ROAS inflation",
+  "set up brand exclusions", or mentions "PMax cannibalizing Search",
+  "incrementality testing", or "PMax stealing traffic".
   Do NOT use for: general PMax optimization (use performance-max-optimizer), SEO vs SEA keyword gaps (use seo-sea-keyword-gap-analyzer), Shopping structure advice (use shopping-campaign-structure-advisor).
 metadata:
   author: "AdSuperpowers"

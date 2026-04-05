@@ -1,8 +1,10 @@
 ---
 name: tiktok-hook-optimization-guide
 description: |
-  First 2 seconds optimization framework for TikTok ad creative. Provides hook formulas (question, shock, curiosity gap, transformation), scroll-stopping techniques, platform-native vs polished creative analysis, hook rate benchmarks, and video retention curve diagnostics. Includes 20+ proven hook templates categorized by industry and objective.
-  Use when: (1) user asks how to improve TikTok ad hooks or stop the scroll, (2) user wants to analyze video retention or drop-off, (3) user needs hook formulas or templates for TikTok ads.
+  This skill should be used when the user asks to "improve TikTok ad hooks",
+  "stop the scroll on TikTok", "optimize the first 2 seconds",
+  "get hook formulas for TikTok", or mentions "hook rate",
+  "video retention drop-off", or "scroll-stopping techniques".
   Do NOT use for: overall creative fatigue analysis (use tiktok-creative-fatigue-tracker), audience targeting (use tiktok-audience-strategy), or Spark Ads strategy (use tiktok-spark-ads-strategy).
 metadata:
   author: "AdSuperpowers"

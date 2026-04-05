@@ -1,8 +1,11 @@
 ---
 name: ab-test-planner
 description: |
-  Design statistically significant A/B tests for Meta Ads with correct test setup, sample size calculations, and analysis frameworks. Use when: setting up a test, analyzing results, or creating a testing roadmap.
-  Do NOT use for: creative brainstorming (use creative-diversification-generator), ad copy writing (use ad-copy-generator), campaign structure (use campaign-structure-advisor).
+  This skill should be used when the user asks to "plan an A/B test", "calculate sample size",
+  "analyze test results", or mentions "Meta split test", "statistical significance",
+  or "testing roadmap". Do NOT use for: creative brainstorming
+  (use creative-diversification-generator), ad copy writing (use ad-copy-generator),
+  campaign structure (use campaign-structure-advisor).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -420,15 +423,11 @@ PRIORITY ORDER:
 
 ```python
 # Get performance data to establish your baseline metrics
-meta_query(
+meta_get_insights(
     account_id="act_XXXXXXXXX",
-    query_type="insights",
-    params={
-        "fields": ["ad_name", "impressions", "clicks", "ctr", "cpc", "cpa", "spend", "actions"],
-        "date_preset": "last_30d",
-        "level": "ad",
-        "breakdowns": []
-    }
+    level="ad",
+    date_preset="last_30d",
+    fields=["ad_name", "impressions", "clicks", "ctr", "cpc", "spend", "actions", "cost_per_action_type"]
 )
 ```
 

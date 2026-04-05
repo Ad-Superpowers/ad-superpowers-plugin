@@ -1,9 +1,9 @@
 ---
 name: meta-creative-fatigue-analyzer
 description: |
-  Detects and prevents creative fatigue on Meta Ads (Facebook/Instagram). Analyzes frequency vs CTR correlation, predicts fatigue timing, and recommends optimal refresh cadence. Addresses key advertiser questions about creative performance.
-  
-  Use when: user asks about Meta/Facebook ad fatigue, declining CTR on Meta, when to refresh Meta creatives, frequency thresholds, or whether to expand audience vs refresh creative.
+  This skill should be used when the user asks to "detect creative fatigue", "analyze frequency vs CTR",
+  "plan a creative refresh", or mentions "Meta ad fatigue", "declining CTR on Facebook",
+  or "frequency thresholds".
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -420,23 +420,21 @@ When diagnosing Meta creative fatigue, provide:
 ### Diagnose creative fatigue with live data:
 
 ```python
-# Pull creative-level performance with frequency and CTR trend
+# Pull creative-level performance with text content
 meta_get_creatives(
     account_id="act_XXXXXXXXX",
-    scope="ads",
-    filters={"date_preset": "last_14d"}
+    scope="account",
+    date_preset="last_14d",
+    sort_by="spend"
 )
 
-# Then pull ad-set level frequency data
-meta_query(
+# Then pull ad-level frequency and CTR trends (daily granularity)
+meta_get_insights(
     account_id="act_XXXXXXXXX",
-    query_type="insights",
-    params={
-        "fields": ["adset_name", "ad_name", "impressions", "reach", "frequency", "ctr", "cpm", "spend", "actions"],
-        "date_preset": "last_14d",
-        "level": "ad",
-        "time_increment": 1
-    }
+    level="ad",
+    date_preset="last_14d",
+    time_increment="1",
+    fields=["ad_name", "impressions", "reach", "frequency", "ctr", "cpm", "spend", "actions"]
 )
 ```
 

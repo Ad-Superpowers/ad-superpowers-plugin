@@ -1,8 +1,9 @@
 ---
 name: pmax-audit-checklist
 description: |
-  Structured Performance Max audit with scoring (100 points). Covers complete PMax account audit, asset group performance analysis, channel breakdown evaluation, search term quality analysis, Shopping/feed health check, and Ad Strength improvement.
-  Use when: PMax audit, Performance Max review, PMax health check, asset group review, PMax scorecard, evaluating PMax performance.
+  This skill should be used when the user asks to "audit Performance Max", "review PMax health",
+  "score PMax campaigns", "evaluate asset group performance", or mentions "PMax scorecard",
+  "PMax health check", or "Ad Strength improvement".
   Do NOT use for: PMax initial setup (use performance-max-optimizer), PMax retail-specific issues (use pmax-retail-optimizer), PMax vs Search cannibalization (use pmax-search-cannibalization-detector).
 metadata:
   author: "AdSuperpowers"

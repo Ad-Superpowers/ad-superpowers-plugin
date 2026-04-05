@@ -1,8 +1,11 @@
 ---
 name: privacy-compliance-checker
 description: |
-  Checks Meta Ads setup for privacy compliance with GDPR, iOS 14+ tracking, and cookieless advertising best practices. Use when: validating compliance or implementing privacy-first strategies.
-  Do NOT use for: CAPI implementation details (use capi-implementation-guide), EMQ optimization (use emq-optimizer), attribution window decisions (use attribution-window-advisor).
+  This skill should be used when the user asks to "check privacy compliance", "validate GDPR setup",
+  "implement cookieless tracking", or mentions "Meta privacy compliance", "iOS 14 tracking setup",
+  or "consent management for ads". Do NOT use for: CAPI implementation details
+  (use capi-implementation-guide), EMQ optimization (use emq-optimizer), attribution window
+  decisions (use attribution-window-advisor).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -390,10 +393,10 @@ ACTION ITEMS:
 
 ```
 1. Verify CAPI event volumes and EMQ:
-→ meta_query(account_id="...", fields=["action_values","actions","cost_per_action_type"], date_preset="last_7d", level="account")
+→ meta_get_insights(account_id="...", fields=["action_values","actions","cost_per_action_type"], date_preset="last_7d", level="account")
 
 2. Check for attribution window configuration issues:
-→ meta_query(account_id="...", fields=["campaign_name","spend","purchase_roas","cost_per_result"], date_preset="last_7d", level="campaign")
+→ meta_get_insights(account_id="...", fields=["campaign_name","spend","purchase_roas","cost_per_result"], date_preset="last_7d", level="campaign")
    Note: Confirm results align with 7d_click + 1d_view default.
    Any reports showing anomalies vs history may reflect the Jan 2026 attribution change.
 ```

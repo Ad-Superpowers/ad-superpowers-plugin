@@ -1,7 +1,9 @@
 ---
 name: ga4-bigquery-export
 description: |
-  BigQuery linking and data warehouse integration for GA4. Use when: configuring BigQuery export, writing GA4 data queries, analyzing raw event data, building custom dashboards with BQ data, data warehouse integration. Do NOT use for: GA4 Data API reporting (use ga4-api-reporting), standard GA4 UI reports (use ga4-revenue-analysis).
+  This skill should be used when the user asks to "export GA4 to BigQuery", "query raw GA4 event data",
+  "set up BigQuery linking", or mentions "GA4 data warehouse", "BigQuery dashboard", or "unsampled GA4 data".
+  Do NOT use for: GA4 Data API reporting (use ga4-api-reporting), standard GA4 UI reports (use ga4-revenue-analysis).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -703,11 +705,12 @@ If the user has connected their GA4 account, check current data volume to estima
 
 ```python
 # Check session and event volume to project daily BQ export row count
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["sessions", "eventCount", "totalUsers"],
     dimensions=["date"],
-    date_range="last_7d"
+    start_date="7daysAgo",
+    end_date="today"
 )
 ```
 

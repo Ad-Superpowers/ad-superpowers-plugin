@@ -1,7 +1,9 @@
 ---
 name: ga4-cross-platform-tracking
 description: |
-  Cross-platform tracking and UTM strategy for GA4. Use when: implementing UTM parameters consistently, tracking Meta/LinkedIn/TikTok in GA4, making auto-tagging vs UTM decisions, establishing campaign naming conventions, third-party platform attribution. Do NOT use for: channel grouping configuration (use ga4-channel-groupings), attribution model selection (use ga4-attribution-advisor).
+  This skill should be used when the user asks to "set up UTM parameters", "track Meta ads in GA4",
+  "implement cross-platform tracking", or mentions "auto-tagging vs UTM", "campaign naming conventions", or "LinkedIn/TikTok attribution in GA4".
+  Do NOT use for: channel grouping configuration (use ga4-channel-groupings), attribution model selection (use ga4-attribution-advisor).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -361,11 +363,12 @@ SETUP REQUIREMENTS:
 
 MCP TOOL - Check cross-channel attribution:
 ```
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["keyEvents", "totalRevenue"],
     dimensions=["sessionDefaultChannelGroup", "sessionCampaignName"],
-    date_range={"start_date": "30daysAgo", "end_date": "yesterday"}
+    start_date="30daysAgo",
+    end_date="yesterday"
 )
 ```
 ```

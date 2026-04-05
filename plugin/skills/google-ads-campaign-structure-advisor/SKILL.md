@@ -1,547 +1,170 @@
 ---
 name: campaign-structure-advisor
 description: |
-  Meta Ads 4-tier funnel structure and creative testing framework for e-commerce and lead generation.
-  Use when: setting up or auditing account structure, creative testing workflows, determining winner criteria,
-  optimizing budget allocation, scaling strategy.
-  Do NOT use for: bid strategy selection (use bid-strategy-selector), creative brainstorming (use creative-diversification-generator),
-  full-funnel design across platforms (use full-funnel-designer).
+  This skill should be used when the user asks to "restructure Google Ads account",
+  "consolidate campaigns", "organize ad groups", "migrate from SKAGs",
+  or mentions "campaign type selection", "account structure optimization",
+  or "Smart Bidding-friendly structure".
+  Do NOT use for: bid strategy selection (use bid-strategy-selector), keyword strategy (use keyword-strategy-planner), or performance diagnosis (use performance-troubleshooter).
 metadata:
   author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
+  version: "1.1.0"
+  platform: "google_ads"
+  phase: "fase-4-measurement-attribution"
+compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
-# Meta Ads Campaign Structure Advisor
+# Campaign Structure Advisor
 
-Framework for setting up and optimizing Meta Ads account structures using the 4-tier funnel methodology. Based on Meta's Performance 5 framework and proven agency best practices 2025-2026.
+Complete guide for structuring and optimizing Google Ads accounts with focus on modern, Smart Bidding-optimized architectures.
 
-> **April 2026 API Update:** Meta API v25.0 (Feb 2026) unifies Advantage+ Sales Campaigns (ASC) into a single campaign type with 3 automation levers (budget, audience, placement). The legacy `smart_promotion_type` / AAC distinction is deprecated (deadline May 19, 2026). `advantage_state_info` is the new field. In practice, the 4-tier structure below remains valid — ASC is the SCALE campaign type. **New placement:** Threads (400M+ MAU, March 2026) — add to placement mix for scale campaigns.
+> Quick decision guide for choosing structure type in [references/decision-trees.md](references/decision-trees.md).
 
-## Core Principle
+## 2026 Campaign Type Reference
 
-**Creative = Targeting.** Meta's Andromeda algorithm selects ads based on creative quality, not audience parameters. Creative diversification and systematic testing are the primary growth levers.
+| Type | Purpose | Key Notes |
+|------|---------|-----------|
+| Search | Text ads on Google Search | AI Max subtype (2026) for broad query coverage |
+| Performance Max | All-channel automation | Negative keywords (v20+), search terms (v21+), network breakdown (v22+) |
+| Demand Gen | Visual prospecting (YouTube, Discover, Gmail) | Replaced Discovery (Aug 2023), supports TargetCPC (v22+) |
+| Display | Banner/image ads on GDN | |
+| Shopping | Product listing ads (feed-based) | |
+| Video | YouTube video campaigns | |
+| App | App install/engagement | |
 
-**Simplification = Better Performance.** Accounts with 2-4 campaigns perform 32% better on CPA than fragmented structures.
+Removed: Discovery (→ Demand Gen), Similar Audiences (→ Optimized Targeting).
 
-## 4-Tier Funnel Structure
-
-| Tier | Campaign Type | Budget | Goal |
-|------|---------------|--------|------|
-| **SCALE** | Advantage+ Sales (ASC) | 60-70% | Scale proven winners |
-| **TEST** | Manual Sales (ABO) | 10-20% | Identify new winners |
-| **RETARGET** | Manual Sales | 15-25% | Convert warm traffic |
-| **RETAIN** | Manual Sales | 5-10% | Maximize customer LTV |
-
-### SCALE Campaign (ASC) - 60-70% budget
-- **Targeting:** 100% Broad (Advantage+ Audience)
-- **Creatives:** Only validated winners - no new tests here
-- **Goal:** Maximum scale with proven performers
-
-### TEST Campaign (Prospecting) - 10-20% budget
-- **Broad Pack [date]** - Contains 3-5 new creatives for testing
-- **Broad Pack [date]** - New batch of creatives (weekly/biweekly)
-- **Interest #1 Winners** - Receives graduated winners for interest targeting
-- **Interest #2 Winners** - Receives graduated winners for other interests
-- **Goal:** Systematically test new creatives and identify winners
-
-### RETARGET Campaign - 15-25% budget
-- **14 Day FB/IG Engagers** - Social engagement retargeting
-- **30 Day Website Visitors** - Site visitor retargeting
-- **90 Day ATC/IC** - Add to Cart / Initiate Checkout retargeting
-- **Goal:** Convert warm traffic with high purchase intent
-
-### RETAIN Campaign - 5-10% budget
-- **All Time Purchasers** - Upsell/Cross-sell messaging
-- **180 Day Purchasers** - Replenishment/New Products messaging
-- **Goal:** Reactivate existing customers and increase LTV
-
----
-
-## Creative Flow: How Ads Move Through the System
-
-This is the exact flow of how creatives are tested, evaluated, and graduated.
-
-### Step 1: New Creatives Start in TEST
-
-All new creatives begin in the **TEST campaign**, specifically in a **Broad Pack ad set**:
+## Pull Current Account Structure via MCP
 
 ```
-New creative made
-         ↓
-    TEST Campaign
-         ↓
-  Broad Pack [date]
-    (Ad Set with ABO)
+google_ads_run_gaql(query="
+  SELECT campaign.name, campaign.advertising_channel_type,
+         campaign.advertising_channel_sub_type,
+         campaign.bidding_strategy_type,
+         campaign.status,
+         metrics.conversions, metrics.cost_micros,
+         metrics.cost_per_conversion
+  FROM campaign
+  WHERE segments.date DURING LAST_30_DAYS
+    AND campaign.status = 'ENABLED'
+  ORDER BY metrics.cost_micros DESC
+  LIMIT 25
+")
 ```
 
-**Why Broad Pack?**
-- Broad targeting gives the algorithm maximum freedom to find the best audience
-- ABO (Ad Set Budget Optimization) ensures equal budget distribution between creatives
-- Date in name makes tracking creative batches simple
-
-### Step 2: Evaluation Against Winner Criteria
-
-After sufficient spend and time, each creative is evaluated:
-
-```
-Creative in Broad Pack
-         ↓
-  Spend >= minimum threshold?
-  (e.g., 3x CPA or 3x AOV)
-         ↓
-    NO → Keep testing OR kill if underperforming
-    YES → Evaluate performance
-         ↓
-  ROAS >= threshold AND conversions >= minimum?
-         ↓
-    NO → Kill or keep testing
-    YES → WINNER! Go to Step 3
-```
-
-### Step 3: Winner Graduation (Three Destinations)
-
-**Important:** A winner goes to MULTIPLE destinations simultaneously, not just one.
-
-When a creative reaches winner status, it is copied to:
-
-**Destination A: SCALE Campaign (ASC)**
-```
-Winner Creative
-      ↓
- SCALE Campaign (ASC)
-      ↓
- 100% Broad Ad Set
- (alongside other winners)
-```
-- Creative is added to the ASC campaign
-- Runs with 100% broad targeting on Advantage Campaign Budget
-- Receives the largest share of budget (60-70%)
-
-**Destination B: Interest #1 Winners Ad Set**
-```
-Winner Creative
-      ↓
-  TEST Campaign
-      ↓
-Interest #1 Winners
-   (Ad Set)
-```
-- Same creative, but now with interest targeting
-- Tests whether the winner also performs with specific interest audiences
-- Provides diversification alongside pure broad scaling
-
-**Destination C: Interest #2 Winners Ad Set**
-```
-Winner Creative
-      ↓
-  TEST Campaign
-      ↓
-Interest #2 Winners
-   (Ad Set)
-```
-- Same creative with different interest targeting
-- Multiple interest ad sets possible depending on product/market
-
-### Complete Flow Summary
-
-```
-[NEW CREATIVE]
-        │
-        ▼
-┌───────────────────┐
-│   TEST Campaign   │
-│                   │
-│  Broad Pack [date]│ ◄── Starting point for all new creatives
-│    (ABO budget)   │
-└────────┬──────────┘
-         │
-         ▼
-   [EVALUATION]
-   Meets winner criteria?
-         │
-    ┌────┴────┐
-    │         │
-   NO        YES
-    │         │
-    ▼         ▼
-  [KILL]   [WINNER]
-    or        │
- [KEEP       │
- TESTING]    ├──────────────────────────────────────┐
-             │                                      │
-             ▼                                      ▼
-┌────────────────────────┐          ┌───────────────────────────┐
-│    SCALE Campaign      │          │      TEST Campaign        │
-│         (ASC)          │          │                           │
-│                        │          │  ┌─────────────────────┐  │
-│  ┌──────────────────┐  │          │  │ Interest #1 Winners │  │
-│  │   100% Broad     │  │          │  └─────────────────────┘  │
-│  │   (all winners)  │  │          │  ┌─────────────────────┐  │
-│  └──────────────────┘  │          │  │ Interest #2 Winners │  │
-│                        │          │  └─────────────────────┘  │
-│  Budget: 60-70%        │          │                           │
-│  Goal: Maximum scale   │          │  Goal: Interest targeting │
-└────────────────────────┘          │        with winners       │
-                                    └───────────────────────────┘
-```
-
-### Flow Rules Summary
-
-| Rule | Description |
-|------|-------------|
-| New creatives → Broad Pack | All new creatives start in TEST campaign, Broad Pack ad set |
-| Winner = multi-destination | Winners go to SCALE (ASC) AND Interest Winners ad sets |
-| No new tests in SCALE | SCALE campaign contains only proven winners, no experiments |
-| Interest Winners ≠ new tests | Interest Winners ad sets contain graduated winners, not new creatives |
-| Retarget/Retain = separate creatives | These campaigns use specific messaging, not the same test creatives |
-
-### When Does a Creative NOT Advance?
-
-A creative is paused (killed) and does not advance when:
-
-1. **No conversions after 2-3x CPA spend** → Pause immediately
-2. **ROAS < 50% of target after significant spend** → Pause
-3. **CTR < 0.5% with €100+ spend** → Pause or iterate
-4. **Hook rate < 20% after 10,000+ impressions** → Creative problem, iterate
-
-### Practical Example
-
-```
-Scenario: E-commerce brand, AOV €80, Target ROAS 4x, Target CPA €20
-
-Week 1:
-- Launch Broad Pack 2025-01-15 with Creative A, B, C, D
-- Each creative gets equal budget (ABO)
-
-Week 2 (after €60+ spend per creative):
-- Creative A: €65 spend, 4 purchases, €400 revenue → ROAS 6.15x ✓
-- Creative B: €70 spend, 2 purchases, €160 revenue → ROAS 2.29x (below threshold)
-- Creative C: €55 spend, 0 purchases → KILL
-- Creative D: €60 spend, 3 purchases, €280 revenue → ROAS 4.67x ✓
-
-Actions:
-- Creative A → Copy to SCALE + Interest #1 Winners + Interest #2 Winners
-- Creative B → Keep testing (ROAS positive but below 3x threshold)
-- Creative C → Pause (no conversions after 2.75x CPA)
-- Creative D → Copy to SCALE + Interest #1 Winners + Interest #2 Winners
-```
-
-## Campaign Settings per Tier
-
-### SCALE - Advantage+ Sales Campaign (ASC)
-
-| Setting | Value |
-|---------|-------|
-| Campaign Type | Advantage+ Sales Campaign |
-| Budget Type | Advantage Campaign Budget (formerly CBO) |
-| Targeting | 100% Broad (Advantage+ Audience) |
-| Existing Customer Cap | 0-10% (for pure acquisition) |
-| Creatives | Only validated winners |
-| Max ads | 150 per campaign, 50 per ad set |
-
-**Scaling rules:**
-- Increase budget by max 20-25% per 24-48 hours
-- Monitor frequency: >3.0 = creative fatigue risk
-- Add new winners, don't immediately pause old ones
-
-### TEST - Prospecting Campaign
-
-| Setting | Value |
-|---------|-------|
-| Campaign Type | Manual Sales Campaign |
-| Budget Type | ABO (Ad Set Budget Optimization) |
-| Targeting | Broad (Broad Packs) + Interest (Winners) |
-| Structure | 3-5 creatives per Broad Pack ad set |
-| Test duration | Minimum 5-7 days |
-
-**Broad Pack naming:**
-```
-Ad Set: "Broad Pack [YYYY-MM-DD]"
-├── Creative #1: [Format]_[Concept]_[Hook]_V1
-├── Creative #2: [Format]_[Concept]_[Hook]_V2
-├── Creative #3: [Format]_[Concept]_[Hook]_V3
-└── Creative #4: [Format]_[Concept]_[Hook]_V4
-```
-
-### RETARGET - Retargeting Campaign
-
-| Audience | Window | Creative Approach |
-|----------|--------|-------------------|
-| FB/IG Engagers | 14 days | Social proof, testimonials |
-| Website Visitors | 30 days | Product benefits, urgency |
-| ATC/IC | 90 days | Abandoned cart, discount offers |
-
-**Retargeting creative types:**
-- Evergreen content (always relevant)
-- Objection handlers (FAQ, guarantees)
-- Sales/discount promotions
-- Low barrier offers (free shipping, samples)
-- Product-specific retargeting (Advantage+ Catalog Ads)
-
-### RETAIN - Retention Campaign
-
-| Audience | Creative Approach |
-|----------|-------------------|
-| All Time Purchasers | Cross-sell, new collections, VIP offers |
-| 180 Day Purchasers | Replenishment, loyalty rewards, referral |
-
-**Retention creative types:**
-- Subscription/membership upsells
-- Bundle offers
-- Exclusive early access
-- Referral programs
-
-## Winner Criteria Framework
-
-### Step 1: Determine Client Parameters
-
-**Always ask the user first:**
-1. What is the average order value (AOV)?
-2. What is the target CPA or ROAS?
-3. What is the business model? (e-commerce low/high AOV, lead gen)
-4. How much budget is available for testing?
-
-### Step 2: Calculate Winner Thresholds
-
-**Formula for E-commerce:**
-```
-Minimum Spend = MAX(3 x Target CPA, 3 x AOV)
-Minimum Conversions = Depends on AOV tier (see table)
-ROAS Threshold = Depends on business model (see table)
-```
-
-**Winner Criteria per Business Model:**
-
-| Business Model | Min. Conversions | Min. Spend | ROAS Threshold |
-|----------------|-----------------|------------|----------------|
-| Low AOV (<€50) | 8-10 purchases | 3x CPA or ~€200-400 | >=4x ROAS |
-| Medium AOV (€50-200) | 5-8 purchases | 3x CPA or ~€300-600 | >=3x ROAS |
-| High AOV (>€200) | 3-5 purchases | 3x CPA or ~€500-1000 | >=2.5x ROAS |
-| Lead Generation | 10-15 leads | 3x CPL or ~€200-500 | Lead Quality Score |
-
-**Example calculation (Medium AOV):**
-```
-AOV = €100
-Target CPA = €25
-Target ROAS = 4x (€100/€25)
-
-Winner Criteria:
-- Minimum spend: MAX(3 x €25, 3 x €100) = €300
-- Minimum conversions: 5-8 purchases
-- ROAS threshold: >=3x (conservative) or >=4x (target)
-```
-
-### Step 3: Early Performance Signals (Video)
-
-**Evaluate after 24-48 hours and 10,000+ impressions:**
-
-| Metric | Benchmark | Action if Below |
-|--------|-----------|-----------------|
-| Hook Rate | >=25% (target: 30-45%) | Iterate first 3 seconds |
-| Hold Rate | >=40% (target: 60%+) | Check pacing and narrative |
-| CTR | >=1% (target: 2%+) | Test other hooks/angles |
-| CPC | <= account average | Monitor, don't pause yet |
-
-### Step 4: Kill Criteria
-
-**Pause creative when:**
-- No conversions after 2-3x target CPA spend
-- ROAS <50% of target after 5+ days
-- CTR <0.5% with significant spend (>€100)
-- Frequency >3.0 with declining performance
-- Hook rate <20% after 10,000+ impressions
-
-## Creative Velocity Guidelines
-
-**How many new creatives per month?**
-
-| Monthly Ad Spend | New Creatives | Structure |
-|-----------------|---------------|-----------|
-| €0-10k | 1-2 per month | Test on-demand at fatigue |
-| €10-25k | 3-4 per month | Weekly iteration cycle |
-| €25-50k | 4-8 per month | 1-2 per week |
-| €50-100k | 8-16 per month | 2-4 per week |
-| €100k+ | 15-50+ per month | Dedicated creative team |
-
-**Creative production breakdown:**
-- ~50% iterations on proven concepts
-- ~30% new concepts within proven formats
-- ~20% experimental new formats/angles
-
-**Win rate expectations:**
-- ~2% of creatives become true scale winners
-- ~10% show initial profitability
-- Iterations on winners often outperform originals
-
-## Budget Allocation Templates
-
-### Template A: Growth Focus (Recommended)
-```
-SCALE (ASC):     60%
-TEST:            20%
-RETARGET:        15%
-RETAIN:           5%
-```
-
-### Template B: Efficiency Focus
-```
-SCALE (ASC):     50%
-TEST:            15%
-RETARGET:        25%
-RETAIN:          10%
-```
-
-### Template C: New Account / Launch
-```
-SCALE (ASC):     40%  (or 0% until first winners)
-TEST:            40%
-RETARGET:        15%
-RETAIN:           5%
-```
-
-## Account Audit Checklist
-
-### Identifying Red Flags
-
-| Red Flag | Impact | Action |
-|----------|--------|--------|
-| >5 active campaigns | Data fragmentation | Consolidate to 4-tier model |
-| Ad sets <50 conv/week | Learning Limited | Merge or increase budget |
-| >50% budget in learning | Inefficiency | Consolidate, increase budgets |
-| No dedicated test campaign | No pipeline | Implement TEST tier |
-| Retargeting >30% budget | Over-investment | Reduce, focus on prospecting |
-| Frequency >4 on scale | Creative fatigue | Refresh creatives, add new |
-
-### Audit Questions
-
-1. **Structure:** How many active campaigns? (Ideal: 2-4)
-2. **Learning:** How many ad sets in "Learning Limited"? (Ideal: <20%)
-3. **Testing:** Is there a dedicated test campaign? (Must: Yes)
-4. **Winners:** How are winners identified and scaled?
-5. **Creative velocity:** How many new creatives per month?
-6. **Attribution:** Is CAPI implemented with EMQ >=6?
-
-### MCP: Pull Account Structure for Audit
-
-```python
-# Get active campaigns with delivery status and budget
-meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","status","daily_budget","lifetime_budget","objective","buying_type"], filters={"effective_status":["ACTIVE"]})
-
-# Get ad sets for a campaign (learning status, audience info)
-meta_query(account_id="act_XXXXX", entity="adsets", fields=["id","name","status","learning_phase_status","daily_budget","targeting","optimization_goal"], filters={"campaign_id":"<campaign_id>","effective_status":["ACTIVE"]})
-```
-
-## Naming Convention
-
-**Campaign Level:**
-```
-[Tier]_[Objective]_[BudgetType]_[Geo]
-```
-Example: `SCALE_SALES_ACB_NL` or `TEST_SALES_ASB_EU`
-
-**Ad Set Level:**
-```
-[Tier]_[AudienceType]_[Date/Detail]
-```
-Example: `TEST_BROAD_2025-01-15` or `RT_WV30D_ALLPLC`
-
-**Ad Level:**
-```
-[Format]_[Concept]_[Hook]_[Version]
-```
-Example: `VID_UGC_PROBLEM_V2` or `IMG_LIFESTYLE_BENEFIT_V1`
-
-### Code Legend
-
-| Code | Meaning |
-|------|---------|
-| SCALE | Scaling campaign (ASC) |
-| TEST | Testing campaign |
-| RT | Retargeting |
-| RET | Retention |
-| BROAD | Advantage+ Audience / Broad |
-| INT | Interest targeting |
-| LAL | Lookalike Audience |
-| WV | Website Visitors |
-| ENG | Engagers (FB/IG) |
-| ATC | Add to Cart |
-| IC | Initiate Checkout |
-| PURCH | Purchasers |
-| VID | Video |
-| IMG | Static Image |
-| CAR | Carousel |
-| UGC | User Generated Content |
-
-## Implementation Plan
-
-### Week 1: Audit & Setup
-1. Audit current account structure
-2. Define winner criteria with client
-3. Set up 4-tier campaign structure
-4. Implement naming conventions
-
-### Week 2: Testing Launch
-1. Launch first Broad Pack with 4-6 creatives
-2. Set up tracking and reporting dashboard
-3. Monitor early signals (hook rate, CTR)
-
-### Week 3-4: Optimize & Scale
-1. Evaluate creatives against winner criteria
-2. Graduate winners to SCALE/Interest
-3. Kill underperformers
-4. Launch new test batch
-
-### Ongoing: Maintain Velocity
-1. Weekly creative refresh cycle
-2. Monthly structure audit
-3. Quarterly winner criteria review
-
-## Output Template: Account Restructuring Plan
+Use to audit campaign types, identify consolidation candidates (<30 conv/month), and spot legacy structures.
+
+## Modern Structure Principles
+
+1. **Consolidation over fragmentation:** Fewer campaigns with more conversions = faster Smart Bidding learning
+2. **Machine learning first:** Smart Bidding + broad match, not manual bids + exact match
+3. **Theme-based ad groups (STAG):** Same-intent keywords grouped (10-20 per group), replacing SKAGs
+4. **Budget = business constraint:** Separate campaigns only for different budgets, geos, business units, or performance targets
+
+## Recommended Account Architectures
+
+### E-Commerce
+| Campaign | Budget % | Bidding | Purpose |
+|----------|----------|---------|---------|
+| Brand Search | 10-15% | Max Conv or tCPA | Capture branded intent |
+| Performance Max | 40-50% | Max Conv Value + tROAS | Full-funnel automation |
+| Non-Brand Search | 30-40% | tCPA or tROAS | High-intent traffic |
+| Demand Gen | 5-10% | tCPA or tCPC (v22+) | Prospecting, visual products |
+| Display Remarketing | 5-10% | tCPA | Re-engage visitors |
+
+### Lead Gen
+| Campaign | Budget % | Purpose |
+|----------|----------|---------|
+| Brand Search | 10-15% | Low CPA, high conversion rate |
+| High-Intent Non-Brand | 50-60% | Qualified leads ([service] + action terms) |
+| Consideration/Research | 20-25% | Top-funnel leads ([service] + question terms) |
+| Performance Max (optional) | 10-15% | Broader reach |
+
+### Ad Group Best Practices (STAG)
+- 10-20 keywords per ad group, all same intent/theme
+- Same landing page, 2-3 RSAs per group
+- Match type strategy: Broad 40-60% + Phrase 30-40% + Exact 10-20% (with Smart Bidding)
+- Negatives are crucial with broad match: account-level list, campaign-level, weekly search term review
+
+## Campaign Consolidation
+
+### When to Consolidate
+- <50 conversions per campaign per month (Smart Bidding "Learning Limited")
+- Overlapping keywords across campaigns
+- Same CPA/ROAS targets with no reason for separation
+- Fragmented budgets across many small campaigns
+
+### Keep Separate When
+- Different budget pools or business units
+- Different geographic/language targets
+- Significantly different performance targets (brand vs non-brand)
+- Compliance/organizational requirements
+
+### Consolidation Process
+
+**Phase 1 (Week 1):** Export data, identify candidates, map keyword overlap, plan new structure.
+
+**Phase 2 (Week 2):** Build new consolidated campaigns, reorganize keywords, write RSAs, configure bid strategy.
+
+**Phase 3 (Week 3):** Soft transition — reduce old budgets 50%, enable new with 50%, shift gradually over 7-14 days.
+
+**Phase 4 (Week 4+):** Monitor Learning Phase, adjust targets, optimize negatives, review search terms.
+
+### Portfolio Bid Strategies
+
+One bid strategy across multiple campaigns — useful when individual campaigns have too little data.
+
+- Target CPA Portfolio: Multiple lead gen campaigns, same CPA target
+- Target ROAS Portfolio: Multiple e-commerce campaigns, same margin target
+- Maximize Conversions Portfolio: New/small campaigns needing aggregated data
+
+## SKAG to Modern Migration
+
+SKAGs (Single Keyword Ad Groups) no longer work because Smart Bidding needs data volume, close variants make exact match imprecise, and broad match + Smart Bidding outperforms.
+
+**Migration steps:**
+1. Export all SKAGs, group keywords by theme/intent
+2. Define new structure: 500 SKAGs → 30-50 themed ad groups in 3-5 campaigns
+3. Consolidate ad copy: 2-3 RSAs per group using best performers as base
+4. Gradual transition over 4 weeks (20% → 50% → 80% → 100% new structure)
+5. Post-migration: monitor Learning Phase (2-4 weeks), expand with broad match gradually
+
+> Enterprise account architecture (multi-product/region), budget hierarchies, and Google Ads Script for structure analysis in [references/detailed-reference.md](references/detailed-reference.md).
+
+## Output: Structure Recommendation Template
 
 ```markdown
-# Account Restructuring Plan: [Client Name]
+# Account Structure Recommendation
 
-## Current Situation
-- Campaigns: [count]
-- Ad Sets: [count]
-- % in Learning Limited: [%]
-- Primary issues: [list]
+## Current State
+- **Campaigns:** [X] | **Ad Groups:** [X] | **Keywords:** [X]
+- **Avg conversions/campaign/month:** [X]
+- **SKAGs detected:** [X]
 
-## Winner Criteria (Client-Specific)
-- AOV: €[X]
-- Target CPA: €[X]
-- Target ROAS: [X]x
-- Min. spend for winner: €[X]
-- Min. conversions for winner: [X]
+## Assessment
+| Aspect | Current | Best Practice | Status |
+|--------|---------|---------------|--------|
+| Campaign count | [X] | [Based on budget] | [OK/Issue] |
+| Ad groups/campaign | [X] | 5-15 | [OK/Issue] |
+| Keywords/ad group | [X] | 10-20 | [OK/Issue] |
+| Conv/campaign | [X] | 50+ | [OK/Issue] |
 
-## Proposed 4-Tier Structure
+## Proposed Architecture
+├── Campaign 1: [Name] — Budget: [X]/day — Bidding: [Strategy]
+├── Campaign 2: [Name] — ...
+└── Campaign N: [Name] — ...
 
-### SCALE - ASC Campaign
-- Budget: €[X]/day ([%] of total)
-- Creatives: [current winners]
-
-### TEST - Prospecting Campaign
-- Budget: €[X]/day ([%] of total)
-- First Broad Pack: [date]
-- Creatives to test: [list]
-
-### RETARGET Campaign
-- Budget: €[X]/day ([%] of total)
-- Audiences: [list with windows]
-
-### RETAIN Campaign
-- Budget: €[X]/day ([%] of total)
-- Focus: [upsell/cross-sell strategy]
+## Consolidation Plan
+| Old Campaigns | New Campaign | Reason |
+|---------------|--------------|--------|
+| [List] | [New name] | [Low volume/overlap] |
 
 ## Migration Timeline
-- Week 1: [actions]
-- Week 2: [actions]
-- Week 3-4: [actions]
+- Week 1: Preparation (export data, design structure)
+- Week 2-3: Migration (gradual budget shift)
+- Week 4: Consolidation (100% new structure)
 
-## Expected Impact
-- CPA reduction: [%]
-- ROAS improvement: [%]
-- Learning Limited reduction: [%]
+## Expected Outcomes
+- Faster learning phase
+- Improved Smart Bidding performance
+- Reduced management overhead
 ```

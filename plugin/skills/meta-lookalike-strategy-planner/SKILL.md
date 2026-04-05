@@ -1,8 +1,11 @@
 ---
 name: lookalike-strategy-planner
 description: |
-  Develops effective Lookalike Audience strategies for Meta Ads with optimal source audiences, percentages, and layering techniques. Use when: setting up lookalikes, optimizing existing lookalikes, or diagnosing underperforming lookalike audiences.
-  Do NOT use for: audience overlap issues (use audience-overlap-detector), full-funnel design (use full-funnel-designer), campaign structure (use campaign-structure-advisor).
+  This skill should be used when the user asks to "create lookalike audiences", "optimize LAL percentages",
+  "choose source audiences", or mentions "lookalike strategy", "LAL underperforming",
+  or "Advantage+ audience signals". Do NOT use for: audience overlap issues
+  (use audience-overlap-detector), full-funnel design (use full-funnel-designer),
+  campaign structure (use campaign-structure-advisor).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -348,12 +351,13 @@ With that info I can fine-tune the percentages and build out a layered strategy!
 # List custom audiences to identify your highest-quality source options
 meta_query(
     account_id="act_XXXXXXXXX",
-    query_type="customaudiences",
-    params={
-        "fields": ["name", "subtype", "approximate_count", "data_source", "time_updated"],
-        "filtering": [{"field": "subtype", "operator": "IN", "value": ["CUSTOM", "WEBSITE", "OFFLINE_CONVERSION"]}]
-    }
+    entity_type="adsets",
+    effective_status=["ACTIVE"],
+    fields=["id", "name", "targeting", "optimization_goal"]
 )
+# Note: Custom audience listing is not directly available via MCP tools.
+# Use Ads Manager → Audiences to view custom audience details (subtype, size, last updated).
+# The adsets query above shows which audiences are in use via targeting.custom_audiences.
 ```
 
 Look for audiences with `approximate_count` > 1,000 and recent `time_updated`. Purchaser audiences (OFFLINE_CONVERSION or WEBSITE with Purchase event) in the 500–10,000 range are ideal LAL sources. Avoid audiences with counts below 300 or last updated more than 180 days ago.

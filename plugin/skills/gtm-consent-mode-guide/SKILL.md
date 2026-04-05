@@ -1,13 +1,10 @@
 ---
 name: gtm-consent-mode-guide
 description: |
-  Cookie consent and Google Consent Mode v2 implementation guide for GTM. Covers consent_default,
-  consent_update, all consent types, CMP integration, data loss estimation and recovery strategies,
-  Enhanced Conversions, behavioral modeling, TCF 2.2 compliance, and regional consent strategies.
-
-  Use when: (1) implementing Google Consent Mode v2 in GTM, (2) choosing or integrating a CMP with GTM,
-  (3) estimating and recovering conversion data lost to cookie consent requirements.
-
+  This skill should be used when the user asks to "implement Consent Mode v2",
+  "integrate a CMP with GTM", "recover data lost to cookie consent",
+  "set up consent_default and consent_update", or mentions "TCF 2.2",
+  "behavioral modeling", or "Enhanced Conversions for consent".
   Do NOT use for: GTM tag/trigger setup (use gtm-conversion-setup-guide), server-side tagging
   (use gtm-server-side-tagging-guide), or strategic tracking planning (use tracking-plan-builder).
 metadata:

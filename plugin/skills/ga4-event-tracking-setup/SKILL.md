@@ -1,8 +1,8 @@
 ---
 name: ga4-event-tracking-setup
 description: |
-  Google Analytics 4 event tracking implementation guide. Covers custom event configuration in GTM, form submission tracking, video engagement, click tracking, event parameters, and user properties.
-  Use when: user asks about event tracking, custom events, GTM event setup, form tracking, click tracking, GA4 event parameters, or user properties configuration.
+  This skill should be used when the user asks to "set up GA4 events", "configure custom events",
+  "track form submissions", or mentions "click tracking", "GA4 event parameters", or "user properties".
   Do NOT use for: Data Layer implementation (use ga4-data-layer-guide), key events/conversions setup (use ga4-key-events-config), or e-commerce event tracking (use ga4-ecommerce-setup).
 metadata:
   author: "AdSuperpowers"
@@ -612,11 +612,12 @@ If the user has connected their GA4 account, verify events are actually firing i
 
 ```python
 # Confirm events are being received and count correctly
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
+    start_date="7daysAgo",
+    end_date="today",
     metrics=["eventCount"],
-    dimensions=["eventName"],
-    date_range="last_7d"
+    dimensions=["eventName"]
 )
 ```
 

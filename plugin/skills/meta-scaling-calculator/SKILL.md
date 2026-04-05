@@ -1,8 +1,11 @@
 ---
-name: meta-scaling-calculator
+name: scaling-calculator
 description: |
-  Calculates optimal scaling strategies for Meta Ads campaigns with budget increments, timeline planning, and risk assessment. Use when: scaling successfully without losing performance.
-  Do NOT use for: bid strategy selection (use bid-strategy-selector), budget allocation across funnel (use full-funnel-designer), performance diagnostics (use performance-troubleshooter).
+  This skill should be used when the user asks to "scale a campaign", "calculate budget increments",
+  "plan a scaling timeline", or mentions "scaling without losing performance",
+  "Meta Ads scaling strategy", or "budget increase risk". Do NOT use for: bid strategy
+  selection (use bid-strategy-selector), budget allocation across funnel
+  (use full-funnel-designer), performance diagnostics (use performance-troubleshooter).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -411,13 +414,13 @@ Before building a scale plan, always verify the pre-scaling checklist with real 
 
 ```
 1. Performance stability check (last 7 days):
-→ meta_query(account_id="...", fields=["adset_name","cost_per_result","purchase_roas","spend","impressions","reach","frequency"], date_preset="last_7d", level="adset")
+→ meta_get_insights(account_id="...", level="adset", date_preset="last_7d", fields=["adset_name","cost_per_action_type","spend","impressions","reach","frequency"])
 
 2. Learning phase status:
-→ meta_query(account_id="...", fields=["adset_name","delivery_info","spend"], date_preset="last_3d", level="adset")
+→ meta_get_insights(account_id="...", level="adset", date_preset="last_3d", fields=["adset_name","spend","impressions"])
 
 3. Check current frequency (audience headroom):
-→ meta_query(account_id="...", fields=["adset_name","frequency","reach","impressions"], date_preset="last_14d", level="adset")
+→ meta_get_insights(account_id="...", level="adset", date_preset="last_14d", fields=["adset_name","frequency","reach","impressions"])
 ```
 
 Use the results to fill in the scaling readiness checklist before committing to a timeline.
@@ -477,7 +480,7 @@ Stop and stabilize if:
 
 **MONITOR DAILY with MCP:**
 ```
-meta_query(account_id="...", fields=["adset_name","spend","cost_per_result","purchase_roas","frequency","impressions"], date_preset="today", level="adset")
+meta_get_insights(account_id="...", level="adset", date_preset="today", fields=["adset_name","spend","cost_per_action_type","frequency","impressions"])
 ```
 
 Would you like a detailed day-by-day tracking sheet?"

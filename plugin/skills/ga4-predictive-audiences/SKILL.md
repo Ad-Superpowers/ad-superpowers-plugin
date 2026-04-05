@@ -1,8 +1,8 @@
 ---
 name: ga4-predictive-audiences
 description: |
-  GA4 predictive audiences with machine learning. Identifies likely purchasers (7-day purchase probability), churn prediction, at-risk customers, predicted revenue segmentation, and ML audience activation for Smart Bidding.
-  Use when: user asks about predictive audiences, purchase probability, churn prediction, likely buyers, at-risk customers, ML audiences, predicted revenue, or machine learning audience setup.
+  This skill should be used when the user asks to "set up predictive audiences", "find likely buyers",
+  "predict churn", or mentions "purchase probability", "at-risk customers", or "ML audiences in GA4".
   Do NOT use for: building standard audiences (use ga4-audience-builder), audience exclusions (use ga4-audience-exclusions), or remarketing export setup (use ga4-remarketing-setup).
 metadata:
   author: "AdSuperpowers"
@@ -380,7 +380,7 @@ DON'Ts
 ├── Rely solely on predictive
 │   └─► Combine with first-party data
 │
-├── Ignore that you're not eligible
+├── Ignore ineligibility
 │   └─► Fix tracking first, then use predictive
 │
 ├── Expect predictive to work instantly
@@ -463,12 +463,12 @@ If the user has connected their GA4 account, check whether predictive metrics ar
 
 ```python
 # Check purchase event volume — need ≥1k purchasers in last 28 days for predictive eligibility
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["eventCount", "totalUsers"],
     dimensions=["eventName"],
-    date_range="last_28d",
-    filter_expression="eventName==purchase"
+    start_date="28daysAgo",
+    end_date="today"
 )
 ```
 

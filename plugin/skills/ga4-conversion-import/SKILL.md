@@ -1,7 +1,9 @@
 ---
 name: ga4-conversion-import
 description: |
-  Import GA4 conversions to Google Ads for Smart Bidding. Use when: exporting GA4 key events to Google Ads, configuring primary vs secondary conversions, optimizing Smart Bidding with GA4 data, setting conversion counting and value, importing offline conversions. Do NOT use for: attribution model selection (use ga4-attribution-advisor), e-commerce event setup (use ga4-ecommerce-setup).
+  This skill should be used when the user asks to "import GA4 conversions to Google Ads", "set up Smart Bidding conversions",
+  "configure conversion counting", or mentions "offline conversion import", "primary vs secondary conversions", or "GA4 to Google Ads export".
+  Do NOT use for: attribution model selection (use ga4-attribution-advisor), e-commerce event setup (use ga4-ecommerce-setup).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -411,11 +413,12 @@ If the user has connected their GA4 account, check key event counts before setti
 
 ```python
 # Get key event counts to verify volume and consistency before importing to Google Ads
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["keyEvents", "sessions"],
     dimensions=["date", "sessionDefaultChannelGroup"],
-    date_range="last_30d"
+    start_date="30daysAgo",
+    end_date="today"
 )
 ```
 

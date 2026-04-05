@@ -1,8 +1,10 @@
 ---
 name: linkedin-campaign-scaling-guide
 description: |
-  LinkedIn-specific campaign scaling strategies for high-CPC B2B environments. Covers audience expansion techniques, bid strategy optimization, geographic scaling, dayparting, frequency management, and budget allocation across campaign types. Includes scaling readiness assessment and plateau-breaking frameworks.
-  Use when: (1) user wants to scale LinkedIn ad spend without destroying efficiency, (2) user asks about audience expansion or bid strategies on LinkedIn, (3) user is hitting diminishing returns or audience saturation on LinkedIn.
+  This skill should be used when the user asks to "scale LinkedIn ad spend",
+  "break through a LinkedIn campaign plateau", "expand LinkedIn audiences",
+  "optimize LinkedIn bid strategy", or mentions "LinkedIn diminishing returns",
+  "audience saturation", or "LinkedIn budget allocation".
   Do NOT use for: initial campaign setup (use linkedin-content-strategy), lead quality issues (use linkedin-lead-scoring-framework), or ABM targeting (use linkedin-abm-targeting-strategy).
 metadata:
   author: "AdSuperpowers"

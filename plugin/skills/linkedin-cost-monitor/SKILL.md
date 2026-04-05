@@ -1,8 +1,9 @@
 ---
 name: linkedin-cost-monitor
 description: |
-  Track, analyze, and benchmark LinkedIn Ads costs with a focus on European (EU) and Dutch (NL) markets. Includes DDMA 2025 benchmarks showing +4.5x CPL YoY increase in Netherlands. Helps advertisers understand if their costs are normal, detect cost spikes early, and optimize budget efficiency.
-  Use when: user asks about LinkedIn costs, CPC/CPL benchmarks, why LinkedIn is so expensive, if their LinkedIn CPL is normal, or cost trends for B2B advertising in Europe.
+  This skill should be used when the user asks to "track LinkedIn ad costs",
+  "benchmark LinkedIn CPC in Europe", "detect LinkedIn cost spikes", or mentions
+  "why is LinkedIn so expensive", "LinkedIn CPL normal for Netherlands", or "LinkedIn cost trends EU".
   Do NOT use for: general LinkedIn benchmark lookups across all metrics (use linkedin-benchmark-database), LinkedIn bid strategy questions (use linkedin-bid-strategy-selector), or LinkedIn performance troubleshooting (use linkedin-performance-troubleshooter).
 metadata:
   author: "AdSuperpowers"
@@ -497,25 +498,25 @@ Use MCP tools to pull cost data for analysis and trend detection:
 # Get weekly cost trends across all campaigns
 linkedin_get_analytics(
   account_id="YOUR_ACCOUNT_ID",
-  entity="campaigns",
-  metrics=["costInLocalCurrency", "cpc", "cpm", "cpl", "clicks", "impressions",
-           "leads", "frequency"],
-  date_range={"start": "YYYY-MM-DD", "end": "YYYY-MM-DD"}
+  start_date="YYYY-MM-DD",
+  end_date="YYYY-MM-DD",
+  level="campaign",
+  fields=["costInLocalCurrency", "clicks", "impressions", "leads"]
 )
 
 # Get account-level totals for efficiency score calculation
 linkedin_get_analytics(
   account_id="YOUR_ACCOUNT_ID",
-  entity="accounts",
-  metrics=["costInLocalCurrency", "cpc", "cpm", "cpl", "totalEngagements", "impressions"],
-  date_range={"start": "YYYY-MM-DD", "end": "YYYY-MM-DD"}
+  start_date="YYYY-MM-DD",
+  end_date="YYYY-MM-DD",
+  level="account",
+  fields=["costInLocalCurrency", "clicks", "impressions", "totalEngagements"]
 )
 
 # Get campaign details to check for bid strategy changes that may explain spikes
 linkedin_query(
   account_id="YOUR_ACCOUNT_ID",
-  entity="campaigns",
-  fields=["id", "name", "costType", "unitCost", "dailyBudget", "lastModified", "status"]
+  entity_type="campaigns"
 )
 ```
 

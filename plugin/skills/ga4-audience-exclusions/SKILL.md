@@ -1,8 +1,8 @@
 ---
 name: ga4-audience-exclusions
 description: |
-  GA4 audience exclusions and frequency management guide. Covers excluding converters from prospecting, recent purchaser exclusions, frequency capping strategies, audience overlap prevention, and budget efficiency maximization.
-  Use when: user asks about audience exclusions, excluding converters, frequency capping, overlap prevention, audience management, or budget optimization for ad spend.
+  This skill should be used when the user asks to "exclude converters from campaigns", "set up audience exclusions",
+  "prevent audience overlap", or mentions "frequency capping", "purchaser exclusions", or "budget waste from overlap".
   Do NOT use for: building audiences (use ga4-audience-builder), predictive audiences (use ga4-predictive-audiences), or remarketing export setup (use ga4-remarketing-setup).
 metadata:
   author: "AdSuperpowers"
@@ -622,12 +622,12 @@ If the user has connected their GA4 account, check exclusion audience sizes befo
 
 ```python
 # Get converters and recent purchasers volume to size exclusion lists
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["totalUsers"],
     dimensions=["date"],
-    date_range="last_30d",
-    filter_expression="eventName==purchase"
+    start_date="30daysAgo",
+    end_date="today"
 )
 ```
 

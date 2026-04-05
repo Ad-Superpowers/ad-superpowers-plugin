@@ -1,8 +1,9 @@
 ---
 name: linkedin-abm-targeting-strategy
 description: |
-  Account-based marketing targeting strategy for LinkedIn Ads. Builds tiered ABM targeting plans using company lists, decision-maker mapping by seniority and job function, LinkedIn Audience Network expansion, and account penetration scoring.
-  Use when: (1) user wants to target specific companies or accounts on LinkedIn, (2) user asks about ABM strategy or account-based advertising, (3) user needs help building decision-maker targeting by seniority or job function.
+  This skill should be used when the user asks to "target specific companies on LinkedIn",
+  "build an ABM campaign", "reach the buying committee", "create a company list for LinkedIn",
+  or mentions "account-based marketing", "decision-maker targeting", or "account penetration".
   Do NOT use for: general LinkedIn campaign optimization (use linkedin-performance-troubleshooter), lead form strategy (use linkedin-lead-gen-optimizer), or campaign scaling (use linkedin-campaign-scaling-guide).
 metadata:
   author: "AdSuperpowers"

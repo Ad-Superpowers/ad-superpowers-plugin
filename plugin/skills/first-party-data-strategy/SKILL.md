@@ -1,8 +1,7 @@
 ---
 name: first-party-data-strategy
 description: |
-  Guide to building a privacy-first data infrastructure for advertising: first-party data collection, server-side tracking (Meta CAPI, Google Enhanced Conversions, TikTok Events API), Consent Mode V2 implementation, CDP selection, data clean rooms, and GDPR compliance checklists.
-  Use when: user asks about first-party data strategy, server-side tracking, CAPI setup, Consent Mode, privacy-first measurement, CDP selection, GDPR-compliant tracking, Enhanced Conversions, cookieless advertising, or signal loss recovery.
+  This skill should be used when the user asks to "set up server-side tracking", "implement CAPI", "build a first-party data strategy", mentions "Consent Mode V2", "cookieless advertising", or "GDPR-compliant tracking setup".
   Do NOT use for: attribution discrepancy diagnosis (use attribution-reconciler), GTM container auditing (use gtm-container-auditor), or incrementality measurement (use incrementality-testing-guide).
 metadata:
   author: "AdSuperpowers"
@@ -507,11 +506,12 @@ If the user has connected their GA4 account, check current consent rate and data
 
 ```python
 # Assess session volume and key event data — gaps indicate consent/tracking issues
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
+    start_date="30daysAgo",
+    end_date="today",
     metrics=["sessions", "totalUsers", "keyEvents"],
-    dimensions=["date", "sessionDefaultChannelGroup"],
-    date_range="last_30d"
+    dimensions=["date", "sessionDefaultChannelGroup"]
 )
 ```
 

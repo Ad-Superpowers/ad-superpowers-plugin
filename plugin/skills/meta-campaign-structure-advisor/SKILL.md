@@ -1,11 +1,11 @@
 ---
 name: Meta Campaign Structure Advisor
 description: |
-  Meta Ads 4-tier funnel structure and creative testing framework for e-commerce and lead generation.
-  Use when: setting up or auditing account structure, creative testing workflows, determining winner criteria,
-  optimizing budget allocation, scaling strategy.
-  Do NOT use for: bid strategy selection (use bid-strategy-selector), creative brainstorming (use creative-diversification-generator),
-  full-funnel design across platforms (use full-funnel-designer).
+  This skill should be used when the user asks to "set up campaign structure", "audit account structure",
+  "organize ad sets", or mentions "Meta account structure", "creative testing framework",
+  or "4-tier funnel". Do NOT use for: bid strategy selection (use bid-strategy-selector),
+  creative brainstorming (use creative-diversification-generator), full-funnel design across
+  platforms (use full-funnel-designer).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -427,10 +427,10 @@ RETAIN:           5%
 
 ```python
 # Get active campaigns with delivery status and budget
-meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","status","daily_budget","lifetime_budget","objective","buying_type"], filters={"effective_status":["ACTIVE"]})
+meta_query(account_id="act_XXXXX", entity_type="campaigns", effective_status=["ACTIVE"], fields=["id","name","status","daily_budget","lifetime_budget","objective","buying_type"])
 
 # Get ad sets for a campaign (learning status, audience info)
-meta_query(account_id="act_XXXXX", entity="adsets", fields=["id","name","status","learning_phase_status","daily_budget","targeting","optimization_goal"], filters={"campaign_id":"<campaign_id>","effective_status":["ACTIVE"]})
+meta_query(account_id="act_XXXXX", entity_type="adsets", effective_status=["ACTIVE"], fields=["id","name","status","daily_budget","targeting","optimization_goal"])
 ```
 
 ## Naming Convention

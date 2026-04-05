@@ -1,8 +1,7 @@
 ---
 name: landing-page-optimization-guide
 description: |
-  CRO (Conversion Rate Optimization) guide for ad-specific landing pages. Includes a 100-point scoring framework (message match, value proposition, trust, CTA, form, mobile, speed), industry conversion benchmarks by traffic source, and A/B test prioritization using the PIE framework.
-  Use when: user asks about improving landing page conversion rates, CRO audits, message match between ads and pages, high bounce rates on paid traffic, form optimization, or A/B testing priorities.
+  This skill should be used when the user asks to "optimize my landing page", "improve conversion rate", "audit my landing page for CRO", mentions "message match between ads and pages", "high bounce rate on paid traffic", or "A/B test prioritization".
   Do NOT use for: ad creative optimization (use platform-specific creative/fatigue skills), channel selection (use channel-selection-framework), or tracking/pixel implementation (use first-party-data-strategy or gtm-container-auditor).
 metadata:
   author: "AdSuperpowers"
@@ -266,11 +265,12 @@ If the user has connected their GA4 account, pull landing page performance data 
 
 ```python
 # Get landing page performance: sessions, bounce rate, and conversion rate per page
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
+    start_date="30daysAgo",
+    end_date="today",
     metrics=["sessions", "bounceRate", "keyEvents", "averageSessionDuration"],
-    dimensions=["landingPage"],
-    date_range="last_30d"
+    dimensions=["landingPage"]
 )
 ```
 

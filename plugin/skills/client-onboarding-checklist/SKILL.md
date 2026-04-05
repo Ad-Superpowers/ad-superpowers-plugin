@@ -1,9 +1,10 @@
 ---
 name: client-onboarding-checklist
 description: |
-  Agency client onboarding workflow for advertising accounts, covering discovery through 90-day optimization. Includes phase-by-phase checklists, tracking audit procedures, account structure review, communication templates, and MCP tool usage at each stage.
-  Use when: (1) user is onboarding a new client for ad management, (2) user needs a structured checklist for taking over an existing ad account, (3) user wants templates for kickoff meetings, weekly updates, or monthly reports.
-  Do NOT use for: specific platform campaign builds (use platform-specific skills), billing/contract setup (outside scope), or creative production workflows (use creative-fatigue-analyzer or ad-copy-generator).
+  This skill should be used when the user asks to "onboard a new advertising client",
+  "audit an ad account before takeover", "build a client kickoff checklist",
+  "structure a 30/60/90 day plan", or mentions "agency onboarding" or "account takeover".
+  Do NOT use for: specific platform campaign builds (use platform-specific skills), billing/contract setup (outside scope), or creative production workflows (use creative-fatigue-analyzer).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"

@@ -1,8 +1,11 @@
 ---
 name: capi-implementation-guide
 description: |
-  Meta Conversions API (CAPI) implementation guide and troubleshooting. Use when: CAPI setup advice per platform, server-side tracking configuration, event deduplication setup, CAPI Gateway implementation, CAPI troubleshooting and debugging.
-  Do NOT use for: EMQ optimization specifically (use emq-optimizer), attribution window decisions (use attribution-window-advisor), pixel-only tracking issues (use performance-troubleshooter).
+  This skill should be used when the user asks to "set up CAPI", "implement server-side tracking",
+  "configure event deduplication", or mentions "Conversions API", "CAPI Gateway",
+  or "CAPI troubleshooting". Do NOT use for: EMQ optimization specifically (use emq-optimizer),
+  attribution window decisions (use attribution-window-advisor), pixel-only tracking issues
+  (use performance-troubleshooter).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -396,11 +399,13 @@ Direct API Route:
 ## MCP: Verify CAPI Health
 
 ```python
-# Check pixel/CAPI event match quality and diagnostics via meta_query
-meta_query(account_id="act_XXXXX", entity="pixels", fields=["id","name","last_fired_time","is_unavailable","diagnostics","event_stats"])
+# Review recent campaign performance — if ROAS looks lower than expected, check EMQ first
+meta_get_insights(account_id="act_XXXXX", level="campaign", date_preset="last_7d", fields=["campaign_name","spend","actions","cost_per_action_type","website_purchase_roas"])
 
-# Review recent ad performance — if ROAS looks lower than expected, check EMQ first
-meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","spend","actions","cost_per_action_type","website_purchase_roas"], date_range="last_7d")
+# Check pixel health via Events Manager UI (pixel diagnostics are not exposed via meta_query)
+# Events Manager → Data Sources → Pixel → Diagnostics tab
+# Or: Pull campaign entities for a quick status overview
+meta_query(account_id="act_XXXXX", entity_type="campaigns", effective_status=["ACTIVE"], fields=["id","name","status","objective"])
 ```
 
 ## Maintenance

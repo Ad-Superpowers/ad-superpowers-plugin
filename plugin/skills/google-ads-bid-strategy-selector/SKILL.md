@@ -1,397 +1,767 @@
 ---
-name: google-ads-bid-strategy-selector
+name: bid-strategy-selector
 description: |
-  Selects optimal Meta Ads bid strategy (Lowest Cost, Cost Cap, Bid Cap, ROAS Goal) based on goals, budget, and account maturity. Use when: choosing bid strategy, comparing cost cap vs bid cap, budget allocation, scaling strategy, value rules setup.
-  Do NOT use for: Google Ads bidding (use google-bid-strategy-selector), campaign structure decisions (use campaign-structure-advisor), creative testing (use creative-diversification-generator).
+  This skill should be used when the user asks to "choose a Google Ads bid strategy",
+  "compare tCPA vs tROAS", "set up value-based bidding", "migrate from manual to Smart Bidding",
+  or mentions "Portfolio Bidding", "Maximize Conversions", or "learning phase management".
+  Do NOT use for: Meta Ads bidding (use meta-bid-strategy-selector),
+  LinkedIn bidding (use linkedin-bid-strategy-selector), keyword strategy (use keyword-strategy-planner).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
-  platform: "meta"
+  platform: "google_ads"
   phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
+compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Bid Strategy Selector
 
-Advisor for selecting the optimal Meta Ads bid strategy based on goals, budget, and account situation.
+Complete guide for choosing and implementing the right Google Ads Smart Bidding strategy based on goals, data, and account situation. Current API: v23.2 (March 25, 2026).
 
-## Quick Selection Guide
+## Quick Decision Tree
 
 ```
-WHAT IS YOUR PRIMARY GOAL?
+WHICH BID STRATEGY IS RIGHT FOR YOU?
 │
-├─► Maximum volume (leads/sales)
-│   └─► LOWEST COST (Highest Volume)
+├── NEW ACCOUNT / LOW DATA (<30 conversions/month)
+│   └── MAXIMIZE CONVERSIONS (no target)
+│       └── Goal: Collect data, complete learning phase
 │
-├─► Keep CPA under control
-│   └─► COST CAP
+├── LEAD GENERATION with known lead value
+│   ├── Consistent conversion volume (50+/month)?
+│   │   └── YES → TARGET CPA
+│   │   └── NO → MAXIMIZE CONVERSIONS
+│   └── Variable lead values?
+│       └── YES → MAXIMIZE CONVERSION VALUE + tROAS
 │
-├─► Strict margin requirements
-│   └─► BID CAP
+├── E-COMMERCE with purchase tracking
+│   ├── Focus on volume (market share)?
+│   │   └── MAXIMIZE CONVERSION VALUE
+│   ├── Focus on profitability?
+│   │   └── TARGET ROAS
+│   └── Balance both?
+│       └── MAXIMIZE CONVERSION VALUE + tROAS target
 │
-└─► Profitability focus (e-commerce)
-    └─► ROAS GOAL (Minimum ROAS)
+└── MULTIPLE CAMPAIGNS with same goal
+    └── PORTFOLIO BID STRATEGY
+        └── Shared strategy across campaigns
 ```
 
-## Bid Strategy Overview
+## Smart Bidding Overview
 
-| Strategy | Control | Risk | Best For | Min. Data |
-|----------|---------|------|----------|-----------|
-| **Lowest Cost** | None | Low | Beginners, volume | Little |
-| **Cost Cap** | CPA target | Medium | CPA constraints | 50+ conv/week |
-| **Bid Cap** | Max bid | High | Competitive niches | 100+ conv/week |
-| **ROAS Goal** | Min ROAS | Medium | Profitability | 50+ conv/week + CAPI |
+```
+SMART BIDDING COMPARISON
+════════════════════════
 
-## Lowest Cost (Highest Volume)
+┌─────────────────────────┬───────────┬───────────┬─────────────────────┐
+│ STRATEGY                │ CONTROL   │ DATA REQ  │ BEST FOR            │
+├─────────────────────────┼───────────┼───────────┼─────────────────────┤
+│ Maximize Conversions    │ None      │ Low       │ New accounts,       │
+│ (without target)        │           │           │ data collection     │
+├─────────────────────────┼───────────┼───────────┼─────────────────────┤
+│ Maximize Conversions    │ CPA cap   │ Medium    │ Lead gen with       │
+│ + Target CPA            │           │ (50+/mo)  │ cost constraints    │
+├─────────────────────────┼───────────┼───────────┼─────────────────────┤
+│ Maximize Conv. Value    │ None      │ Low       │ E-commerce volume,  │
+│ (without target)        │           │           │ initial learning    │
+├─────────────────────────┼───────────┼───────────┼─────────────────────┤
+│ Maximize Conv. Value    │ ROAS      │ Medium    │ E-commerce profit,  │
+│ + Target ROAS           │ target    │ (50+/mo)  │ scaling             │
+├─────────────────────────┼───────────┼───────────┼─────────────────────┤
+│ Manual CPC              │ Max CPC   │ None      │ Niche, B2B,         │
+│ (Enhanced CPC opt.)     │ per kw    │           │ small accounts      │
+└─────────────────────────┴───────────┴───────────┴─────────────────────┘
+```
+
+## Maximize Conversions
 
 ### How It Works
-Meta gets as many results as possible within your budget, without a CPA limit.
 
-### When to Use
-- New accounts with little historical data
-- Learning phase (first 2-4 weeks)
-- Volume more important than efficiency
-- Unsure about realistic CPA targets
-- Brand awareness campaigns
-
-### When NOT to Use
-- Strict CPA requirements
-- Limited budget with margin pressure
-- Competitive auctions where CPA can spike
-
-### Setup
 ```
-Campaign Settings:
-├── Budget optimization: Advantage Campaign Budget or Ad Set Budget
-├── Bid strategy: Highest Volume
-├── No cost controls: Leave empty
-└── Conversion goal: Select optimization event
-```
+MAXIMIZE CONVERSIONS ENGINE
+===========================
 
-### Expectations
-- CPA fluctuates day-to-day
-- AI optimizes for volume, not efficiency
-- Best baseline for new campaigns
-
-## Cost Cap
-
-### How It Works
-Meta keeps average CPA around your target. May temporarily exceed but balances over time.
-
-### When to Use
-- Known target CPA (from historical data)
-- Lead gen with fixed lead value
-- E-commerce with known break-even CPA
-- Scaling while monitoring efficiency
-
-### When NOT to Use
-- No idea of realistic CPA
-- Cap set too low (delivery stops)
-- New accounts without benchmarks
-
-### Setup Best Practices
-```
-Cost Cap Calculation:
-├── Break-even CPA: [AOV x Margin] or [Lead Value x Conv Rate]
-├── Starting point: 1.2x break-even (room for learning)
-├── After 1-2 weeks: Tighten to 1.0-1.1x
-└── Never: Start below historical average
-
-Example E-commerce:
-- AOV: €80
-- Margin: 40%
-- Break-even CPA: €80 x 0.40 = €32
-- Starting Cost Cap: €38 (1.2x)
-- Target Cost Cap: €32-35
+┌────────────────────────────────────────────────────────────────┐
+│  GOOGLE AI OPTIMIZES FOR:                                      │
+│  Maximum number of conversions within your daily budget        │
+│                                                                │
+│  SIGNALS USED:                                                 │
+│  ├── Device, location, time of day                             │
+│  ├── Browser, OS, demographics                                 │
+│  ├── Search query and intent signals                           │
+│  ├── Remarketing lists membership                              │
+│  ├── Historical conversion patterns                            │
+│  └── Real-time auction dynamics                                │
+│                                                                │
+│  YOU CONTROL:                                                  │
+│  ├── Daily budget (spending limit)                             │
+│  ├── Target CPA (optional, as constraint)                      │
+│  └── Conversion actions (which ones to optimize for)           │
+└────────────────────────────────────────────────────────────────┘
 ```
 
-### Troubleshooting
+### When to Use Maximize Conversions
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| No delivery | Cap too low | Increase 10-20% |
-| CPA above cap | Learning phase | Wait 3-5 days |
-| Unstable delivery | Cap too tight | Increase to 1.1x target |
-
-## Bid Cap
-
-### How It Works
-Set maximum bid per auction. Meta never bids more, even if it costs conversions.
-
-### When to Use
-- Competitive niches (finance, real estate, SaaS)
-- Strict margin requirements
-- Predictable costs are crucial
-- Experienced advertisers with lots of data
-
-### When NOT to Use
-- Beginners (too complex)
-- Low conversion volume
-- Unknown auction dynamics
-
-### Setup Strategy
 ```
-Determining Bid Cap:
-├── Start: 1.5x your average CPA
-├── Week 1: Monitor delivery and CPA
-├── Week 2: Lower 10% if delivery is stable
-├── Repeat: Until sweet spot found
-└── Minimum: Never below historical lowest CPA
+USE MAXIMIZE CONVERSIONS WHEN:
+──────────────────────────────
+• New account with little historical data
+• First 2-4 weeks of a new campaign
+• Lead generation focus (single conversion type)
+• Budget is more important than CPA efficiency
+• Collecting data for later tCPA transition
+
+DO NOT USE WHEN:
+────────────────
+• Strict CPA requirements (use tCPA)
+• E-commerce with purchase values (use Max Conv Value)
+• Very low budget (<EUR20/day) - too few learnings
+• Campaign with multiple conversion types without a primary one
+```
+
+### Maximize Conversions + Target CPA
+
+```
+ADDING TARGET CPA
+=================
+
+WHEN:
+├── 50+ conversions in the past 30 days
+├── Stable performance (no major fluctuations)
+├── Known target CPA (break-even or goal)
+└── After successful pure Maximize Conversions phase
+
+CALCULATING TARGET CPA:
+───────────────────────
+Break-even CPA (Lead Gen):
+└── Lead Value x Conversion Rate to Sale
 
 Example:
-- Historical CPA: €25
-- Starting Bid Cap: €37.50
-- Week 2: €33.75
-- Week 3: €30
-- Sweet spot: €28-30
+├── Lead value (as sale): EUR500
+├── Close rate: 10%
+├── Break-even CPA: EUR500 x 0.10 = EUR50
+
+Starting Target CPA:
+├── Week 1-2: 120% of break-even (EUR60)
+├── Week 3-4: 110% of break-even (EUR55)
+├── Week 5+: 100% or tighter if stable
+
+WARNING: NEVER start BELOW your historical average CPA!
 ```
 
-### Pro Tips
-- Test multiple bid caps in parallel across different ad sets
-- Seasonal adjustment: Increase 20-30% in Q4/peak periods
-- Monitor frequency: High frequency + low delivery = bid too low
-
-## ROAS Goal (Minimum ROAS)
+## Maximize Conversion Value
 
 ### How It Works
-Meta optimizes for minimum return per euro of ad spend.
-
-### When to Use
-- E-commerce with variable product values
-- Profitability more important than volume
-- Sufficient conversion volume (50+/week)
-- Strong CAPI implementation
-
-### When NOT to Use
-- Lead generation (no direct revenue)
-- Inconsistent product values
-- Weak tracking setup
-
-### Setup Requirements
-```
-Prerequisites:
-├── CAPI active with purchase value
-├── Event Match Quality >7
-├── Product catalog with accurate prices
-├── 50+ purchases per week
-└── 28+ days of conversion data
-
-Calculating ROAS Target:
-├── Break-even ROAS: 1 / Profit Margin
-├── Example: 40% margin → 1/0.40 = 2.5x break-even
-├── Starting target: 80% of break-even (2.0x)
-├── Scale up: Tighten toward break-even + buffer
-└── Aggressive: 1.2x break-even for growth
-```
-
-### Value Rules (2025 Enhancement)
-
-Value Rules let you adjust bids based on predicted ROAS per segment:
 
 ```
-Value Rule Setup:
-├── Segment: High-value customers
-│   ├── Criteria: Previous purchasers, high AOV
-│   └── Bid adjustment: +30%
-│
-├── Segment: Low-value segments
-│   ├── Criteria: Certain geos, devices
-│   └── Bid adjustment: -20%
-│
-└── Formula: Bid = BaseBid x (Predicted ROAS / Target ROAS)
+MAXIMIZE CONVERSION VALUE ENGINE
+================================
+
+┌────────────────────────────────────────────────────────────────┐
+│  GOOGLE AI OPTIMIZES FOR:                                      │
+│  Maximum total conversion value within your daily budget       │
+│                                                                │
+│  REQUIREMENTS:                                                 │
+│  ├── Conversion tracking with VALUE (purchase value)           │
+│  ├── Accurate revenue/value data                               │
+│  └── Consistent value tracking                                 │
+│                                                                │
+│  AI PRIORITIZES:                                               │
+│  ├── High-value transactions over low-value ones               │
+│  ├── Users with high predicted value                           │
+│  └── Queries that historically generate high values            │
+└────────────────────────────────────────────────────────────────┘
 ```
 
-## Budget & Scaling Strategy
-
-### Budget Allocation Framework
+### Maximize Conversion Value + Target ROAS
 
 ```
-Total Monthly Budget: €[X]
-│
-├── Prospecting (TOF): 60-70%
-│   ├── Advantage+ Sales: 70% of TOF
-│   └── Manual testing: 30% of TOF
-│
-├── Retargeting (MOF/BOF): 20-30%
-│   ├── Website visitors: 60%
-│   └── Engagement: 40%
-│
-└── Creative Testing: 5-15%
-    └── New concepts validation
+ADDING TARGET ROAS
+==================
+
+WHEN:
+├── 50+ conversions with value in the past 30 days
+├── Consistent value tracking (no gaps)
+├── Known break-even or target ROAS
+└── After successful pure Max Conv Value phase
+
+CALCULATING TARGET ROAS:
+────────────────────────
+Break-even ROAS = 1 / Profit Margin
+
+Example:
+├── Profit margin: 40%
+├── Break-even ROAS: 1 / 0.40 = 2.5 (250%)
+├── Spending EUR100 means generating EUR250 in revenue is needed
+
+Starting Target ROAS:
+├── Week 1-2: 80% of break-even (200% if break-even is 250%)
+├── Week 3-4: 90% of break-even (225%)
+├── Week 5+: 100% or tighter if stable
+
+WARNING: Too aggressive a ROAS target = no delivery!
 ```
 
-### Scaling Rules
+## Portfolio Bid Strategies
 
-**Vertical Scaling (Increasing Budget)**
-```
-Safe scaling protocol:
-├── Maximum increase: 20% per 3-4 days
-├── Never: >50% at once
-├── Monitor: CPA after each increase
-├── Trigger: ROAS >target AND stable 5+ days
-└── Stop: If CPA rises >20% after increase
-```
-
-**Horizontal Scaling (New Ad Sets)**
-```
-Horizontal expansion:
-├── Duplicate winning ad set
-├── Change ONE variable:
-│   ├── New audience segment
-│   ├── New creative set
-│   └── New geo/placement
-├── Run in parallel with original
-└── Consolidate winners after 7-14 days
-```
-
-### Peak Period Strategy
+### What Are Portfolio Strategies?
 
 ```
-Peak Period Planning (Black Friday, etc.):
-├── 2 weeks before peak:
-│   ├── Increase budgets 30-50%
-│   ├── Loosen bid constraints 20%
-│   └── Test new creatives
-│
-├── Peak week:
-│   ├── Allocate 50-60% monthly budget
-│   ├── Monitor hourly
-│   └── Ready for quick scaling
-│
-└── Post-peak:
-    ├── Reduce budgets gradually
-    ├── Tighten bids
-    └── Continue retargeting
+PORTFOLIO BID STRATEGY
+======================
+
+= One bid strategy shared across multiple campaigns
+
+ADVANTAGES:
+├── More data for learning → better optimization
+├── Centralized bid management
+├── Budget flexibility across campaigns
+└── Better performance for small campaigns
+
+LIMITATIONS:
+├── All campaigns must share the same goal
+├── Shared learning can be suboptimal per campaign
+└── Less granular control
 ```
 
-## Scenario-Based Recommendations
-
-### Scenario 1: New Account Launch
+### Portfolio Strategy Setup
 
 ```
-Week 1-2:
-├── Strategy: Lowest Cost
-├── Budget: €50-100/day minimum
-├── Goal: Exit learning phase
-└── KPI: 50+ conversions
+PORTFOLIO STRATEGY TYPES
+========================
 
-Week 3-4:
-├── Strategy: Cost Cap (1.2x achieved CPA)
-├── Evaluate: Is CPA sustainable?
-├── Adjust: Tighten cap 10% weekly
-└── Scale: If ROAS >break-even
+1. TARGET CPA PORTFOLIO
+   └── Multiple Search/Display campaigns, same CPA goal
+   └── Example: Brand + Non-brand Search
 
-Week 5+:
-├── Strategy: Maintain Cost Cap or switch to ROAS Goal
-├── Focus: Scaling winners
-└── Testing: 10-15% budget for new concepts
+2. TARGET ROAS PORTFOLIO
+   └── E-commerce campaigns with same margin target
+   └── Example: Shopping + Search + PMax
+
+3. MAXIMIZE CONVERSIONS PORTFOLIO
+   └── Aggregate data for faster learning
+   └── Example: Bundle new campaigns
+
+4. TARGET IMPRESSION SHARE PORTFOLIO
+   └── Brand visibility campaigns
+   └── Example: Branded Search campaigns
+
+SETUP LOCATION:
+Tools & Settings → Shared Library → Bid Strategies
 ```
 
-### Scenario 2: Scaling Profitable Campaign
+### When to Use Portfolio
 
 ```
-Current: ROAS 4x, spending €500/day
-Target: Scale to €2000/day
+PORTFOLIO DECISION MATRIX
+=========================
 
-Approach:
-├── Week 1: €500 → €600 (+20%)
-├── Week 2: €600 → €750 (+25%)
-├── Week 3: €750 → €950 (+27%)
-├── Week 4: €950 → €1200 (+26%)
-├── Week 5: €1200 → €1500 (+25%)
-├── Week 6: €1500 → €2000 (+33%)
-└── Total: 6 weeks for 4x scale
+USE PORTFOLIO WHEN:
+├── Multiple campaigns with <50 conversions/month each
+├── Campaigns have exactly the same KPI targets
+├── A single point for bid management is desired
+└── Small budgets spread across multiple campaigns
 
-Safety checks per week:
-- ROAS drop >20%? Pause scaling
-- CPA spike >30%? Reduce budget 10%
-- Frequency >4? Refresh creatives
+USE INDIVIDUAL WHEN:
+├── Campaigns have different margin/CPA targets
+├── Sufficient conversions per campaign (50+/month)
+├── Different product types/audiences
+└── Need for campaign-level bid adjustments
 ```
 
-### Scenario 3: Competitive Niche (Finance/Insurance)
+## Learning Phase Management
+
+### Learning Phase Basics
 
 ```
-Strategy: Bid Cap + Value Rules
+LEARNING PHASE EXPLAINED
+=========================
 
-Setup:
-├── Research: Competitor bid ranges
-├── Start: Premium bid cap (top 25% range)
-├── Value Rules:
-│   ├── High-intent keywords: +40%
-│   └── Low-quality signals: -30%
-├── Focus: Quality over volume
-└── Tracking: Lead-to-customer rate
+WHAT:
+├── Period during which Smart Bidding collects data
+├── Bids can fluctuate
+├── Performance may temporarily worsen
+└── DO NOT intervene during this phase
 
-Optimization:
-├── Weekly bid adjustments
-├── Heavy creative testing (10+ variations)
-├── Audience refinement
-└── Landing page A/B testing
+DURATION:
+├── Typical: 7-14 days
+├── Requirement: ~50 conversions (or actions)
+├── Can take longer with low volume
+└── Status visible in campaign UI
+
+LEARNING PHASE STATUS:
+├── "Learning" = Actively learning
+├── "Learning (limited)" = Insufficient data
+├── "Eligible" = Learning complete
+└── "Limited" = Other issue (budget, etc.)
 ```
 
-## Bid Strategy Migration Checklist
-
-When switching strategies:
+### What Resets the Learning Phase?
 
 ```
-Pre-Migration:
-□ Document current performance (7-day average)
-□ Calculate new target (CPA/ROAS)
-□ Prepare for learning phase reset
+ACTIONS THAT RESET LEARNING
+============================
 
-Migration:
-□ Implement new strategy
-□ Set conservative targets (1.2x current)
-□ Allow 3-5 days learning
+AVOID THESE DURING LEARNING:
+─────────────────────────────
+• Changing bid strategy
+• Adjusting Target CPA/ROAS (>20%)
+• Changing conversion action
+• Increasing or decreasing budget >20%
+• Pausing campaign for >7 days
 
-Post-Migration:
-□ Compare week-over-week
-□ Tighten targets if stable
-□ Document learnings
+SAFE DURING LEARNING:
+─────────────────────
+• Adding or pausing ads
+• Adding keywords (small batches)
+• Adding negatives
+• Budget changes <20%
+• Ad copy adjustments
 ```
 
-## MCP: Check Current Bid Strategy & Performance
+### Learning Phase Troubleshooting
 
-```python
-# Pull campaign-level bid strategy and spend for active campaigns
-meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","bid_strategy","daily_budget","status"], filters={"effective_status":["ACTIVE"]})
+```
+LEARNING PHASE ISSUES
+=====================
 
-# Pull ad set performance to evaluate current CPA vs target
-meta_query(account_id="act_XXXXX", entity="adsets", fields=["id","name","bid_strategy","bid_amount","optimization_goal","cost_per_result","spend","actions"], date_range="last_7d")
+PROBLEM: "Learning (limited)" stays stuck
+──────────────────────────────────────────
+Cause: Insufficient conversions
+Solutions:
+├── Increase budget
+├── Broader targeting (more volume)
+├── Higher-funnel conversion action (temporarily)
+└── Wait longer (sometimes needed)
+
+PROBLEM: CPA spikes during learning
+─────────────────────────────────────
+This is normal! The AI is testing boundaries.
+Actions:
+├── DO NOT panic
+├── Wait at least 7-10 days
+├── Monitor the trend, not daily CPA
+└── If >14 days poor: evaluate targeting/budget
+
+PROBLEM: Learning takes >3 weeks
+─────────────────────────────────
+Possible causes:
+├── Insufficient budget
+├── Too niche targeting
+├── Poor ad quality
+└── Tracking issues
 ```
 
-## Output: Strategy Recommendation Template
+## Value-Based Bidding
+
+### Value Rules (2025+)
+
+```
+VALUE RULES EXPLAINED
+=====================
+
+WHAT:
+├── Dynamically adjust conversion values
+├── Based on user/context signals
+├── AI bids higher for high-value segments
+└── Available for all Smart Bidding strategies
+
+AVAILABLE SIGNALS:
+├── Device (mobile, desktop, tablet)
+├── Location (geographic)
+├── Audience (Customer Match, remarketing)
+└── Time (planned for future)
+
+EXAMPLE SETUP:
+──────────────
+Value Rule 1: High-Value Customers
+├── Condition: Customer Match list = "VIP Customers"
+├── Adjustment: +50% value
+└── Effect: EUR100 purchase → EUR150 for bidding
+
+Value Rule 2: Low-Intent Location
+├── Condition: Location = "Low converting region"
+├── Adjustment: -30% value
+└── Effect: EUR100 purchase → EUR70 for bidding
+```
+
+### New Customer Acquisition
+
+```
+NEW CUSTOMER BIDDING (2025+)
+============================
+
+LOCATION: Campaign Settings → Customer Acquisition
+
+OPTIONS:
+├── Bid higher for new customers: +X% bid adjustment
+├── Only bid for new customers: Exclude existing
+└── No differentiation (default)
+
+SETUP REQUIREMENTS:
+├── Customer Match list of existing customers
+├── Conversion tracking active
+└── Sufficient new vs returning data
+
+RECOMMENDED START:
+├── +20% for new customers
+├── Monitor new vs returning ROAS
+├── Adjust based on LTV data
+└── E-commerce: Consider first-purchase margin
+```
+
+## Bid Strategy Migration
+
+### From Manual to Smart Bidding
+
+```
+MANUAL → SMART BIDDING MIGRATION
+================================
+
+STEP 1: PREPARATION (Week -2 to -1)
+────────────────────────────────────
+□ Verify conversion tracking
+□ Minimum 30 conversions/month
+□ Document baseline metrics
+□ Set budget (min EUR50/day)
+
+STEP 2: INITIAL SETUP (Week 1)
+──────────────────────────────
+□ Start with Maximize Conversions (no target)
+□ Expect fluctuations
+□ DO NOT intervene
+
+STEP 3: MONITORING (Week 2-3)
+─────────────────────────────
+□ Monitor learning phase
+□ Compare with baseline
+□ Still DO NOT intervene
+
+STEP 4: OPTIMIZATION (Week 4+)
+──────────────────────────────
+□ Evaluate performance vs manual
+□ Add target if stable
+□ Start conservative (120% of achieved)
+```
+
+### Strategy Switch Checklist
+
+```
+BID STRATEGY SWITCH PROTOCOL
+============================
+
+□ PRE-SWITCH:
+├── Document current performance (7-day average)
+├── Calculate target (CPA/ROAS)
+├── Choose switching moment (not during peak)
+└── Prepare stakeholders (temporary fluctuations)
+
+□ DURING SWITCH:
+├── Implement new strategy
+├── Conservative target (120% of current)
+├── Screenshot for reference
+└── Set calendar reminder for review
+
+□ POST-SWITCH (Week 1-2):
+├── Daily monitoring (but no changes)
+├── Check learning phase status
+├── Compare week-over-week (not day-over-day)
+└── Note anomalies
+
+□ POST-SWITCH (Week 3+):
+├── Formal performance review
+├── Tighten targets if stable (+10%)
+├── Document learnings
+└── Continue monitoring
+```
+
+## Campaign Type Specific Recommendations
+
+### Search Campaigns
+
+```
+SEARCH BID STRATEGY GUIDE
+=========================
+
+BRAND SEARCH:
+├── Strategy: Maximize Conversions or Manual CPC
+├── Reason: High CTR, low competition
+├── Target: Impression Share >90%
+└── Note: Don't overbid — brand terms win anyway
+
+NON-BRAND SEARCH:
+├── New: Maximize Conversions (2-3 weeks)
+├── Then: Target CPA/ROAS
+├── Reason: Competitive, need efficiency
+├── Note: Broad match + Smart Bidding = Google's recommended combo
+└── AI Max: Enable AI Max for Search to unlock Search Term Matching,
+    URL Expansion, and Text Customization within existing Search campaigns
+    (Campaign.ai_max_setting.enable_ai_max)
+
+DSA (Dynamic Search Ads):
+├── Strategy: Maximize Conversions
+├── Reason: Discovery, volume focus
+├── Transition to tCPA once winning queries are known
+└── Note: Negative keywords management
+```
+
+### Shopping & PMax
+
+```
+SHOPPING / PMAX BID STRATEGY
+============================
+
+STANDARD SHOPPING (if still used):
+├── Start: Maximize Clicks (data collection)
+├── Transition: Target ROAS after 50+ purchases
+├── Note: Product-level bidding via priorities
+
+PERFORMANCE MAX:
+├── E-commerce: Maximize Conversion Value + tROAS
+├── Lead Gen: Maximize Conversions + tCPA
+├── New: Without target (2-3 weeks)
+└── Note: PMax needs more data than Search
+
+ROAS TARGETS FOR PMAX:
+├── Conservative start: 200-300%
+├── Moderate: 300-500%
+├── Aggressive: 500%+
+└── Adjust based on margin and goals
+```
+
+### Display & Video
+
+```
+DISPLAY / VIDEO BID STRATEGY
+============================
+
+DISPLAY CAMPAIGNS:
+├── Remarketing: Maximize Conversions + tCPA
+├── Prospecting: Maximize Conversions (volume focus)
+├── Brand: Target CPM (if available)
+└── Note: Longer learning due to lower volume
+
+VIDEO CAMPAIGNS:
+├── Awareness: Target CPM or Maximize Impressions
+├── Consideration: Target CPV (Cost-per-View)
+├── Conversion: Maximize Conversions
+└── Note: Video ads convert indirectly
+
+DEMAND GEN (replaced Discovery in 2025):
+├── Strategy: Maximize Conversions or tCPA
+├── Target CPC: Also available for Demand Gen (v22 addition)
+├── Reason: Hybrid awareness/conversion
+└── Note: Factor in view-through conversions
+```
+
+## Smart Bidding Exploration (v21+)
+
+```
+SMART BIDDING EXPLORATION
+=========================
+
+WHAT:
+├── Google's feature to test bid variations beyond your tROAS target
+├── API field: target_roas_tolerance_percent_millis
+├── Lets the algorithm explore auctions outside the strict target
+└── Goal: Find incremental volume while staying near your target
+
+WHEN TO ENABLE:
+├── Campaign hitting tROAS target but with limited volume
+├── Goal is to test scale without fully loosening the target
+├── Available for tROAS campaigns with sufficient conversion data (30+/mo)
+
+HOW TO CHECK:
+──────────────
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    campaign.maximize_conversion_value.target_roas,
+    campaign.maximize_conversion_value.target_roas_tolerance_percent_millis
+  FROM campaign
+  WHERE campaign.advertising_channel_type = 'SEARCH'
+    AND campaign.status = 'ENABLED'
+    AND segments.date DURING LAST_30_DAYS
+")
+```
+
+## Performance Monitoring Script
+
+```javascript
+/**
+ * Bid Strategy Performance Monitor
+ *
+ * Monitors Smart Bidding performance and learning phase status.
+ *
+ * Setup:
+ * 1. Update EMAIL
+ * 2. Schedule daily at 9:00
+ */
+
+var CONFIG = {
+  EMAIL: 'your@email.com',
+  CPA_THRESHOLD: 0.25,     // Alert on 25% CPA increase
+  ROAS_THRESHOLD: 0.20,    // Alert on 20% ROAS decline
+  LEARNING_DAYS_ALERT: 14  // Alert if learning >14 days
+};
+
+function main() {
+  var campaigns = AdsApp.campaigns()
+    .withCondition('Status = ENABLED')
+    .get();
+
+  var alerts = [];
+  var learningCampaigns = [];
+
+  while (campaigns.hasNext()) {
+    var campaign = campaigns.next();
+    var bidStrategy = campaign.getBiddingStrategyType();
+
+    // Check learning phase (via status indicators)
+    var status = checkCampaignStatus(campaign);
+    if (status.isLearning) {
+      learningCampaigns.push({
+        name: campaign.getName(),
+        strategy: bidStrategy,
+        days: status.learningDays
+      });
+    }
+
+    // Check performance changes
+    var perfAlerts = checkPerformance(campaign);
+    alerts = alerts.concat(perfAlerts);
+  }
+
+  // Send summary
+  if (alerts.length > 0 || learningCampaigns.length > 0) {
+    sendSummaryEmail(alerts, learningCampaigns);
+  }
+
+  Logger.log('Monitor complete. Alerts: ' + alerts.length);
+  Logger.log('Campaigns in learning: ' + learningCampaigns.length);
+}
+
+function checkCampaignStatus(campaign) {
+  // Note: Learning phase status not directly available via API
+  // This is a proxy check
+  var stats7d = campaign.getStatsFor('LAST_7_DAYS');
+  var stats14d = campaign.getStatsFor('LAST_14_DAYS');
+
+  var conv7d = stats7d.getConversions();
+  var conv14d = stats14d.getConversions();
+
+  // If <50 conversions in 14 days, likely still learning
+  return {
+    isLearning: conv14d < 50,
+    learningDays: conv14d < 50 ? 14 : 0
+  };
+}
+
+function checkPerformance(campaign) {
+  var alerts = [];
+  var name = campaign.getName();
+
+  var currentStats = campaign.getStatsFor('LAST_7_DAYS');
+  var previousStats = campaign.getStatsFor('LAST_14_DAYS');
+
+  var currentCPA = currentStats.getConversions() > 0 ?
+    currentStats.getCost() / currentStats.getConversions() : 0;
+
+  // Calculate previous period CPA
+  var prevConv = previousStats.getConversions() - currentStats.getConversions();
+  var prevCost = previousStats.getCost() - currentStats.getCost();
+  var previousCPA = prevConv > 0 ? prevCost / prevConv : 0;
+
+  if (previousCPA > 0 && currentCPA > 0) {
+    var change = (currentCPA - previousCPA) / previousCPA;
+    if (change > CONFIG.CPA_THRESHOLD) {
+      alerts.push({
+        campaign: name,
+        metric: 'CPA',
+        previous: previousCPA.toFixed(2),
+        current: currentCPA.toFixed(2),
+        change: (change * 100).toFixed(1) + '%'
+      });
+    }
+  }
+
+  return alerts;
+}
+
+function sendSummaryEmail(alerts, learningCampaigns) {
+  var subject = 'Smart Bidding Status - ' + AdsApp.currentAccount().getName();
+  var body = 'Smart Bidding Daily Report\n';
+  body += '===========================\n\n';
+
+  if (learningCampaigns.length > 0) {
+    body += 'CAMPAIGNS IN LEARNING:\n';
+    for (var i = 0; i < learningCampaigns.length; i++) {
+      var lc = learningCampaigns[i];
+      body += '- ' + lc.name + ' (' + lc.strategy + ')\n';
+    }
+    body += '\n';
+  }
+
+  if (alerts.length > 0) {
+    body += 'PERFORMANCE ALERTS:\n';
+    for (var j = 0; j < alerts.length; j++) {
+      var alert = alerts[j];
+      body += '- ' + alert.campaign + ': ' + alert.metric + ' changed ';
+      body += alert.previous + ' -> ' + alert.current + ' (' + alert.change + ')\n';
+    }
+  }
+
+  MailApp.sendEmail(CONFIG.EMAIL, subject, body);
+}
+```
+
+## Output: Bid Strategy Recommendation Template
 
 ```markdown
 # Bid Strategy Recommendation
 
-## Current Situation
-- Monthly budget: €[X]
-- Current CPA/ROAS: [metric]
-- Conversion volume: [X]/week
-- Primary goal: [volume/efficiency/profitability]
+## Account Situation
+- **Account type:** [E-commerce / Lead Gen / Hybrid]
+- **Monthly budget:** EUR[X]
+- **Current conversions/month:** [X]
+- **Current CPA/ROAS:** EUR[X] / [X]%
+- **Primary goal:** [Volume / Efficiency / Profitability]
 
 ## Recommended Strategy
-**[Strategy Name]**
+**[STRATEGY NAME]**
 
 ### Why This Strategy
-[2-3 bullets explaining rationale]
+1. [Reason 1 - based on account situation]
+2. [Reason 2 - based on goals]
+3. [Reason 3 - based on data availability]
 
-### Implementation
-1. [Step 1]
-2. [Step 2]
-3. [Step 3]
+### Implementation Plan
+
+**Week 1-2: Setup & Learning**
+- Switch to [strategy]
+- Target: [None / EURX / X%] (conservative)
+- Budget: EUR[X]/day
+- Action: Monitor only, no changes
+
+**Week 3-4: Evaluation**
+- Learning phase check
+- Performance vs baseline
+- Target adjustment: [Specify]
+
+**Week 5+: Optimization**
+- Tighten target to [X]
+- Continue monitoring
+- Evaluate scale opportunities
 
 ### Targets
-- [Primary metric]: [target]
-- [Secondary metric]: [target]
+- Primary: [CPA EURX / ROAS X%]
+- Secondary: [Conversions, Value, etc.]
 
-### Timeline
-- Week 1: [actions]
-- Week 2: [actions]
-- Week 3+: [ongoing optimization]
+### Expected Results
+- CPA change: [+/- X%]
+- Volume change: [+/- X%]
+- Learning phase duration: [X weeks]
 
-### Success Criteria
-- [Metric 1] achieves [target]
-- Learning phase exits within [X] days
-- Stable delivery maintained
+### Risks & Mitigation
+- Risk: [Describe]
+- Mitigation: [Plan]
 ```

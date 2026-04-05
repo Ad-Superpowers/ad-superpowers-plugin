@@ -1,7 +1,9 @@
 ---
 name: ga4-revenue-analysis
 description: |
-  Analyzes e-commerce revenue and product performance in GA4. Use when: interpreting revenue reports, analyzing product performance, building checkout funnel analysis, extracting purchase journey insights, creating e-commerce KPI dashboards. Do NOT use for: e-commerce event implementation (use ga4-ecommerce-setup), promotion and coupon tracking (use ga4-promotion-tracking).
+  This skill should be used when the user asks to "analyze GA4 revenue", "review product performance",
+  "build a checkout funnel", or mentions "purchase journey insights", "e-commerce KPI dashboard", or "revenue trends in GA4".
+  Do NOT use for: e-commerce event implementation (use ga4-ecommerce-setup), promotion and coupon tracking (use ga4-promotion-tracking).
 metadata:
   author: "AdSuperpowers"
   version: "1.1.0"
@@ -487,27 +489,30 @@ Solution:
 
 ```python
 # Overall revenue by source/medium (last 30 days)
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["totalRevenue", "ecommercePurchases", "averagePurchaseRevenue", "keyEventRate"],
     dimensions=["sessionSourceMedium"],
-    date_range={"start_date": "30daysAgo", "end_date": "yesterday"}
+    start_date="30daysAgo",
+    end_date="yesterday"
 )
 
 # Top products by revenue
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["itemRevenue", "itemsPurchased", "itemsViewed"],
     dimensions=["itemName", "itemCategory"],
-    date_range={"start_date": "30daysAgo", "end_date": "yesterday"}
+    start_date="30daysAgo",
+    end_date="yesterday"
 )
 
 # Revenue trend by day (for anomaly detection)
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["totalRevenue", "ecommercePurchases", "averagePurchaseRevenue"],
     dimensions=["date"],
-    date_range={"start_date": "60daysAgo", "end_date": "yesterday"}
+    start_date="60daysAgo",
+    end_date="yesterday"
 )
 ```
 

@@ -1,8 +1,7 @@
 ---
 name: market-sizing-guide
 description: |
-  Calculates TAM, SAM, and SOM for advertising budget planning using top-down, bottom-up, and hybrid methods. Includes industry ad-spend ratios, Share of Voice rules, LTV:CAC budget frameworks, and Netherlands market reference data.
-  Use when: user asks about market sizing, TAM/SAM/SOM calculations, how much to spend on ads, budget planning for new markets, addressable audience sizing, or strategic budget allocation.
+  This skill should be used when the user asks to "calculate TAM SAM SOM", "size my market for ad budget", "plan budget for a new market", mentions "how much should I spend on ads", "addressable audience sizing", or "market opportunity assessment".
   Do NOT use for: channel-level budget allocation (use channel-selection-framework), competitor spend estimation (use competitor-analysis-toolkit), or cross-platform attribution (use attribution-reconciler).
 metadata:
   author: "AdSuperpowers"

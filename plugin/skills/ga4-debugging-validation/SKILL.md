@@ -1,7 +1,9 @@
 ---
 name: ga4-debugging-validation
 description: |
-  GA4 debugging and data validation guide. Use when: using DebugView for real-time debugging, validating tag implementation, running data quality checks, troubleshooting event tracking problems, GA4 audit and troubleshooting. Do NOT use for: e-commerce event setup (use ga4-ecommerce-setup), BigQuery data analysis (use ga4-bigquery-export).
+  This skill should be used when the user asks to "debug GA4 tracking", "validate tag implementation",
+  "use DebugView", or mentions "data quality checks", "GA4 audit", or "event tracking not working".
+  Do NOT use for: e-commerce event setup (use ga4-ecommerce-setup), BigQuery data analysis (use ga4-bigquery-export).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -561,7 +563,7 @@ describe('GA4 Tracking', () => {
 CI/CD INTEGRATION:
 ──────────────────
 # .github/workflows/ga4-tests.yml
-name: ga4-debugging-validation
+name: GA4 Tracking Tests
 
 on:
   push:
@@ -738,11 +740,12 @@ If the user has connected their GA4 account, run validation checks against produ
 
 ```python
 # Cross-check event counts and session data against expected values from debugging session
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
+    start_date="7daysAgo",
+    end_date="today",
     metrics=["sessions", "eventCount", "keyEvents"],
-    dimensions=["eventName", "date"],
-    date_range="last_7d"
+    dimensions=["eventName", "date"]
 )
 ```
 

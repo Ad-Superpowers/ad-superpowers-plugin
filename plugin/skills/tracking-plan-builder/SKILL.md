@@ -1,13 +1,10 @@
 ---
 name: tracking-plan-builder
 description: |
-  Strategic tracking plan builder that maps business goals to events, parameters, and platform-specific
-  conversion requirements. Covers e-commerce, lead gen, SaaS, and local business models with event naming
-  conventions, priority matrices, and cross-platform event mapping.
-
-  Use when: (1) building a measurement strategy from scratch, (2) auditing what events a site should track,
-  (3) mapping business KPIs to GA4/Meta/Google Ads/LinkedIn/TikTok events and parameters.
-
+  This skill should be used when the user asks to "build a tracking plan",
+  "map business goals to conversion events", "audit what events to track",
+  "define event naming conventions", or mentions "measurement strategy",
+  "cross-platform event mapping", or "KPI to event mapping".
   Do NOT use for: GTM tag/trigger implementation (use gtm-conversion-setup-guide), server-side tagging
   (use gtm-server-side-tagging-guide), or consent/privacy setup (use gtm-consent-mode-guide).
 metadata:

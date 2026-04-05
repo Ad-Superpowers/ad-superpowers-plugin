@@ -1,358 +1,557 @@
 ---
-name: google-ads-learning-phase-tracker
+name: learning-phase-tracker
 description: |
-  Meta Ads learning phase management and edit impact analyzer. Use when: assessing learning phase status, predicting significant edit impact, learning phase exit strategies, calculating budget change impact, ad set health checks.
-  Do NOT use for: campaign structure decisions (use campaign-structure-advisor), performance troubleshooting (use performance-troubleshooter), bid strategy selection (use bid-strategy-selector).
+  This skill should be used when the user asks to "check learning phase status",
+  "fix stuck learning phase", "accelerate Smart Bidding learning",
+  "predict learning phase duration", or mentions "learning limited",
+  "bid strategy learning", or "tCPA learning phase".
+  Do NOT use for: bid strategy selection (use bid-strategy-selector), campaign structure changes (use campaign-structure-advisor), or conversion tracking setup (use conversion-tracking-auditor).
 metadata:
   author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
+  version: "1.1.0"
+  platform: "google_ads"
+  phase: "fase-4-measurement-attribution"
+compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Learning Phase Tracker
 
-Analyzer for Meta Ads learning phase management. Predicts edit impact and advises on optimal timing for changes.
+Complete guide for monitoring, understanding, and optimizing Google Ads Smart Bidding learning phases for faster and more stable performance.
 
-## Learning Phase Basics
+
+
+See [decision-trees.md](references/decision-trees.md) for details.
+
+
+
+## Learning Phase Fundamentals
 
 ### What Is Learning Phase?
 
-A period during which Meta's algorithm learns who to target and how to bid. Ad sets show "Learning" status until sufficient data has been collected.
-
-### Exit Criteria (2026 Update)
-
 ```
-Traditional rule: 50 optimization events per ad set per week
+LEARNING PHASE EXPLAINED
+═════════════════════════
 
-2026 Update: Some accounts see 10 conversions over 3 days
-as the new threshold (Meta continues to refine this).
-With ASC campaigns (unified structure since v25.0), the
-algorithm has more flexibility — combined ad sets learn faster.
+WHAT HAPPENS:
+├── Google's AI collects data about your account
+├── Analyzes which signals lead to conversions
+├── Builds a prediction model
+├── Bids are dynamically adjusted
+└── Performance may fluctuate
 
-Practical rule of thumb: Plan for 50/week, but monitor
-whether faster exit is possible.
-```
+WHY IT IS NECESSARY:
+├── Every account is unique
+├── AI must learn your specific patterns
+├── Seasonality, audience, products vary
+└── Generic models are suboptimal
 
-### Learning Phase Statuses
+LEARNING DURATION:
+────────────────────────────────────────
+Typical: 7-14 days (or ~50 conversions)
 
-| Status | Meaning | Action |
-|--------|---------|--------|
-| **Learning** | Algorithm is collecting data | Don't change, wait |
-| **Active** | Exited, optimization is stable | Monitor and optimize |
-| **Learning Limited** | Insufficient events | Increase budget or use broader targeting |
+May take longer with:
+├── Low conversion volume
+├── Inconsistent tracking
+├── Insufficient budget
+├── Very niche targeting
+└── New conversion actions
 
-## Edit Impact Matrix
-
-### Significant Edits (Trigger Learning Reset)
-
-| Edit Type | Impact | Learning Reset? |
-|-----------|--------|-----------------|
-| Budget >20% increase | High | Usually yes |
-| Budget >20% decrease | High | Usually yes |
-| Audience change | High | Yes |
-| New creative | High | Yes |
-| Optimization goal change | High | Yes |
-| Bid strategy change | High | Yes |
-| Placement change | Medium | Often yes |
-
-### Non-Significant Edits (Usually Safe)
-
-| Edit Type | Impact | Learning Reset? |
-|-----------|--------|-----------------|
-| Budget <20% change | Low | Usually no |
-| Ad name change | None | No |
-| Campaign name change | None | No |
-| Adding new ad (2026) | Variable | Sometimes not anymore |
-| Minor copy tweak | Low | Usually no |
-
-### 2026 Updates
-
-Meta now shows messages like:
-> "You can increase your budget to €[X] without restarting learning"
-
-This provides specific safe thresholds per ad set.
-
-## Budget Change Impact Calculator
-
-### Safe Budget Increase Zones
-
-```
-Current Daily Budget: €[X]
-Learning Phase Status: [Learning/Active/Limited]
-
-SAFE ZONE (No Reset):
-├── Increase: Up to 20% (€[X x 1.2])
-└── Decrease: Up to 20% (€[X x 0.8])
-
-YELLOW ZONE (Possible Reset):
-├── Increase: 20-50% (€[X x 1.2] - €[X x 1.5])
-└── Decrease: 20-50%
-└── Recommendation: Do in 2 steps over 3-4 days
-
-RED ZONE (Likely Reset):
-├── Increase: >50%
-└── Decrease: >50%
-└── Recommendation: Duplicate ad set with new budget
+May be shorter with:
+├── High volume accounts
+├── Consistent historical pattern
+├── Stable seasonality
+└── Experience with similar campaigns
 ```
 
-### Budget Change Decision Tree
+### Learning Phase Signals
 
 ```
-Want to increase budget?
-│
-├─► <20% increase
-│   └─► Safe, implement directly
-│
-├─► 20-50% increase
-│   ├─► Ad set in Learning?
-│   │   └─► Wait until Active, then increase
-│   └─► Ad set Active?
-│       └─► Do in 2 steps (10% + 10%)
-│
-└─► >50% increase
-    └─► Duplicate ad set with new budget
-        └─► Keep original running as backup
+SIGNALS SMART BIDDING USES
+═══════════════════════════
+
+REAL-TIME AUCTION SIGNALS:
+├── Device (mobile, desktop, tablet)
+├── Operating system
+├── Browser
+├── Location (geographic, granular)
+├── Time of day
+├── Day of week
+├── Search query (exact + intent)
+└── Ad format/placement
+
+HISTORICAL SIGNALS:
+├── User's past behavior
+├── Conversion patterns
+├── Seasonal trends
+├── Time-of-day performance
+└── Device performance history
+
+AUDIENCE SIGNALS:
+├── Remarketing list membership
+├── Optimized Targeting signals
+├── Customer Match segments
+├── Demographics (age, gender, income)
+└── Affinities & in-market
+
+CONTEXTUAL SIGNALS:
+├── Ad relevance
+├── Landing page quality
+├── Ad position factors
+├── Competitive auction dynamics
+└── Query-ad match quality
+
+IMPORTANT:
+The AI learns which COMBINATIONS of signals
+lead to conversions in your specific situation.
 ```
 
-## Learning Phase Exit Strategies
-
-### Quick Exit Tactics
+## MCP Tool Integration
 
 ```
-Tactic 1: Budget Boost
-├── Increase budget to 3x CPA x 50 / 7 days
-├── Example: CPA €20 → Budget €429/week = €61/day
-└── After exit: Scale back to desired level
+STEP 1: Check bid strategy status across all campaigns
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    campaign.status,
+    campaign.bidding_strategy_type,
+    bidding_strategy.status,
+    bidding_strategy.name,
+    bidding_strategy.type,
+    metrics.conversions,
+    metrics.cost_micros,
+    metrics.cost_per_conversion
+  FROM campaign
+  WHERE campaign.status = 'ENABLED'
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY metrics.cost_micros DESC
+")
 
-Tactic 2: Broader Targeting
-├── Use Advantage+ Audience
-├── Remove interest restrictions
-├── Expand age ranges
-└── More conversion opportunities = faster learning
+STEP 2: Conversion volume per campaign (estimate learning progress)
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    campaign.bidding_strategy_type,
+    segments.date,
+    metrics.conversions,
+    metrics.cost_micros
+  FROM campaign
+  WHERE campaign.status = 'ENABLED'
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY segments.date DESC
+")
 
-Tactic 3: Higher-Funnel Event
-├── Temporarily optimize for AddToCart instead of Purchase
-├── More events = faster learning
-├── After exit: Switch back to Purchase
-└── Note: May affect traffic quality
-
-Tactic 4: Consolidation
-├── Merge small ad sets
-├── Combine budgets
-├── One strong ad set > multiple weak ones
-└── Aggregated data = faster learning
+STEP 3: Check campaigns potentially stuck in learning
+google_ads_run_gaql(query="
+  SELECT
+    campaign.name,
+    campaign.bidding_strategy_type,
+    campaign.start_date,
+    metrics.conversions,
+    metrics.cost_micros,
+    metrics.search_impression_share
+  FROM campaign
+  WHERE campaign.status = 'ENABLED'
+    AND campaign.bidding_strategy_type IN (
+      'TARGET_CPA',
+      'TARGET_ROAS',
+      'MAXIMIZE_CONVERSIONS',
+      'MAXIMIZE_CONVERSION_VALUE'
+    )
+    AND segments.date DURING LAST_30_DAYS
+  ORDER BY campaign.start_date ASC
+")
 ```
 
-### Learning Limited Solutions
+## Learning Phase Monitoring
+
+### Checking Status
 
 ```
-Diagnosis: Why Learning Limited?
-│
-├─► Budget too low
-│   └─► Increase to €[CPA x 50 / 7] per day
-│
-├─► Audience too small
-│   └─► Broader targeting or merge audiences
-│
-├─► Too few creatives
-│   └─► Add more ads (not just 1 ad per ad set)
-│
-├─► Event too rare
-│   └─► Switch to higher-funnel event
-│
-└─► Competition too high
-    └─► Increase budget or adjust bid strategy
+WHERE TO FIND LEARNING STATUS
+══════════════════════════════
+
+LOCATION 1: Campaign Level
+─────────────────────────
+Campaigns → Columns → Modify → Bid strategy
+→ Add: "Bid strategy type" and "Bid strategy status"
+
+LOCATION 2: Bid Strategy Report
+──────────────────────────────
+Tools → Shared Library → Bid strategies
+→ See "Status" column per strategy
+
+LOCATION 3: Recommendations Tab
+──────────────────────────────
+Recommendations → Scroll to "Bidding"
+→ Alerts about learning issues
+
+STATUS INTERPRETATION:
+─────────────────────
+┌─────────────────────┬─────────────────────────────────────────┐
+│ Status              │ Meaning                                 │
+├─────────────────────┼─────────────────────────────────────────┤
+│ Learning            │ Actively learning (7-14 days)           │
+├─────────────────────┼─────────────────────────────────────────┤
+│ Learning (limited)  │ Insufficient data to learn              │
+├─────────────────────┼─────────────────────────────────────────┤
+│ Eligible            │ Learning complete, full                 │
+│                     │ optimization active                     │
+├─────────────────────┼─────────────────────────────────────────┤
+│ Misconfigured       │ Setup issue (check conversion           │
+│                     │ tracking)                               │
+├─────────────────────┼─────────────────────────────────────────┤
+│ Limited             │ Not learning-related (budget/bid)       │
+└─────────────────────┴─────────────────────────────────────────┘
 ```
 
-## Edit Timing Best Practices
-
-### When to Make Changes
+### Learning Duration Tracker
 
 ```
-BEST TIMING:
-├── Beginning of the week (Monday/Tuesday)
-│   └─► Gives algorithm weekdays to learn
-│
-├── After stable 5-7 days of performance
-│   └─► Baseline data available for comparison
-│
-└── NOT during:
-    ├── Learning phase (wait for exit)
-    ├── Weekend (less data)
-    ├── Peak periods (Black Friday, etc.)
-    └── Right after previous change (<3 days)
+HOW LONG DOES LEARNING TAKE?
+════════════════════════════
+
+BASELINE EXPECTATIONS:
+──────────────────────
+New account/campaign:
+├── Minimum: 7 days
+├── Typical: 10-14 days
+├── Max (normal): 21 days
+└── Guideline: ~50 conversions needed
+
+Existing account (change):
+├── Bid strategy switch: 7-14 days
+├── Target adjustment >20%: 7 days
+├── Small target change <10%: 3-5 days
+└── New conversion action: 14+ days
+
+LEARNING DURATION CALCULATOR:
+─────────────────────────────
+Estimated duration = 50 / (conversions per day)
+
+Example:
+├── 10 conv/day → ~5 days (fast!)
+├── 3 conv/day → ~17 days (average)
+├── 1 conv/day → ~50 days (long)
+└── 0.5 conv/day → 100+ days (too long)
+
+If >21 days in learning:
+├── Evaluate conversion volume
+├── Check budget allocation
+├── Consider higher-funnel conversion
+└── Or different bid strategy type
 ```
 
-### Batch Edits Strategy
+## What Resets Learning Phase?
+
+### Major Resets (Full Restart)
 
 ```
-Multiple edits needed?
-│
-├─► Option 1: Batch all edits together
-│   ├── Advantage: One learning reset instead of multiple
-│   └─► Use when: Major refresh/overhaul
-│
-└─► Option 2: Staggered edits
-    ├── Advantage: Isolate impact per change
-    ├── Wait 3-5 days between edits
-    └─► Use when: Testing hypotheses
+ACTIONS THAT FULLY RESET LEARNING
+═════════════════════════════════
+
+AVOID THESE DURING LEARNING:
+─────────────────────────────
+
+1. CHANGING BID STRATEGY
+   └── From tCPA to Max Conversions = RESET
+   └── From tROAS to tCPA = RESET
+   └── Portfolio to individual = RESET
+
+2. LARGE TARGET ADJUSTMENT (>20%)
+   └── tCPA from $50 to $40 = RESET
+   └── tROAS from 400% to 300% = RESET
+   └── Exception: Adding first target
+
+3. CHANGING CONVERSION ACTION
+   └── Different primary conversion = RESET
+   └── Changing conversion value = RESET
+   └── Linking new conversion action = RESET
+
+4. PAUSING CAMPAIGN >7 DAYS
+   └── Longer pause = learning data becomes stale
+   └── Reopening = essentially a fresh start
+
+5. DRASTIC BUDGET CHANGE (>50%)
+   └── Halving budget = RESET
+   └── Doubling budget = Partial reset
 ```
 
-## Ad Set Health Check
-
-### Quick Health Assessment
+### Minor Changes (No Reset)
 
 ```
-AD SET HEALTH CHECK
+SAFE ACTIONS DURING LEARNING
+═══════════════════════════
 
-□ Learning Phase Status: [Learning/Active/Limited]
-□ Days in current status: [X]
-□ Conversions last 7 days: [X]
-□ Daily budget: €[X]
-□ Estimated CPA: €[X]
-□ Frequency: [X]
-□ CTR: [X]%
-□ Delivery status: [Active/Limited/Off]
+THESE ACTIONS ARE SAFE:
+───────────────────────
 
-HEALTH SCORE:
-├── Green (Healthy): Active + 50+ conv/week + Frequency <4
-├── Yellow (Watch): Learning >7 days OR 25-50 conv/week
-└── Red (Action needed): Limited OR <25 conv/week OR Frequency >5
+TARGETING:
+├── Adding keywords (small batches)
+├── Adding negative keywords
+├── Expanding locations
+├── Device bid adjustments
+└── Adding audiences (observation)
+
+ADS:
+├── Adding new ads
+├── Pausing ads
+├── Changing RSA headlines/descriptions
+├── Adding/changing extensions
+└── Optimizing ad copy
+
+BUDGET:
+├── Budget increase <20%
+├── Budget decrease <10%
+└── Small shared budget adjustments
+
+LANDING PAGES:
+├── Changing landing page URL
+├── Content updates
+└── A/B test URL variants
+
+GENERAL RULE:
+Small, incremental changes = OK
+Large, structural changes = RESET
 ```
 
-### Recommended Actions by Status
+### Gray Zone Actions
 
 ```
-STATUS: Learning (Normal)
-├── Days in learning: <7
-├── Action: Wait, don't make changes
-└── Check again: After 7 days
+ACTIONS WITH POTENTIAL IMPACT
+═══════════════════════════
 
-STATUS: Learning (Extended)
-├── Days in learning: >7
-├── Action: Evaluate budget/audience/event
-└── Consider: Tactic 1-4 from Exit Strategies
+HANDLE WITH CAUTION:
+──────────────────────
 
-STATUS: Learning Limited
-├── Action: Immediate intervention
-├── Primary: Increase budget
-├── Secondary: Broader audience
-└── Tertiary: Higher-funnel event
+1. BUDGET CHANGE 20-30%
+   └── May slow down learning
+   └── Usually not a full reset
+   └── Monitor closely
 
-STATUS: Active (Healthy)
-├── Action: Monitor, no changes needed
-├── Optimize: Test new creatives (add, don't replace)
-└── Scale: 20% budget increase if performance is stable
+2. TARGET CHANGE 10-20%
+   └── May cause short "re-calibration"
+   └── Not always a full reset
+   └── Wait-and-see approach
 
-STATUS: Active (Declining)
-├── Symptoms: Rising CPA, falling ROAS
-├── Diagnose: Creative fatigue? Audience saturation?
-├── Action: Refresh creatives, expand audience
-└── Avoid: Major restructuring (resets learning)
+3. ADDING MANY KEYWORDS AT ONCE
+   └── >50 keywords = may disrupt learning
+   └── Better: batches of 10-20
+   └── Monitor impression share
+
+4. ADDING NEW AD GROUPS
+   └── 1-2 ad groups = no problem
+   └── Large-scale restructure = problematic
+   └── Test small first
+
+5. CHANGING AUDIENCE TARGETING
+   └── Observation to targeting = impact
+   └── Adding new audiences = OK
+   └── Removing audiences = minor impact
 ```
 
-## Edit Impact Simulator
 
-### Input Template
 
-```
-CURRENT AD SET:
-- Daily budget: €[X]
-- Learning status: [Learning/Active/Limited]
-- Days in status: [X]
-- Conv. last 7 days: [X]
-- Current CPA: €[X]
+See [decision-trees.md](references/decision-trees.md) for details.
 
-PROPOSED CHANGE:
-- Change type: [budget/audience/creative/bid/event]
-- Change details: [specifics]
-```
 
-### Output Template
+
+## Learning Phase Best Practices
+
+### Pre-Launch Checklist
 
 ```
-EDIT IMPACT ANALYSIS
+BEFORE LAUNCHING SMART BIDDING
+══════════════════════════════
 
-Proposed Change: [description]
+□ CONVERSION TRACKING VERIFIED
+├── Test conversions fired
+├── Correct attribution window
+├── Values correct (if used)
+└── No duplicate conversions
 
-RISK ASSESSMENT:
-├── Learning Reset Risk: [Low/Medium/High]
-├── Performance Impact: [Minimal/Moderate/Significant]
-└── Recovery Time: [X] days
+□ HISTORICAL DATA PRESENT
+├── Minimum 30 days of data
+├── Preferably 50+ conversions in history
+├── Consistent tracking throughout the period
+└── No large gaps in data
 
-RECOMMENDATION:
-[Proceed/Proceed with caution/Delay/Alternative approach]
+□ ADEQUATE BUDGET
+├── Minimum: 10x target CPA per day
+├── Recommended: 20x target CPA per day
+├── Buffer for learning fluctuations
+└── 30-day budget commitment
 
-ALTERNATIVE APPROACH (if risky):
-[Safer alternative to achieve same goal]
+□ REALISTIC TARGET SET
+├── Target CPA: Historical average + 20%
+├── Target ROAS: Historical average - 20%
+├── DO NOT start too aggressively
+└── Room to learn
 
-TIMING ADVICE:
-[When to implement if proceeding]
-
-POST-CHANGE MONITORING:
-- Day 1-3: [what to monitor]
-- Day 4-7: [evaluation criteria]
-- Action triggers: [when to intervene]
+□ STAKEHOLDERS INFORMED
+├── Expect fluctuations in first 2 weeks
+├── No panic on CPA spikes
+├── Focus on trend, not daily numbers
+└── Review after 4 weeks, not earlier
 ```
 
-## MCP: Check Learning Phase Status
-
-```python
-# Get learning phase status for all active ad sets
-meta_query(account_id="act_XXXXX", entity="adsets", fields=["id","name","status","learning_phase_status","daily_budget","optimization_goal","bid_strategy"], filters={"effective_status":["ACTIVE","LEARNING","LEARNING_LIMITED"]})
-```
-
-## Common Scenarios
-
-### Scenario 1: Doubling Budget
+### During Learning Protocol
 
 ```
-Situation: Ad set performing well, want to 2x budget
-Risk: High (>50% increase)
+DURING LEARNING PHASE
+══════════════════════
 
-Recommendation:
-1. Duplicate ad set with 2x budget
-2. Keep original running on current budget
-3. After 7 days: Evaluate which performs better
-4. Pause the underperformer
+WEEK 1: HANDS-OFF
+─────────────────
+□ Daily monitoring (no action)
+□ Log performance in spreadsheet
+□ Expect: Higher CPA, volatility
+□ DO NOT: Change budget, adjust targets
+
+WEEK 2: OBSERVE PATTERNS
+────────────────────────
+□ Analyze day-of-week trends
+□ Check device performance
+□ Note metrics becoming stable
+□ Still: No major changes
+
+WEEK 3: FIRST EVALUATION
+────────────────────────
+□ Compare with pre-learning baseline
+□ Check learning status in UI
+□ If "Eligible": Small optimization OK
+□ If "Learning": Keep waiting
+
+WEEK 4: FORMAL REVIEW
+──────────────────────
+□ Full performance analysis
+□ Learning complete? → Optimize
+□ Still learning? → Evaluate cause
+□ Document learnings
+
+MONITORING DASHBOARD:
+─────────────────────
+┌───────────────────────────────────────────────────────────┐
+│ Metric          │ Pre-Learning │ Week 1 │ Week 2 │ Week 3│
+├─────────────────┼──────────────┼────────┼────────┼───────┤
+│ Conversions     │ baseline     │ -20%?  │ stable │ +10%? │
+│ CPA             │ baseline     │ +30%?  │ -10%?  │ target│
+│ Conv Rate       │ baseline     │ varies │ stable │ stable│
+│ Impression Share│ baseline     │ varies │ varies │ stable│
+└─────────────────┴──────────────┴────────┴────────┴───────┘
 ```
 
-### Scenario 2: Creative Refresh
+### Learning Acceleration Tactics
 
 ```
-Situation: CTR declining, want to replace all ads
-Risk: High (triggers reset)
+HOW TO ACCELERATE LEARNING
+══════════════════════════
 
-Recommendation:
-1. Add new ads to existing ad set (don't replace)
-2. Let algorithm test new vs old
-3. Pause underperformers after 5-7 days
-4. Avoid full creative swap
+TACTIC 1: CONSERVATIVE TARGETS
+───────────────────────────────
+Start with more relaxed targets:
+├── tCPA: +30% of desired target
+├── tROAS: -30% of desired target
+├── More auctions = more data = faster learning
+└── Tighten after learning is complete
+
+TACTIC 2: ADEQUATE BUDGET
+──────────────────────────
+Budget formula:
+├── Daily budget >= 15x target CPA
+├── Or: Enough for 15+ conversions/day
+├── More spend = faster learnings
+└── Investment in the learning period
+
+TACTIC 3: PORTFOLIO STRATEGIES
+───────────────────────────────
+Bundle campaigns:
+├── Same conversion goal
+├── Shared learnings
+├── Aggregated data
+└── Faster optimization
+
+TACTIC 4: BROAD MATCH + SMART BIDDING
+──────────────────────────────────────
+During learning only:
+├── Broad match = more impressions
+├── Smart bidding selects the best
+├── More data for AI
+└── Later: Add negatives
+
+TACTIC 5: SEASONALITY ADJUSTMENTS
+──────────────────────────────────
+For known seasonal events:
+├── Tools → Bid strategies → Advanced
+├── Add seasonality adjustment
+├── Informs AI about expected change
+└── Prevents unnecessary "re-learning"
 ```
 
-### Scenario 3: Audience Change
 
+
+See [detailed-reference.md](references/detailed-reference.md) for details.
+
+
+
+## Output: Learning Phase Status Template
+
+```markdown
+# Learning Phase Status Report
+
+## Campaign Overview
+- **Campaign name:** [Name]
+- **Bid strategy:** [tCPA/tROAS/Max Conv/etc.]
+- **Learning status:** [Learning/Limited/Eligible]
+- **Days in learning:** [X]
+
+## Current Performance
+| Metric | Baseline | Week 1 | Week 2 | Current |
+|--------|----------|--------|--------|---------|
+| Conversions | [X] | [X] | [X] | [X] |
+| CPA | $[X] | $[X] | $[X] | $[X] |
+| Conv Rate | [X]% | [X]% | [X]% | [X]% |
+| Spend | $[X] | $[X] | $[X] | $[X] |
+
+## Learning Analysis
+
+### Data Volume Check
+- Conversions past 30 days: [X] (needed: 50+)
+- Average per day: [X]
+- Estimated time to eligible: [X] days
+
+### Blocking Factors
+- [ ] Budget too low
+- [ ] Target too restrictive
+- [ ] Conversion tracking issues
+- [ ] Insufficient impressions
+
+## Recommendations
+
+### If Status = "Learning"
+- [ ] Wait at least [X] days
+- [ ] No major changes
+- [ ] Daily monitoring
+
+### If Status = "Learning (Limited)"
+**Priority action:** [Describe solution]
+
+Options:
+1. [Option 1 - e.g., increase budget]
+2. [Option 2 - e.g., relax target]
+3. [Option 3 - e.g., consolidate]
+
+### If Status = "Eligible"
+- [ ] Evaluate performance vs targets
+- [ ] Consider target tightening (max 10%)
+- [ ] Begin optimization cycle
+
+## Next Steps
+1. [Action 1 + deadline]
+2. [Action 2 + deadline]
+3. [Action 3 + deadline]
+
+## Review Schedule
+- Daily check: [Time]
+- Weekly deep-dive: [Day]
+- Formal evaluation: [Date]
 ```
-Situation: Want to add interest targeting
-Risk: High (audience change = reset)
-
-Recommendation:
-1. Create new ad set with new audience
-2. Keep original running in parallel
-3. Compare performance after 7-14 days
-4. Scale winner, pause loser
-```
-
-### Scenario 4: Stuck in Learning
-
-```
-Situation: 14 days in Learning, no progress
-Diagnosis: Budget €30/day, CPA €25, 8 conv/week
-
-Recommendation:
-1. Increase budget to €90/day (€25 CPA x 50 / 7 x 0.5 buffer)
-2. OR switch to AddToCart event temporarily
-3. OR merge with other ad sets
-4. After exit: Optimize back to desired setup
-```
+</output>

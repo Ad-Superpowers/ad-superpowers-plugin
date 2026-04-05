@@ -1,8 +1,10 @@
 ---
 name: linkedin-content-strategy
 description: |
-  LinkedIn ad format selection and B2B content strategy. Provides decision trees for choosing between Sponsored Content (single image, carousel, video, document), Message Ads, Text Ads, and Thought Leader Ads based on campaign objectives. Includes thought leadership positioning, content funnel mapping, and format-specific creative best practices. Note: Conversation Ads are deprecated in EU/EEA and being phased out globally.
-  Use when: (1) user asks which LinkedIn ad format to use, (2) user wants to build a B2B content funnel on LinkedIn, (3) user needs creative best practices for LinkedIn ad formats.
+  This skill should be used when the user asks to "choose a LinkedIn ad format",
+  "build a B2B content funnel on LinkedIn", "compare carousel vs video on LinkedIn",
+  "create Thought Leader Ads", or mentions "LinkedIn ad format",
+  "Sponsored Content strategy", or "LinkedIn creative best practices".
   Do NOT use for: lead form optimization (use linkedin-lead-gen-optimizer), campaign scaling (use linkedin-campaign-scaling-guide), or ABM targeting (use linkedin-abm-targeting-strategy).
 metadata:
   author: "AdSuperpowers"

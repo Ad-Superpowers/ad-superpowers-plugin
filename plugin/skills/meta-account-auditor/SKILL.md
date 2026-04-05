@@ -1,8 +1,11 @@
 ---
-name: meta-account-auditor
+name: account-auditor
 description: |
-  Performs complete Meta Ads account audits with structured checklists, health scores, and actionable recommendations. Use when: taking over a new account, doing periodic reviews, or diagnosing performance problems.
-  Do NOT use for: campaign structure advice (use campaign-structure-advisor), performance troubleshooting (use performance-troubleshooter), benchmark comparisons only (use benchmark-database).
+  This skill should be used when the user asks to "audit a Meta Ads account", "take over a new account",
+  "run a health check", or mentions "account audit", "periodic review",
+  or "Meta account health score". Do NOT use for: campaign structure advice
+  (use campaign-structure-advisor), performance troubleshooting (use performance-troubleshooter),
+  benchmark comparisons only (use benchmark-database).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -518,16 +521,16 @@ Use these MCP calls to pull actual account data before scoring each section:
 
 ```
 1. Campaign structure overview:
-→ meta_query(account_id="...", fields=["campaign_name","objective","status","daily_budget","lifetime_budget"], level="campaign")
+→ meta_query(account_id="...", entity_type="campaigns", effective_status=["ACTIVE"], fields=["id","name","objective","status","daily_budget","lifetime_budget"])
 
 2. Ad set performance + delivery:
-→ meta_query(account_id="...", fields=["adset_name","delivery_info","cost_per_result","spend","frequency","impressions"], date_preset="last_7d", level="adset")
+→ meta_get_insights(account_id="...", level="adset", date_preset="last_7d", fields=["adset_name","cost_per_action_type","spend","frequency","impressions"])
 
 3. Ad-level creative health:
-→ meta_get_creatives(account_id="...", scope="active")
+→ meta_get_creatives(account_id="...", scope="account", date_preset="last_7d")
 
 4. Top/bottom performers (last 30 days):
-→ meta_query(account_id="...", fields=["campaign_name","spend","purchase_roas","cost_per_result","impressions"], date_preset="last_30d", level="campaign")
+→ meta_get_insights(account_id="...", level="campaign", date_preset="last_30d", fields=["campaign_name","spend","actions","cost_per_action_type","impressions"])
 ```
 
 Feed results directly into the audit sections above to score each area objectively.
@@ -541,11 +544,11 @@ Feed results directly into the audit sections above to score each area objective
 "I'll help you with a systematic account audit. Let me pull the live data first:
 
 ```
-meta_query(account_id="...", fields=["campaign_name","objective","status","spend","cost_per_result","purchase_roas","frequency","impressions"], date_preset="last_7d", level="campaign")
+meta_get_insights(account_id="...", level="campaign", date_preset="last_7d", fields=["campaign_name","objective","spend","cost_per_action_type","frequency","impressions"])
 ```
 
 ```
-meta_query(account_id="...", fields=["adset_name","delivery_info","cost_per_result","spend","frequency"], date_preset="last_7d", level="adset")
+meta_get_insights(account_id="...", level="adset", date_preset="last_7d", fields=["adset_name","cost_per_action_type","spend","frequency"])
 ```
 
 While that runs, I also need a few things:

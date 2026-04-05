@@ -1,7 +1,9 @@
 ---
 name: ga4-attribution-advisor
 description: |
-  GA4 attribution model advice and configuration. Use when: choosing between DDA, last-click, first-click, position-based models, configuring attribution model per conversion, setting attribution windows, analyzing cross-channel attribution, running model comparisons. Do NOT use for: conversion import to Google Ads (use ga4-conversion-import), channel grouping configuration (use ga4-channel-groupings).
+  This skill should be used when the user asks to "choose an attribution model", "compare DDA vs last-click",
+  "configure attribution windows", or mentions "cross-channel attribution", "first-click vs position-based", or "GA4 model comparison".
+  Do NOT use for: conversion import to Google Ads (use ga4-conversion-import), channel grouping configuration (use ga4-channel-groupings).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -428,11 +430,12 @@ ANALYTICS ADVISOR INTEGRATION:
 
 ```python
 # Compare conversions by channel for attribution analysis
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["keyEvents", "keyEventRate", "totalRevenue"],
     dimensions=["sessionDefaultChannelGroup", "date"],
-    date_range={"start_date": "90daysAgo", "end_date": "yesterday"}
+    start_date="90daysAgo",
+    end_date="yesterday"
 )
 ```
 

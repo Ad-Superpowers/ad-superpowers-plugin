@@ -1,8 +1,8 @@
 ---
 name: ga4-data-layer-guide
 description: |
-  Google Tag Manager Data Layer implementation guide for GA4. Covers Data Layer structure, e-commerce Data Layer, user data, form/event data, and debugging.
-  Use when: user asks about Data Layer setup, GTM Data Layer implementation, e-commerce Data Layer, pushing data to Data Layer, or Data Layer debugging.
+  This skill should be used when the user asks to "set up a Data Layer", "implement GTM Data Layer",
+  "push data to dataLayer", or mentions "e-commerce Data Layer", "Data Layer debugging", or "dataLayer structure".
   Do NOT use for: GA4 property setup (use ga4-property-setup-guide), event tracking without Data Layer (use ga4-event-tracking-setup), or BigQuery export (use ga4-bigquery-export).
 metadata:
   author: "AdSuperpowers"
@@ -703,11 +703,12 @@ If the user has connected their GA4 account, check event parameter fill rates to
 
 ```python
 # Check which custom events are firing and with what frequency
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
+    start_date="7daysAgo",
+    end_date="today",
     metrics=["eventCount"],
-    dimensions=["eventName", "customEvent:form_name"],
-    date_range="last_7d"
+    dimensions=["eventName", "customEvent:form_name"]
 )
 ```
 

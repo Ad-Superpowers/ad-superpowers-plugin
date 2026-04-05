@@ -1,13 +1,9 @@
 ---
 name: technical-seo-monitor
 description: |
-  Expert framework for monitoring technical SEO health via Google Search Console including
-  indexing status interpretation, sitemap health checks, crawl budget optimization, canonical
-  URL diagnostics, mobile usability issues, and rich results validation.
-  
-  Use when: user asks about indexing problems, pages not appearing in Google, sitemap errors,
-  crawl issues, canonical URL conflicts, mobile usability, rich results status, technical SEO
-  audit, or why their pages aren't being indexed.
+  This skill should be used when the user asks to "fix indexing problems", "check sitemap health",
+  "diagnose crawl issues", or mentions "pages not appearing in Google", "canonical URL conflicts", or "technical SEO audit".
+  Do NOT use for: organic search performance analysis or CTR optimization (use gsc-performance-analyzer).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"

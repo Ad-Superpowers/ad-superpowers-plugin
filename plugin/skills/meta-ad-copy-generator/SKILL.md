@@ -1,8 +1,11 @@
 ---
 name: ad-copy-generator
 description: |
-  Generates high-converting ad copy for Meta Ads using proven frameworks, hook formulas, and platform-specific best practices. Use when: you need primary text, headlines, descriptions, or complete ad copy sets.
-  Do NOT use for: video scripts (use video-script-writer), creative brainstorming (use creative-diversification-generator), A/B test design (use ab-test-planner).
+  This skill should be used when the user asks to "write ad copy", "generate headlines",
+  "create primary text", or mentions "Meta ad copy", "ad descriptions",
+  or "hook formulas for ads". Do NOT use for: video scripts (use video-script-writer),
+  creative brainstorming (use creative-diversification-generator), A/B test design
+  (use ab-test-planner).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -43,7 +46,7 @@ This skill generates effective ad copy for Meta Ads using proven copywriting fra
 ### The 3-Second Rule
 
 ```
-You have ~3 seconds to capture attention.
+There are ~3 seconds to capture attention.
 The first sentence determines whether people stop scrolling.
 ```
 
@@ -437,22 +440,19 @@ Want me to create more variations with a different angle?"
 
 ```python
 # Retrieve existing ad performance to identify winning copy patterns
-meta_query(
+meta_get_insights(
     account_id="act_XXXXXXXXX",
-    query_type="insights",
-    params={
-        "fields": ["ad_name", "ad_id", "impressions", "ctr", "spend", "actions", "cost_per_action_type"],
-        "date_preset": "last_30d",
-        "level": "ad",
-        "sort": ["ctr_descending"]
-    }
+    level="ad",
+    date_preset="last_30d",
+    fields=["ad_name", "ad_id", "impressions", "ctr", "spend", "actions", "cost_per_action_type"]
 )
 
 # Then pull the actual creative text from top performers
 meta_get_creatives(
     account_id="act_XXXXXXXXX",
-    scope="ads",
-    filters={"ad_ids": ["<top_ad_id_1>", "<top_ad_id_2>"]}
+    scope="account",
+    date_preset="last_30d",
+    sort_by="ctr"
 )
 ```
 

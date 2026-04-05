@@ -1,8 +1,9 @@
 ---
 name: linkedin-revenue-attribution
 description: |
-  Connect LinkedIn Ads to actual revenue and prove B2B ROI. Helps navigate the complex world of B2B attribution with 90-200+ day sales cycles, integrate CRM data (Salesforce, HubSpot, Marketo) with LinkedIn, and build executive-ready reporting that demonstrates pipeline impact.
-  Use when: user asks about LinkedIn ROI, how to prove LinkedIn's value to leadership, connecting CRM to LinkedIn, B2B revenue attribution, or why LinkedIn revenue attribution is lower than expected.
+  This skill should be used when the user asks to "prove LinkedIn ROI to leadership",
+  "connect CRM to LinkedIn attribution", "measure LinkedIn pipeline impact", or mentions
+  "LinkedIn revenue attribution", "B2B sales cycle attribution", or "LinkedIn value reporting".
   Do NOT use for: LinkedIn cost benchmarks (use linkedin-cost-monitor or linkedin-benchmark-database), LinkedIn lead gen optimization (use linkedin-lead-gen-optimizer), or LinkedIn bid strategy (use linkedin-bid-strategy-selector).
 metadata:
   author: "AdSuperpowers"
@@ -269,7 +270,7 @@ DEAL SIZE vs EXPECTED SALES CYCLE:
 
 KEY INSIGHT:
 ════════════
-If your average deal is €50K, you won't see meaningful
+If the average deal is €50K, expect no meaningful
 revenue attribution data for 3-6 MONTHS after campaign launch.
 
 PATIENCE REQUIRED:
@@ -495,28 +496,26 @@ Pull attribution and pipeline data using the MCP tools:
 # Get in-platform conversion metrics (Insight Tag based)
 linkedin_get_analytics(
   account_id="YOUR_ACCOUNT_ID",
-  entity="campaigns",
-  metrics=["costInLocalCurrency", "externalWebsiteConversions",
-           "externalWebsitePostClickConversions", "externalWebsitePostViewConversions",
-           "oneClickLeads", "leads"],
-  date_range={"start": "YYYY-MM-DD", "end": "YYYY-MM-DD"}
+  start_date="YYYY-MM-DD",
+  end_date="YYYY-MM-DD",
+  level="campaign",
+  fields=["costInLocalCurrency", "externalWebsiteConversions", "oneClickLeads", "leads"]
 )
 
 # Get RAR pipeline metrics (requires CRM integration via Revenue Attribution Reports)
+# Note: RAR metrics (rar_revenue_won, pipeline_value, etc.) only populate after CRM setup
 linkedin_get_analytics(
   account_id="YOUR_ACCOUNT_ID",
-  entity="campaigns",
-  metrics=["costInLocalCurrency", "rar_revenue_won", "rar_roas",
-           "closed_won_opportunities", "open_opportunities",
-           "pipeline_value", "average_deal_size", "average_days_to_conversion"],
-  date_range={"start": "YYYY-MM-DD", "end": "YYYY-MM-DD"}
+  start_date="YYYY-MM-DD",
+  end_date="YYYY-MM-DD",
+  level="campaign",
+  fields=["costInLocalCurrency", "externalWebsiteConversions", "leads"]
 )
 
 # Get campaign details to contextualize attribution (objective, date range)
 linkedin_query(
   account_id="YOUR_ACCOUNT_ID",
-  entity="campaigns",
-  fields=["id", "name", "objectiveType", "status", "runSchedule", "costType"]
+  entity_type="campaigns"
 )
 ```
 
@@ -603,7 +602,7 @@ When analyzing LinkedIn revenue attribution, provide:
 
 ### "How do I prove LinkedIn ROI to the C-suite?"
 
-1. **Connect CRM** - Without CRM data, you're guessing
+1. **Connect CRM** - Without CRM data, attribution is guesswork
 2. **Set realistic timelines** - Expect 90-180 days for meaningful data
 3. **Show the funnel** - Leads → MQLs → SQLs → Pipeline → Revenue
 4. **Use influenced metrics** - Fair comparison to other channels

@@ -1,8 +1,9 @@
 ---
 name: conversion-tracking-setup
 description: |
-  Complete Google Ads conversion tracking implementation guide. Covers conversion action configuration, Google Tag setup, Enhanced Conversions implementation, value tracking, offline conversion imports, and primary vs secondary conversions.
-  Use when: setting up conversion tracking, Google Tag setup, gtag implementation, Enhanced Conversions, offline conversions, conversion value tracking, attribution configuration.
+  This skill should be used when the user asks to "set up conversion tracking", "implement Google Tag",
+  "configure Enhanced Conversions", "import offline conversions", or mentions "gtag setup",
+  "conversion value tracking", or "primary vs secondary conversions".
   Do NOT use for: debugging existing tracking issues (use conversion-tracking-debugger), Meta pixel setup (use meta tools), GA4 event setup (use ga4 tools).
 metadata:
   author: "AdSuperpowers"
@@ -253,7 +254,7 @@ TYPES:
 +-- Customer Match: Audience building
 
 NEW IN v20+: user_ip_address field
-+-- You can now send the user's IP address as an additional match signal
++-- The user's IP address can now be sent as an additional match signal
 +-- Improves match rates for server-side conversions
 +-- Field: user_ip_address (plain text, not hashed)
 ```

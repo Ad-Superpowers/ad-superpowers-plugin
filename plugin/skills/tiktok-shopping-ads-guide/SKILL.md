@@ -1,8 +1,10 @@
 ---
 name: tiktok-shopping-ads-guide
 description: |
-  TikTok Shop and product advertising guide. Covers catalog setup, dynamic product ads, Video Shopping Ads (VSA), collection ads, TikTok Shop integration, product feed requirements, and shoppable video best practices. Includes product feed troubleshooting, ROAS benchmarks, and catalog optimization frameworks.
-  Use when: (1) user asks about TikTok Shop or product catalog ads, (2) user wants to set up dynamic product ads on TikTok, (3) user needs help with product feeds, collection ads, or shoppable video.
+  This skill should be used when the user asks to "set up TikTok Shop ads",
+  "create dynamic product ads on TikTok", "fix TikTok product feed errors",
+  "build collection ads on TikTok", or mentions "TikTok Shopping",
+  "Video Shopping Ads", or "TikTok product catalog".
   Do NOT use for: general TikTok creative strategy (use tiktok-hook-optimization-guide), audience building (use tiktok-audience-strategy), or Spark Ads (use tiktok-spark-ads-strategy).
 metadata:
   author: "AdSuperpowers"

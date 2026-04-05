@@ -1,7 +1,11 @@
 ---
 name: youtube-ads-strategist
 description: |
-  Develops YouTube Ads strategy and optimizes video campaigns across all ad formats. Use when: TrueView and video ad format selection, Bumper ads strategy, YouTube audience targeting, video campaign setup, YouTube remarketing, video ad creative best practices, ABCD framework. Do NOT use for: standard Display campaigns (use display-campaign-optimizer), Performance Max video assets (use pmax-asset-group-optimizer).
+  This skill should be used when the user asks to "plan YouTube Ads strategy",
+  "choose video ad formats", "set up Bumper ads", "target YouTube audiences",
+  or mentions "TrueView", "ABCD framework", "YouTube remarketing",
+  or "video campaign optimization".
+  Do NOT use for: standard Display campaigns (use display-campaign-optimizer), Performance Max video assets (use pmax-asset-group-optimizer).
 metadata:
   author: "AdSuperpowers"
   version: "1.2.0"

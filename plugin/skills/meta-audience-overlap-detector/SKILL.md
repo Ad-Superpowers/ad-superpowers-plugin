@@ -1,8 +1,11 @@
 ---
 name: audience-overlap-detector
 description: |
-  Analyzes and detects audience overlap in Meta Ads campaigns to prevent budget waste and minimize auction competition. Use when: identifying overlap, consolidating audiences, or setting up exclusion strategies.
-  Do NOT use for: campaign structure advice (use campaign-structure-advisor), lookalike strategy (use lookalike-strategy-planner), full-funnel design (use full-funnel-designer).
+  This skill should be used when the user asks to "detect audience overlap", "consolidate audiences",
+  "set up exclusion strategies", or mentions "audience overlap", "self-bidding",
+  or "internal auction competition". Do NOT use for: campaign structure advice
+  (use campaign-structure-advisor), lookalike strategy (use lookalike-strategy-planner),
+  full-funnel design (use full-funnel-designer).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -304,11 +307,9 @@ Share those percentages and I'll help you with a solution plan!"
 # List all active ad sets with their audiences and delivery metrics
 meta_query(
     account_id="act_XXXXXXXXX",
-    query_type="adsets",
-    params={
-        "fields": ["name", "targeting", "status", "daily_budget", "impressions", "reach", "frequency", "effective_status"],
-        "filtering": [{"field": "effective_status", "operator": "IN", "value": ["ACTIVE"]}]
-    }
+    entity_type="adsets",
+    effective_status=["ACTIVE"],
+    fields=["name", "targeting", "status", "daily_budget"]
 )
 ```
 

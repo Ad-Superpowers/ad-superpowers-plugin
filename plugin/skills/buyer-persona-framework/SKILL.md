@@ -1,8 +1,7 @@
 ---
 name: buyer-persona-framework
 description: |
-  Creates data-driven buyer personas that translate directly into ad platform targeting parameters. Includes B2C and B2B templates, industry archetypes, platform-specific targeting translation tables, and persona validation checklists.
-  Use when: user asks about creating buyer personas, defining target audiences, audience research, customer segmentation, ICP development, or translating personas into Meta/Google/LinkedIn/TikTok targeting.
+  This skill should be used when the user asks to "create buyer personas", "define target audiences", "build an ICP", mentions "customer segmentation", "audience research", or "translate personas into ad targeting".
   Do NOT use for: channel selection decisions (use channel-selection-framework), competitor audience analysis (use competitor-analysis-toolkit), or market size estimation (use market-sizing-guide).
 metadata:
   author: "AdSuperpowers"
@@ -569,17 +568,18 @@ If the user has connected accounts, ground persona demographics in actual audien
 
 ```python
 # Pull real demographic breakdown from GA4
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
+    start_date="30daysAgo",
+    end_date="today",
     metrics=["totalUsers", "sessions"],
-    dimensions=["userAgeBracket", "userGender"],
-    date_range="last_30d"
+    dimensions=["userAgeBracket", "userGender"]
 )
 ```
 
 ```python
 # Cross-reference with Meta audience insights for top-performing campaigns
-meta_query(account_id="act_XXXXX", entity="campaigns", fields=["name","spend","actions"], date_range="last_30d")
+meta_get_insights(account_id="act_XXXXX", level="campaign", date_preset="last_30d", fields=["campaign_name","spend","actions"])
 ```
 
 Compare GA4 demographics against what you assumed in the persona framework. Surprises (e.g., older audience than expected) should update persona priorities and platform channel mix.

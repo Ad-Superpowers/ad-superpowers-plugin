@@ -1,7 +1,9 @@
 ---
 name: ga4-channel-groupings
 description: |
-  Configure custom channel groupings in GA4. Use when: understanding default channel group rules, creating custom channel groups, optimizing source/medium mapping, splitting branded vs non-branded traffic, affiliate and partner tracking. Do NOT use for: UTM parameter setup (use ga4-cross-platform-tracking), attribution model selection (use ga4-attribution-advisor).
+  This skill should be used when the user asks to "configure channel groupings", "create custom channel groups",
+  "fix source/medium mapping", or mentions "branded vs non-branded traffic", "default channel groups", or "affiliate tracking channels".
+  Do NOT use for: UTM parameter setup (use ga4-cross-platform-tracking), attribution model selection (use ga4-attribution-advisor).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -350,21 +352,23 @@ PRINCIPLE:
 
 ```python
 # Check traffic and conversions by channel group
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["sessions", "keyEvents", "totalRevenue", "keyEventRate"],
     dimensions=["sessionDefaultChannelGroup"],
-    date_range={"start_date": "30daysAgo", "end_date": "yesterday"}
+    start_date="30daysAgo",
+    end_date="yesterday"
 )
 
 # Find "Unassigned" traffic to diagnose missing UTMs
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
+    start_date="30daysAgo",
+    end_date="yesterday",
     metrics=["sessions"],
-    dimensions=["sessionDefaultChannelGroup", "sessionSourceMedium"],
-    date_range={"start_date": "30daysAgo", "end_date": "yesterday"},
-    filters={"dimension": "sessionDefaultChannelGroup", "operator": "EXACT", "value": "Unassigned"}
+    dimensions=["sessionDefaultChannelGroup", "sessionSourceMedium"]
 )
+# Filter for "Unassigned" in the results to diagnose missing UTMs
 ```
 
 ## Output: Channel Configuration Template

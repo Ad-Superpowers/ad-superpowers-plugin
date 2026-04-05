@@ -1,7 +1,9 @@
 ---
 name: ga4-promotion-tracking
 description: |
-  Tracks internal promotions and coupon codes in GA4. Use when: tracking internal promotion banners and slots, measuring coupon code effectiveness, building promotion performance reports, A/B testing promotion creatives, calculating coupon ROI. Do NOT use for: e-commerce event setup (use ga4-ecommerce-setup), revenue analysis and reporting (use ga4-revenue-analysis).
+  This skill should be used when the user asks to "track internal promotions", "measure coupon effectiveness",
+  "set up promotion tracking in GA4", or mentions "promotion banners", "coupon ROI", or "A/B testing promotions".
+  Do NOT use for: e-commerce event setup (use ga4-ecommerce-setup), revenue analysis and reporting (use ga4-revenue-analysis).
 metadata:
   author: "AdSuperpowers"
   version: "1.1.0"
@@ -324,11 +326,12 @@ If the user has connected their GA4 account, pull promotion performance to groun
 
 ```python
 # Get view_promotion and select_promotion event counts by promotion name
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["eventCount"],
     dimensions=["eventName", "customEvent:promotion_name"],
-    date_range="last_30d"
+    start_date="30daysAgo",
+    end_date="today"
 )
 ```
 

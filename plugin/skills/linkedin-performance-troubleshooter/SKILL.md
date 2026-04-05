@@ -1,485 +1,450 @@
 ---
 name: linkedin-performance-troubleshooter
 description: |
-  Meta Ads campaign performance diagnostics and troubleshooting. Use when: analyzing underperforming campaigns, solving CPA/ROAS problems, diagnosing delivery issues, interpreting Ad Relevance Diagnostics, making kill vs scale decisions.
-  Do NOT use for: learning phase issues (use learning-phase-tracker), bid strategy changes (use bid-strategy-selector), creative fatigue specifically (use creative-fatigue-analyzer).
+  This skill should be used when the user asks to "fix LinkedIn ad performance",
+  "diagnose high LinkedIn CPL", "fix LinkedIn ads not spending", or mentions
+  "LinkedIn low engagement", "LinkedIn performance drop", or "reduce LinkedIn ad costs".
+  Do NOT use for: LinkedIn bid strategy selection (use linkedin-bid-strategy-selector), LinkedIn lead gen form optimization (use linkedin-lead-gen-optimizer), or LinkedIn benchmark lookups (use linkedin-benchmark-database).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
-  platform: "meta"
+  platform: "linkedin"
   phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
+compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
-# Performance Troubleshooter
+# LinkedIn Ads Performance Troubleshooter
 
-Diagnostic framework for identifying and resolving Meta Ads performance problems.
+## Purpose
 
-## Quick Diagnostic
+Diagnose and fix common LinkedIn Ads performance problems. LinkedIn has the highest CPC ($3-8+) and CPL ($60-150) of any major ad platform, requiring specialized troubleshooting because generic advice doesn't work for LinkedIn's unique auction dynamics and B2B audience.
 
-```
-WHAT IS THE PRIMARY SYMPTOM?
-│
-├─► No or low delivery
-│   └─► Go to [Delivery Issues]
-│
-├─► High CPA / Low ROAS
-│   └─► Go to [Efficiency Problems]
-│
-├─► Low CTR
-│   └─► Go to [Engagement Issues]
-│
-├─► High CPM
-│   └─► Go to [Auction Competition]
-│
-├─► Performance declining over time
-│   └─► Go to [Performance Decay]
-│
-└─► Conversions not tracked
-    └─► Go to [Tracking Issues]
-```
+## When to Use This Skill
 
-## Diagnostic Framework
+Invoke when user mentions:
+- **High costs:** "Why is my LinkedIn CPL so high?"
+- **Delivery issues:** "My LinkedIn ads aren't spending/delivering"
+- **Low engagement:** "Engagement is low despite high impressions"
+- **Cost reduction:** "How do I reduce my LinkedIn ad costs?"
+- **Performance drops:** "Why did my LinkedIn performance suddenly drop?"
 
-### Step 1: Check Fundamentals
+## Quick Diagnostic Framework
 
 ```
-FUNDAMENTALS CHECKLIST:
-□ Pixel firing correctly? (Check Events Manager)
-□ CAPI active? (Server events visible?)
-□ Event Match Quality? (Target: >7)
-□ Attribution window correct? (Match buying cycle)
-□ Budget sufficient? (Min €50/day for learning)
-□ Audience size adequate? (Min 1M+ for prospecting)
-□ Creative variety? (Min 3-5 ads per ad set)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    LINKEDIN ADS TROUBLESHOOTING                              │
+│                         START HERE                                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+                    What's the main problem?
+                                    │
+        ┌───────────────────────────┼───────────────────────────┐
+        │                           │                           │
+        ▼                           ▼                           ▼
+    HIGH CPL                  LOW DELIVERY               LOW ENGAGEMENT
+    (Cost per lead           (Spending <50%             (CTR <0.4%)
+    above benchmark)          of budget)                      │
+        │                           │                           │
+        ▼                           ▼                           ▼
+   Go to SECTION A           Go to SECTION B           Go to SECTION C
 ```
 
-### Step 2: Ad Relevance Diagnostics
+## Section A: High CPL Troubleshooting
 
-Meta's 3 ranking metrics at ad level:
-
-| Metric | Meaning | Below Average = |
-|--------|---------|-----------------|
-| **Quality Ranking** | Perceived quality vs competitors | Improve creative/landing page |
-| **Engagement Rate Ranking** | Expected engagement vs competitors | Better hooks, more compelling creative |
-| **Conversion Rate Ranking** | Expected CVR vs competitors | Landing page issues, audience mismatch |
-
-### Step 3: Identify Root Cause
-
-Use diagnostic matrix below per symptom.
-
-## Delivery Issues
-
-### Symptom: No or Very Low Impressions
+### Diagnostic Checklist
 
 ```
-DIAGNOSE: Why no delivery?
-│
-├─► Ad Account Issues
-│   ├── Account restricted/disabled?
-│   ├── Payment method issue?
-│   └── Policy violation?
-│
-├─► Campaign Settings
-│   ├── Budget too low?
-│   ├── Bid/Cost cap too restrictive?
-│   ├── Schedule issues? (Ads not active?)
-│   └── Campaign paused?
-│
-├─► Audience Issues
-│   ├── Audience too small? (<50K)
-│   ├── Too many exclusions?
-│   ├── Geo targeting too narrow?
-│   └── Overlap with other campaigns?
-│
-├─► Ad Issues
-│   ├── Ads rejected/in review?
-│   ├── Low Quality Ranking?
-│   └── Policy flags?
-│
-└─► Competition Issues
-    ├── Auction outbid?
-    └── CPM spike in market?
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    HIGH CPL DIAGNOSIS                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+                    Check 1: AUDIENCE SIZE
+                                    │
+            ┌───────────────────────┴───────────────────────────┐
+            │                                                   │
+            ▼                                                   ▼
+    AUDIENCE < 50,000                                  AUDIENCE > 50,000
+    ─────────────────                                  ─────────────────
+            │                                                   │
+            ▼                                                   ▼
+    Too narrow!                                        Check 2: BID STRATEGY
+    Action: Remove 1-2 filters                                  │
+    Impact: -20-40% CPL typically               ┌───────────────┴───────────────┐
+                                                │                               │
+                                                ▼                               ▼
+                                        MANUAL BIDDING               AUTOMATED BIDDING
+                                                │                               │
+                                                ▼                               ▼
+                                        Likely too low                Check 3: FORM vs LP
+                                        Action: Switch to                       │
+                                        automated or increase cap       ┌───────┴───────┐
+                                                                        ▼               ▼
+                                                                    USING FORMS    USING LP
+                                                                        │               │
+                                                                        ▼               ▼
+                                                                Check 4: CREATIVE   Higher CPL
+                                                                FATIGUE            expected
+                                                                (CTR declining?)   (better quality)
 ```
 
-### Solutions Matrix: Delivery
+### High CPL Solutions
 
-| Issue | Diagnose Via | Solution |
-|-------|--------------|----------|
-| Budget too low | Spend vs budget | Increase to €50+/day |
-| Bid cap too low | Delivery insights | Increase 20-30% or switch to Lowest Cost |
-| Audience too small | Audience size estimate | Broader targeting, remove restrictions |
-| Ads rejected | Ad status | Fix policy issues, appeal if incorrect |
-| Low quality | Quality Ranking | Improve creative, landing page |
-| Outbid | Auction overlap | Increase bid or switch strategy |
+| Check | Issue | Action | Expected Impact |
+|-------|-------|--------|-----------------|
+| Audience size | <50,000 members | Broaden targeting - remove 1-2 filters | -20-40% CPL |
+| Bid strategy | Manual bidding too low | Switch to automated or increase cap | -10-25% CPL |
+| Forms vs LP | Using landing pages | Test Lead Gen Forms for volume | -30-50% CPL (but lower quality) |
+| Creative fatigue | CTR declining over 2+ weeks | Rotate creatives | -10-20% CPL |
 
-## Efficiency Problems
+## Section B: Low Delivery Troubleshooting
 
-### Symptom: High CPA / Low ROAS
+### Diagnostic Checklist
 
 ```
-DIAGNOSE: Why high CPA?
-│
-├─► Funnel Analysis
-│   ├── CPM normal, CTR low → Creative issue
-│   ├── CPM normal, CTR normal, CVR low → Landing page issue
-│   ├── CPM high, CTR normal → Audience/competition issue
-│   └── All metrics degraded → Multiple issues
-│
-├─► Funnel Metrics Checklist
-│   ├── CPM: €[X] (Benchmark: €15-25)
-│   ├── CTR: [X]% (Benchmark: 1-2%)
-│   ├── CPC: €[X] (Benchmark: €0.50-1.00)
-│   ├── LP → ATC: [X]% (Benchmark: 15%)
-│   ├── ATC → Purchase: [X]% (Benchmark: 30-50%)
-│   └── Overall CVR: [X]% (Benchmark: 2-5%)
-│
-└─► Identify Bottleneck
-    └─► Focus optimization effort there
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    LOW DELIVERY DIAGNOSIS                                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+                    Check 1: AUDIENCE SIZE
+                                    │
+            ┌───────────────────────┴───────────────────────────┐
+            │                                                   │
+            ▼                                                   ▼
+    AUDIENCE < 300,000                                 AUDIENCE > 300,000
+    (minimum for Sponsored Content)                            │
+            │                                                   │
+            ▼                                                   ▼
+    Too small for format!                             Check 2: BUDGET
+    Action: Use Message Ads                                    │
+    for <50K audiences, or                    ┌───────────────┴───────────────┐
+    expand targeting                          │                               │
+                                              ▼                               ▼
+                                      BUDGET < $50/day              BUDGET > $50/day
+                                              │                               │
+                                              ▼                               ▼
+                                      May be too low                Check 3: BID CAPS
+                                      Action: Increase to                      │
+                                      $100+/day for                    ┌───────┴───────┐
+                                      consistent delivery              │               │
+                                                                       ▼               ▼
+                                                               BID CAP SET      NO BID CAP
+                                                                       │               │
+                                                                       ▼               ▼
+                                                               Likely below    Check 4: TARGETING
+                                                               competitive     OVERLAP
+                                                               threshold              │
+                                                               Action: Remove          ▼
+                                                               cap or +20-30%   Overlapping
+                                                                               audiences?
+                                                                               Action:
+                                                                               Consolidate or
+                                                                               use exclusions
 ```
 
-### Solutions Matrix: Efficiency
+### Low Delivery Solutions
 
-| Bottleneck | Symptom | Solution |
-|------------|---------|----------|
-| Creative | Low CTR | Test new hooks, formats, angles |
-| Targeting | High CPM, normal CTR | Broader audience, less competition |
-| Landing Page | High CTR, low CVR | UX audit, speed test, trust elements |
-| Offer | Good traffic, no sales | Price, value prop, urgency |
-| Tracking | Conversions missing | Fix Pixel/CAPI, check deduplication |
-| Attribution | Sales in GA but not Meta | Attribution window, cross-device |
+| Check | Issue | Action | Notes |
+|-------|-------|--------|-------|
+| Audience size | <300K for Sponsored Content | Use Message Ads for <50K, or expand targeting | Minimum 300K recommended |
+| Budget | <$50/day | Increase to $100+/day for consistent delivery | $25 minimum, $100 recommended |
+| Bid caps | Below competitive threshold | Remove cap or increase by 20-30% | Benchmark CPC: $5-8 for most B2B |
+| Targeting overlap | Overlapping audiences competing | Consolidate or use exclusions | Prevents self-competition |
 
-### Funnel Optimization Priority
+## Section C: Low Engagement Troubleshooting
 
-```
-PRIORITY ORDER:
-1. Fix tracking first (no data = optimizing blind)
-2. Landing page (often 2-3x lift possible)
-3. Creative (highest ongoing impact)
-4. Targeting (let AI help)
-5. Bid strategy (fine-tuning)
-
-ROI PER FIX:
-├── Tracking: 50-200% improvement possible
-├── Landing page: 20-100% CVR lift
-├── Creative: 20-50% CTR lift
-├── Targeting: 10-30% efficiency gain
-└── Bid strategy: 5-15% fine-tuning
-```
-
-## Engagement Issues
-
-### Symptom: Low CTR
+### Diagnostic Checklist
 
 ```
-CTR BENCHMARK:
-├── Poor: <0.8%
-├── Average: 0.8-1.5%
-├── Good: 1.5-2.5%
-└── Excellent: >2.5%
-
-LOW CTR CAUSES:
-│
-├─► Creative Issues
-│   ├── Weak hook (first 3 sec video)
-│   ├── Unclear value proposition
-│   ├── Poor visual quality
-│   ├── Wrong format for placement
-│   └── Creative fatigue
-│
-├─► Targeting Issues
-│   ├── Irrelevant audience
-│   ├── Audience too broad
-│   └── Message-audience mismatch
-│
-└─► Ad Copy Issues
-    ├── Weak headline
-    ├── No clear CTA
-    └── Benefits unclear
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    LOW ENGAGEMENT DIAGNOSIS                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+                    Check 1: CREATIVE RELEVANCE
+                                    │
+            ┌───────────────────────┴───────────────────────────┐
+            │                                                   │
+            ▼                                                   ▼
+    GENERIC MESSAGING                                  PERSONALIZED MESSAGING
+    ─────────────────                                  ───────────────────────
+            │                                                   │
+            ▼                                                   ▼
+    Low relevance to audience                         Check 2: AD FORMAT
+    Action: Personalize to job                                 │
+    function/industry                         ┌───────────────┴───────────────┐
+    Impact: +50-100% CTR                      │               │               │
+                                              ▼               ▼               ▼
+                                          SINGLE          VIDEO          CAROUSEL
+                                          IMAGE              │               │
+                                              │               ▼               │
+                                              │    Good engagement,          │
+                                              │    lower CTR                 │
+                                              │               │               │
+                                              ▼               ▼               ▼
+                                        Check 3: CTA ALIGNMENT
+                                                              │
+                                              ┌───────────────┴───────────────┐
+                                              │                               │
+                                              ▼                               ▼
+                                        CTA MATCHES                    CTA MISMATCH
+                                        FUNNEL STAGE                   ───────────
+                                              │                               │
+                                              ▼                               ▼
+                                        Check 4:                       Fix CTA:
+                                        MOBILE EXPERIENCE              Top-funnel: Learn More
+                                                                       Bottom-funnel: Request Demo
 ```
 
-### Solutions: Low CTR
+### Low Engagement Solutions
+
+| Check | Issue | Action | Expected Impact |
+|-------|-------|--------|-----------------|
+| Creative relevance | Generic messaging | Personalize to job function/industry | +50-100% CTR |
+| Ad format | Not testing video | Test video (higher engagement, lower CTR) | +20-30% engagement |
+| CTA alignment | CTA doesn't match funnel stage | Top: Learn More, Download; Bottom: Request Demo | +10-20% CTR |
+| Mobile experience | Poor mobile LP | Optimize LP for mobile (50%+ traffic) | +15-25% CVR |
+
+## Red Flag Thresholds
+
+### CPL Thresholds
+
+| Status | Threshold |
+|--------|-----------|
+| Good | At or below industry benchmark |
+| Warning | >1.5x industry benchmark |
+| Critical | >2x industry benchmark |
+
+### CTR Thresholds
+
+| Status | CTR |
+|--------|-----|
+| Good | >0.50% |
+| Warning | 0.40-0.50% |
+| Critical | <0.40% |
+| Severe | <0.25% |
+
+### Delivery Thresholds
+
+| Status | % of Budget Spent |
+|--------|-------------------|
+| Good | >80% |
+| Warning | 50-80% |
+| Critical | <50% |
+
+### Frequency Thresholds
+
+| Status | Frequency/Week |
+|--------|----------------|
+| Good | <3x |
+| Warning | 3-5x |
+| Critical | >5x |
+
+### Conversion Rate Thresholds
+
+| Status | Form Completion Rate |
+|--------|---------------------|
+| Excellent | >60% |
+| Good | 40-60% |
+| Warning | 30-40% |
+| Critical | <30% |
+
+## Quick Wins Checklist
+
+### Immediate Actions (Do Today)
+
+- [ ] Switch to automated bidding (if using manual)
+- [ ] Expand audience by removing 1 targeting criteria
+- [ ] Add video creative to ad mix
+- [ ] Check mobile landing page speed (<3 seconds)
+
+### This Week
+
+- [ ] A/B test headline variations
+- [ ] Create retargeting audience
+- [ ] Review form field count (optimal: 5-7)
+- [ ] Analyze best performing demographics
+
+### Next Sprint
+
+- [ ] Implement lead scoring
+- [ ] Set up conversion tracking refinement
+- [ ] Build matched audience from CRM
+- [ ] Create funnel-stage segmented campaigns
+
+## Industry Benchmarks
+
+### CPC by Industry
+
+| Industry | CPC Range |
+|----------|-----------|
+| Finance | $3-5 |
+| SaaS | $6-8+ |
+| Healthcare | $4-6 |
+| Education | $3-4 |
+| Marketing | $5-7 |
+
+### CPM Range
+
+$30-50 across most B2B industries
+
+### CTR by Format
+
+| Format | Average CTR |
+|--------|-------------|
+| Sponsored Content | 0.50-0.60% |
+| Video | 0.40% |
+| Carousel | 0.45-0.55% |
+| Message Ads (InMail) | 3%+ |
+
+### Form Completion Rate
+
+| Rating | Rate |
+|--------|------|
+| Good | 40-60% |
+| Excellent | >60% |
+
+## New Format Opportunities for Performance Recovery
+
+When standard Sponsored Content is underperforming, test these formats before restructuring campaigns:
+
+| Format | When to Test | Expected Benefit |
+|--------|-------------|------------------|
+| **Document Ads** | Low CTR on image ads, content-heavy audience | In-feed reading = higher dwell time, 8-12% download CVR |
+| **Thought Leader Ads** | Brand ads feel impersonal, trust gap | Employee voice = 20-40% lower CPM, higher engagement |
+| **CTV Ads** | Need awareness reach beyond feed inventory | Lean-back viewing, household-level B2B reach |
+| **Carousel Ads** | Single-image CTR declining | Multi-frame storytelling, +20-30% engagement vs single image |
+
+**Thought Leader Ads troubleshooting note:** These are boosted organic employee posts. If a Thought Leader campaign has low delivery, check that the employee post has some existing organic engagement — LinkedIn favors posts with initial signals.
+
+**Document Ads troubleshooting note:** If form completion is low on standard Lead Gen Forms, test Document Ads as a gated-content replacement. The in-feed reading experience reduces friction vs external landing pages.
+
+## Predictive Audiences for CPL Improvement
+
+If high CPL persists after audience broadening, test **Predictive Audiences** (LinkedIn's AI lookalikes):
+
+- **Requirement:** 300+ conversions or contacts as seed audience
+- **Expected impact:** ~21% lower CPL vs standard interest/attribute targeting
+- **Setup:** Campaign Manager → Audiences → Predictive → Upload seed or use conversion event
+- **Note:** Needs Matched Audiences enabled (Company/Contact list upload or Insight Tag)
+
+## MCP Tool Usage
+
+Pull diagnostics data to pinpoint the performance issue:
 
 ```
-CREATIVE FIXES:
-├── Test 5+ new hook variations
-├── A/B test headlines
-├── Try different formats (video vs static)
-├── Update visuals/thumbnails
-└── Add motion/animation
+# Get key performance metrics across campaigns
+linkedin_get_analytics(
+  account_id="YOUR_ACCOUNT_ID",
+  start_date="YYYY-MM-DD",
+  end_date="YYYY-MM-DD",
+  level="campaign",
+  fields=["costInLocalCurrency", "clicks", "impressions", "leads", "totalEngagements"]
+)
 
-TARGETING FIXES:
-├── Narrow to higher-intent segments
-├── Test different interest combinations
-├── Create lookalikes from purchasers
-└── Exclude low-engagement segments
+# Get campaign settings to check bid strategy and audience size
+linkedin_query(
+  account_id="YOUR_ACCOUNT_ID",
+  entity_type="campaigns"
+)
 
-COPY FIXES:
-├── Lead with benefit, not feature
-├── Add social proof
-├── Create urgency
-└── Clearer, action-oriented CTA
+# Get creative-level performance
+linkedin_get_creatives_with_images(
+  account_id="YOUR_ACCOUNT_ID",
+  start_date="YYYY-MM-DD",
+  end_date="YYYY-MM-DD"
+)
 ```
 
-## Auction Competition
+## Platform-Specific Troubleshooting
 
-### Symptom: High CPM
+### Common LinkedIn Issues
 
-```
-CPM BENCHMARK:
-├── Low: <€10
-├── Average: €15-25
-├── High: €25-40
-└── Very High: >€40
+| Problem | Check | Solution |
+|---------|-------|----------|
+| High CPL | Audience size | Broaden targeting, test automated bidding |
+| Low engagement | Creative relevance | Test video, improve personalization |
+| Delivery issues | Budget/bid caps | Increase audience size, raise bids |
+| Form completion low | Field count | Reduce to 5-7 fields |
+| Sudden performance drop | Frequency | Check for audience saturation |
 
-HIGH CPM CAUSES:
-│
-├─► Market Factors
-│   ├── Peak season (Q4, Black Friday)
-│   ├── Industry competition spike
-│   └── Major events/elections
-│
-├─► Targeting Factors
-│   ├── Very competitive audience
-│   ├── Small audience (premium pricing)
-│   └── Overlapping with own campaigns
-│
-└─► Quality Factors
-    ├── Low relevance score
-    ├── Poor engagement history
-    └── New ad account (no history)
-```
+### LinkedIn-Specific Optimization Levers
 
-### Solutions: High CPM
+| Lever | When to Use | Impact |
+|-------|-------------|--------|
+| Audience Expansion | When delivery is limited | +20-50% reach, monitor quality |
+| Enhanced Bidding | After manual testing phase | More efficient spend |
+| Website Retargeting | Always for bottom-funnel | +30-50% CVR |
+| Matched Audiences | When you have CRM data | +40-60% CTR |
+
+## Output Template
+
+When troubleshooting LinkedIn performance, provide:
 
 ```
-IMMEDIATE ACTIONS:
-├── Expand audience (larger = cheaper)
-├── Remove restrictive targeting
-├── Test different placements (including Threads — new March 2026, lower CPM early stage)
-├── Check audience overlap tool
+## LinkedIn Performance Diagnosis
 
-STRATEGIC ACTIONS:
-├── Improve ad quality (better auction position)
-├── Test off-peak timing
-├── Build lookalikes from best customers
-└── Diversify to less competitive channels
+### Problem Type: [High CPL / Low Delivery / Low Engagement / Multiple]
 
-SEASONAL STRATEGY:
-├── Pre-peak: Lock in audiences, test creatives
-├── Peak: Accept higher CPM, focus on ROAS
-└── Post-peak: Capitalize on lower competition
-```
+### Severity: [Warning / Critical]
 
-## Performance Decay
+### Root Cause Hypothesis
+Based on the data, the most likely cause is: [specific cause]
 
-### Symptom: Metrics Declining Over Time
+### Metrics vs Benchmarks
 
-```
-DECAY DIAGNOSIS:
-│
-├─► Creative Fatigue
-│   ├── Symptoms: Rising frequency, falling CTR
-│   ├── Threshold: Frequency >3-4
-│   └── Solution: Fresh creative rotation
-│
-├─► Audience Saturation
-│   ├── Symptoms: Shrinking reach, high frequency
-│   ├── Threshold: Reached >70% of audience
-│   └── Solution: Expand targeting, new audiences
-│
-├─► Seasonal Effects
-│   ├── Symptoms: Industry-wide decline
-│   └── Solution: Adjust expectations, test new offers
-│
-├─► Competitor Activity
-│   ├── Symptoms: CPM up, CTR down
-│   └── Solution: Differentiate, refresh positioning
-│
-└─► Algorithm Changes
-    ├── Symptoms: Sudden performance shift
-    └── Solution: Adapt to new best practices
-```
-
-### Creative Fatigue Detection
-
-```
-FATIGUE INDICATORS:
-□ CTR dropping week-over-week
-□ Frequency >4 in past 7 days
-□ Same creative running >14-21 days
-□ Engagement Rate Ranking declining
-□ CPM increasing without market shift
-
-REFRESH CADENCE:
-├── High-spend campaigns: Every 7-14 days
-├── Medium-spend: Every 14-21 days
-├── Low-spend: Every 21-30 days
-└── Evergreen/testimonials: Can run longer
-```
-
-## Tracking Issues
-
-### Symptom: Conversions Not Tracked
-
-```
-TRACKING DIAGNOSTIC:
-│
-├─► Pixel Issues
-│   ├── Pixel not installed correctly
-│   ├── Pixel blocked by ad blockers
-│   ├── Event not firing on conversion
-│   └── Wrong pixel ID
-│
-├─► CAPI Issues
-│   ├── CAPI not configured
-│   ├── Events not deduplicating
-│   ├── Low Event Match Quality
-│   └── Token expired
-│
-├─► Attribution Issues
-│   ├── Wrong attribution window
-│   ├── Cross-device not tracked
-│   ├── Long purchase cycle
-│   └── iOS privacy impact
-│
-└─► Technical Issues
-    ├── Thank you page not loading
-    ├── Redirect issues
-    └── Tag manager conflicts
-```
-
-### Tracking Fix Checklist
-
-```
-QUICK FIXES:
-□ Test Pixel with Meta Pixel Helper
-□ Check Events Manager for recent events
-□ Verify domain is verified
-□ Confirm event parameters (value, currency)
-□ Check for duplicate events
-
-CAPI VERIFICATION:
-□ Server events visible in Events Manager?
-□ Deduplication working? (Same event from 2 sources)
-□ Event Match Quality >7?
-□ Customer parameters hashed correctly?
-
-ATTRIBUTION CHECK:
-□ Attribution window matches buying cycle
-□ GA4 comparison (same trends?)
-□ Post-purchase survey attribution
-```
-
-## Kill vs Scale Decision
-
-### Decision Framework
-
-```
-SCALE SIGNALS (Increase Budget):
-├── ROAS >target for 5+ days
-├── CPA <target and stable
-├── CTR above benchmark
-├── Frequency <3
-├── Room to grow in audience
-└── Consistent daily performance
-
-OPTIMIZE SIGNALS (Test & Tweak):
-├── ROAS within 20% of target
-├── CPA fluctuating but manageable
-├── Some ads performing, others not
-├── Creative starting to fatigue
-└── Potential with adjustments
-
-KILL SIGNALS (Pause/Stop):
-├── ROAS <1x (losing money)
-├── CPA >2x target for 7+ days
-├── CTR <0.5% consistent
-├── No improvements despite tests
-├── Insufficient budget for learning
-└── Audience exhausted
-```
-
-### Kill Decision Checklist
-
-```
-BEFORE KILLING, VERIFY:
-□ Tracking is accurate (not a tracking issue)
-□ Attribution window appropriate
-□ Gave sufficient time (7+ days minimum)
-□ Tested multiple creatives
-□ Budget was adequate
-□ Not during anomaly period (holiday, etc.)
-
-IF ALL VERIFIED, THEN:
-├── Killing = correct decision
-├── Document learnings
-├── Archive for reference
-└── Reallocate budget to winners
-```
-
-## MCP: Pull Performance Data for Diagnosis
-
-```python
-# Get campaign-level performance metrics
-meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","status","spend","impressions","clicks","ctr","cpm","cpc","actions","cost_per_action_type","frequency"], date_range="last_7d", filters={"effective_status":["ACTIVE"]})
-
-# Get ad-level breakdown to isolate creative issues
-meta_query(account_id="act_XXXXX", entity="ads", fields=["id","name","status","spend","impressions","clicks","ctr","frequency","actions","quality_ranking","engagement_rate_ranking","conversion_rate_ranking"], date_range="last_7d", filters={"campaign_id":"<campaign_id>"})
-```
-
-## Troubleshooting Output Template
-
-```markdown
-# Campaign Troubleshooting Report
-
-## Campaign Overview
-- Campaign: [name]
-- Objective: [objective]
-- Daily Budget: €[X]
-- Running since: [date]
-- Current Status: [status]
-
-## Symptom Analysis
-**Primary symptom:** [description]
-**Duration:** [since when]
-**Severity:** [Low/Medium/High/Critical]
-
-## Diagnostic Results
-
-### Fundamentals Check
-- [x] Pixel: [OK/Issue]
-- [x] CAPI: [OK/Issue]
-- [x] EMQ: [score]
-- [x] Budget: [OK/Issue]
-- [x] Audience: [OK/Issue]
-
-### Key Metrics
 | Metric | Current | Benchmark | Status |
 |--------|---------|-----------|--------|
-| CPM | €[X] | €15-25 | [OK/High/Low] |
-| CTR | [X]% | 1-2% | [OK/High/Low] |
-| CPC | €[X] | €0.50-1 | [OK/High/Low] |
-| CVR | [X]% | 2-5% | [OK/High/Low] |
-| CPA | €[X] | €[target] | [OK/High] |
-| ROAS | [X]x | [target]x | [OK/Low] |
+| CPL | $X | $Y | [status] |
+| CTR | X% | 0.50% | [status] |
+| Delivery | X% | 80%+ | [status] |
+| Frequency | X/week | <3/week | [status] |
 
-### Root Cause Identified
-[Description of root cause]
+### Recommendations
 
-## Recommended Actions
+**Immediate Fixes (Do Now):**
+1. [Action 1 with expected impact]
+2. [Action 2 with expected impact]
 
-### Immediate (This Week)
-1. [Action 1]
-2. [Action 2]
+**Testing Suggestions:**
+1. [Test recommendation]
+2. [Test recommendation]
 
-### Short-term (2-4 Weeks)
-1. [Action 1]
-2. [Action 2]
+**Budget Optimization:**
+- [Recommendation based on analysis]
 
-### Monitor
-- [Metric 1]: Watch for [threshold]
-- [Metric 2]: Watch for [threshold]
-
-## Prognosis
-[Expected outcome if recommendations followed]
+### Timeline for Results
+- Quick wins: [1-2 weeks]
+- Full optimization: [4-6 weeks]
 ```
+
+## Emergency Response: Performance Crashed
+
+### Step 1: Check External Factors
+
+- [ ] LinkedIn platform outage? (check status.linkedin.com)
+- [ ] Tracking broken? (verify LinkedIn Insight Tag)
+- [ ] Payment issue? (check billing)
+
+### Step 2: Check for Changes
+
+- [ ] Did anyone edit the campaign?
+- [ ] Did a scheduled change take effect?
+- [ ] Did bid strategy switch?
+
+### Step 3: Compare to Previous Period
+
+- [ ] Is this across all campaigns or just one?
+- [ ] All audiences or specific segments?
+- [ ] Gradual decline or sudden drop?
+
+### Step 4: Don't Panic-Edit
+
+- Wait 24-48 hours before major changes
+- Verify data is correct before reacting
+- Document what you observe
+
+---
+
+*Based on 2025-2026 LinkedIn Ads research. LinkedIn is the highest-cost ad platform - specialized troubleshooting is essential for ROI.*

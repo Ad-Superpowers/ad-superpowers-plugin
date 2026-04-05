@@ -1,14 +1,15 @@
 ---
 name: tiktok-video-performance-analyzer
 description: |
-  Analyzes TikTok video ad performance with focus on hook effectiveness (first 2 seconds), video length optimization, and engagement patterns. 70% of video retention is decided within the first 2 seconds on TikTok.
-  Use when: user asks about improving TikTok video hooks, optimal video length for TikTok, low video completion rates, UGC vs polished content, or when to use Spark Ads.
+  This skill should be used when the user asks to "improve TikTok video hooks",
+  "optimize TikTok video length", "analyze TikTok video completion rates", or mentions
+  "TikTok first 2 seconds", "UGC vs polished TikTok ads", or "when to use Spark Ads".
   Do NOT use for: TikTok creative fatigue detection (use tiktok-creative-fatigue-tracker), TikTok benchmark lookups (use tiktok-benchmark-database), or TikTok attribution questions (use tiktok-attribution-guide).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
   platform: "tiktok"
-  phase: "fase-1-foundation"
+  phase: "fase-3-campaigns-creative"
 compatibility: "Requires AdSuperpowers MCP server with TikTok Ads connection"
 ---
 # TikTok Video Performance Analyzer
@@ -403,28 +404,23 @@ Pull video performance data directly:
 
 ```
 # Get creative-level performance (hook rates, completion, CTR)
-tiktok_get_ad_insights(
-  advertiser_id="...",
-  dimensions=["ad_id", "stat_time_day"],
+tiktok_get_report(
+  start_date="2026-03-01",
+  end_date="2026-04-04",
+  level="ad",
   metrics=["video_play_actions", "video_watched_2s", "video_watched_6s",
            "video_views_p25", "video_views_p50", "video_views_p100",
-           "ctr", "cpc", "spend"],
-  start_date="2026-03-01",
-  end_date="2026-04-04"
+           "ctr", "cpc", "spend"]
 )
 
 # Get asset info for a specific creative
 tiktok_get_asset_info(
-  advertiser_id="...",
   asset_type="video",
   asset_ids=["<video_id>"]
 )
 
 # List campaigns to find which use which ad formats
-tiktok_get_campaigns(
-  advertiser_id="...",
-  fields=["campaign_name", "objective_type", "campaign_type", "budget"]
-)
+tiktok_query(entity_type="campaigns")
 ```
 
 ---

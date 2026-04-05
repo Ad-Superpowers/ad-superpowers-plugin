@@ -1,8 +1,11 @@
 ---
-name: meta-benchmark-database
+name: benchmark-database
 description: |
-  Reference database with industry benchmarks for Meta Ads metrics by vertical, funnel stage, and campaign type. Use when: evaluating whether your metrics are performing well, or setting targets for new campaigns.
-  Do NOT use for: performance diagnostics (use performance-troubleshooter), account audits (use account-auditor), scaling decisions (use scaling-calculator).
+  This skill should be used when the user asks to "compare my metrics to benchmarks",
+  "find industry averages", "set campaign targets", or mentions "Meta Ads benchmarks",
+  "CPM by industry", or "average CTR for my vertical". Do NOT use for: performance diagnostics
+  (use performance-troubleshooter), account audits (use account-auditor), scaling decisions
+  (use scaling-calculator).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -310,10 +313,10 @@ Never benchmark against user-provided numbers alone — always pull live account
 
 ```
 1. Get current metrics (last 30 days):
-→ meta_query(account_id="...", fields=["campaign_name","spend","ctr","cpc","cpm","cost_per_result","purchase_roas","impressions"], date_preset="last_30d", level="campaign")
+→ meta_get_insights(account_id="...", level="campaign", date_preset="last_30d", fields=["campaign_name","spend","ctr","cpc","cpm","cost_per_action_type","impressions"])
 
 2. Drill into ad set level for audience-specific benchmarks:
-→ meta_query(account_id="...", fields=["adset_name","ctr","cpc","cost_per_result","purchase_roas","frequency"], date_preset="last_30d", level="adset")
+→ meta_get_insights(account_id="...", level="adset", date_preset="last_30d", fields=["adset_name","ctr","cpc","cost_per_action_type","frequency"])
 ```
 
 Then compare the returned metrics against the benchmark tables above, applying seasonal adjustment factors if relevant.

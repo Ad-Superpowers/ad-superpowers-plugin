@@ -1,8 +1,9 @@
 ---
 name: search-campaign-builder
 description: |
-  Google Ads Search Campaign builder for lead generation. Covers RSA best practices and ad strength optimization, ad extensions setup (sitelinks, callouts, call), search campaign structure, lead gen keyword strategy, conversion tracking for leads, call tracking and form submissions.
-  Use when: search campaign, rsa, responsive search ads, ad strength, extensions, sitelinks, callouts, lead generation, call extension, lead forms, search campaign structure, ad copy.
+  This skill should be used when the user asks to "build a Search campaign", "write RSA ad copy",
+  "improve Ad Strength", "set up sitelinks and callouts", or mentions "lead generation campaign",
+  "call extensions", "lead forms", or "search campaign structure".
   Do NOT use for: Performance Max campaigns (use performance-max-optimizer), Shopping campaigns (use shopping-campaign-structure-advisor), bid strategy selection (use bid-strategy-selector).
 metadata:
   author: "AdSuperpowers"

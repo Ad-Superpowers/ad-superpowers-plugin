@@ -1,8 +1,11 @@
 ---
 name: video-script-writer
 description: |
-  Writes effective video scripts for Meta Ads with optimized hook structures, pacing, and platform-specific formats. Use when: creating scripts for video ads, Reels, Stories, or UGC content.
-  Do NOT use for: ad copy text (use ad-copy-generator), creative brainstorming (use creative-diversification-generator), A/B test design (use ab-test-planner).
+  This skill should be used when the user asks to "write a video script", "create a Reels script",
+  "script a Stories ad", or mentions "video ad script", "UGC script",
+  or "hook structure for video". Do NOT use for: ad copy text (use ad-copy-generator),
+  creative brainstorming (use creative-diversification-generator), A/B test design
+  (use ab-test-planner).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -431,21 +434,17 @@ Want me to create an alternative version with a different hook?"
 # Get video-level metrics to identify which hooks and lengths are working
 meta_get_creatives(
     account_id="act_XXXXXXXXX",
-    scope="ads",
-    filters={"date_preset": "last_30d"}
+    scope="account"
 )
 
 # Then pull video-specific engagement metrics
-meta_query(
+meta_get_insights(
     account_id="act_XXXXXXXXX",
-    query_type="insights",
-    params={
-        "fields": ["ad_name", "video_thruplay_watched_actions", "video_30_sec_watched_actions",
-                   "video_p25_watched_actions", "video_p50_watched_actions", "video_p75_watched_actions",
-                   "video_p95_watched_actions", "ctr", "spend"],
-        "date_preset": "last_30d",
-        "level": "ad"
-    }
+    fields=["ad_name", "video_thruplay_watched_actions", "video_30_sec_watched_actions",
+            "video_p25_watched_actions", "video_p50_watched_actions", "video_p75_watched_actions",
+            "video_p95_watched_actions", "ctr", "spend"],
+    date_preset="last_30d",
+    level="ad"
 )
 ```
 

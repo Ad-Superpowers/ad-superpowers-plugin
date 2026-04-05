@@ -1,8 +1,10 @@
 ---
 name: tiktok-audience-strategy
 description: |
-  TikTok audience building and targeting strategy. Covers interest vs behavior targeting, custom audience types (pixel, engagement, customer file), lookalike audience sizing (1-5% recommendations), audience refresh cadence, broad vs narrow testing methodology, and exclusion strategies. Includes audience stacking frameworks and testing protocols.
-  Use when: (1) user asks about TikTok targeting or audience setup, (2) user wants to build custom or lookalike audiences on TikTok, (3) user is deciding between broad and narrow targeting on TikTok.
+  This skill should be used when the user asks to "build TikTok audiences",
+  "choose TikTok lookalike size", "set up TikTok custom audiences",
+  "decide between broad and narrow targeting on TikTok", or mentions
+  "TikTok audience strategy", "audience refresh cadence", or "TikTok interest targeting".
   Do NOT use for: creative optimization (use tiktok-hook-optimization-guide), Spark Ads strategy (use tiktok-spark-ads-strategy), or product/shopping ads (use tiktok-shopping-ads-guide).
 metadata:
   author: "AdSuperpowers"

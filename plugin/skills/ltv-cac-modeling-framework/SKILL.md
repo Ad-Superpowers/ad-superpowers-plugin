@@ -1,8 +1,10 @@
 ---
 name: ltv-cac-modeling-framework
 description: |
-  Customer Lifetime Value vs Customer Acquisition Cost modeling framework for advertising budget decisions. Covers LTV calculation methods (historic, predictive, cohort), CAC by channel, LTV:CAC ratio benchmarks, payback period targets, MER as ROAS alternative, and integration of ad platform data with revenue systems.
-  Use when: (1) user asks about LTV, CAC, or LTV:CAC ratios, (2) user wants to set CPA targets based on customer value, (3) user needs to evaluate whether ad spend is sustainable or wants to calculate maximum allowable acquisition cost.
+  This skill should be used when the user asks to "calculate customer lifetime value",
+  "set CPA targets based on LTV", "evaluate LTV to CAC ratio",
+  "calculate payback period", or mentions "LTV:CAC", "customer acquisition cost",
+  "MER", or "maximum allowable acquisition cost".
   Do NOT use for: single-campaign ROAS optimization (use platform-specific skills), creative performance analysis (use creative-fatigue-analyzer), or funnel structure design (use ecommerce-funnel-optimizer).
 metadata:
   author: "AdSuperpowers"

@@ -1,7 +1,9 @@
 ---
 name: ga4-ecommerce-setup
 description: |
-  Implements GA4 e-commerce event tracking for online stores. Use when: configuring view_item, add_to_cart, purchase events, setting up enhanced e-commerce tracking, structuring product dataLayer, validating e-commerce events, implementing revenue tracking in GA4. Do NOT use for: promotion and coupon tracking (use ga4-promotion-tracking), revenue analysis and reporting (use ga4-revenue-analysis).
+  This skill should be used when the user asks to "set up e-commerce tracking in GA4", "implement purchase events",
+  "configure add_to_cart tracking", or mentions "view_item events", "product dataLayer", or "enhanced e-commerce GA4".
+  Do NOT use for: promotion and coupon tracking (use ga4-promotion-tracking), revenue analysis and reporting (use ga4-revenue-analysis).
 metadata:
   author: "AdSuperpowers"
   version: "1.1.0"
@@ -559,11 +561,12 @@ If the user has connected their GA4 account, verify ecommerce events are firing 
 
 ```python
 # Confirm purchase events, transaction count, and revenue totals
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["transactions", "purchaseRevenue", "ecommercePurchases"],
     dimensions=["date"],
-    date_range="last_14d"
+    start_date="14daysAgo",
+    end_date="today"
 )
 ```
 

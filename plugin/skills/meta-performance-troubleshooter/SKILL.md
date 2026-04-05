@@ -1,8 +1,11 @@
 ---
-name: meta-performance-troubleshooter
+name: performance-troubleshooter
 description: |
-  Meta Ads campaign performance diagnostics and troubleshooting. Use when: analyzing underperforming campaigns, solving CPA/ROAS problems, diagnosing delivery issues, interpreting Ad Relevance Diagnostics, making kill vs scale decisions.
-  Do NOT use for: learning phase issues (use learning-phase-tracker), bid strategy changes (use bid-strategy-selector), creative fatigue specifically (use creative-fatigue-analyzer).
+  This skill should be used when the user asks to "troubleshoot campaign performance",
+  "diagnose delivery issues", "fix high CPA", or mentions "underperforming Meta ads",
+  "Ad Relevance Diagnostics", or "kill vs scale decision". Do NOT use for: learning phase
+  issues (use learning-phase-tracker), bid strategy changes (use bid-strategy-selector),
+  creative fatigue specifically (use creative-fatigue-analyzer).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -421,10 +424,10 @@ IF ALL VERIFIED, THEN:
 
 ```python
 # Get campaign-level performance metrics
-meta_query(account_id="act_XXXXX", entity="campaigns", fields=["id","name","status","spend","impressions","clicks","ctr","cpm","cpc","actions","cost_per_action_type","frequency"], date_range="last_7d", filters={"effective_status":["ACTIVE"]})
+meta_get_insights(account_id="act_XXXXX", level="campaign", date_preset="last_7d", fields=["campaign_name","spend","impressions","clicks","ctr","cpm","cpc","actions","cost_per_action_type","frequency"])
 
 # Get ad-level breakdown to isolate creative issues
-meta_query(account_id="act_XXXXX", entity="ads", fields=["id","name","status","spend","impressions","clicks","ctr","frequency","actions","quality_ranking","engagement_rate_ranking","conversion_rate_ranking"], date_range="last_7d", filters={"campaign_id":"<campaign_id>"})
+meta_get_insights(account_id="act_XXXXX", level="ad", date_preset="last_7d", fields=["ad_name","spend","impressions","clicks","ctr","frequency","actions","quality_ranking","engagement_rate_ranking","conversion_rate_ranking"])
 ```
 
 ## Troubleshooting Output Template

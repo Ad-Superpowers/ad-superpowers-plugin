@@ -1,13 +1,10 @@
 ---
 name: gtm-conversion-setup-guide
 description: |
-  Per-platform conversion tag, trigger, and variable setup in Google Tag Manager. Covers GA4, Google Ads,
-  Meta Pixel, LinkedIn Insight Tag, and TikTok Pixel with detailed tag configurations, trigger conditions,
-  variable types, and tag sequencing patterns.
-
-  Use when: (1) setting up conversion tags in GTM for any ad platform, (2) configuring triggers for form
-  submissions, clicks, or custom events, (3) debugging why a tag is not firing or firing incorrectly.
-
+  This skill should be used when the user asks to "set up conversion tags in GTM",
+  "configure a Meta Pixel trigger", "debug a tag not firing",
+  "add Google Ads conversion tracking in GTM", or mentions "GTM tag setup",
+  "trigger conditions", or "LinkedIn Insight Tag".
   Do NOT use for: strategic tracking planning (use tracking-plan-builder), server-side tagging
   (use gtm-server-side-tagging-guide), or consent implementation (use gtm-consent-mode-guide).
 metadata:

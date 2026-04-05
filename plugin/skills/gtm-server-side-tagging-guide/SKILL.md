@@ -1,13 +1,10 @@
 ---
 name: gtm-server-side-tagging-guide
 description: |
-  Server-side Google Tag Manager (sGTM) guide covering architecture, hosting, migration from client-side,
-  platform-specific server clients (GA4, Meta CAPI, Google Ads Enhanced Conversions), event enrichment,
-  first-party data strategy, custom domain setup, and cost estimation.
-
-  Use when: (1) planning or implementing server-side tagging, (2) setting up Meta Conversions API or
-  Google Ads Enhanced Conversions via sGTM, (3) evaluating whether sGTM is worth the cost and complexity.
-
+  This skill should be used when the user asks to "set up server-side GTM",
+  "implement Meta CAPI via sGTM", "migrate from client-side to server-side tagging",
+  "estimate sGTM hosting costs", or mentions "server-side tagging",
+  "sGTM", or "first-party data strategy".
   Do NOT use for: client-side GTM tag setup (use gtm-conversion-setup-guide), strategic tracking planning
   (use tracking-plan-builder), or consent mode implementation (use gtm-consent-mode-guide).
 metadata:

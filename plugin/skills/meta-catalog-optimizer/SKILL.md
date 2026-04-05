@@ -1,8 +1,11 @@
 ---
 name: catalog-optimizer
 description: |
-  Optimizes Meta Product Catalogs for better Advantage+ Catalog Ads (formerly DPA) performance with feed optimization, product set strategies, and troubleshooting. Use when: working with catalogs, Advantage+ Catalog Ads, or Advantage+ Sales.
-  Do NOT use for: campaign structure (use campaign-structure-advisor), creative diversification (use creative-diversification-generator), full-funnel design (use full-funnel-designer).
+  This skill should be used when the user asks to "optimize product catalog", "improve DPA performance",
+  "fix catalog feed issues", or mentions "Advantage+ Catalog Ads", "product set strategy",
+  or "catalog feed optimization". Do NOT use for: campaign structure
+  (use campaign-structure-advisor), creative diversification
+  (use creative-diversification-generator), full-funnel design (use full-funnel-designer).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -415,13 +418,13 @@ CATALOG AUDIT CHECKLIST
 
 ```
 1. Check catalog campaign ROAS and delivery:
-→ meta_query(account_id="...", fields=["campaign_name","spend","purchase_roas","cost_per_result","impressions","frequency"], date_preset="last_14d", level="campaign")
+→ meta_get_insights(account_id="...", fields=["campaign_name","spend","purchase_roas","cost_per_result","impressions","frequency"], date_preset="last_14d", level="campaign")
 
 2. Ad set level — check audience segments:
-→ meta_query(account_id="...", fields=["adset_name","spend","purchase_roas","cost_per_result","reach","frequency"], date_preset="last_14d", level="adset")
+→ meta_get_insights(account_id="...", fields=["adset_name","spend","purchase_roas","cost_per_result","reach","frequency"], date_preset="last_14d", level="adset")
 
 3. Creative performance across catalog ads:
-→ meta_get_creatives(account_id="...", scope="active")
+→ meta_get_creatives(account_id="...", scope="account")
 ```
 
 Use results to identify which product sets, audience windows, or creative overlays are dragging ROAS down.

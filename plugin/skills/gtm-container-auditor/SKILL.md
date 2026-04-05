@@ -1,8 +1,7 @@
 ---
 name: gtm-container-auditor
 description: |
-  Audits Google Tag Manager containers for misconfigurations, duplicate tracking, unused tags/triggers, data layer issues, and consent compliance risks. Provides a structured health score (0-100) with prioritized remediation roadmap.
-  Use when: user asks to audit GTM, review container setup, find duplicate conversion tags, diagnose GTM performance issues, clean up after agency handover, or check GDPR consent compliance of tags.
+  This skill should be used when the user asks to "audit my GTM container", "find duplicate tags", "clean up Tag Manager", mentions "GTM health check", "unused tags and triggers", or "consent compliance of tags".
   Do NOT use for: server-side tracking or CAPI implementation (use first-party-data-strategy), attribution discrepancies between platforms (use attribution-reconciler), or general tag implementation guidance (use platform-specific skills).
 metadata:
   author: "AdSuperpowers"
@@ -62,7 +61,7 @@ If multiple containers exist, ask the user which to audit, or audit all if reque
 ### Step 2: Run Full Audit
 
 ```
-gtm_audit(container_id="accounts/[ID]/containers/[ID]")
+gtm_audit(container_path="accounts/[ID]/containers/[ID]")
 ```
 
 The audit returns: tags, triggers, variables, workspace summary, built-in variables.
@@ -368,7 +367,7 @@ If the user has connected their GTM account, run a live container audit instead 
 
 ```python
 # Pull a full audit of the container — tags, triggers, variables, and issues
-gtm_audit(account_id="YOUR_GTM_ACCOUNT_ID", container_id="YOUR_CONTAINER_ID")
+gtm_audit(container_path="accounts/YOUR_ACCOUNT_ID/containers/YOUR_CONTAINER_ID")
 ```
 
 This returns tag counts, firing rules, variable usage, and flags common issues (missing notes, paused tags, All Pages over-triggers). Use the audit output to populate the framework above with real data rather than estimates.

@@ -1,8 +1,7 @@
 ---
 name: competitor-analysis-toolkit
 description: |
-  Framework for competitive intelligence in digital advertising: competitor discovery, ad spend estimation (Meta Ad Library, Auction Insights, traffic-based), creative analysis scoring, positioning maps, threat scoring, and share of voice analysis.
-  Use when: user asks about competitor research, ad spend estimation, Meta Ad Library analysis, auction insights interpretation, competitive positioning, share of voice, or competitive strategy.
+  This skill should be used when the user asks to "analyze competitor ads", "estimate competitor ad spend", "research competitors in Meta Ad Library", mentions "share of voice", "auction insights", or "competitive positioning strategy".
   Do NOT use for: keyword gap analysis between organic and paid (use seo-sea-keyword-gap-analyzer), channel selection decisions (use channel-selection-framework), or creative fatigue on own ads (use platform-specific fatigue skills).
 metadata:
   author: "AdSuperpowers"
@@ -316,7 +315,7 @@ Common positioning dimensions:
 
 - **White space**: Quadrants with no competitors
 - **Crowded space**: Areas to differentiate or avoid
-- **Movement opportunities**: Where you could shift positioning
+- **Movement opportunities**: Where positioning could shift
 
 ### Competitive Messaging Matrix
 
@@ -521,7 +520,7 @@ google_ads_run_gaql(
 
 ```python
 # Check your own organic keyword positions for gap analysis vs competitors
-gsc_search_analytics(site_url="https://yourdomain.com", dimensions=["query"], date_range="last_30d", row_limit=50)
+gsc_search_analytics(site_url="https://yourdomain.com", dimensions=["query"], days=30, row_limit=50)
 ```
 
 Auction insights show which competitors are actively bidding on your keywords. GSC positions show where you rank organically — compare these to identify where competitors outrank you and where you have room to take share.

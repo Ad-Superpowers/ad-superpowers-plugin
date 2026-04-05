@@ -1,8 +1,8 @@
 ---
 name: ga4-key-events-config
 description: |
-  Google Analytics 4 Key Events (conversions) configuration guide. Covers marking events as key events, conversion values, counting methods, primary vs secondary conversions, and Google Ads conversion import preparation.
-  Use when: user asks about key events, conversions, conversion tracking, conversion values, goal setup, primary/secondary conversions, or conversion import to Google Ads.
+  This skill should be used when the user asks to "configure key events", "set up conversions",
+  "mark events as key events", or mentions "conversion values", "primary vs secondary conversions", or "GA4 goal setup".
   Do NOT use for: event tracking setup (use ga4-event-tracking-setup), Google Ads conversion import details (use ga4-conversion-import), or attribution models (use ga4-attribution-advisor).
 metadata:
   author: "AdSuperpowers"
@@ -385,17 +385,18 @@ VERIFICATION:
 
 ## MCP Tool: Verify Key Event Performance
 
-Use `ga4_report()` to check key event counts and trends:
+Use `ga4_run_report()` to check key event counts and trends:
 
 ```python
 # Check key event counts over last 30 days
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
+    start_date="30daysAgo",
+    end_date="yesterday",
     metrics=["keyEvents", "keyEventRate"],
-    dimensions=["eventName", "date"],
-    date_range={"start_date": "30daysAgo", "end_date": "yesterday"},
-    filters={"dimension": "eventName", "operator": "IN_LIST", "values": ["purchase", "generate_lead"]}
+    dimensions=["eventName", "date"]
 )
+# Note: filter by eventName in your analysis — ga4_run_report returns all events
 ```
 
 ## Google Ads Conversion Import Preparation

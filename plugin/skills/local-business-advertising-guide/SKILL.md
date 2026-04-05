@@ -1,8 +1,10 @@
 ---
 name: local-business-advertising-guide
 description: |
-  Simplified advertising guide for local businesses with limited budgets (EUR 500-2000/month). Covers Google Ads for local, Meta Ads for local, budget allocation, simplified campaign structure, local keyword strategy, Google Business Profile optimization, and a 30-minute weekly management approach.
-  Use when: (1) user runs ads for a local business like a restaurant, dentist, plumber, or local shop, (2) user has a small budget under EUR 2000/month and needs a focused strategy, (3) user asks about Local Services Ads, location targeting, or local lead generation.
+  This skill should be used when the user asks to "advertise a local business",
+  "run ads for a restaurant or dentist", "set up Local Services Ads",
+  "target people in my city", or mentions "local business ads",
+  "small ad budget", or "Google Business Profile optimization".
   Do NOT use for: e-commerce businesses selling online (use ecommerce-funnel-optimizer), national/international brands (use channel-selection-framework), or B2B SaaS companies (use platform-specific skills).
 metadata:
   author: "AdSuperpowers"

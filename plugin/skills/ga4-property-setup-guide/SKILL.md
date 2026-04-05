@@ -1,8 +1,8 @@
 ---
 name: ga4-property-setup-guide
 description: |
-  Google Analytics 4 property setup and configuration guide. Covers creating a new GA4 property, configuring data streams, Enhanced Measurement, data retention, privacy settings, and linking Google Ads/Search Console.
-  Use when: user asks about GA4 setup, property configuration, data streams, Enhanced Measurement, GA4 installation, analytics setup, or Google Ads/Search Console linking.
+  This skill should be used when the user asks to "set up GA4", "create a GA4 property",
+  "configure data streams", or mentions "Enhanced Measurement", "GA4 installation", or "link Google Ads to GA4".
   Do NOT use for: event tracking (use ga4-event-tracking-setup), key events/conversions (use ga4-key-events-config), or audience building (use ga4-audience-builder).
 metadata:
   author: "AdSuperpowers"
@@ -548,11 +548,12 @@ If the user has connected their GA4 account, verify the setup is actually collec
 
 ```python
 # Confirm sessions are flowing in — proves property is connected and firing
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["sessions", "totalUsers", "screenPageViews"],
     dimensions=["date"],
-    date_range="last_7d"
+    start_date="7daysAgo",
+    end_date="today"
 )
 ```
 

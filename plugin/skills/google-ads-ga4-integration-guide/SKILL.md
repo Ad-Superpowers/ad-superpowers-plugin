@@ -1,8 +1,9 @@
 ---
 name: ga4-integration-guide
 description: |
-  Google Ads and GA4 integration guide. Covers Google Ads to GA4 account linking, GA4 conversion import to Google Ads, audience import and sync, attribution model alignment, cross-platform reporting, and campaign URL tagging.
-  Use when: ga4, google analytics, linking, audience import, conversions import, attribution, utm, campaign tagging, measurement, cross-platform tracking, ga4 audiences, data-driven attribution.
+  This skill should be used when the user asks to "link Google Ads to GA4",
+  "import GA4 conversions into Google Ads", "sync GA4 audiences", "align attribution models",
+  or mentions "UTM tagging", "cross-platform tracking", or "data-driven attribution".
   Do NOT use for: GA4 standalone reporting (use ga4 MCP tools directly), conversion tracking setup (use conversion-tracking-setup), enhanced conversions (use enhanced-conversions-setup).
 metadata:
   author: "AdSuperpowers"

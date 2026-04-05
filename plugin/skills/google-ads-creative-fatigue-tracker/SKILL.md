@@ -1,9 +1,10 @@
 ---
 name: google-ads-creative-fatigue-tracker
 description: |
-  Detects and prevents creative fatigue on Google Ads (Display, PMax, YouTube). Monitors asset ratings, performance decay, and recommends optimal refresh timing. Google Ads has the longest fatigue cycles (4-8 weeks) compared to other platforms.
-  
-  Use when: user asks about Google Ads creative fatigue, declining asset performance, when to refresh Google Ads creatives, PMax asset group performance, Display ad fatigue, or YouTube ad creative burnout.
+  This skill should be used when the user asks to "detect Google Ads creative fatigue",
+  "check asset performance decay", "find when to refresh Google Ads creatives",
+  or mentions "PMax asset group fatigue", "Display ad burnout", "YouTube creative fatigue",
+  or "asset rating decline".
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"

@@ -1,8 +1,7 @@
 ---
 name: incrementality-testing-guide
 description: |
-  Guide to measuring true causal advertising impact through incrementality testing: geo lift tests, holdout experiments, conversion lift studies, synthetic control methods, and Marketing Mix Modeling (MMM) basics. Includes test design checklists, statistical power calculations, and iROAS interpretation.
-  Use when: user asks whether advertising is actually working, wants to run a geo lift or holdout test, questions platform-reported ROAS, asks about incremental ROAS (iROAS), conversion lift studies, or MMM.
+  This skill should be used when the user asks to "run an incrementality test", "measure true ad impact", "design a geo lift test", mentions "incremental ROAS", "holdout experiment", or "is my advertising actually working".
   Do NOT use for: attribution discrepancy diagnosis (use attribution-reconciler), A/B testing landing pages (use landing-page-optimization-guide), or first-party data / tracking setup (use first-party-data-strategy).
 metadata:
   author: "AdSuperpowers"
@@ -372,11 +371,12 @@ If the user has connected their GA4 account, pull baseline metrics before the te
 
 ```python
 # Capture pre-test baseline: conversions, sessions, revenue by channel
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
+    start_date="30daysAgo",
+    end_date="today",
     metrics=["keyEvents", "sessions", "purchaseRevenue"],
-    dimensions=["date", "sessionDefaultChannelGroup"],
-    date_range="last_30d"
+    dimensions=["date", "sessionDefaultChannelGroup"]
 )
 ```
 

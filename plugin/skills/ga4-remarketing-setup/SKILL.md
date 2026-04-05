@@ -1,7 +1,9 @@
 ---
 name: ga4-remarketing-setup
 description: |
-  Exports GA4 remarketing audiences to Google Ads for activation. Use when: setting up GA4 audience export to Google Ads, configuring RLSA (Remarketing Lists for Search Ads), building Display/YouTube remarketing campaigns, troubleshooting audience sync issues. Do NOT use for: audience creation in GA4 (use ga4-audience-builder), predictive audiences (use ga4-predictive-audiences), audience exclusion strategy (use ga4-audience-exclusions).
+  This skill should be used when the user asks to "export GA4 audiences to Google Ads", "set up RLSA",
+  "configure remarketing lists", or mentions "audience sync issues", "Display remarketing", or "YouTube remarketing".
+  Do NOT use for: audience creation in GA4 (use ga4-audience-builder), predictive audiences (use ga4-predictive-audiences), audience exclusion strategy (use ga4-audience-exclusions).
 metadata:
   author: "AdSuperpowers"
   version: "1.1.0"
@@ -521,11 +523,12 @@ If the user has connected their GA4 account, check remarketing pool sizes before
 
 ```python
 # Estimate funnel stage volumes for remarketing tiers
-ga4_report(
+ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     metrics=["totalUsers"],
     dimensions=["sessionDefaultChannelGroup"],
-    date_range="last_30d"
+    start_date="30daysAgo",
+    end_date="today"
 )
 ```
 

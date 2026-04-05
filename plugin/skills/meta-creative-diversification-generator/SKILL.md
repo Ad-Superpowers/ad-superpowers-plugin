@@ -1,8 +1,10 @@
 ---
 name: creative-diversification-generator
 description: |
-  Meta Ads creative diversification and concept generator. Generates 8-15 unique ad concepts with hooks, formats, and variations. Use when: creative brainstorming, generating hook strategies, building modular creative systems, creating UGC briefs, writing video scripts, ad copy variations.
-  Do NOT use for: ad copy writing only (use ad-copy-generator), video scripts only (use video-script-writer), creative fatigue analysis (use creative-fatigue-analyzer).
+  This skill should be used when the user asks to "brainstorm ad creatives", "generate hook strategies",
+  "build modular creative systems", "create UGC briefs", or mentions "creative diversification"
+  or "ad concept variations". Do NOT use for: ad copy writing only (use ad-copy-generator),
+  video scripts only (use video-script-writer), creative fatigue analysis (use creative-fatigue-analyzer).
 metadata:
   author: "AdSuperpowers"
   version: "1.0.0"
@@ -505,5 +507,5 @@ STORIES/REELS (4):
 
 ```python
 # Get ad-level performance to identify winning creative patterns
-meta_get_creatives(account_id="act_XXXXX", scope="ads", fields=["id","name","spend","impressions","ctr","frequency","actions","quality_ranking","engagement_rate_ranking"], date_range="last_14d")
+meta_get_creatives(account_id="act_XXXXX", scope="account", date_preset="last_14d", sort_by="spend")
 ```

@@ -1,8 +1,10 @@
 ---
 name: linkedin-lead-scoring-framework
 description: |
-  Lead qualification and scoring framework for LinkedIn advertising. Builds scoring models based on form completion behavior, LinkedIn intent signals, and demographic fit. Includes MQL vs SQL definitions, cost-per-qualified-lead analysis, CRM integration approaches, and a configurable scoring matrix template.
-  Use when: (1) user asks about lead quality vs quantity tradeoffs on LinkedIn, (2) user wants to score or qualify LinkedIn leads, (3) user needs help reducing cost per qualified lead or improving MQL-to-SQL conversion.
+  This skill should be used when the user asks to "score LinkedIn leads",
+  "improve MQL to SQL conversion", "reduce cost per qualified lead",
+  "build a lead scoring model", or mentions "LinkedIn lead quality",
+  "lead qualification framework", or "CRM integration for LinkedIn leads".
   Do NOT use for: lead form design or A/B testing (use linkedin-lead-gen-optimizer), campaign performance diagnostics (use linkedin-performance-troubleshooter), or ABM account scoring (use linkedin-abm-targeting-strategy).
 metadata:
   author: "AdSuperpowers"
