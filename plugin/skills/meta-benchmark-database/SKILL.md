@@ -313,10 +313,10 @@ Never benchmark against user-provided numbers alone — always pull live account
 
 ```
 1. Get current metrics (last 30 days):
-→ meta_get_insights(account_id="...", level="campaign", date_preset="last_30d", fields=["campaign_name","spend","ctr","cpc","cpm","cost_per_action_type","impressions"])
+→ meta_get_insights(account_id="...", level="campaign", date_preset="last_30d", fields=["spend","ctr","cpc","cpm","cost_per_action_type","impressions"])
 
 2. Drill into ad set level for audience-specific benchmarks:
-→ meta_get_insights(account_id="...", level="adset", date_preset="last_30d", fields=["adset_name","ctr","cpc","cost_per_action_type","frequency"])
+→ meta_get_insights(account_id="...", level="adset", date_preset="last_30d", fields=["ctr","cpc","cost_per_action_type","frequency"])
 ```
 
 Then compare the returned metrics against the benchmark tables above, applying seasonal adjustment factors if relevant.

@@ -565,16 +565,11 @@ TEST 4: Seed audience quality
 
 ```
 tiktok_query(
-    advertiser_id="<account>",
-    entity="ad_groups",
-    fields=["adgroup_id", "adgroup_name", "audience_type",
-            "targeting", "status", "budget"],
-    filters={"status": "ACTIVE"}
+    entity_type="adgroups",
+    status="ADGROUP_STATUS_ENABLE"
 )
 
-tiktok_get_audiences(
-    advertiser_id="<account>"
-)
+tiktok_get_audiences()
 ```
 
 Track audience performance over time:

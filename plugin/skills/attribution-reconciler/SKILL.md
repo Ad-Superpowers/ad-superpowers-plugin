@@ -39,8 +39,8 @@ Use these MCP tools to pull live data when diagnosing attribution discrepancies:
 
 **Recommended diagnostic sequence:**
 ```
-1. ga4_run_report(property_id="...", start_date="28daysAgo", end_date="today", metrics=["keyEvents"], dimensions=["date"])
-2. meta_get_insights(account_id="act_...", level="campaign", date_preset="last_28d", fields=["campaign_name","actions","spend"])
+1. ga4_run_report(property_id="...", start_date="2026-03-08", end_date="2026-04-05", metrics=["keyEvents"], dimensions=["date"])
+2. meta_get_insights(account_id="act_...", level="campaign", date_preset="last_28d", fields=["spend","actions","impressions"])
 3. google_ads_run_gaql(customer_id="...", query="SELECT campaign.name, metrics.conversions, metrics.cost_micros FROM campaign WHERE segments.date DURING LAST_28_DAYS")
 ```
 

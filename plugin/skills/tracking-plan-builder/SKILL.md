@@ -385,7 +385,7 @@ Use the AdSuperpowers MCP tools to audit what you currently have:
 1. gtm_list_containers
    -> Get container ID and account ID
 
-2. gtm_audit(container_id="GTM-XXXXX")
+2. gtm_audit(container_path="accounts/123456/containers/789012")
    -> Export all tags, triggers, variables
    -> Compare against tracking plan
 
@@ -393,7 +393,8 @@ Use the AdSuperpowers MCP tools to audit what you currently have:
      property_id="...",
      dimensions=["eventName"],
      metrics=["eventCount"],
-     date_range="last_28_days"
+     start_date="28daysAgo",
+     end_date="today"
    )
    -> See which events actually fire
    -> Check for events in GA4 not in your plan (rogue events)

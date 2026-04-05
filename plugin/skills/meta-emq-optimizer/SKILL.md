@@ -357,7 +357,7 @@ SCORE 8-10 (Great):
 
 ```python
 # Cross-check ROAS — low EMQ typically shows as underreported ROAS
-meta_get_insights(account_id="act_XXXXX", level="campaign", date_preset="last_7d", fields=["campaign_name","spend","website_purchase_roas","actions"])
+meta_get_insights(account_id="act_XXXXX", level="campaign", date_preset="last_7d", fields=["spend","website_purchase_roas","actions"])
 
 # Check pixel health via Events Manager UI (pixel diagnostics are not exposed via meta_query)
 # Events Manager → Data Sources → Pixel → Diagnostics → Match Quality tab

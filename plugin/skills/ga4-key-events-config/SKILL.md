@@ -393,7 +393,7 @@ ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
     start_date="30daysAgo",
     end_date="yesterday",
-    metrics=["keyEvents", "keyEventRate"],
+    metrics=["keyEvents", "sessionKeyEventRate"],
     dimensions=["eventName", "date"]
 )
 # Note: filter by eventName in your analysis — ga4_run_report returns all events

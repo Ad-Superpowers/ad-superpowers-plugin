@@ -424,10 +424,10 @@ IF ALL VERIFIED, THEN:
 
 ```python
 # Get campaign-level performance metrics
-meta_get_insights(account_id="act_XXXXX", level="campaign", date_preset="last_7d", fields=["campaign_name","spend","impressions","clicks","ctr","cpm","cpc","actions","cost_per_action_type","frequency"])
+meta_get_insights(account_id="act_XXXXX", level="campaign", date_preset="last_7d", fields=["spend","impressions","clicks","ctr","cpm","cpc","actions","cost_per_action_type","frequency"])
 
 # Get ad-level breakdown to isolate creative issues
-meta_get_insights(account_id="act_XXXXX", level="ad", date_preset="last_7d", fields=["ad_name","spend","impressions","clicks","ctr","frequency","actions","quality_ranking","engagement_rate_ranking","conversion_rate_ranking"])
+meta_get_insights(account_id="act_XXXXX", level="ad", date_preset="last_7d", fields=["spend","impressions","clicks","ctr","frequency","actions","quality_ranking","engagement_rate_ranking","conversion_rate_ranking"])
 ```
 
 ## Troubleshooting Output Template

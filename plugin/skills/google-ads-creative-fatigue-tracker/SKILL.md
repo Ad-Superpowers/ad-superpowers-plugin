@@ -203,17 +203,19 @@ google_ads_run_gaql(query="
   SELECT
     ad_group.name,
     campaign.name,
-    ad_group_ad.ad.responsive_display_ad.headlines,
-    asset_group_asset.performance_label,
+    ad_group_ad.ad.type,
     metrics.impressions,
     metrics.ctr,
     metrics.cost_micros,
     metrics.conversions
   FROM ad_group_ad
   WHERE campaign.advertising_channel_type = 'DISPLAY'
+    AND ad_group_ad.ad.type = 'RESPONSIVE_DISPLAY_AD'
     AND segments.date DURING LAST_30_DAYS
   ORDER BY metrics.cost_micros DESC
 ")
+# Note: RDA asset performance labels are not available via GAQL —
+# check in Google Ads UI: Ads → Assets → View asset details.
 
 SIGNAL 2: AD PERFORMANCE METRICS
 ────────────────────────────────

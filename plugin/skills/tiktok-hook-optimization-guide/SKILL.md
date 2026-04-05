@@ -396,14 +396,13 @@ Pull video performance data to diagnose retention issues:
 
 ```
 tiktok_get_report(
-    advertiser_id="<account>",
-    report_type="ad",
+    start_date="2026-03-29",
+    end_date="2026-04-05",
+    level="ad",
     metrics=["impressions", "clicks", "video_play_actions",
              "video_watched_2s", "video_watched_6s",
-             "average_video_play_per_user", "video_views_p25",
-             "video_views_p50", "video_views_p75", "video_views_p100"],
-    date_range="last_7_days",
-    dimensions=["ad_id"]
+             "video_views_p25", "video_views_p50",
+             "video_views_p75", "video_views_p100"]
 )
 ```
 

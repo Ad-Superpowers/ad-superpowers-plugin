@@ -419,13 +419,13 @@ Before building rules, always check current account performance to set realistic
 
 ```
 STEP 1: Get recent CPA baseline
-→ meta_get_insights(account_id="...", fields=["cost_per_result"], date_preset="last_7d", level="adset")
+→ meta_get_insights(account_id="...", fields=["cost_per_action_type","spend","actions"], date_preset="last_7d", level="adset")
 
 STEP 2: Check frequency levels
 → meta_get_insights(account_id="...", fields=["frequency","impressions"], date_preset="last_7d", level="adset")
 
 STEP 3: Review current learning phase status
-→ meta_get_insights(account_id="...", fields=["delivery_info","spend"], date_preset="last_3d", level="adset")
+→ meta_get_insights(account_id="...", fields=["spend","impressions","actions"], date_preset="last_3d", level="adset")
 ```
 
 Use the actual CPA from `meta_query` results to set rule thresholds — never guess.
@@ -439,7 +439,7 @@ Use the actual CPA from `meta_query` results to set rule thresholds — never gu
 "Let me first check your current account performance to set accurate thresholds.
 
 ```
-meta_get_insights(account_id="...", fields=["adset_name","cost_per_result","impressions","spend"], date_preset="last_7d", level="adset")
+meta_get_insights(account_id="...", fields=["cost_per_action_type","impressions","spend"], date_preset="last_7d", level="adset")
 ```
 
 Based on those results, I'll build a complete rule set for CPA protection. With a target CPA of $15, I'd suggest the following:
@@ -500,7 +500,7 @@ Schedule: Daily at 09:00
 
 After rules are live, monitor via:
 ```
-meta_get_insights(account_id="...", fields=["adset_name","cost_per_result","delivery_info","spend"], date_preset="last_3d", level="adset")
+meta_get_insights(account_id="...", fields=["cost_per_action_type","spend","impressions"], date_preset="last_3d", level="adset")
 ```
 
 Would you like me to also add scaling rules for when CPA is below target?"

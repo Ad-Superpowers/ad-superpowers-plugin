@@ -69,10 +69,11 @@ Pull baseline metrics before any scaling changes:
 ```
 linkedin_get_analytics(
     account_id="<account>",
-    campaign_ids=["<campaign_id>"],
-    date_range="last_30_days",
-    metrics=["impressions", "clicks", "leads", "costInLocalCurrency",
-             "averageCpc", "ctr", "frequency"]
+    start_date="YYYY-MM-DD",
+    end_date="YYYY-MM-DD",
+    level="campaign",
+    entity_id="<campaign_id>",
+    fields=["impressions", "clicks", "costInLocalCurrency"]
 )
 ```
 
@@ -532,11 +533,11 @@ Track these weekly during any scaling period:
 ```
 linkedin_get_analytics(
     account_id="<account>",
-    campaign_ids=["<all_active_campaign_ids>"],
-    date_range="last_7_days",
-    metrics=["impressions", "clicks", "leads", "costInLocalCurrency",
-             "averageCpc", "ctr", "frequency"]
+    start_date="YYYY-MM-DD",
+    end_date="YYYY-MM-DD",
+    fields=["impressions", "clicks", "costInLocalCurrency"]
 )
+# Returns account-level aggregated metrics for all campaigns.
 ```
 
 ### Scaling Alert Thresholds

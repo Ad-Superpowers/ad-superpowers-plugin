@@ -358,7 +358,7 @@ Post-Migration:
 meta_query(account_id="act_XXXXX", entity_type="campaigns", effective_status=["ACTIVE"], fields=["id","name","bid_strategy","daily_budget","status"])
 
 # Pull ad set performance to evaluate current CPA vs target
-meta_get_insights(account_id="act_XXXXX", level="adset", date_preset="last_7d", fields=["adset_name","bid_strategy","optimization_goal","cost_per_action_type","spend","actions"])
+meta_get_insights(account_id="act_XXXXX", level="adset", date_preset="last_7d", fields=["cost_per_action_type","spend","actions","impressions","ctr"])
 ```
 
 ## Output: Strategy Recommendation Template

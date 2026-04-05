@@ -306,23 +306,33 @@ To enable: Campaign Manager → Audiences → Predictive Audiences. Requires Mat
 Pull lead gen performance data to analyze CPL and form completion:
 
 ```
-# Get CPL and lead volume per campaign
+# Step 1: List campaigns to find IDs and objectives
+linkedin_query(
+  account_id="YOUR_ACCOUNT_ID",
+  entity_type="campaigns",
+  status=["ACTIVE"]
+)
+
+# Step 2: Get account-level lead gen performance
+linkedin_get_analytics(
+  account_id="YOUR_ACCOUNT_ID",
+  start_date="YYYY-MM-DD",
+  end_date="YYYY-MM-DD",
+  fields=["costInLocalCurrency", "clicks", "impressions", "externalWebsiteConversions"]
+)
+
+# Step 3: Get performance for a specific campaign
 linkedin_get_analytics(
   account_id="YOUR_ACCOUNT_ID",
   start_date="YYYY-MM-DD",
   end_date="YYYY-MM-DD",
   level="campaign",
-  fields=["costInLocalCurrency", "leads", "clicks", "impressions", "oneClickLeadFormOpens"]
+  entity_id="CAMPAIGN_ID",
+  fields=["costInLocalCurrency", "clicks", "impressions", "externalWebsiteConversions"]
 )
 
-# Get form completion rate: leads / oneClickLeadFormOpens
-# If this ratio is <40%, form has friction — reduce fields or simplify questions
-
-# Get campaign details to check targeting and objective
-linkedin_query(
-  account_id="YOUR_ACCOUNT_ID",
-  entity_type="campaigns"
-)
+# Note: Lead Gen Form metrics (oneClickLeadFormOpens, leads) are available
+# in Campaign Manager UI. Via API, use externalWebsiteConversions for conversion tracking.
 ```
 
 ## Hybrid Strategy Playbook
@@ -369,4 +379,4 @@ Use hybrid when:
 
 ---
 
-*Based on 2025-2026 LinkedIn Ads research. Lead Gen Forms offer volume; Landing Pages offer quality. Hybrid approach often delivers the best blended results.*
+*Based on 2025-2026 LinkedIn Ads research (LinkedIn Marketing Solutions Blog 2025, B2BHouse 2025 LinkedIn Benchmarks). CPL benchmarks in USD. Lead Gen Forms offer volume; Landing Pages offer quality. Hybrid approach often delivers the best blended results.*

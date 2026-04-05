@@ -396,7 +396,7 @@ ACTION ITEMS:
 → meta_get_insights(account_id="...", fields=["action_values","actions","cost_per_action_type"], date_preset="last_7d", level="account")
 
 2. Check for attribution window configuration issues:
-→ meta_get_insights(account_id="...", fields=["campaign_name","spend","purchase_roas","cost_per_result"], date_preset="last_7d", level="campaign")
+→ meta_get_insights(account_id="...", fields=["spend","purchase_roas","cost_per_action_type"], date_preset="last_7d", level="campaign")
    Note: Confirm results align with 7d_click + 1d_view default.
    Any reports showing anomalies vs history may reflect the Jan 2026 attribution change.
 ```

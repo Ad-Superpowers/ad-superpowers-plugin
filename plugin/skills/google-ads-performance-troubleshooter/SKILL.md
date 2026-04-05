@@ -101,16 +101,20 @@ google_ads_run_gaql(query="
   ORDER BY segments.date DESC
 ")
 
-STEP 3: Auction Insights (competition check)
+STEP 3: Ad group & keyword drill-down (find the problem area)
 google_ads_run_gaql(query="
   SELECT
-    campaign.name,
-    metrics.auction_insight_search_impression_share,
-    metrics.auction_insight_search_overlap_rate,
-    metrics.auction_insight_search_outranking_share
-  FROM campaign
-  WHERE campaign.status = 'ENABLED'
+    ad_group.name,
+    metrics.impressions,
+    metrics.clicks,
+    metrics.conversions,
+    metrics.cost_micros,
+    metrics.cost_per_conversion
+  FROM ad_group
+  WHERE campaign.name = 'CAMPAIGN_NAME'
+    AND ad_group.status = 'ENABLED'
     AND segments.date DURING LAST_14_DAYS
+  ORDER BY metrics.cost_micros DESC
 ")
 
 STEP 4: Search terms quality check

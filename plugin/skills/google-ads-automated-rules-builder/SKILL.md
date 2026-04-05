@@ -70,7 +70,7 @@ STEP 3: Budget pacing check (find campaigns near daily cap)
 google_ads_run_gaql(query="
   SELECT
     campaign.name,
-    campaign.budget_amount_micros,
+    campaign_budget.amount_micros,
     metrics.cost_micros,
     metrics.impressions,
     metrics.search_budget_lost_impression_share

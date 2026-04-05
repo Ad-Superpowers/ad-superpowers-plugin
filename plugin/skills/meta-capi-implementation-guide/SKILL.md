@@ -400,7 +400,7 @@ Direct API Route:
 
 ```python
 # Review recent campaign performance — if ROAS looks lower than expected, check EMQ first
-meta_get_insights(account_id="act_XXXXX", level="campaign", date_preset="last_7d", fields=["campaign_name","spend","actions","cost_per_action_type","website_purchase_roas"])
+meta_get_insights(account_id="act_XXXXX", level="campaign", date_preset="last_7d", fields=["spend","actions","cost_per_action_type","website_purchase_roas"])
 
 # Check pixel health via Events Manager UI (pixel diagnostics are not exposed via meta_query)
 # Events Manager → Data Sources → Pixel → Diagnostics tab

@@ -387,4 +387,4 @@ tiktok_query(entity_type="campaigns")
 
 ---
 
-*Based on 2025-2026 TikTok Ads research. TikTok creative fatigue is fundamentally different from other platforms - plan for 4x faster refresh cycles.*
+*Based on 2025-2026 TikTok Ads research (TikTok Creative Best Practices Guide 2025, Varos 2025 TikTok Benchmark Report). TikTok creative fatigue is fundamentally different from other platforms — plan for 4x faster refresh cycles.*

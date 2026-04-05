@@ -524,13 +524,13 @@ Use these MCP calls to pull actual account data before scoring each section:
 → meta_query(account_id="...", entity_type="campaigns", effective_status=["ACTIVE"], fields=["id","name","objective","status","daily_budget","lifetime_budget"])
 
 2. Ad set performance + delivery:
-→ meta_get_insights(account_id="...", level="adset", date_preset="last_7d", fields=["adset_name","cost_per_action_type","spend","frequency","impressions"])
+→ meta_get_insights(account_id="...", level="adset", date_preset="last_7d", fields=["cost_per_action_type","spend","frequency","impressions"])
 
 3. Ad-level creative health:
 → meta_get_creatives(account_id="...", scope="account", date_preset="last_7d")
 
 4. Top/bottom performers (last 30 days):
-→ meta_get_insights(account_id="...", level="campaign", date_preset="last_30d", fields=["campaign_name","spend","actions","cost_per_action_type","impressions"])
+→ meta_get_insights(account_id="...", level="campaign", date_preset="last_30d", fields=["spend","actions","cost_per_action_type","impressions"])
 ```
 
 Feed results directly into the audit sections above to score each area objectively.
@@ -544,11 +544,11 @@ Feed results directly into the audit sections above to score each area objective
 "I'll help you with a systematic account audit. Let me pull the live data first:
 
 ```
-meta_get_insights(account_id="...", level="campaign", date_preset="last_7d", fields=["campaign_name","objective","spend","cost_per_action_type","frequency","impressions"])
+meta_get_insights(account_id="...", level="campaign", date_preset="last_7d", fields=["spend","cost_per_action_type","frequency","impressions"])
 ```
 
 ```
-meta_get_insights(account_id="...", level="adset", date_preset="last_7d", fields=["adset_name","cost_per_action_type","spend","frequency"])
+meta_get_insights(account_id="...", level="adset", date_preset="last_7d", fields=["cost_per_action_type","spend","frequency"])
 ```
 
 While that runs, I also need a few things:

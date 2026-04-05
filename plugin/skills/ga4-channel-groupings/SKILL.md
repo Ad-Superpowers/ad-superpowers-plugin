@@ -354,7 +354,7 @@ PRINCIPLE:
 # Check traffic and conversions by channel group
 ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
-    metrics=["sessions", "keyEvents", "totalRevenue", "keyEventRate"],
+    metrics=["sessions", "keyEvents", "totalRevenue", "sessionKeyEventRate"],
     dimensions=["sessionDefaultChannelGroup"],
     start_date="30daysAgo",
     end_date="yesterday"

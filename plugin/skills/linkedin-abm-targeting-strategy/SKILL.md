@@ -198,9 +198,8 @@ For each ABM campaign, layer targeting in this order:
 ```
 linkedin_query(
     account_id="<account>",
-    entity="campaigns",
-    fields=["id", "name", "targetingCriteria", "status"],
-    filters={"status": "ACTIVE"}
+    entity_type="campaigns",
+    status=["ACTIVE"]
 )
 ```
 Upload matched audience list as base targeting.
@@ -265,11 +264,14 @@ Weight different engagement types:
 ```
 linkedin_get_analytics(
     account_id="<account>",
-    campaign_ids=["<tier1_campaign>"],
-    date_range="last_90_days",
-    metrics=["impressions", "clicks", "leads", "costInLocalCurrency"],
-    breakdown="company"
+    start_date="YYYY-MM-DD",
+    end_date="YYYY-MM-DD",
+    level="campaign",
+    entity_id="<tier1_campaign>",
+    fields=["impressions", "clicks", "costInLocalCurrency"]
 )
+# Note: per-company breakdown is not available via API — check Campaign Manager
+# Demographics tab for company-level engagement data.
 ```
 
 Key ABM metrics to track:

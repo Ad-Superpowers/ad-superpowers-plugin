@@ -545,11 +545,11 @@ Use **`gtm_audit`** to inspect both your client-side and server-side GTM contain
 
 ```
 # Audit client container
-gtm_audit(container_id="GTM-CLIENT")
+gtm_audit(container_path="accounts/123456/containers/CLIENT_ID")
 -> Check: transport_url configured, event_id generation, user_data passing
 
 # Audit server container  
-gtm_audit(container_id="GTM-SERVER")
+gtm_audit(container_path="accounts/123456/containers/SERVER_ID")
 -> Check: clients configured, tags for each platform, enrichment tags
 ```
 
@@ -562,7 +562,8 @@ ga4_run_report(
   property_id="...",
   dimensions=["eventName", "platform"],
   metrics=["eventCount"],
-  date_range="last_7_days"
+  start_date="7daysAgo",
+  end_date="today"
 )
 
 Compare:

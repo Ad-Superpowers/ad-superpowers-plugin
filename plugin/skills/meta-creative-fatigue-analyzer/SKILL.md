@@ -434,7 +434,7 @@ meta_get_insights(
     level="ad",
     date_preset="last_14d",
     time_increment="1",
-    fields=["ad_name", "impressions", "reach", "frequency", "ctr", "cpm", "spend", "actions"]
+    fields=["impressions", "reach", "frequency", "ctr", "cpm", "spend", "actions"]
 )
 ```
 
@@ -442,4 +442,4 @@ Use daily `time_increment=1` to plot CTR trend over time and correlate with freq
 
 ---
 
-*Based on 2025-2026 Meta Ads research. Meta creative fatigue is more gradual than TikTok — plan for 2-week refresh cycles with monitoring. With Andromeda, maintaining 15+ creative variations is the most effective fatigue prevention strategy.*
+*Based on 2025-2026 Meta Ads research (Revealbot 2025 Creative Benchmarks, Meta Business Help Center). Meta creative fatigue is more gradual than TikTok — plan for 2-week refresh cycles with monitoring. With Andromeda, maintaining 15+ creative variations is the most effective fatigue prevention strategy.*

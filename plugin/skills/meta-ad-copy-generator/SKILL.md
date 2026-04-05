@@ -444,7 +444,7 @@ meta_get_insights(
     account_id="act_XXXXXXXXX",
     level="ad",
     date_preset="last_30d",
-    fields=["ad_name", "ad_id", "impressions", "ctr", "spend", "actions", "cost_per_action_type"]
+    fields=["impressions", "ctr", "spend", "actions", "cost_per_action_type"]
 )
 
 # Then pull the actual creative text from top performers

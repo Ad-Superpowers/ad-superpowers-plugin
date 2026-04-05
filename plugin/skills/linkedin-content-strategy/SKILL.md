@@ -384,9 +384,8 @@ LinkedIn rewards authentic expertise over polished corporate messaging. The algo
 ```
 linkedin_query(
     account_id="<account>",
-    entity="creatives",
-    fields=["id", "type", "status", "campaign"],
-    filters={"status": "ACTIVE"}
+    entity_type="creatives",
+    status=["ACTIVE"]
 )
 
 linkedin_get_creatives_with_images(

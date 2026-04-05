@@ -628,7 +628,7 @@ Use numeric priority values (higher = fires first):
 After setting up all tags, run an audit to verify:
 
 ```
-gtm_audit(container_id="GTM-XXXXX")
+gtm_audit(container_path="accounts/123456/containers/789012")
 
 Check for:
 - All P0 conversion tags present

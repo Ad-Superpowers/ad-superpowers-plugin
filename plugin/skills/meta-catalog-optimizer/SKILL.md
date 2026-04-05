@@ -418,10 +418,10 @@ CATALOG AUDIT CHECKLIST
 
 ```
 1. Check catalog campaign ROAS and delivery:
-→ meta_get_insights(account_id="...", fields=["campaign_name","spend","purchase_roas","cost_per_result","impressions","frequency"], date_preset="last_14d", level="campaign")
+→ meta_get_insights(account_id="...", fields=["spend","purchase_roas","cost_per_action_type","impressions","frequency"], date_preset="last_14d", level="campaign")
 
 2. Ad set level — check audience segments:
-→ meta_get_insights(account_id="...", fields=["adset_name","spend","purchase_roas","cost_per_result","reach","frequency"], date_preset="last_14d", level="adset")
+→ meta_get_insights(account_id="...", fields=["spend","purchase_roas","cost_per_action_type","reach","frequency"], date_preset="last_14d", level="adset")
 
 3. Creative performance across catalog ads:
 → meta_get_creatives(account_id="...", scope="account")

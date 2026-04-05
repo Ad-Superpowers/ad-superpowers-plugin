@@ -427,10 +427,10 @@ MEASURING VT CONTRIBUTION:
 
 ```python
 # Pull conversions broken down by attribution window to understand click vs view contribution
-meta_get_insights(account_id="act_XXXXX", level="campaign", fields=["campaign_name","spend","actions","website_purchase_roas"], date_preset="last_30d")
+meta_get_insights(account_id="act_XXXXX", level="campaign", fields=["spend","actions","website_purchase_roas"], date_preset="last_30d")
 
 # Compare attribution at ad set level for the same period
-meta_get_insights(account_id="act_XXXXX", level="adset", fields=["adset_name","actions","cost_per_action_type"], date_preset="last_7d")
+meta_get_insights(account_id="act_XXXXX", level="adset", fields=["actions","cost_per_action_type","spend"], date_preset="last_7d")
 ```
 
 ## Best Practices

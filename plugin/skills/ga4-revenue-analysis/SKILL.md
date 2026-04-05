@@ -491,7 +491,7 @@ Solution:
 # Overall revenue by source/medium (last 30 days)
 ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
-    metrics=["totalRevenue", "ecommercePurchases", "averagePurchaseRevenue", "keyEventRate"],
+    metrics=["totalRevenue", "ecommercePurchases", "averagePurchaseRevenue", "sessionKeyEventRate"],
     dimensions=["sessionSourceMedium"],
     start_date="30daysAgo",
     end_date="yesterday"

@@ -473,10 +473,10 @@ Replace manual Ads Manager browsing with direct data pulls:
 DAILY CHECK (2 minutes with MCP):
 
 1. Performance snapshot (all active ad sets):
-→ meta_get_insights(account_id="...", fields=["adset_name","spend","cost_per_result","roas","impressions","frequency"], date_preset="today", level="adset")
+→ meta_get_insights(account_id="...", fields=["spend","cost_per_action_type","purchase_roas","impressions","frequency"], date_preset="today", level="adset")
 
 2. Weekly trend (top/bottom performers):
-→ meta_get_insights(account_id="...", fields=["campaign_name","spend","cost_per_result","purchase_roas"], date_preset="last_7d", level="campaign")
+→ meta_get_insights(account_id="...", fields=["spend","cost_per_action_type","purchase_roas"], date_preset="last_7d", level="campaign")
 
 3. Creative health check:
 → meta_get_creatives(account_id="...", scope="account")

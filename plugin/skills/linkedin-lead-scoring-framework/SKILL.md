@@ -350,9 +350,11 @@ Each additional form field reduces completion rate:
 ```
 linkedin_get_analytics(
     account_id="<account>",
-    campaign_ids=["<campaign_id>"],
-    date_range="last_30_days",
-    metrics=["leads", "costInLocalCurrency", "clicks", "impressions"]
+    start_date="YYYY-MM-DD",
+    end_date="YYYY-MM-DD",
+    level="campaign",
+    entity_id="<campaign_id>",
+    fields=["costInLocalCurrency", "clicks", "impressions"]
 )
 ```
 

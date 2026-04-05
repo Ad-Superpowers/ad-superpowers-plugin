@@ -427,7 +427,7 @@ meta_get_insights(
     account_id="act_XXXXXXXXX",
     level="ad",
     date_preset="last_30d",
-    fields=["ad_name", "impressions", "clicks", "ctr", "cpc", "spend", "actions", "cost_per_action_type"]
+    fields=["impressions", "clicks", "ctr", "cpc", "spend", "actions", "cost_per_action_type"]
 )
 ```
 

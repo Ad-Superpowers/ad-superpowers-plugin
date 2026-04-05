@@ -381,15 +381,11 @@ CAMPAIGN: [Brand] Spark Ads - [Month]
 
 ```
 tiktok_query(
-    advertiser_id="<account>",
-    entity="ads",
-    fields=["ad_id", "ad_name", "ad_format", "status",
-            "creative_type", "landing_page_url"],
-    filters={"status": "ACTIVE"}
+    entity_type="ads",
+    status="AD_STATUS_ENABLE"
 )
 
 tiktok_get_ads_with_creatives(
-    advertiser_id="<account>",
     campaign_id="<campaign_id>"
 )
 ```

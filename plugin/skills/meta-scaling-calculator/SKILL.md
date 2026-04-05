@@ -414,13 +414,13 @@ Before building a scale plan, always verify the pre-scaling checklist with real 
 
 ```
 1. Performance stability check (last 7 days):
-→ meta_get_insights(account_id="...", level="adset", date_preset="last_7d", fields=["adset_name","cost_per_action_type","spend","impressions","reach","frequency"])
+→ meta_get_insights(account_id="...", level="adset", date_preset="last_7d", fields=["cost_per_action_type","spend","impressions","reach","frequency"])
 
 2. Learning phase status:
-→ meta_get_insights(account_id="...", level="adset", date_preset="last_3d", fields=["adset_name","spend","impressions"])
+→ meta_get_insights(account_id="...", level="adset", date_preset="last_3d", fields=["spend","impressions","actions"])
 
 3. Check current frequency (audience headroom):
-→ meta_get_insights(account_id="...", level="adset", date_preset="last_14d", fields=["adset_name","frequency","reach","impressions"])
+→ meta_get_insights(account_id="...", level="adset", date_preset="last_14d", fields=["frequency","reach","impressions"])
 ```
 
 Use the results to fill in the scaling readiness checklist before committing to a timeline.
@@ -480,7 +480,7 @@ Stop and stabilize if:
 
 **MONITOR DAILY with MCP:**
 ```
-meta_get_insights(account_id="...", level="adset", date_preset="today", fields=["adset_name","spend","cost_per_action_type","frequency","impressions"])
+meta_get_insights(account_id="...", level="adset", date_preset="today", fields=["spend","cost_per_action_type","frequency","impressions"])
 ```
 
 Would you like a detailed day-by-day tracking sheet?"

@@ -544,15 +544,14 @@ CAMPAIGN: Seasonal
 
 ```
 tiktok_get_report(
-    advertiser_id="<account>",
-    report_type="ad",
-    metrics=["spend", "impressions", "clicks", "conversions",
+    start_date="2026-03-29",
+    end_date="2026-04-05",
+    level="ad",
+    metrics=["spend", "impressions", "clicks", "conversion",
              "cost_per_conversion", "conversion_rate",
-             "total_purchase_value", "total_onsite_shopping_value",
-             "return_on_ad_spend"],
-    date_range="last_7_days",
-    dimensions=["ad_id"]
+             "total_purchase_value", "total_onsite_shopping_value"]
 )
+# Note: ROAS is calculated as total_purchase_value / spend.
 ```
 
 ### Shopping-Specific KPIs

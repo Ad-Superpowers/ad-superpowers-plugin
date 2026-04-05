@@ -537,7 +537,7 @@ For US states: the opt-out model means you can set consent to `granted` by defau
 Use **`gtm_audit`** to verify consent configuration in your GTM container:
 
 ```
-gtm_audit(container_id="GTM-XXXXX")
+gtm_audit(container_path="accounts/123456/containers/789012")
 
 Check for:
 - CMP tag present and fires on Consent Initialization
@@ -553,9 +553,8 @@ Use **`gtm_manage`** to update consent settings across multiple tags:
 
 ```
 gtm_manage(
-  container_id="GTM-XXXXX",
-  action="update",
-  entity_type="tag",
+  container_path="accounts/123456/containers/789012",
+  action="update_tag",
   ...
 )
 

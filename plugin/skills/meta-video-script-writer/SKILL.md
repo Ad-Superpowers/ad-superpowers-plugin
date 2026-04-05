@@ -440,7 +440,7 @@ meta_get_creatives(
 # Then pull video-specific engagement metrics
 meta_get_insights(
     account_id="act_XXXXXXXXX",
-    fields=["ad_name", "video_thruplay_watched_actions", "video_30_sec_watched_actions",
+    fields=["video_thruplay_watched_actions", "video_30_sec_watched_actions",
             "video_p25_watched_actions", "video_p50_watched_actions", "video_p75_watched_actions",
             "video_p95_watched_actions", "ctr", "spend"],
     date_preset="last_30d",

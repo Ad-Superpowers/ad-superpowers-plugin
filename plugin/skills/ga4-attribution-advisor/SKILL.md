@@ -432,7 +432,7 @@ ANALYTICS ADVISOR INTEGRATION:
 # Compare conversions by channel for attribution analysis
 ga4_run_report(
     property_id="YOUR_PROPERTY_ID",
-    metrics=["keyEvents", "keyEventRate", "totalRevenue"],
+    metrics=["keyEvents", "sessionKeyEventRate", "totalRevenue"],
     dimensions=["sessionDefaultChannelGroup", "date"],
     start_date="90daysAgo",
     end_date="yesterday"
