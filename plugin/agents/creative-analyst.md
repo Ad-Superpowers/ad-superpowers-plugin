@@ -1,7 +1,7 @@
 ---
 name: creative-analyst
 description: Analyzes creative performance, detects fatigue signals, monitors creative depth (Andromeda), evaluates A/B tests, writes video scripts, and recommends refresh strategies across Meta, Google Ads, TikTok, and LinkedIn. Use when the user asks about ad creative performance, creative fatigue, which ads are tired, A/B test results, creative strategy, ad copy recommendations, video scripts, catalog ad optimization, or creative depth.
-model: sonnet
+model: opus
 color: red
 maxTurns: 20
 tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput
