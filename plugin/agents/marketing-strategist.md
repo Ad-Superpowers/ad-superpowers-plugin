@@ -1,7 +1,7 @@
 ---
 name: marketing-strategist
 description: Develops advertising strategy, analyzes competitive landscapes, sizes markets, selects channels, builds buyer personas, designs lead scoring frameworks, and plans ABM strategies. Use when the user asks about marketing strategy, competitive analysis, market sizing, channel selection, target audience definition, value proposition, onboarding a new client/account, lead quality, ABM strategy, attribution modeling, or landing page strategy.
-model: sonnet
+model: opus
 color: purple
 maxTurns: 25
 tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput
