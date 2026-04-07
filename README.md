@@ -24,6 +24,8 @@ Pick the path that matches how you use Claude. All four give you the MCP tools; 
 
 ### Claude Code (terminal or VSCode extension)
 
+**Requires Claude Code `2.1.74` or newer.** Earlier versions have an upstream bug ([anthropics/claude-code#21560](https://github.com/anthropics/claude-code/issues/21560)) that prevents plugin-defined subagents from accessing MCP tools, which breaks all 5 specialized agents in this plugin. The MCP tools and skills work on older versions, but the agents will refuse cleanly instead of running. Upgrade with `npm i -g @anthropic-ai/claude-code@latest` (terminal) or via the VSCode extension marketplace, then `Developer: Reload Window`.
+
 Add the marketplace once, then install the plugin:
 
 ```bash
@@ -126,6 +128,20 @@ All write operations include safety confirmations:
 * Campaigns always create paused so you can review before going live
 * Budget changes require explicit approval
 * Destructive operations are clearly flagged
+
+## Known limitations
+
+### Specialized agents may run with reduced capabilities
+
+The 5 bundled agents (`marketing-strategist`, `media-buyer`, `creative-analyst`, `reporting-agent`, `tracking-specialist`) are designed to call Ad Superpowers MCP tools directly when Claude Code dispatches them. As of Claude Code's current release, **MCP tools shipped from a plugin's `.mcp.json` are not propagated into plugin-defined subagents**. This is a Claude Code platform limitation tracked upstream at [anthropics/claude-code#21560](https://github.com/anthropics/claude-code/issues/21560), not an Ad Superpowers bug.
+
+What this means in practice:
+
+* When Claude Code spawns one of these agents via the `Agent` tool, the agent's tool registry only contains read-only tools (`Glob`, `Grep`, `Read`, `WebFetch`, `WebSearch`). The Ad Superpowers MCP tools are absent.
+* The agents are programmed to **detect this and refuse cleanly** rather than fabricate data. You'll see a structured failure report instead of an invented analysis.
+* Asking Claude directly (without explicit agent dispatch) is unaffected — the main thread has full access to all 33 MCP tools, all 30 workflow commands, and all 115 skills. **The plugin works fully when used in the main conversation.**
+
+We will re-enable the agents for direct MCP access once the upstream Claude Code fix lands. If you want to be notified, ⭐ the [issue on GitHub](https://github.com/anthropics/claude-code/issues/21560).
 
 ## Pricing
 
