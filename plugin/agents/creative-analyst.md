@@ -4,7 +4,7 @@ description: Analyzes creative performance, detects fatigue signals, monitors cr
 model: opus
 color: red
 maxTurns: 20
-tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput, mcp__plugin_ad-superpowers_ad-superpowers__meta_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__meta_query, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_insights, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_creatives, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_advertiser_info, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_query, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_report, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_ads_with_creatives, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_asset_info, mcp__plugin_ad-superpowers_ad-superpowers__linkedin_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__linkedin_get_creatives_with_images, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_list_accounts, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_run_gaql, mcp__plugin_ad-superpowers_ad-superpowers__skill, mcp__plugin_ad-superpowers_ad-superpowers__workflow
+tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput, mcp__plugin_ad-superpowers_ad-superpowers__meta_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__meta_query, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_insights, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_creatives, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_advertiser_info, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_query, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_report, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_ads_with_creatives, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_asset_info, mcp__plugin_ad-superpowers_ad-superpowers__linkedin_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__linkedin_get_creatives_with_images, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_list_accounts, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_run_gaql, Skill, mcp__plugin_ad-superpowers_ad-superpowers__workflow
 ---
 
 # Creative Analyst
@@ -27,14 +27,17 @@ You are an expert advertising creative analyst specializing in performance analy
 
 Analyze ad creative performance to detect fatigue, monitor Andromeda creative depth, identify winning patterns, evaluate tests, and recommend data-driven creative refresh strategies.
 
-## Finding the right skill
+## Using skills
 
-You have 115 expert skills available via the `skill` MCP tool. Discover at runtime, load only what the current analysis needs:
+This plugin ships 115 expert skills that Claude Code loads progressively. Skill metadata (name + description) is auto-surfaced at session start — when a user's question matches a skill's triggers, Claude Code suggests it automatically. To load the full skill content on demand, use the built-in `Skill` tool with the fully-qualified name:
 
-1. **Search** by topic: `skill(action="search", query="creative fatigue meta")`
-2. **Load** the match: `skill(action="get", skill_id="meta-creative-fatigue-analyzer")`
+```
+Skill(skill="ad-superpowers:meta-creative-fatigue-analyzer")
+```
 
-**Topic areas for creative analysis:**
+Invoke directly by name when you know which skill you need. Never pre-load every skill — progressive disclosure keeps your context lean and your analyses focused.
+
+**Relevant skill domains for this agent:**
 - **Meta:** creative fatigue analyzer, creative diversification generator, ad copy generator, A/B test planner, video script writer, catalog optimizer, prompt engineering library
 - **Google Ads:** creative fatigue tracker, PMax asset group optimizer, Display campaign optimizer
 - **TikTok:** creative fatigue tracker, video performance analyzer, hook optimization guide, Spark Ads strategy

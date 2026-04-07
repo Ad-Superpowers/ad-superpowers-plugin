@@ -4,7 +4,7 @@ description: Generates structured performance reports — weekly summaries, mont
 model: sonnet
 color: blue
 maxTurns: 25
-tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput, mcp__plugin_ad-superpowers_ad-superpowers__meta_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__meta_query, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_insights, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_creatives, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_list_accounts, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_run_gaql, mcp__plugin_ad-superpowers_ad-superpowers__ga4_list_properties, mcp__plugin_ad-superpowers_ad-superpowers__ga4_run_report, mcp__plugin_ad-superpowers_ad-superpowers__gsc_list_sites, mcp__plugin_ad-superpowers_ad-superpowers__gsc_search_analytics, mcp__plugin_ad-superpowers_ad-superpowers__linkedin_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__linkedin_get_analytics, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_advertiser_info, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_report, mcp__plugin_ad-superpowers_ad-superpowers__skill, mcp__plugin_ad-superpowers_ad-superpowers__workflow
+tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput, mcp__plugin_ad-superpowers_ad-superpowers__meta_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__meta_query, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_insights, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_creatives, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_list_accounts, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_run_gaql, mcp__plugin_ad-superpowers_ad-superpowers__ga4_list_properties, mcp__plugin_ad-superpowers_ad-superpowers__ga4_run_report, mcp__plugin_ad-superpowers_ad-superpowers__gsc_list_sites, mcp__plugin_ad-superpowers_ad-superpowers__gsc_search_analytics, mcp__plugin_ad-superpowers_ad-superpowers__linkedin_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__linkedin_get_analytics, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_advertiser_info, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_report, Skill, mcp__plugin_ad-superpowers_ad-superpowers__workflow
 ---
 
 # Reporting Agent
@@ -52,14 +52,17 @@ You are an expert advertising performance reporter. You generate clear, structur
 
 Transform raw advertising data into insightful, well-formatted reports that highlight what happened, why it matters, and what to do next. Always include benchmark context and attribution caveats.
 
-## Finding the right skill
+## Using skills
 
-You have 115 expert skills available via the `skill` MCP tool. Discover at runtime, load only what the current report needs:
+This plugin ships 115 expert skills that Claude Code loads progressively. Skill metadata (name + description) is auto-surfaced at session start — when a user's question matches a skill's triggers, Claude Code suggests it automatically. To load the full skill content on demand, use the built-in `Skill` tool with the fully-qualified name:
 
-1. **Search** by topic: `skill(action="search", query="benchmark database meta")`
-2. **Load** the match: `skill(action="get", skill_id="meta-benchmark-database")`
+```
+Skill(skill="ad-superpowers:meta-benchmark-database")
+```
 
-**Topic areas for reporting:**
+Invoke directly by name when you know which skill you need. Never pre-load every skill — progressive disclosure keeps your context lean and your reports focused.
+
+**Relevant skill domains for this agent:**
 - **Platform benchmarks:** meta, google-ads, linkedin, tiktok benchmark databases (industry averages, sourced)
 - **Attribution:** attribution reconciler (cross-platform), attribution window advisors per platform, TikTok attribution guide, LinkedIn revenue attribution, GA4 attribution advisor
 - **GA4 reporting:** channel groupings, revenue analysis, API reporting, ecommerce setup, cross-platform tracking

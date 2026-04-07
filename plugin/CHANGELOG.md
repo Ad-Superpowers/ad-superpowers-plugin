@@ -2,6 +2,16 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.1.3] - 2026-04-07
+
+### Changed
+
+- **Agents now invoke bundled skills via the built-in `Skill` tool instead of the MCP `skill` tool.** The MCP `skill` tool is designed for custom user skills stored in the SaaS backend database (a Pro+ feature) — the 115 bundled plugin skills are shipped on disk and loaded natively by Claude Code's progressive-disclosure skill runtime. Using the MCP round-trip for bundled skills added latency, required authentication, and was conceptually wrong per the Claude Code plugin architecture. Changes:
+  - Removed `mcp__plugin_ad-superpowers_ad-superpowers__skill` from the `tools:` list of all 5 agents (`media-buyer`, `reporting-agent`, `creative-analyst`, `marketing-strategist`, `tracking-specialist`).
+  - Added the built-in `Skill` tool to the `tools:` list of all 5 agents.
+  - Renamed "Finding the right skill" section to "Using skills" in each agent body and rewrote it to invoke skills directly via `Skill(skill="ad-superpowers:<skill-name>")`, documenting that Claude Code auto-surfaces skill metadata at session start so agents don't need to search the backend.
+- The MCP `skill` tool remains available at the workspace level for users who want to manage custom user skills (Pro+).
+
 ## [2.1.2] - 2026-04-07
 
 ### Requirements
