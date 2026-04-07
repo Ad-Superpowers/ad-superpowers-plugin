@@ -2,6 +2,17 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.1.4] - 2026-04-07
+
+### Changed
+
+- **Repository renamed from `Ad-Superpowers/claude-plugin` to `Ad-Superpowers/ad-superpowers-plugin`.** The old name was too generic and risked collisions if/when this plugin is submitted to the official `anthropics/claude-plugins-official` marketplace — every plugin in that registry needs a distinctive repo name for discoverability. Also avoids any trademark concerns with using "claude" in the plugin's own repository name. GitHub automatically redirects the old URL, so existing installations and `git clone`s continue to work. **New installs should use the new name:**
+  ```
+  /plugin marketplace add Ad-Superpowers/ad-superpowers-plugin
+  /plugin install ad-superpowers@ad-superpowers
+  ```
+  Users who already have the plugin installed don't need to take any action — GitHub's redirect handles existing references. Updates to `plugin.json` (`"repository"` field) and `README.md` (install instructions, Cowork sync path).
+
 ## [2.1.3] - 2026-04-07
 
 ### Changed

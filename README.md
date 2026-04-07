@@ -29,7 +29,7 @@ Pick the path that matches how you use Claude. All four give you the MCP tools; 
 Add the marketplace once, then install the plugin:
 
 ```bash
-/plugin marketplace add Ad-Superpowers/claude-plugin
+/plugin marketplace add Ad-Superpowers/ad-superpowers-plugin
 /plugin install ad-superpowers@ad-superpowers
 ```
 
@@ -41,7 +41,7 @@ Cowork supports plugins through an admin UI, not through a slash command. This p
 
 1. In Claude Desktop, go to **Organization settings → Plugins**
 2. Click **Add plugin** and choose **Sync from GitHub**
-3. Enter the repository: `Ad-Superpowers/claude-plugin`
+3. Enter the repository: `Ad-Superpowers/ad-superpowers-plugin`
 4. Set distribution: **Available for install** (members can opt in) or **Installed by default**
 5. Members then open **Browse plugins** inside Cowork to install it
 
