@@ -20,7 +20,9 @@ Manage, analyze, and optimize your ad campaigns across 8 platforms through natur
 
 ## Install
 
-### Claude Code (terminal, VSCode extension, or Claude Desktop with Code mode)
+Pick the path that matches how you use Claude. All four give you the MCP tools; only Claude Code and Cowork give you the bundled skills, commands, and agents.
+
+### Claude Code (terminal or VSCode extension)
 
 Add the marketplace once, then install the plugin:
 
@@ -31,20 +33,32 @@ Add the marketplace once, then install the plugin:
 
 That's it. The MCP server, all 115 skills, 30 workflow commands, 5 agents, and safety confirmations are bundled.
 
-### Claude Desktop (Connectors UI)
+### Cowork (Claude Desktop's agentic coding mode)
 
-Claude Desktop uses Connectors instead of plugins. You'll get the MCP tools but not the bundled skills, commands, and agents (those are Claude Code features).
+Cowork supports plugins through an admin UI, not through a slash command. This path is available on **Team** and **Enterprise** plans, and only Owners or Primary Owners can add plugins for the organization.
+
+1. In Claude Desktop, go to **Organization settings → Plugins**
+2. Click **Add plugin** and choose **Sync from GitHub**
+3. Enter the repository: `Ad-Superpowers/claude-plugin`
+4. Set distribution: **Available for install** (members can opt in) or **Installed by default**
+5. Members then open **Browse plugins** inside Cowork to install it
+
+Once installed, members get the full plugin experience (skills, commands, agents, and MCP tools) inside Cowork.
+
+### Claude Desktop (chat mode, via Connectors)
+
+The regular Claude Desktop chat interface doesn't have a plugin system. You can still get the MCP tools by adding Ad Superpowers as a Connector, but you won't get the bundled skills, commands, or agents (those need Claude Code or Cowork).
 
 1. Open Claude Desktop
 2. Go to **Settings → Connectors → Add Custom Connector**
 3. Enter the URL: `https://mcp.adsuperpowers.ai/v1`
 4. Complete the OAuth flow in your browser
 
-If you want the full plugin experience (skills, commands, agents), use Claude Code instead.
+If you want the full experience, use Claude Code or Cowork instead.
 
 ### ChatGPT
 
-ChatGPT supports the Ad Superpowers MCP server through the Apps Directory. Search for "Ad Superpowers" in the ChatGPT Apps interface and authorize access.
+ChatGPT supports the Ad Superpowers MCP server through the Apps Directory. Search for "Ad Superpowers" in the ChatGPT Apps interface and authorize access. You'll get the MCP tools but not the bundled skills, commands, or agents.
 
 ## Setup
 
