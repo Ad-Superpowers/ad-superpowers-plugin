@@ -1,5 +1,6 @@
 ---
 description: End-to-end creative refresh pipeline: analyze ad performance, detect fatigue, build a creative brief from your top performers, then upload and deploy a new image you provide (local file up to 4 MB, or any public HTTPS URL). Image generation happens outside the app — bring your own image from Photoshop, Canva, Midjourney, Gemini, or anywhere. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta

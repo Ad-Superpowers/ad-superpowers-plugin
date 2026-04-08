@@ -1,5 +1,6 @@
 ---
 description: End-to-end new client onboarding workflow — from discovery through tracking setup to campaign launch
+disable-model-invocation: true
 ---
 
 # New Client Launch

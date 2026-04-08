@@ -1,5 +1,6 @@
 ---
 description: Comprehensive audit of your organic search performance using Google Search Console data. Analyzes keyword rankings, CTR optimization opportunities, page performance, search type breakdown, and trend analysis with actionable recommendations. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** google_search_console

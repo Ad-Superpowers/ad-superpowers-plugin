@@ -1,5 +1,6 @@
 ---
 description: Generate professional, client-ready weekly reports in one click. Automatically adapts tone and metrics based on client type (e-commerce, B2B lead gen, brand awareness). (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok

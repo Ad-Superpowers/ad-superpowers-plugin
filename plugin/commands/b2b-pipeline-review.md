@@ -1,5 +1,6 @@
 ---
 description: B2B lead pipeline review — CPL trends, lead quality scoring, and MQL-to-SQL conversion analysis across LinkedIn and Google Ads
+disable-model-invocation: true
 ---
 
 # B2B Pipeline Review

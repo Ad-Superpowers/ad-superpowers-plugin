@@ -1,5 +1,6 @@
 ---
 description: Monitor your website's technical SEO health using Google Search Console. Checks sitemap status, indexing coverage, and inspects key pages for crawl issues, canonical conflicts, mobile usability problems, and rich results eligibility. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** google_search_console

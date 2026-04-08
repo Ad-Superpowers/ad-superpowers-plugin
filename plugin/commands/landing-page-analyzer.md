@@ -1,5 +1,6 @@
 ---
 description: Comprehensive landing page analysis combining page crawling, GA4 performance data, and CRO best practices. Identifies conversion opportunities and provides actionable recommendations. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok, google_analytics

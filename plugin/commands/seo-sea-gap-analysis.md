@@ -1,5 +1,6 @@
 ---
 description: Compare organic keywords (Search Console) with paid keywords (Google Ads) to find cannibalization, savings opportunities, and content gaps. Identifies keywords where you're paying for clicks you could get organically, and paid keywords that need organic content. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** google_search_console, google_ads

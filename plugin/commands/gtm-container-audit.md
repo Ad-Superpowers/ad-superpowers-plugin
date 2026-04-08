@@ -1,5 +1,6 @@
 ---
 description: Audit your Google Tag Manager containers for misconfigurations, duplicate tracking, unused tags/triggers, consent compliance gaps, and performance issues. Returns a prioritized remediation roadmap with health scores. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** google_tag_manager

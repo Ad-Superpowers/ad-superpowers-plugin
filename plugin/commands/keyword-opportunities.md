@@ -4,6 +4,7 @@ description: Compare organic keywords (GSC) with paid keywords (Google Ads) to f
 user_invocable: true
 tier: pro
 platforms: [gsc, google_ads]
+disable-model-invocation: true
 ---
 
 # Keyword Opportunities — SEO vs SEA Gap Analysis

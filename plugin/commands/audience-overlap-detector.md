@@ -1,5 +1,6 @@
 ---
 description: Detect audience overlap issues in Meta campaigns. Find where you're competing against yourself and wasting budget. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta

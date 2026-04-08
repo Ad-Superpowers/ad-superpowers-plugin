@@ -1,5 +1,6 @@
 ---
 description: E-commerce performance health check — ROAS by product/category, funnel conversion rates, and shopping feed status
+disable-model-invocation: true
 ---
 
 # E-Commerce Health Check

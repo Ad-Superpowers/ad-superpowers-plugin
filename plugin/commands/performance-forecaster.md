@@ -1,5 +1,6 @@
 ---
 description: Predicts future campaign performance using historical platform data, seasonality patterns, and trend analysis. Uses Monte Carlo-style uncertainty modeling to provide confidence intervals for projected spend, conversions, and ROAS. Helps set realistic expectations and plan for multiple scenarios. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok, google_analytics

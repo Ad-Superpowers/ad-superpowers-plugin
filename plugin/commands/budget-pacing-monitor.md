@@ -1,5 +1,6 @@
 ---
 description: Real-time budget tracking with end-of-month projections. Prevent overspend and underspend surprises with velocity anomaly detection.
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok

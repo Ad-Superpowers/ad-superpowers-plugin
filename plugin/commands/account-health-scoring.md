@@ -1,5 +1,6 @@
 ---
 description: Get a 0-100 health score for each account with prioritized issue list and quick win recommendations. Perfect for managing large portfolios. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok

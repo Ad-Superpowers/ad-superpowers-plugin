@@ -1,5 +1,6 @@
 ---
 description: Comprehensive client research combining deep research with optional ad account analysis. Gathers company intel, competitive landscape, and advertising history in one structured workflow. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok, google_analytics

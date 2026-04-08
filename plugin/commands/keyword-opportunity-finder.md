@@ -1,5 +1,6 @@
 ---
 description: Discover new keyword opportunities in Google Ads. Analyze search terms, find gaps, and get bid recommendations. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** google_ads

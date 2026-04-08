@@ -1,5 +1,6 @@
 ---
 description: Analyze lead quality across platforms with LinkedIn-specific benchmarks. Compare CPL by industry, MQL/SQL rates, Lead Gen Forms vs Landing Pages, and LTV:CAC framework for B2B. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin

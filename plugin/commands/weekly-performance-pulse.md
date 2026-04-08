@@ -1,5 +1,6 @@
 ---
 description: Quick weekly summary with platform-specific insights. Includes TL;DR, top wins, concerns, and platform-appropriate benchmarks (TikTok creative health, LinkedIn CPL vs industry, etc.).
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok

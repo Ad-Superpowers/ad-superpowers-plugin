@@ -1,5 +1,6 @@
 ---
 description: Comprehensive organic search health check using Google Search Console data
+disable-model-invocation: true
 ---
 
 # SEO Health Check

@@ -1,5 +1,6 @@
 ---
 description: Get a traffic-light overview of all your ad accounts in under 5 minutes. Uses platform-specific thresholds: TikTok (faster fatigue), LinkedIn (B2B CPL benchmarks), Meta/Google (standard metrics).
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok

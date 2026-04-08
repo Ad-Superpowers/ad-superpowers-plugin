@@ -1,5 +1,6 @@
 ---
 description: Forward-looking budget planning with scenario modeling (conservative/realistic/aggressive). Integrates market sizing data, competitive share of voice analysis, and platform-specific budget thresholds. Outputs optimal budget distribution across channels with confidence levels and expected ROI ranges. Different from budget-pacing-monitor which tracks actual spend vs. budget. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok, google_analytics

@@ -1,5 +1,6 @@
 ---
 description: Generate detailed buyer personas combining research with optional platform audience data. Creates 2-4 actionable personas with platform-specific targeting recommendations. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok, google_analytics

@@ -1,5 +1,6 @@
 ---
 description: Deep-dive analysis for e-commerce businesses with Shopify integration. Analyze product-level ROAS, identify winners/losers, and get inventory-aware recommendations. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, shopify, google_analytics

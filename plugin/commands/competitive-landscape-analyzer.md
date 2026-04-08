@@ -1,5 +1,6 @@
 ---
 description: Comprehensive competitive analysis combining deep research with ad platform data. Includes competitor profiling, positioning maps, spend estimation, creative analysis, and strategic recommendations. Integrates Google Ads auction insights and Meta Ad Library research. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok

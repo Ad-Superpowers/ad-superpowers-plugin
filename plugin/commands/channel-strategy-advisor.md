@@ -1,5 +1,6 @@
 ---
 description: AI-powered channel selection advisor that matches campaign objectives with optimal platform mix. Analyzes audience fit, platform strengths, funnel stage requirements, and budget constraints to recommend the ideal channel strategy. Includes budget allocation suggestions and expected performance benchmarks per channel. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok, google_analytics

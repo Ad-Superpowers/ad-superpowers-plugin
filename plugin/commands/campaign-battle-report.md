@@ -1,5 +1,6 @@
 ---
 description: Compare two campaigns, time periods, or campaign types head-to-head. Includes statistical significance indicators for A/B tests. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok

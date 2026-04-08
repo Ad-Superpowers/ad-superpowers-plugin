@@ -1,5 +1,6 @@
 ---
 description: Quarterly business review template — 90-day performance trends, YoY comparison, strategic recommendations, and next quarter plan
+disable-model-invocation: true
 ---
 
 # Quarterly Business Review (QBR)

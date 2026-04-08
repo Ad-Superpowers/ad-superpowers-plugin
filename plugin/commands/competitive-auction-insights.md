@@ -1,5 +1,6 @@
 ---
 description: Analyze Google Ads auction insights to understand competitive landscape. See who you're competing against and where you're winning or losing. (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** google_ads

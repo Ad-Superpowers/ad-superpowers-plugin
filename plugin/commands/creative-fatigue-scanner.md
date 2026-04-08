@@ -1,5 +1,6 @@
 ---
 description: Proactively detect ad creative fatigue before performance tanks. Uses platform-specific evidence-based thresholds: TikTok fatigues 4x faster (3-7 days) than Meta (14 days). Google Ads uses asset ratings (4-8 weeks). LinkedIn has longest cycles (4-6 weeks). (requires Pro subscription)
+disable-model-invocation: true
 ---
 
 > **Platforms:** meta, tiktok, linkedin, google_ads
