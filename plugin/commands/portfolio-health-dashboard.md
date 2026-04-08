@@ -12,34 +12,74 @@ description: Get a traffic-light overview of all your ad accounts in under 5 min
 
 Generate a comprehensive health check for all connected ad accounts for the last 7 days.
 
-## Instructions
+## OUTPUT FORMAT (CRITICAL - follow this EXACT structure)
 
-### 1. Gather Account Data Per Platform
+### TL;DR
+1-2 sentence plain English summary. Examples:
+- "Your ads are mostly on track. One account needs attention: [Account] on TikTok has declining performance costing ~€XX/day in wasted spend."
+- "All accounts are performing well this week. Focus on growth, not fixes."
 
-**Tool Usage:**
-- Meta: `meta_get_insights(account_id, date_preset="[specify period]", level="account")`
-- Google Ads: `google_ads_run_gaql(customer_id, query="SELECT campaign.name, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions FROM campaign WHERE segments.date DURING LAST_30_DAYS ORDER BY metrics.cost_micros DESC")`
-- TikTok: `tiktok_get_report(start_date, end_date, level="campaign")`
-- LinkedIn: `linkedin_get_analytics(account_id, start_date, end_date)`
+### #1 Priority — If You Do ONE Thing This Week
+Single most impactful action in plain language. Example:
+"Refresh your TikTok creatives in [Account Name]. Your current ads are tired (running 12 days — TikTok ads need refreshing every 5-7 days). Likely costing €50-100/day extra."
+If all healthy: "No urgent actions needed. Consider testing new creatives."
 
-Retrieve for each:
-- Account-level spend and budget data
-- Primary KPIs (ROAS for e-commerce, CPA/CPL for lead gen)
-- Week-over-week or period-over-period changes
+### Quick Overview
+X accounts | Y healthy | Z need attention | W urgent
 
-### 2. Apply Platform-Specific Traffic Light Status
+| Platform | Status | Quick Take |
+|----------|--------|------------|
+| Meta | Green/Amber/Red | "Running smoothly" / "Watch your costs" / "Needs work" |
+| Google | Green/Amber/Red | Plain language description |
+| TikTok | Green/Amber/Red | Plain language description |
+| LinkedIn | Green/Amber/Red | Plain language description |
 
-**IMPORTANT:** Different platforms have different healthy thresholds!
+### Detailed Account Status
 
-#### Universal Thresholds (All Platforms)
+| Account | Platform | Budget Used | Results vs Goal | Health |
+|---------|----------|-------------|-----------------|--------|
+| [Name] | Meta | €XX/€XX | Above/On/Below target | Green/Amber/Red |
+| [Name] | TikTok | €XX/€XX | Above/On/Below target | Green/Amber/Red |
+| [Name] | LinkedIn | €XX/€XX | Above/On/Below target | Green/Amber/Red |
+| [Name] | Google | €XX/€XX | Above/On/Below target | Green/Amber/Red |
+
+### Urgent — Fix This Week (Red items)
+For each: Problem (plain language) → Impact (€/day) → Fix (specific action)
+
+### Keep an Eye On (Amber items)
+For each: Current state → Threshold approaching → Recommended preparation
+
+### All Good (Green items)
+Brief note on what's working well.
+
+### Priority Actions
+Numbered list, most impactful first.
+
+## EXECUTION STEPS
+
+### Step 1: Discover Accounts
+Use `meta_list_ad_accounts`, `google_ads_list_accounts`, `tiktok_query`, `linkedin_list_ad_accounts` to find all connected accounts.
+
+### Step 2: Gather Data Per Platform
+
+**Meta:** `meta_get_insights(account_id, date_preset="[specify period]", level="account")`
+**Google Ads:** `google_ads_run_gaql(customer_id=customer_id, query="SELECT campaign.id, campaign.name, campaign.status, metrics.impressions, metrics.clicks, metrics.ctr, metrics.average_cpc, metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM campaign WHERE segments.date DURING LAST_30_DAYS ORDER BY metrics.cost_micros DESC")`
+**TikTok:** `tiktok_get_report(start_date, end_date, level="campaign")`
+**LinkedIn:** `linkedin_get_analytics(account_id, start_date, end_date)`
+
+Retrieve for each: account-level spend/budget, primary KPIs (ROAS for e-commerce, CPA/CPL for lead gen), week-over-week changes.
+
+### Step 3: Apply Platform-Specific Traffic Light Thresholds
+
+**Universal Thresholds (All Platforms)**
 | Metric | Green | Amber | Red |
 |--------|-------|-------|-----|
-| Daily spend vs. budget | 90-110% | 80-90% or 110-120% | <80% or >120% |
-| Monthly pacing | Within 5% of ideal | 5-15% deviation | >15% deviation |
-| CPA vs. target | Within 10% | +10-25% | +25%+ |
-| ROAS vs. target | At or above target | -10-20% | -20%+ |
+| Daily spend vs budget | 90-110% | 80-90% or 110-120% | <80% or >120% |
+| Monthly pacing | Within 5% | 5-15% deviation | >15% deviation |
+| CPA vs target | Within 10% | +10-25% | +25%+ |
+| ROAS vs target | At or above | -10-20% | -20%+ |
 
-#### Meta Ads Specific
+**Meta Ads**
 | Metric | Green | Amber | Red |
 |--------|-------|-------|-----|
 | CTR (Feed) | >1.5% | 1.0-1.5% | <1.0% |
@@ -48,7 +88,7 @@ Retrieve for each:
 | Creative age | <10 days | 10-14 days | >14 days |
 | CPM vs 7-day avg | Within 15% | 15-25% deviation | >25% deviation |
 
-#### Google Ads Specific
+**Google Ads**
 | Metric | Green | Amber | Red |
 |--------|-------|-------|-----|
 | CTR (Search) | >3% | 2-3% | <2% |
@@ -57,7 +97,7 @@ Retrieve for each:
 | Impression Share | >70% | 50-70% | <50% |
 | IS Lost (Budget) | <10% | 10-20% | >20% |
 
-#### TikTok Ads Specific (4x Faster Fatigue!)
+**TikTok Ads (4x Faster Fatigue!)**
 | Metric | Green | Amber | Red |
 |--------|-------|-------|-----|
 | CTR | >1.5% | 1.0-1.5% | <1.0% |
@@ -66,7 +106,7 @@ Retrieve for each:
 | Creative age | <5 days | 5-7 days | >7 days |
 | CPM vs baseline | Within 20% | 20-40% increase | >40% increase |
 
-#### LinkedIn Ads Specific (B2B Benchmarks)
+**LinkedIn Ads (B2B Benchmarks)**
 | Metric | Green | Amber | Red |
 |--------|-------|-------|-----|
 | CTR (Sponsored Content) | >0.55% | 0.35-0.55% | <0.35% |
@@ -77,109 +117,26 @@ Retrieve for each:
 | Frequency | <4/week | 4-6/week | >6/week |
 | Creative age | <30 days | 30-45 days | >45 days |
 
-#### Critical Alerts (Immediate Action Required)
+**Critical Alerts (Immediate Action Required)**
 | Alert | Threshold | Platform |
 |-------|-----------|----------|
 | Conversion tracking down | 0 conversions in 24+ hours | All |
 | Mass ad disapprovals | >10% of active ads | All |
-| Impression share loss (budget) | >20% sustained | Google |
+| IS loss (budget) | >20% sustained | Google |
 | Spend velocity anomaly | 200%+ of normal rate | All |
-| TikTok creative cliff | CTR drop >25% in 3 days | TikTok |
-| LinkedIn CPL spike | >50% above industry benchmark | LinkedIn |
+| Creative cliff | CTR drop >25% in 3 days | TikTok |
+| CPL spike | >50% above industry benchmark | LinkedIn |
 
-### 3. Output Format
-
-```
-================================================================================
-                         PORTFOLIO HEALTH CHECK
-                    Period: Last 7 Days vs Previous Period
-================================================================================
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 TL;DR (Executive Summary)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[1-2 sentence plain English summary. Example:]
-"Your ads are mostly on track. One account needs attention: [Account] on TikTok
-has declining performance that's costing you ~€XX/day in wasted spend."
-
-or if all healthy:
-"All accounts are performing well this week. You can focus on growth, not fixes."
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🎯 #1 PRIORITY - If You Do ONE Thing This Week:
-───────────────────────────────────────────────
-[Single most impactful action in plain language. Example:]
-"Refresh your TikTok creatives in [Account Name].
-Your current ads are tired (they've been running 12 days - TikTok ads need
-refreshing every 5-7 days). This is likely costing you €50-100/day extra."
-
-If all healthy: "No urgent actions needed. Consider testing new creatives."
-───────────────────────────────────────────────
-
-QUICK OVERVIEW: X accounts | Y healthy | Z need attention | W urgent
-
-| Platform | Status | Quick Take |
-|----------|--------|------------|
-| Meta     | 🟢/🟡/🔴 | [Plain language: "Running smoothly" / "Watch your costs" / "Needs work"] |
-| Google   | 🟢/🟡/🔴 | [Plain language description] |
-| TikTok   | 🟢/🟡/🔴 | [Plain language description] |
-| LinkedIn | 🟢/🟡/🔴 | [Plain language description] |
-
-DETAILED ACCOUNT STATUS:
---------------------------------------------------------------------------------
-| Account          | Platform | Budget Used | Results vs Goal | Health |
---------------------------------------------------------------------------------
-| [Account Name]   | Meta     | €XX/€XX     | [Above/On/Below] target | 🟢🟡🔴 |
-| [Account Name]   | TikTok   | €XX/€XX     | [Above/On/Below] target | 🟢🟡🔴 |
-| [Account Name]   | LinkedIn | €XX/€XX     | [Above/On/Below] target | 🟢🟡🔴 |
-| [Account Name]   | Google   | €XX/€XX     | [Above/On/Below] target | 🟢🟡🔴 |
---------------------------------------------------------------------------------
-
-⚠️ WHAT TO KNOW (Plain Language Alerts):
------------------------------------------
-TIKTOK: Your TikTok ads are getting stale. People have seen them too many times.
-  → What this means: You're paying more for fewer clicks.
-  → Fix: Upload 3-5 new videos/images this week.
-
-LINKEDIN: Your cost per lead is high compared to other [industry] companies.
-  → What this means: You might be targeting too narrowly.
-  → Fix: Try broader job titles or company sizes.
-
-GOOGLE: You're missing out on customers because your budget runs out.
-  → What this means: ~XX% of potential customers can't see your ads.
-  → Fix: Increase daily budget or focus on best-performing campaigns.
-
-META: People are seeing your ads too often (frequency is high).
-  → What this means: Ad fatigue is starting - effectiveness dropping.
-  → Fix: Add new creative variations or expand your audience.
-
-🔴 URGENT - Fix This Week:
---------------------------
-* [Account] on TikTok: Ads are underperforming
-  - Problem: Your click rate dropped 28% in 3 days (ads are stale)
-  - Impact: ~€XX/day in wasted spend
-  - Fix: Upload 3+ new creatives today
-
-* [Account] on LinkedIn: Leads are too expensive
-  - Problem: Paying €XX per lead (industry average is €XX)
-  - Impact: ~€XX/month over budget
-  - Fix: Test Lead Gen Forms instead of website forms
-
-🟡 KEEP AN EYE ON:
-------------------
-* [Account] on Meta: Getting close to ad fatigue
-  - Current: People see your ads 3.2x/week (limit is 4x)
-  - Action: Prepare new creatives just in case
-
-🟢 ALL GOOD:
-------------
-* X accounts running smoothly
-* [Brief note on what's working well]
-```
-
-### 4. Prioritization
-List issues by:
-1. Platform urgency (TikTok issues first - faster fatigue)
-2. Spend impact (highest spend accounts)
+### Step 4: Present Results
+Prioritize issues by:
+1. Platform urgency (TikTok first — faster fatigue)
+2. Spend impact (highest spend accounts first)
 3. Severity (Red before Amber)
 4. Actionability (quick fixes first)
+
+## EDGE CASES
+- **Single account:** Skip portfolio overview, go straight to detailed status for that account
+- **No connected platforms:** Return error explaining user needs to connect at least one ad platform first
+- **All accounts healthy:** Celebrate — note what's working well, suggest growth experiments instead of fixes
+- **Platform API error:** Skip that platform, note it as "Unable to retrieve — check connection" and continue with remaining platforms
+- **New account (<7 days data):** Mark as "Insufficient data" with Amber status, recommend checking back after one full week

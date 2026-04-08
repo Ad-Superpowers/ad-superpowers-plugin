@@ -6,12 +6,6 @@ description: |
   "run a geo lift study", or mentions "statistical significance",
   "holdout test", or "test duration".
   Do NOT use for: creative fatigue analysis (use creative-fatigue-analyzer), general campaign performance review (use platform-specific troubleshooters), or audience strategy (use buyer-persona-framework).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with Meta and/or Google Ads connections"
 ---
 
 # Advertising Experiment Design Framework

@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "ad-superpowers": {
-      "type": "http",
+      "type": "streamable-http",
       "url": "https://mcp.adsuperpowers.ai/v1"
     }
   }

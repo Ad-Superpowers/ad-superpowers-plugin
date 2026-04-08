@@ -7,12 +7,6 @@ description: |
   "behavioral modeling", or "Enhanced Conversions for consent".
   Do NOT use for: GTM tag/trigger setup (use gtm-conversion-setup-guide), server-side tagging
   (use gtm-server-side-tagging-guide), or strategic tracking planning (use tracking-plan-builder).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server"
 ---
 
 # GTM Consent Mode v2 Guide

@@ -5,12 +5,6 @@ description: |
   "choose between Maximum Delivery and Manual Bidding", "set up LinkedIn Cost Cap",
   "reduce LinkedIn CPC", or mentions "LinkedIn CPL too high" or "LinkedIn budget pacing".
   Do NOT use for: LinkedIn benchmark lookups (use benchmark-database), LinkedIn lead gen form optimization (use linkedin-lead-gen-optimizer), LinkedIn performance troubleshooting (use linkedin-performance-troubleshooter).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "linkedin"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
 # LinkedIn Bid Strategy Selector
 

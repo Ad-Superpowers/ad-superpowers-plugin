@@ -6,12 +6,6 @@ description: |
   "build a lead scoring model", or mentions "LinkedIn lead quality",
   "lead qualification framework", or "CRM integration for LinkedIn leads".
   Do NOT use for: lead form design or A/B testing (use linkedin-lead-gen-optimizer), campaign performance diagnostics (use linkedin-performance-troubleshooter), or ABM account scoring (use linkedin-abm-targeting-strategy).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "linkedin"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
 
 # LinkedIn Lead Scoring Framework

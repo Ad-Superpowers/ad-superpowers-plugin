@@ -6,12 +6,6 @@ description: |
   "target people in my city", or mentions "local business ads",
   "small ad budget", or "Google Business Profile optimization".
   Do NOT use for: e-commerce businesses selling online (use ecommerce-funnel-optimizer), national/international brands (use channel-selection-framework), or B2B SaaS companies (use platform-specific skills).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-2-onboarding"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads and/or Meta connections"
 ---
 
 # Local Business Advertising Guide

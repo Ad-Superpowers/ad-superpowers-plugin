@@ -1,17 +1,11 @@
 ---
-name: ab-test-planner
+name: meta-ab-test-planner
 description: |
   This skill should be used when the user asks to "plan an A/B test", "calculate sample size",
   "analyze test results", or mentions "Meta split test", "statistical significance",
   or "testing roadmap". Do NOT use for: creative brainstorming
   (use creative-diversification-generator), ad copy writing (use ad-copy-generator),
   campaign structure (use campaign-structure-advisor).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-3-audience-creative"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # A/B Test Planner
 

@@ -1,17 +1,11 @@
 ---
-name: full-funnel-designer
+name: meta-full-funnel-designer
 description: |
   This skill should be used when the user asks to "design a full funnel", "allocate budget across
   funnel stages", "optimize TOFU/MOFU/BOFU", or mentions "full-funnel strategy",
   "customer journey campaigns", or "funnel budget split". Do NOT use for: campaign structure
   details (use campaign-structure-advisor), audience overlap issues
   (use audience-overlap-detector), bid strategy selection (use bid-strategy-selector).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-3-audience-creative"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # Full-Funnel Designer
 

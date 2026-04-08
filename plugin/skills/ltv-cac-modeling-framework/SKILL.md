@@ -6,12 +6,6 @@ description: |
   "calculate payback period", or mentions "LTV:CAC", "customer acquisition cost",
   "MER", or "maximum allowable acquisition cost".
   Do NOT use for: single-campaign ROAS optimization (use platform-specific skills), creative performance analysis (use creative-fatigue-analyzer), or funnel structure design (use ecommerce-funnel-optimizer).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with Meta, Google Ads, and/or GA4 connections"
 ---
 
 # LTV:CAC Modeling Framework

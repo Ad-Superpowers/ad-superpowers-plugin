@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "set up predictive audiences", "find likely buyers",
   "predict churn", or mentions "purchase probability", "at-risk customers", or "ML audiences in GA4".
   Do NOT use for: building standard audiences (use ga4-audience-builder), audience exclusions (use ga4-audience-exclusions), or remarketing export setup (use ga4-remarketing-setup).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "ga4"
-  phase: "fase-2-audiences"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 Predictive Audiences Guide
 

@@ -1,17 +1,11 @@
 ---
-name: learning-phase-tracker
+name: meta-learning-phase-tracker
 description: |
   This skill should be used when the user asks to "check learning phase status", "predict edit impact",
   "exit learning phase faster", or mentions "learning phase", "significant edit reset",
   or "ad set health check". Do NOT use for: campaign structure decisions
   (use campaign-structure-advisor), performance troubleshooting (use performance-troubleshooter),
   bid strategy selection (use bid-strategy-selector).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # Learning Phase Tracker
 

@@ -10,20 +10,73 @@ description: Real-time budget tracking with end-of-month projections. Prevent ov
 
 # Budget Pacing Monitor
 
-Monitor budget pacing across all connected ad accounts.
+Monitor budget pacing across all connected ad accounts. Alert threshold: {{ alert_threshold | default(15) }}%.
 
-## Instructions
+## OUTPUT FORMAT (CRITICAL - follow this EXACT structure)
 
-### 1. Gather Budget Data
-For each account/campaign, retrieve:
-- Monthly budget (or daily budget * days in month)
-- Spend to date this month
-- Days elapsed / days remaining in month
+### SUMMARY
+| Metric | Value |
+|--------|-------|
+| Total Monthly Budget | |
+| Spent to Date | |
+| Day X of Y | |
+| Projected End-of-Month | |
+| Variance | +/- amount (+/-%) |
 
-### 2. Calculate Pacing Metrics
+### PACING TABLE
+| Account | Platform | Budget | Spent | Pacing % | Projected | Status |
+|---------|----------|--------|-------|----------|-----------|--------|
+(Status: GREEN 95-105% | AMBER 85-95% or 105-115% | RED <85% or >115%)
+
+### RED ALERTS (Immediate Action)
+For each RED account:
+- Current daily spend vs ideal daily spend
+- Projected over/underspend amount
+- Specific recommendation
+
+### AMBER WARNINGS
+For each AMBER account:
+- Deviation percentage and direction
+- Monitor-through date
+- Adjustment suggestion
+
+### VELOCITY ANOMALIES
+Flag any account where today's spend rate is >150% or <50% of its 7-day average.
+
+### NEXT STEPS
+1. [Highest priority action]
+2. [Second priority]
+3. [Monitoring recommendation]
+
+## EXECUTION STEPS
+
+### Step 1: Discover Accounts
+- `meta_list_ad_accounts()`
+- `google_ads_list_accounts()`
+- `linkedin_list_ad_accounts()`
+- `tiktok_get_advertiser_info()`
+
+### Step 2: Pull Spend Data (This Month)
+
+**Meta:** `meta_get_insights(account_id="FROM_STEP_1", date_preset="this_month", level="account", fields=["spend","impressions","clicks","actions","action_values","purchase_roas"])`
+
+Also pull yesterday for velocity: `meta_get_insights(account_id="FROM_STEP_1", date_preset="yesterday", level="account", fields=["spend"])`
+
+**Google Ads:** `google_ads_run_gaql(customer_id="FROM_STEP_1", query="SELECT campaign.name, campaign.budget_amount_micros, metrics.cost_micros FROM campaign WHERE segments.date DURING THIS_MONTH AND campaign.status = 'ENABLED' ORDER BY metrics.cost_micros DESC")`
+
+Also pull yesterday: `google_ads_run_gaql(customer_id="FROM_STEP_1", query="SELECT metrics.cost_micros FROM customer WHERE segments.date = 'YYYY-MM-DD'")`
+
+**TikTok:** `tiktok_get_report(start_date="YYYY-MM-01", end_date="YYYY-MM-DD", level="campaign", metrics=["spend","impressions","clicks","conversions"])`
+
+**LinkedIn:** `linkedin_get_analytics(account_id="FROM_STEP_1", start_date="YYYY-MM-01", end_date="YYYY-MM-DD", fields=["impressions","clicks","costInLocalCurrency","externalWebsiteConversions"])`
+
+### Step 3: Calculate Pacing
 
 ```python
-# Pacing calculation logic
+days_in_month = calendar.monthrange(year, month)[1]
+days_elapsed = current_day_of_month
+days_remaining = days_in_month - days_elapsed
+
 ideal_daily_spend = monthly_budget / days_in_month
 actual_daily_spend = spend_to_date / days_elapsed
 pacing_ratio = actual_daily_spend / ideal_daily_spend
@@ -36,55 +89,26 @@ elif 0.85 <= pacing_ratio < 0.95 or 1.05 < pacing_ratio <= 1.15:
     status = "AMBER - Watch"
 else:
     status = "RED - Alert"
+
+# Velocity anomaly
+velocity_ratio = yesterday_spend / seven_day_avg_daily_spend
+if velocity_ratio > 1.5 or velocity_ratio < 0.5:
+    flag_velocity_anomaly = True
 ```
 
-### 3. Output Format
-
-```
-================================================================================
-                         BUDGET PACING MONITOR
-                    Month: [Current Month] | Day [X] of [Y]
-================================================================================
-
-SUMMARY:
-- Total Monthly Budget: €XXX,XXX
-- Spent to Date: €XX,XXX (XX%)
-- Projected End-of-Month: €XXX,XXX
-- Variance: +/-€X,XXX (+/-XX%)
-
---------------------------------------------------------------------------------
-| Account/Campaign | Budget    | Spent     | Pacing | Projected | Status      |
---------------------------------------------------------------------------------
-| [Name]           | €XX,XXX   | €X,XXX    | XX%    | €XX,XXX   | GREEN/AMBER/RED |
---------------------------------------------------------------------------------
-
-RED ALERTS (Immediate Action Required):
----------------------------------------
-* [Account]: Projected overspend of €X,XXX (+XX%)
-  - Current daily spend: €XXX vs ideal €XXX
-  - Recommendation: [Specific action]
-
-* [Account]: Projected underspend of €X,XXX (-XX%)
-  - Current daily spend: €XXX vs ideal €XXX
-  - Recommendation: [Specific action]
-
-AMBER WARNINGS:
----------------
-* [Account]: Slight pacing deviation (XX%)
-  - Monitor through [date]
-  - Consider: [Adjustment suggestion]
-
-VELOCITY ANOMALIES:
--------------------
-* [Account]: Unusual spend velocity detected
-  - Today's spend rate: XX% higher/lower than 7-day average
-  - Potential cause: [Suggestion]
-```
-
-### 4. Critical Alerts
+### Step 4: Present Results
+Follow OUTPUT FORMAT above EXACTLY. Include all tables with real data.
 
 Flag immediately if:
-- Projected overspend >{{ alert_threshold | default(10) }}% before month end
+- Projected overspend >{{ alert_threshold | default(15) }}% before month end
 - Projected underspend >{{ alert_threshold | default(15) }}% before month end
-- Daily spend >150% or <50% of average (velocity anomaly)
+- Daily spend >150% or <50% of 7-day average (velocity anomaly)
 - Budget exhaustion projected before month end
+
+## EDGE CASES
+- No spend data yet (month just started, <3 days): Note "Insufficient data for reliable projection" and show raw spend only
+- Mid-month budget changes: Use current budget as baseline, note the change
+- Campaign-level budgets vs account-level: Sum campaign budgets when account budget unavailable
+- Platform API returns no budget field: Use last 30 days average daily spend * days_in_month as proxy
+- Single platform connected: Run for that platform only
+- Currency mismatch across platforms: Note currencies, do not convert

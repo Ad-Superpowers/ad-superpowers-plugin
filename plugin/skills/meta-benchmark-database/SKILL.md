@@ -1,17 +1,11 @@
 ---
-name: benchmark-database
+name: meta-benchmark-database
 description: |
   This skill should be used when the user asks to "compare my metrics to benchmarks",
   "find industry averages", "set campaign targets", or mentions "Meta Ads benchmarks",
   "CPM by industry", or "average CTR for my vertical". Do NOT use for: performance diagnostics
   (use performance-troubleshooter), account audits (use account-auditor), scaling decisions
   (use scaling-calculator).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-5-advanced"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # Benchmark Database
 

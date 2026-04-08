@@ -6,12 +6,6 @@ description: |
   "decide between broad and narrow targeting on TikTok", or mentions
   "TikTok audience strategy", "audience refresh cadence", or "TikTok interest targeting".
   Do NOT use for: creative optimization (use tiktok-hook-optimization-guide), Spark Ads strategy (use tiktok-spark-ads-strategy), or product/shopping ads (use tiktok-shopping-ads-guide).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "tiktok"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with TikTok Ads connection"
 ---
 
 # TikTok Audience Strategy

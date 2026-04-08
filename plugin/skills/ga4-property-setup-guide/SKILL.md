@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "set up GA4", "create a GA4 property",
   "configure data streams", or mentions "Enhanced Measurement", "GA4 installation", or "link Google Ads to GA4".
   Do NOT use for: event tracking (use ga4-event-tracking-setup), key events/conversions (use ga4-key-events-config), or audience building (use ga4-audience-builder).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "ga4"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 Property Setup Guide
 

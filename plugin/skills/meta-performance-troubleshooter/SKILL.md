@@ -1,17 +1,11 @@
 ---
-name: performance-troubleshooter
+name: meta-performance-troubleshooter
 description: |
   This skill should be used when the user asks to "troubleshoot campaign performance",
   "diagnose delivery issues", "fix high CPA", or mentions "underperforming Meta ads",
   "Ad Relevance Diagnostics", or "kill vs scale decision". Do NOT use for: learning phase
   issues (use learning-phase-tracker), bid strategy changes (use bid-strategy-selector),
   creative fatigue specifically (use creative-fatigue-analyzer).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # Performance Troubleshooter
 

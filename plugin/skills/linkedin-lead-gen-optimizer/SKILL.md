@@ -5,12 +5,6 @@ description: |
   "compare Lead Gen Forms vs landing pages", "improve LinkedIn lead quality",
   "reduce LinkedIn CPL", or mentions "LinkedIn form conversion rate" or "B2B lead quality tradeoff".
   Do NOT use for: LinkedIn bid strategy questions (use linkedin-bid-strategy-selector), LinkedIn benchmark lookups (use linkedin-benchmark-database), or LinkedIn learning phase questions (use linkedin-learning-phase-tracker).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "linkedin"
-  phase: "fase-3-lead-generation"
-compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
 # LinkedIn Lead Gen Form Optimizer
 

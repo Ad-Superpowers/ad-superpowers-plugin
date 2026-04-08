@@ -1,17 +1,11 @@
 ---
-name: remarketing-list-builder
+name: google-ads-remarketing-list-builder
 description: |
   This skill should be used when the user asks to "build remarketing lists", "set up RLSA",
   "implement dynamic remarketing", "create cart abandonment audiences",
   or mentions "sequential remarketing", "cross-device retargeting",
   or "display remarketing campaigns".
   Do NOT use for: audience strategy planning (use audience-strategy-planner), GA4 audience export (use ga4-integration-guide), bid strategy selection (use bid-strategy-selector).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "google_ads"
-  phase: "fase-3-lead-generation"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Remarketing List Builder
 

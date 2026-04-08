@@ -3,12 +3,6 @@ name: gtm-container-auditor
 description: |
   This skill should be used when the user asks to "audit my GTM container", "find duplicate tags", "clean up Tag Manager", mentions "GTM health check", "unused tags and triggers", or "consent compliance of tags".
   Do NOT use for: server-side tracking or CAPI implementation (use first-party-data-strategy), attribution discrepancies between platforms (use attribution-reconciler), or general tag implementation guidance (use platform-specific skills).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-2-onboarding"
-compatibility: "Requires AdSuperpowers MCP server with multiple platform connections connection"
 ---
 # GTM Container Auditor
 

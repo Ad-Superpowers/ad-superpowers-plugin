@@ -1,17 +1,11 @@
 ---
-name: Meta Campaign Structure Advisor
+name: meta-campaign-structure-advisor
 description: |
   This skill should be used when the user asks to "set up campaign structure", "audit account structure",
   "organize ad sets", or mentions "Meta account structure", "creative testing framework",
   or "4-tier funnel". Do NOT use for: bid strategy selection (use bid-strategy-selector),
   creative brainstorming (use creative-diversification-generator), full-funnel design across
   platforms (use full-funnel-designer).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # Meta Ads Campaign Structure Advisor
 

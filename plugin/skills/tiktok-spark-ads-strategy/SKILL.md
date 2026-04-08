@@ -6,12 +6,6 @@ description: |
   "get a TikTok authorization code", or mentions "Spark Ads",
   "creator content in ads", or "organic-to-paid TikTok strategy".
   Do NOT use for: general TikTok creative optimization (use tiktok-creative-fatigue-tracker), hook optimization (use tiktok-hook-optimization-guide), or audience strategy (use tiktok-audience-strategy).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "tiktok"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with TikTok Ads connection"
 ---
 
 # TikTok Spark Ads Strategy

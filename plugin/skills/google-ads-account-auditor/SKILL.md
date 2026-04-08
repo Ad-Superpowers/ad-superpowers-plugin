@@ -1,17 +1,11 @@
 ---
-name: account-auditor
+name: google-ads-account-auditor
 description: |
   This skill should be used when the user asks to "audit a Google Ads account",
   "do an account takeover review", "run a health check on Google Ads",
   "identify optimization opportunities", or mentions "account audit",
   "periodic review", or "account health score".
   Do NOT use for: single campaign troubleshooting (use performance-troubleshooter), keyword-only analysis (use keyword-strategy-planner).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "google_ads"
-  phase: "fase-5-advanced"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Account Auditor
 

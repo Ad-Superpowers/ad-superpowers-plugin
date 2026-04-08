@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "use the GA4 Data API", "build automated reports",
   "create a custom GA4 dashboard", or mentions "GA4 API quotas", "data extraction scripts", or "programmatic GA4 reporting".
   Do NOT use for: GA4 UI reports (use ga4-revenue-analysis), BigQuery raw data (use ga4-bigquery-export), event tracking setup (use ga4-event-tracking-setup).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "ga4"
-  phase: "fase-5-advanced"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 Data API Reporting Guide
 

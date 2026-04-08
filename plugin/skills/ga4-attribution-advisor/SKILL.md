@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "choose an attribution model", "compare DDA vs last-click",
   "configure attribution windows", or mentions "cross-channel attribution", "first-click vs position-based", or "GA4 model comparison".
   Do NOT use for: conversion import to Google Ads (use ga4-conversion-import), channel grouping configuration (use ga4-channel-groupings).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "ga4"
-  phase: "fase-3-attribution"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 Attribution Advisor
 

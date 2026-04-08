@@ -1,17 +1,11 @@
 ---
-name: automated-rules-builder
+name: google-ads-automated-rules-builder
 description: |
   This skill should be used when the user asks to "create automated rules in Google Ads",
   "set up budget management automation", "configure bid adjustment rules",
   "build performance alerts", or mentions "scheduling automation",
   "scripts vs rules", or "Google Ads automation".
   Do NOT use for: Meta Ads rules (use meta-automated-rules-builder), Google Ads Scripts only (use google-ads-scripts-library), or bid strategy selection (use bid-strategy-selector).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "google_ads"
-  phase: "fase-5-full-funnel-automation"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Automated Rules Builder
 

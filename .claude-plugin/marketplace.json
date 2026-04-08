@@ -1,8 +1,5 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "ad-superpowers",
-  "version": "1.0.0",
-  "description": "AI-powered advertising intelligence across 8 platforms",
   "owner": {
     "name": "Ad Superpowers",
     "email": "support@adsuperpowers.ai"
@@ -11,8 +8,8 @@
     {
       "name": "ad-superpowers",
       "source": "./plugin",
-      "description": "AI-powered advertising intelligence across 8 platforms. 115 expert skills, 30 workflow commands, 5 specialized agents, and 33 MCP tools for Meta, Google Ads, GA4, Search Console, LinkedIn, TikTok, Google Tag Manager, and Gemini image generation.",
-      "version": "2.1.4",
+      "description": "AI-powered advertising intelligence across 8 platforms. 115 expert skills, 35 workflow commands, 5 specialized agents, and 33 MCP tools for Meta, Google Ads, GA4, Search Console, LinkedIn, TikTok, and Google Tag Manager.",
+      "version": "2.1.5",
       "author": {
         "name": "Ad Superpowers",
         "email": "support@adsuperpowers.ai"

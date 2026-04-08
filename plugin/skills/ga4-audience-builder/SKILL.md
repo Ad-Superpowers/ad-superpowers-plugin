@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "build GA4 audiences", "create custom segments",
   "set up audience targeting", or mentions "sequential audiences", "user segments", or "remarketing audiences in GA4".
   Do NOT use for: audience exclusions (use ga4-audience-exclusions), predictive audiences (use ga4-predictive-audiences), or exporting audiences to Google Ads (use ga4-remarketing-setup).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "ga4"
-  phase: "fase-2-audiences"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 Audience Builder Guide
 

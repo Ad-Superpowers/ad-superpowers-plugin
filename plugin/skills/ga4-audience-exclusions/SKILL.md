@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "exclude converters from campaigns", "set up audience exclusions",
   "prevent audience overlap", or mentions "frequency capping", "purchaser exclusions", or "budget waste from overlap".
   Do NOT use for: building audiences (use ga4-audience-builder), predictive audiences (use ga4-predictive-audiences), or remarketing export setup (use ga4-remarketing-setup).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "ga4"
-  phase: "fase-2-audiences"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 Audience Exclusions Guide
 

@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "analyze GA4 revenue", "review product performance",
   "build a checkout funnel", or mentions "purchase journey insights", "e-commerce KPI dashboard", or "revenue trends in GA4".
   Do NOT use for: e-commerce event implementation (use ga4-ecommerce-setup), promotion and coupon tracking (use ga4-promotion-tracking).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "ga4"
-  phase: "fase-4-ecommerce"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 Revenue Analysis Guide
 

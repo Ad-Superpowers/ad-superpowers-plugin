@@ -6,12 +6,6 @@ description: |
   "create Thought Leader Ads", or mentions "LinkedIn ad format",
   "Sponsored Content strategy", or "LinkedIn creative best practices".
   Do NOT use for: lead form optimization (use linkedin-lead-gen-optimizer), campaign scaling (use linkedin-campaign-scaling-guide), or ABM targeting (use linkedin-abm-targeting-strategy).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "linkedin"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
 
 # LinkedIn Ad Format Selection & Content Strategy

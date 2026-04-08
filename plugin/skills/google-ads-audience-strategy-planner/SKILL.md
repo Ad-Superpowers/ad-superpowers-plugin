@@ -1,17 +1,11 @@
 ---
-name: audience-strategy-planner
+name: google-ads-audience-strategy-planner
 description: |
   This skill should be used when the user asks to "plan Google Ads audience strategy",
   "set up Customer Match", "configure Optimized Targeting", "build audience layering",
   or mentions "In-market audiences", "first-party data strategy", "B2B targeting",
   or "custom segments".
   Do NOT use for: remarketing list creation (use remarketing-list-builder), GA4 audience export (use ga4-integration-guide), bid strategy selection (use bid-strategy-selector).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "google_ads"
-  phase: "fase-3-lead-generation"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Audience Strategy Planner
 

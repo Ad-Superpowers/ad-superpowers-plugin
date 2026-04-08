@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "fix indexing problems", "check sitemap health",
   "diagnose crawl issues", or mentions "pages not appearing in Google", "canonical URL conflicts", or "technical SEO audit".
   Do NOT use for: organic search performance analysis or CTR optimization (use gsc-performance-analyzer).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "gsc"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with Google Search Console connection"
 ---
 # Technical SEO Monitor
 

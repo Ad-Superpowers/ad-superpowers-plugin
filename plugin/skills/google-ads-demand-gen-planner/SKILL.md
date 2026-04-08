@@ -1,17 +1,11 @@
 ---
-name: demand-gen-planner
+name: google-ads-demand-gen-planner
 description: |
   This skill should be used when the user asks to "set up Demand Gen campaigns",
   "configure Gmail ads", "create feed-based creatives", "advertise on YouTube Shorts",
   or mentions "Demand Gen", "Discovery campaign migration", "mid-funnel campaigns",
   or "visual storytelling ads".
   Do NOT use for: Search campaign setup (use search-campaign-builder), Performance Max optimization (use performance-max-optimizer), or YouTube awareness/bumper strategy (use youtube-ads-strategist).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "google_ads"
-  phase: "fase-5-full-funnel-automation"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Demand Gen Planner
 

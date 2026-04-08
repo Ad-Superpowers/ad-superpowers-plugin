@@ -3,12 +3,6 @@ name: buyer-persona-framework
 description: |
   This skill should be used when the user asks to "create buyer personas", "define target audiences", "build an ICP", mentions "customer segmentation", "audience research", or "translate personas into ad targeting".
   Do NOT use for: channel selection decisions (use channel-selection-framework), competitor audience analysis (use competitor-analysis-toolkit), or market size estimation (use market-sizing-guide).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-2-onboarding"
-compatibility: "Requires AdSuperpowers MCP server with multiple platform connections connection"
 ---
 # Buyer Persona Framework for Advertising
 

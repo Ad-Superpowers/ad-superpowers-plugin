@@ -10,335 +10,149 @@ description: Design rigorous incrementality tests to measure true advertising im
 
 # Incrementality Test Designer
 
-Design a rigorous incrementality test to measure the **true causal impact** of your advertising.
+Design a rigorous incrementality test for your platform. In a privacy-first world (40-60% iOS signal loss, 50-65% modeled conversions), incrementality testing answers the only question that matters: "What revenue did this advertising create that wouldn't have happened anyway?"
 
-## Why Incrementality Testing Matters (2026)
+## OUTPUT FORMAT (CRITICAL - follow this EXACT structure)
 
-In a privacy-first world, traditional attribution is increasingly unreliable:
-- iOS signal loss: 40-60% of conversions untracked on Meta
-- Cookie deprecation: Cross-site tracking severely limited
-- Platform modeling: 50-65% of reported conversions are "modeled" (estimated)
-- Channel overlap: Same user credited by multiple platforms
+### TEST RECOMMENDATION
+| Factor | Value |
+|--------|-------|
+| Recommended Test Type | [Geo Lift / Conversion Lift / Holdout / Ghost Bids / MMM] |
+| Why This Test | [2-3 bullet reasons based on spend, platform, geography] |
+| Estimated Duration | [X weeks total incl. baseline + cooldown] |
+| Confidence Level | [High / Medium-High / Medium] |
 
-**Incrementality testing answers the only question that matters:**
-"What additional revenue did this advertising create that wouldn't have happened anyway?"
-
----
-
-## Test Parameters
-
-**Test Focus:**
-- Platform to test: Not specified
-- Campaign type: All campaigns
-- Current monthly spend: €X,XXX
-- Geographic scope: Netherlands
-- Business type: E-commerce
-
----
-
-## Instructions
-
-### 1. Determine Test Type
-
-**Choose the Right Test for Your Situation:**
+**Test Type Selection Reference:**
 
 | Test Type | Best For | Min Budget | Min Duration | Confidence |
 |-----------|----------|-----------|--------------|------------|
-| **Geo Lift** | Any channel, any size | €5K/month | 4-6 weeks | High |
-| **Conversion Lift (Meta)** | Meta only | €2K/month | 2-4 weeks | Medium-High |
-| **Brand Lift (Google)** | Brand awareness | €5K+ | 2 weeks | High |
-| **Holdout Test** | Retargeting | €3K/month | 3-4 weeks | Medium |
-| **Ghost Bids** | Display/Video | €10K/month | 4 weeks | High |
-| **Full MMM** | All channels | €100K+/month | 8-12 weeks | Highest |
+| Geo Lift | Any channel, any size | 5K/mo | 4-6 weeks | High |
+| Conversion Lift (Meta) | Meta only | 2K/mo | 2-4 weeks | Medium-High |
+| Brand Lift (Google) | Brand awareness | 5K+ | 2 weeks | High |
+| Holdout Test | Retargeting | 3K/mo | 3-4 weeks | Medium |
+| Ghost Bids | Display/Video | 10K/mo | 4 weeks | High |
+| Full MMM | All channels | 100K+/mo | 8-12 weeks | Highest |
 
-**Tool Usage:**
-First, gather current performance data:
-- Meta: `meta_get_insights(account_id, date_preset="last_90d", level="campaign")`
-- Google: `google_ads_run_gaql(customer_id, query="SELECT campaign.name, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions FROM campaign WHERE segments.date DURING LAST_90_DAYS")`
-- GA4: `ga4_run_report(property_id, start_date, end_date, metrics=["conversions", "totalRevenue"], dimensions=["source", "medium"])`
-
-### 2. Output Format
-
-```
-================================================================================
-                    INCREMENTALITY TEST DESIGN
-                    Platform: [Platform]
-================================================================================
-
-📊 TEST RECOMMENDATION
-─────────────────────
-
-**Recommended Test Type:** [Geo Lift / Conversion Lift / Holdout / etc.]
-
-**Why This Test:**
-- [Reason 1 based on spend level]
-- [Reason 2 based on platform]
-- [Reason 3 based on geography]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🗺️ GEO LIFT TEST DESIGN
-────────────────────────
-
-**Test vs Control Region Selection:**
-
+### GEO SPLIT DESIGN
 | Factor | Test Regions | Control Regions |
 |--------|-------------|-----------------|
 | Population | [50% of target] | [50% of target] |
 | Historical similarity | Must match within 15% | Baseline |
-| Economic indicators | Similar GDP/income | Similar GDP/income |
-| Suggested regions | [List 3-5 regions] | [List 3-5 regions] |
+| Suggested regions | [List 3-5] | [List 3-5] |
 
-**For Netherlands:** Consider these geo splits:
-| Option | Test Regions | Control Regions | Balance Score |
-|--------|-------------|-----------------|---------------|
+**Pre-built geo splits (use if applicable):**
+
+Netherlands:
+| Option | Test | Control | Balance |
+|--------|------|---------|---------|
 | North/South | Noord-Holland, Zuid-Holland, Utrecht | Noord-Brabant, Gelderland, Limburg | 85% |
-| East/West | Overijssel, Gelderland, Flevoland | Noord-Holland, Zuid-Holland | 78% |
 | Randstad/Rest | Amsterdam, Rotterdam, Den Haag | All other provinces | 72% |
 
-**For Germany:** Consider these geo splits:
-| Option | Test Regions | Control Regions | Balance Score |
-|--------|-------------|-----------------|---------------|
-| North/South | NRW, Niedersachsen, Hamburg | Bavaria, Baden-Württemberg, Hessen | 88% |
-| East/West | Former DDR states | Former West states | 65% |
+Germany:
+| Option | Test | Control | Balance |
+|--------|------|---------|---------|
+| North/South | NRW, Niedersachsen, Hamburg | Bavaria, Baden-Wuerttemberg, Hessen | 88% |
 
-**Recommended Split:** [Specific recommendation with reasoning]
+### POWER ANALYSIS
+| Metric | Your Value | Required (80% Power) | Gap |
+|--------|-----------|---------------------|-----|
+| Monthly conversions | [from data] | 400 (200/group) | [+/-X] |
+| Monthly revenue | [from data] | - | - |
+| Current ROAS | [calculated] | - | - |
+| MDE at 80% confidence | +/-30% | ~200/group | - |
+| MDE at 90% confidence | +/-20% | ~400/group | - |
+| MDE at 95% confidence | +/-15% | ~800/group | - |
+| Test duration needed | [calculated] | [X weeks] | - |
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Data sufficiency: [Sufficient (400+/mo) | Marginal (extend duration) | Insufficient (use platform lift instead)]
 
-📐 STATISTICAL POWER CALCULATION
-────────────────────────────────
+### SCHEDULE
+| Phase | Duration | Activities |
+|-------|----------|------------|
+| Pre-test baseline | 2 weeks | Measure both regions, confirm <15% variance |
+| Test period | 4-6 weeks | Ads ON in test, OFF in control |
+| Post-test cooldown | 1 week | Measure lag conversions |
+| Analysis | 1 week | Statistical analysis, significance testing |
 
-**Minimum Detectable Effect (MDE):**
+### COST-BENEFIT ANALYSIS
+| Cost Type | Amount |
+|-----------|--------|
+| Lost revenue (control group) | [est. 50% of normal in control] |
+| Media spend (unchanged) | [X] |
+| Analysis time | [X hours] |
+| **Total Test Cost** | **[X]** |
 
-Your test needs enough conversions to detect a meaningful difference.
+| Savings Scenario | Annual Impact |
+|------------------|---------------|
+| 20% of spend non-incremental | Save [X]/year |
+| 30% of spend non-incremental | Save [X]/year |
+| 80%+ incremental | Validate/increase budget |
 
-| Current Metrics | Value |
-|-----------------|-------|
-| Monthly conversions | [From data] |
-| Monthly revenue | [From data] |
-| Current ROAS | [Calculated] |
+ROI breakeven: [X weeks] of optimized spend
 
-**Power Analysis:**
-
-| Confidence Level | MDE You Can Detect | Required Sample (Conversions) |
-|------------------|-------------------|-------------------------------|
-| 80% confidence | ±30% | ~200 per group |
-| 90% confidence | ±20% | ~400 per group |
-| 95% confidence | ±15% | ~800 per group |
-
-**For your spend level (€X,XXX/month):**
-
-| Metric | Your Value | Required for 80% Power | Gap |
-|--------|-----------|----------------------|-----|
-| Monthly conversions | [X] | 400 (200 per group) | [+/-X] |
-| Test duration needed | [Calculate] | [X weeks] | - |
-
-**Interpretation:**
-- [ ] Sufficient data for reliable test (400+ monthly conversions)
-- [ ] Marginal data - extend test duration or reduce MDE target
-- [ ] Insufficient data - consider platform conversion lift instead
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-⏱️ TEST DURATION RECOMMENDATION
-───────────────────────────────
-
-**Minimum Test Duration:** [X weeks]
-
-| Factor | Impact on Duration |
-|--------|-------------------|
-| Conversion volume | [High/Med/Low volume] → [Shorter/Longer] |
-| Purchase cycle | [X days avg] → Add [X days] buffer |
-| Seasonality | [Season] → [Adjust for/Avoid] |
-| Day-of-week effects | Account for [X] full weeks |
-
-**Recommended Schedule:**
-
-| Phase | Duration | Dates | Activities |
-|-------|----------|-------|------------|
-| Pre-test baseline | 2 weeks | [Date range] | Measure both regions |
-| Test period | 4-6 weeks | [Date range] | Ads ON in test, OFF in control |
-| Post-test cooldown | 1 week | [Date range] | Measure lag effects |
-| Analysis | 1 week | [Date range] | Statistical analysis |
-
-**Total Timeline:** [X weeks]
-
-**Avoid Testing During:**
-- Black Friday / Cyber Monday (Nov 20 - Dec 5)
-- Christmas period (Dec 15 - Jan 5)
-- Major sports events in your market
-- Your own promotional periods
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-💰 COST-BENEFIT ANALYSIS
-────────────────────────
-
-**Cost of Testing:**
-
-| Cost Type | Amount | Notes |
-|-----------|--------|-------|
-| Lost revenue (control) | €[X,XXX] | Estimated 50% of normal revenue in control |
-| Media spend (unchanged) | €[X,XXX] | Or reduced if scaling back for test |
-| Analysis time | [X hours] | Internal or agency cost |
-| **Total Test Cost** | **€[X,XXX]** | |
-
-**Potential Benefit:**
-
-| Scenario | Annual Impact |
-|----------|---------------|
-| If 20% of spend is non-incremental | Save €[X,XXX]/year |
-| If 30% of spend is non-incremental | Save €[X,XXX]/year |
-| If spend is 80%+ incremental | Validate/increase budget |
-
-**ROI of Testing:**
-
-```
-Test Cost: €[X,XXX]
-Potential Annual Savings: €[X,XXX] - €[X,XXX]
-ROI Breakeven: [X weeks] of optimized spend
-```
-
-**Recommendation:** [Worth testing / Defer testing / Alternative approach]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🎯 HOLDOUT TEST DESIGN (For Retargeting)
-────────────────────────────────────────
-
-If testing retargeting incrementality specifically:
-
-**Holdout Structure:**
-
+### HOLDOUT DESIGN (if retargeting test)
 | Group | Size | Treatment |
 |-------|------|-----------|
-| Control (Holdout) | 10-20% of audience | No retargeting ads |
-| Test | 80-90% of audience | Normal retargeting |
+| Control (Holdout) | 10-20% | No retargeting ads |
+| Test | 80-90% | Normal retargeting |
 
-**Platform-Specific Setup:**
+**Retargeting incrementality benchmarks:**
 
-**Meta Conversion Lift:**
-1. Go to Experiments in Ads Manager
-2. Create A/B test with holdout
-3. Meta handles randomization and measurement
-4. Results in 2-4 weeks
+| Type | Expected Incrementality |
+|------|------------------------|
+| Cart abandoners (1-3 days) | 40-60% |
+| Cart abandoners (7+ days) | 60-80% |
+| Website visitors (generic) | 20-40% |
+| Past purchasers | 15-30% |
+| Dynamic product ads | 35-55% |
 
-**Google Conversion Lift:**
-1. Contact Google rep for conversion lift study
-2. Requires minimum spend threshold
-3. Google manages holdout and measurement
+### RESULTS INTERPRETATION
+| Incrementality Rate | Meaning | Action |
+|--------------------|---------|--------|
+| 80-100% | Highly incremental | Scale aggressively |
+| 60-80% | Mostly incremental | Maintain/optimize |
+| 40-60% | Partially incremental | Review targeting, creative |
+| 20-40% | Low incrementality | Reduce spend, shift budget |
+| <20% | Mostly cannibalization | Pause or restructure |
 
-**Manual Holdout (Any Platform):**
-1. Split audience randomly (use user ID hash)
-2. Exclude control group from all retargeting
-3. Track conversions in both groups
-4. Calculate lift manually
+iROAS formula: Reported ROAS x Incrementality% = True incremental ROAS
 
-**Expected Retargeting Incrementality Benchmarks:**
+### EXECUTION CHECKLIST
+**Pre-test:** Define regions/audiences, set up tracking, document baselines, ensure <15% group variance, create suppression lists
+**During test:** Monitor daily (don't optimize!), document external factors, keep other marketing consistent, flag contamination
+**Post-test:** 7-day cooldown, calculate lift = (Test - Control) / Control, check p < 0.05, document learnings
 
-| Retargeting Type | Expected Incrementality |
-|------------------|------------------------|
-| Cart abandoners (1-3 days) | 40-60% incremental |
-| Cart abandoners (7+ days) | 60-80% incremental |
-| Website visitors (generic) | 20-40% incremental |
-| Past purchasers | 15-30% incremental |
-| Dynamic product ads | 35-55% incremental |
+### NEXT STEPS
+1. Run Cross-Platform Comparison for baseline
+2. After test: update budget allocation based on iROAS
+3. Retest every 6-12 months (incrementality changes over time)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## EXECUTION STEPS
 
-📋 TEST EXECUTION CHECKLIST
-───────────────────────────
+### Step 1: Gather Baseline Data
+- **Meta:** `meta_get_insights(account_id, date_preset="last_90d", level="campaign")`
+- **Google Ads:** `google_ads_run_gaql(customer_id=customer_id, query="SELECT campaign.id, campaign.name, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM campaign WHERE segments.date DURING LAST_90_DAYS ORDER BY metrics.cost_micros DESC")`
+- **GA4:** `ga4_run_report(property_id, start_date="90daysAgo", end_date="today", metrics=["conversions","totalRevenue"], dimensions=["source","medium"])`
 
-**Pre-Test (Week -2 to 0):**
-- [ ] Define test and control regions/audiences
-- [ ] Set up tracking in both groups
-- [ ] Document baseline metrics for both groups
-- [ ] Ensure groups are statistically similar (<15% variance)
-- [ ] Create suppression lists for control group
-- [ ] Brief team on test protocol
+### Step 2: Determine Test Type
+Based on platform, spend level, geography, and conversion volume, select from the test type table. If <200 monthly conversions, prefer platform-native lift studies.
 
-**During Test (Week 1-4-6):**
-- [ ] Monitor both groups daily (but don't optimize!)
-- [ ] Document any external factors (weather, news, etc.)
-- [ ] Keep all other marketing activities consistent
-- [ ] Track weekly KPIs for both groups
-- [ ] Flag any contamination issues immediately
+### Step 3: Design Geo/Holdout Structure
+Match test and control groups on historical performance (<15% variance). For geo tests, use pre-built splits or create custom ones based on regional similarity.
 
-**Post-Test (Week 6+):**
-- [ ] Allow 7-day cooldown for lag conversions
-- [ ] Calculate lift: (Test - Control) / Control
-- [ ] Assess statistical significance (p < 0.05)
-- [ ] Document learnings and confidence level
-- [ ] Plan next test or budget reallocation
+### Step 4: Calculate Power
+Use conversion volume and spend data to determine MDE and required test duration. If insufficient data, recommend extending duration or using a less granular test.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+### Step 5: Run Cost-Benefit Analysis
+Estimate test cost (lost control revenue + analysis time) vs potential annual savings from budget reallocation. Test ROI should break even within 1-2 months.
 
-📊 EXPECTED RESULTS FRAMEWORK
-─────────────────────────────
+### Step 6: Present Results
+Follow OUTPUT FORMAT above EXACTLY. Fill all tables with real data from steps 1-5.
 
-**How to Interpret Your Results:**
-
-| Incrementality Rate | What It Means | Action |
-|--------------------|---------------|--------|
-| **80-100%** | Highly incremental | Scale aggressively |
-| **60-80%** | Mostly incremental | Maintain/optimize |
-| **40-60%** | Partially incremental | Review targeting, creative |
-| **20-40%** | Low incrementality | Reduce spend, shift budget |
-| **<20%** | Mostly cannibalization | Pause or radically restructure |
-
-**Adjusting ROAS for Incrementality:**
-
-```
-Reported ROAS: [X.X]x
-Measured Incrementality: [XX]%
-Incremental ROAS (iROAS): [X.X]x × [XX]% = [X.X]x
-
-Your TRUE return per € is [X.X]x, not [X.X]x
-```
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🔄 NEXT STEPS
-─────────────
-
-1. **Before testing:** Run Cross-Platform Comparison to establish baseline
-2. **After testing:** Update budget allocation based on iROAS
-3. **Ongoing:** Retest every 6-12 months (incrementality changes over time)
-4. **Advanced:** Consider full MMM for holistic view
-
-**Suggested Follow-Up Workflows:**
-- [ ] Cross-Platform Comparison (with incrementality data)
-- [ ] Budget Allocation Planner (with iROAS inputs)
-- [ ] Performance Forecaster (adjusted for incrementality)
-```
-
----
-
-## Incrementality Testing Best Practices
-
-### Common Pitfalls to Avoid
-
-| Pitfall | Impact | Prevention |
-|---------|--------|-----------|
-| Test too short | Inconclusive results | Minimum 4 weeks |
-| Unbalanced groups | Biased results | Pre-match on historical KPIs |
-| Contamination | Invalid results | Strict geo/audience separation |
-| Testing during promos | Noise in data | Avoid sale periods |
-| Optimizing during test | Invalidates test | Freeze all settings |
-
-### When NOT to Run Incrementality Tests
-
-- Less than €5K/month spend (use platform lift studies instead)
-- During peak season (data too noisy)
-- Recent major changes (need stable baseline)
-- Fewer than 100 monthly conversions (insufficient data)
-
-### Building a Testing Calendar
-
-| Quarter | Test Focus | Channel | Notes |
-|---------|-----------|---------|-------|
-| Q1 | [Prospecting] | [Meta] | Post-holiday baseline |
-| Q2 | [Retargeting] | [Google] | Pre-summer |
-| Q3 | [Brand] | [TikTok] | Before Q4 ramp |
-| Q4 | Skip testing | - | Peak season data too valuable |
+## EDGE CASES
+- **Low budget (<5K/mo):** Use platform-native conversion lift instead of geo test
+- **Low conversions (<100/mo):** Extend test to 8+ weeks or use revenue as primary metric
+- **Peak season:** Defer testing - data too noisy (avoid Nov-Dec, major promos)
+- **Recent major changes:** Wait 4+ weeks for stable baseline before testing
+- **Multiple platforms:** Test one platform at a time to isolate effects
+- **Small geography:** Not enough regions for geo split - use audience holdout instead

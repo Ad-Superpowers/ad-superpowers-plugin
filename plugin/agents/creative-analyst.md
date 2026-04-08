@@ -3,7 +3,6 @@ name: creative-analyst
 description: Analyzes creative performance, detects fatigue signals, monitors creative depth (Andromeda), evaluates A/B tests, writes video scripts, and recommends refresh strategies across Meta, Google Ads, TikTok, and LinkedIn. Use when the user asks about ad creative performance, creative fatigue, which ads are tired, A/B test results, creative strategy, ad copy recommendations, video scripts, catalog ad optimization, or creative depth.
 model: opus
 color: red
-maxTurns: 20
 tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput, mcp__plugin_ad-superpowers_ad-superpowers__meta_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__meta_query, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_insights, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_creatives, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_advertiser_info, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_query, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_report, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_ads_with_creatives, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_asset_info, mcp__plugin_ad-superpowers_ad-superpowers__linkedin_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__linkedin_get_creatives_with_images, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_list_accounts, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_run_gaql, Skill, mcp__plugin_ad-superpowers_ad-superpowers__workflow
 ---
 

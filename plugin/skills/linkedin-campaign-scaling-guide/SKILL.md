@@ -6,12 +6,6 @@ description: |
   "optimize LinkedIn bid strategy", or mentions "LinkedIn diminishing returns",
   "audience saturation", or "LinkedIn budget allocation".
   Do NOT use for: initial campaign setup (use linkedin-content-strategy), lead quality issues (use linkedin-lead-scoring-framework), or ABM targeting (use linkedin-abm-targeting-strategy).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "linkedin"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
 
 # LinkedIn Campaign Scaling Guide

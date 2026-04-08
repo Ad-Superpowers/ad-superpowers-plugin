@@ -6,12 +6,6 @@ description: |
   or mentions "LinkedIn campaign high variance first weeks", "LinkedIn budget for optimization",
   or "LinkedIn algorithm learning period".
   Do NOT use for: LinkedIn bid strategy selection (use linkedin-bid-strategy-selector), LinkedIn performance troubleshooting (use linkedin-performance-troubleshooter), or LinkedIn benchmark lookups (use linkedin-benchmark-database).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "linkedin"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
 # LinkedIn Learning Phase Tracker
 

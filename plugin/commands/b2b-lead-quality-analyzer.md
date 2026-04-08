@@ -10,28 +10,111 @@ description: Analyze lead quality across platforms with LinkedIn-specific benchm
 
 # B2B Lead Quality Analyzer
 
-Deep analysis of B2B lead generation with **LinkedIn-specific benchmarks** and quality metrics.
+Deep analysis of B2B lead generation with **LinkedIn-specific benchmarks** and quality metrics. LinkedIn CPC is 3-5x higher than Meta/Google, but B2B audience quality often compensates — this workflow measures whether it actually does.
 
-## LinkedIn B2B Benchmarks (Industry-Specific)
+## OUTPUT FORMAT (CRITICAL - follow this EXACT structure)
 
-### CPL Benchmarks by Industry
+### LEAD FUNNEL OVERVIEW
+| Stage | Volume | Rate | Benchmark | Status |
+|-------|--------|------|-----------|--------|
+| Total Leads | XXX | - | - | - |
+| MQLs | XX | XX% | 31% | OK/Above/Below |
+| SQLs | XX | XX% of MQL | 20-35% | OK/Above/Below |
+| Opportunities | XX | XX% of SQL | 35-50% | OK/Above/Below |
+
+B2B sales cycle context: Avg LinkedIn-sourced cycle 200+ days. Multi-touch attribution: 6-12 touches average. Do not judge CPL without SQL rate data.
+
+### LINKEDIN-SPECIFIC METRICS
+| Metric | Your Value | Industry Benchmark | Status |
+|--------|------------|-------------------|--------|
+| CPL | EUR XX | EUR [industry avg] | OK/Above/Below |
+| CPC | EUR XX | EUR 4-7 (B2B avg) | OK/Above/Below |
+| CTR | X.XX% | 0.35-0.55% (Sponsored Content) | OK/Above/Below |
+| Form CVR | XX% | 6-10% (Lead Gen Forms) | OK/Above/Below |
+| SQL Rate | XX% | 10-20% (average) | OK/Above/Below |
+| Cost/SQL | EUR XXX | CPL / SQL rate | OK/Above/Below |
+
+### LEAD GEN FORMS vs LANDING PAGES
+| Source | Leads | CPL | SQL Rate | Cost/SQL | Recommendation |
+|--------|-------|-----|----------|----------|----------------|
+| Lead Gen Forms | XX | EUR XX | XX% | EUR XXX | Volume or Quality call |
+| Landing Pages | XX | EUR XX | XX% | EUR XXX | Volume or Quality call |
+
+When to use which: Lead Gen Forms for volume, TOFU/MOFU content, mobile. Landing Pages for quality, BOFU demos, complex qualification.
+
+### PLATFORM QUALITY COMPARISON
+| Platform | Leads | CPL | SQL Rate | Cost/SQL | Quality Score (1-10) |
+|----------|-------|-----|----------|----------|---------------------|
+| LinkedIn | XX | EUR XX | XX% | EUR XXX | X |
+| Google | XX | EUR XX | XX% | EUR XXX | X |
+| Meta | XX | EUR XX | XX% | EUR XXX | X |
+
+### LTV:CAC ANALYSIS
+| Metric | Value | Target | Status |
+|--------|-------|--------|--------|
+| Avg Contract Value | EUR XX,XXX | - | - |
+| Customer Lifespan | X years | - | - |
+| Estimated LTV | EUR XX,XXX | - | - |
+| CAC (from ads) | EUR X,XXX | - | - |
+| LTV:CAC Ratio | X:1 | 3:1 - 5:1 | OK/Above/Below |
+
+Interpretation: <1:1 loss-making | 1-3:1 break-even to marginal | 3-5:1 healthy target | 5-7:1 excellent | >7:1 potentially under-investing.
+
+### RECOMMENDATIONS
+**Budget Reallocation:**
+- LinkedIn: Increase/Decrease/Maintain — reason based on SQL rate
+- Google: Increase/Decrease/Maintain — reason
+- Meta: Increase/Decrease/Maintain — reason
+
+**Quality Improvements:**
+1. [Lead Gen Form field changes if SQL rate <15%]
+2. [Landing Page test for BOFU campaigns if quality is priority]
+3. [Speed-to-lead: respond <1hr for 53% conv rate vs 17% at 24hr+]
+
+**Lead Gen Form Optimization:**
+- Current fields: X
+- Recommendation: Add/Remove field to improve SQL rate
+- Expected impact: +X% SQL rate or +X% volume
+
+## EXECUTION STEPS
+
+### Step 1: Discover Accounts
+- `meta_list_ad_accounts()`
+- `google_ads_list_accounts()`
+- `linkedin_list_ad_accounts()`
+
+### Step 2: Gather Lead Data
+
+**LinkedIn:** `linkedin_get_analytics(account_id="FROM_STEP_1", start_date="YYYY-MM-DD", end_date="YYYY-MM-DD", fields=["impressions","clicks","costInLocalCurrency","externalWebsiteConversions","leadGenerationMailContactInfoShares"])`
+
+**Google Ads:** `google_ads_run_gaql(customer_id="FROM_STEP_1", query="SELECT campaign.id, campaign.name, campaign.status, metrics.impressions, metrics.clicks, metrics.ctr, metrics.average_cpc, metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM campaign WHERE segments.date DURING LAST_30_DAYS ORDER BY metrics.cost_micros DESC")`
+
+Filter Google campaigns to lead-focused ones (search for "lead", "demo", "contact", "sign up" in conversion actions).
+
+**Meta:** `meta_get_insights(account_id="FROM_STEP_1", date_preset="last_30d", level="campaign", fields=["campaign_name","spend","impressions","clicks","actions","cost_per_action_type","cpc","ctr","cpm"])`
+
+Filter Meta campaigns to those with lead-type actions (lead, complete_registration, contact).
+
+### Step 3: Apply LinkedIn Benchmarks
+
+**CPL Benchmarks by Industry:**
 | Industry | Poor | Average | Good | Excellent |
 |----------|------|---------|------|-----------|
-| Finance & Insurance | >€120 | €90-120 | €60-90 | <€60 |
-| SaaS / Software | >€120 | €80-120 | €50-80 | <€50 |
-| Professional Services | >€100 | €70-100 | €45-70 | <€45 |
-| Healthcare | >€150 | €100-150 | €70-100 | <€70 |
-| Manufacturing | >€130 | €90-130 | €60-90 | <€60 |
-| Education | >€80 | €60-80 | €40-60 | <€40 |
-| Marketing / Agencies | >€120 | €80-120 | €50-80 | <€50 |
+| Finance & Insurance | >EUR 120 | EUR 90-120 | EUR 60-90 | <EUR 60 |
+| SaaS / Software | >EUR 120 | EUR 80-120 | EUR 50-80 | <EUR 50 |
+| Professional Services | >EUR 100 | EUR 70-100 | EUR 45-70 | <EUR 45 |
+| Healthcare | >EUR 150 | EUR 100-150 | EUR 70-100 | <EUR 70 |
+| Manufacturing | >EUR 130 | EUR 90-130 | EUR 60-90 | <EUR 60 |
+| Education | >EUR 80 | EUR 60-80 | EUR 40-60 | <EUR 40 |
+| Marketing / Agencies | >EUR 120 | EUR 80-120 | EUR 50-80 | <EUR 50 |
 
-**CPL Context by Deal Size:**
-- Enterprise deals (€50k+ ACV): CPL €150-300+ acceptable
-- Mid-market (€10-50k ACV): CPL €80-150 target
-- SMB deals (€5k ACV): CPL <€50 target
-- Freemium SaaS: CPL <€30 ideal
+**CPL context by deal size:**
+- Enterprise (EUR 50k+ ACV): CPL EUR 150-300+ acceptable
+- Mid-market (EUR 10-50k ACV): CPL EUR 80-150 target
+- SMB (EUR 5k ACV): CPL <EUR 50 target
+- Freemium SaaS: CPL <EUR 30 ideal
 
-### Lead Quality Benchmarks (LinkedIn-Specific)
+**Lead Quality Benchmarks (LinkedIn-specific):**
 | Metric | Poor | Average | Good | Excellent |
 |--------|------|---------|------|-----------|
 | MQL to SQL Rate | <10% | 10-20% | 20-35% | >35% |
@@ -40,7 +123,7 @@ Deep analysis of B2B lead generation with **LinkedIn-specific benchmarks** and q
 | Lead Gen Form SQL Rate | <8% | 8-15% | 15-25% | >25% |
 | Landing Page SQL Rate | <15% | 15-30% | 30-45% | >45% |
 
-### Lead Gen Forms vs Landing Pages
+**Lead Gen Forms vs Landing Pages (expected performance):**
 | Metric | Lead Gen Forms | Landing Pages |
 |--------|----------------|---------------|
 | Conversion Rate | 10-13% | 4-6% |
@@ -48,121 +131,26 @@ Deep analysis of B2B lead generation with **LinkedIn-specific benchmarks** and q
 | SQL Rate (quality) | 20-40% lower | Higher |
 | Mobile Experience | Excellent | Variable |
 
-**When to Use:**
-- Lead Gen Forms: Volume-focused, TOFU/MOFU content, mobile audience
-- Landing Pages: Quality-focused, BOFU demos, complex qualification needed
-
-## Instructions
-
-### 1. Gather Lead Data
-**LinkedIn:** Use `linkedin_get_analytics(account_id, start_date, end_date)` for lead metrics
-**Google:** Use `google_ads_run_gaql(customer_id, query="SELECT campaign.name, metrics.conversions, metrics.cost_per_conversion FROM campaign WHERE campaign.advertising_channel_type = 'SEARCH' AND segments.date DURING LAST_30_DAYS")` for lead campaigns
-**Meta:** Use `meta_get_insights(account_id, fields=["actions"])` for lead events
-
-From CRM/Marketing Automation (if available):
-- MQL conversion rates by source
-- SQL progression
-- Pipeline value attributed
-
-### 2. Calculate Quality Metrics
-
-```python
-# Quality-adjusted CPL (the metric that matters)
-quality_cpl = total_spend / mql_count  # Cost per MQL, not just CPL
-
-# LinkedIn-specific efficiency
-# LinkedIn CPC is 3-5x higher than Meta/Google, but quality compensates
-platform_efficiency = sql_rate * (1 / quality_cpl)  # Higher = better
-
-# LTV:CAC Ratio (B2B ROI standard)
-ltv = avg_contract_value * customer_lifespan_years * gross_margin
-cac = total_spend / customers_acquired
-ltv_cac_ratio = ltv / cac
-# Target: 3:1 - 5:1 is healthy, >7:1 may indicate underinvestment
-```
-
-### 3. Output Format
+### Step 4: Calculate Quality Metrics
 
 ```
-================================================================================
-                         B2B LEAD QUALITY ANALYZER
-                    Period: Last 30 Days
-                    Industry: SaaS / Software
-================================================================================
-
-LEAD FUNNEL OVERVIEW:
----------------------
-| Stage           | Volume  | Rate      | Benchmark | Status    |
-|-----------------|---------|-----------|-----------|-----------|
-| Total Leads     | XXX     | -         | -         | -         |
-| MQLs            | XX      | XX%       | 31%       | [🟢🟡🔴]   |
-| SQLs            | XX      | XX% of MQL| 20-35%    | [🟢🟡🔴]   |
-| Opportunities   | XX      | XX% of SQL| 35-50%    | [🟢🟡🔴]   |
-
-B2B SALES CYCLE CONTEXT:
-- Avg LinkedIn-sourced cycle: 200+ days
-- Multi-touch attribution: 6-12 touches average
-- Don't judge CPL without SQL rate data!
-
-LINKEDIN-SPECIFIC METRICS:
---------------------------
-| Metric | Your Value | Industry Benchmark | Status |
-|--------|------------|-------------------|--------|
-| CPL | €XX | €[specify industry_cpl_benchmark] | [🟢🟡🔴] |
-| CPC | €XX | €4-7 (B2B avg) | [🟢🟡🔴] |
-| CTR | X.XX% | 0.35-0.55% (Sponsored Content) | [🟢🟡🔴] |
-| Form CVR | XX% | 6-10% (Lead Gen Forms) | [🟢🟡🔴] |
-| SQL Rate | XX% | 10-20% (average) | [🟢🟡🔴] |
-| Cost/SQL | €XXX | €[specify industry_cpl_benchmark] / SQL rate | [🟢🟡🔴] |
-
-LEAD GEN FORMS vs LANDING PAGES:
---------------------------------
-| Source | Leads | CPL | SQL Rate | Cost/SQL | Recommendation |
-|--------|-------|-----|----------|----------|----------------|
-| Lead Gen Forms | XX | €XX | XX% | €XXX | [Volume/Quality tradeoff] |
-| Landing Pages | XX | €XX | XX% | €XXX | [Volume/Quality tradeoff] |
-
-PLATFORM QUALITY COMPARISON:
-----------------------------
-| Platform  | Leads | CPL    | SQL Rate | Cost/SQL | Quality Score |
-|-----------|-------|--------|----------|----------|---------------|
-| LinkedIn  | XX    | €XX.XX | XX%      | €XXX     | [1-10]        |
-| Google    | XX    | €XX.XX | XX%      | €XXX     | [1-10]        |
-| Meta      | XX    | €XX.XX | XX%      | €XXX     | [1-10]        |
-
-Note: LinkedIn CPC is 3-5x higher than Meta/Google, but B2B audience quality often compensates.
-
-LTV:CAC ANALYSIS:
------------------
-| Metric | Value | Target | Status |
-|--------|-------|--------|--------|
-| Avg Contract Value | €XX,XXX | - | - |
-| Customer Lifespan | X years | - | - |
-| Estimated LTV | €XX,XXX | - | - |
-| CAC (from ads) | €X,XXX | - | - |
-| LTV:CAC Ratio | X:1 | 3:1 - 5:1 | [🟢🟡🔴] |
-
-Interpretation:
-- <1:1 = Loss-making
-- 1:1 - 3:1 = Break-even to marginal
-- 3:1 - 5:1 = Healthy (target range)
-- 5:1 - 7:1 = Excellent
-- >7:1 = Potentially under-investing in growth
-
-RECOMMENDATIONS:
-----------------
-Budget Reallocation:
-- LinkedIn: [Increase/Decrease/Maintain] - [Reason based on SQL rate]
-- Google: [Increase/Decrease/Maintain] - [Reason]
-- Meta: [Increase/Decrease/Maintain] - [Reason]
-
-Quality Improvements:
-1. [Add 1-2 qualifying questions to Lead Gen Forms if SQL rate <15%]
-2. [Test Landing Pages for BOFU campaigns if quality is priority]
-3. [Speed-to-lead: Respond <1hr for 53% conv rate vs 17% at 24hr+]
-
-Lead Gen Form Optimization:
-- Current fields: [X]
-- Recommendation: [Add/Remove] [Field] to improve SQL rate
-- Expected impact: [+X% SQL rate] or [+X% volume]
+Quality-adjusted CPL = total_spend / mql_count (cost per MQL, not just CPL)
+Platform efficiency = sql_rate * (1 / quality_cpl) — higher = better
+LTV = avg_contract_value * customer_lifespan_years * gross_margin
+CAC = total_spend / customers_acquired
+LTV:CAC ratio = LTV / CAC — target 3:1 to 5:1
 ```
+
+If CRM data is unavailable, score on platform data only: use CPL, CTR, and conversion rate benchmarks.
+
+### Step 5: Present Results
+Follow OUTPUT FORMAT above EXACTLY. Use SaaS / Software benchmarks. Flag any metric more than 1 tier below benchmark.
+
+## EDGE CASES
+- No LinkedIn account connected: Analyze Google + Meta only, note LinkedIn is recommended for B2B
+- No CRM data available: Score on platform metrics only (CPL, CTR, CVR vs benchmarks), skip MQL/SQL funnel and LTV:CAC
+- All leads from one platform: Full analysis for that platform, recommend testing a second channel
+- Zero conversions: Flag as tracking issue or insufficient budget, recommend minimum EUR 2k/mo for LinkedIn B2B
+- B2C account detected (ecommerce/ROAS focus): Redirect to ecommerce-roas-optimizer workflow instead
+- Very low volume (<20 leads): Note statistical insignificance, recommend extending date range to 90 days
+- API error on one platform: Note the error, continue with remaining platforms

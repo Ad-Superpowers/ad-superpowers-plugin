@@ -1,16 +1,10 @@
 ---
-name: performance-max-optimizer
+name: google-ads-performance-max-optimizer
 description: |
   This skill should be used when the user asks to "set up Performance Max", "optimize PMax campaigns",
   "configure audience signals", "choose search themes", or mentions "PMax asset group strategy",
   "channel performance breakdown", or "e-commerce vs lead gen PMax".
   Do NOT use for: PMax audit scoring (use pmax-audit-checklist), PMax retail-specific optimization (use pmax-retail-optimizer), PMax vs Search cannibalization (use pmax-search-cannibalization-detector).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "google_ads"
-  phase: "fase-3-campaigns-creative"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Performance Max Optimizer
 

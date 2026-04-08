@@ -1,17 +1,11 @@
 ---
-name: catalog-optimizer
+name: meta-catalog-optimizer
 description: |
   This skill should be used when the user asks to "optimize product catalog", "improve catalog ad performance",
   "fix catalog feed issues", or mentions "Advantage+ Catalog Ads", "product set strategy",
   or "catalog feed optimization". Do NOT use for: campaign structure
   (use campaign-structure-advisor), creative diversification
   (use creative-diversification-generator), full-funnel design (use full-funnel-designer).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-5-advanced"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # Catalog Optimizer
 

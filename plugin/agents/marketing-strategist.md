@@ -2,8 +2,7 @@
 name: marketing-strategist
 description: Develops advertising strategy, analyzes competitive landscapes, sizes markets, selects channels, builds buyer personas, designs lead scoring frameworks, and plans ABM strategies. Use when the user asks about marketing strategy, competitive analysis, market sizing, channel selection, target audience definition, value proposition, onboarding a new client/account, lead quality, ABM strategy, attribution modeling, or landing page strategy.
 model: opus
-color: purple
-maxTurns: 25
+color: magenta
 tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput, mcp__plugin_ad-superpowers_ad-superpowers__meta_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__meta_query, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_insights, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_creatives, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_list_accounts, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_run_gaql, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_run_keyword_planner, mcp__plugin_ad-superpowers_ad-superpowers__ga4_list_properties, mcp__plugin_ad-superpowers_ad-superpowers__ga4_run_report, mcp__plugin_ad-superpowers_ad-superpowers__gsc_list_sites, mcp__plugin_ad-superpowers_ad-superpowers__gsc_search_analytics, mcp__plugin_ad-superpowers_ad-superpowers__linkedin_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__linkedin_query, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_advertiser_info, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_query, Skill, mcp__plugin_ad-superpowers_ad-superpowers__workflow
 ---
 

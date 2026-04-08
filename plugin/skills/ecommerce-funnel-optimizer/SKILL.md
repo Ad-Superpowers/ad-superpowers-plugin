@@ -6,12 +6,6 @@ description: |
   "recover abandoned carts with ads", or mentions "dynamic product ads",
   "Advantage+ Catalog Ads", or "seasonal ad strategy".
   Do NOT use for: single-platform campaign structure (use platform-specific skills), attribution discrepancies (use attribution-reconciler), or creative fatigue diagnosis (use creative-fatigue-analyzer).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-2-onboarding"
-compatibility: "Requires AdSuperpowers MCP server with Meta, Google Ads, GA4, and/or TikTok connections"
 ---
 
 # E-Commerce Funnel Optimizer

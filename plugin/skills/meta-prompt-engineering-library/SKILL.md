@@ -1,17 +1,11 @@
 ---
-name: prompt-engineering-library
+name: meta-prompt-engineering-library
 description: |
   This skill should be used when the user asks to "get AI prompts for Meta Ads", "optimize prompts
   for ad analysis", "find prompt templates", or mentions "prompt engineering for ads",
   "AI workflow prompts", or "Meta Ads prompt library". Do NOT use for: ad copy writing
   directly (use ad-copy-generator), video scripts (use video-script-writer), campaign
   diagnostics (use performance-troubleshooter).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-4-automation"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # Prompt Engineering Library
 

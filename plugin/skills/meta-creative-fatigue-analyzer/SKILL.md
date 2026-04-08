@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "detect creative fatigue", "analyze frequency vs CTR",
   "plan a creative refresh", or mentions "Meta ad fatigue", "declining CTR on Facebook",
   or "frequency thresholds".
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-3-audience-creative"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # Meta Ads Creative Fatigue Analyzer
 

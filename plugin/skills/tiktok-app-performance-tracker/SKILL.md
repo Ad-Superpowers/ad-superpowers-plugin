@@ -5,12 +5,6 @@ description: |
   "reconcile TikTok MMP data", "fix TikTok SKAN attribution", or mentions
   "TikTok cost per install", "TikTok AppsFlyer numbers don't match", or "TikTok app event tracking".
   Do NOT use for: TikTok creative fatigue (use tiktok-creative-fatigue-tracker), TikTok video performance (use tiktok-video-performance-analyzer), or TikTok benchmark lookups (use tiktok-benchmark-database).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "tiktok"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with TikTok Ads connection"
 ---
 # TikTok App Performance Tracker
 

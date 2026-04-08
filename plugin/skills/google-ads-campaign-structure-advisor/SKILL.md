@@ -1,17 +1,11 @@
 ---
-name: campaign-structure-advisor
+name: google-ads-campaign-structure-advisor
 description: |
   This skill should be used when the user asks to "restructure Google Ads account",
   "consolidate campaigns", "organize ad groups", "migrate from SKAGs",
   or mentions "campaign type selection", "account structure optimization",
   or "Smart Bidding-friendly structure".
   Do NOT use for: bid strategy selection (use bid-strategy-selector), keyword strategy (use keyword-strategy-planner), or performance diagnosis (use performance-troubleshooter).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "google_ads"
-  phase: "fase-4-measurement-attribution"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Campaign Structure Advisor
 

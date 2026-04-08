@@ -1,17 +1,11 @@
 ---
-name: capi-implementation-guide
+name: meta-capi-implementation-guide
 description: |
   This skill should be used when the user asks to "set up CAPI", "implement server-side tracking",
   "configure event deduplication", or mentions "Conversions API", "CAPI Gateway",
   or "CAPI troubleshooting". Do NOT use for: EMQ optimization specifically (use emq-optimizer),
   attribution window decisions (use attribution-window-advisor), pixel-only tracking issues
   (use performance-troubleshooter).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # CAPI Implementation Guide
 

@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "analyze GSC performance", "optimize organic CTR",
   "check keyword rankings", or mentions "position tracking", "seasonal SEO trends", or "Google Discover performance".
   Do NOT use for: indexing problems or technical SEO issues (use technical-seo-monitor).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "gsc"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with Google Search Console connection"
 ---
 # GSC Performance Analyzer
 

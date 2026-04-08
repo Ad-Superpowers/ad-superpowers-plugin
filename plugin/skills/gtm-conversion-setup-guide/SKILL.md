@@ -7,12 +7,6 @@ description: |
   "trigger conditions", or "LinkedIn Insight Tag".
   Do NOT use for: strategic tracking planning (use tracking-plan-builder), server-side tagging
   (use gtm-server-side-tagging-guide), or consent implementation (use gtm-consent-mode-guide).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server"
 ---
 
 # GTM Conversion Setup Guide

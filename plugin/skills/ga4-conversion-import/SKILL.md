@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "import GA4 conversions to Google Ads", "set up Smart Bidding conversions",
   "configure conversion counting", or mentions "offline conversion import", "primary vs secondary conversions", or "GA4 to Google Ads export".
   Do NOT use for: attribution model selection (use ga4-attribution-advisor), e-commerce event setup (use ga4-ecommerce-setup).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "ga4"
-  phase: "fase-3-attribution"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 Conversion Import Guide
 

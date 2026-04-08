@@ -7,12 +7,6 @@ description: |
   "cross-platform event mapping", or "KPI to event mapping".
   Do NOT use for: GTM tag/trigger implementation (use gtm-conversion-setup-guide), server-side tagging
   (use gtm-server-side-tagging-guide), or consent/privacy setup (use gtm-consent-mode-guide).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server"
 ---
 
 # Tracking Plan Builder

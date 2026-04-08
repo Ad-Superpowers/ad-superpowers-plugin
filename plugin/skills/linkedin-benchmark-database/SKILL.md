@@ -5,12 +5,6 @@ description: |
   "compare LinkedIn CPL to industry average", "set LinkedIn KPI targets", or mentions
   "is my LinkedIn CTR good", "LinkedIn CPC benchmark", or "B2B ad performance standards".
   Do NOT use for: LinkedIn bid strategy selection (use linkedin-bid-strategy-selector), LinkedIn lead gen optimization (use linkedin-lead-gen-optimizer), LinkedIn performance troubleshooting (use linkedin-performance-troubleshooter).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "linkedin"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
 # LinkedIn Ads Benchmark Database
 

@@ -5,12 +5,6 @@ description: |
   "compare TikTok CPM to industry average", "check TikTok Spark Ads benchmarks", or mentions
   "is my TikTok CTR good", "TikTok ROAS benchmark", or "TikTok Shop performance standards".
   Do NOT use for: TikTok creative fatigue detection (use tiktok-creative-fatigue-tracker), TikTok video hook/length optimization (use tiktok-video-performance-analyzer), or TikTok attribution questions (use tiktok-attribution-guide).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "tiktok"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with TikTok Ads connection"
 ---
 # TikTok Ads Benchmark Database
 

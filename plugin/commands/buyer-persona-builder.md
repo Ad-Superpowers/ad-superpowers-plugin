@@ -8,470 +8,145 @@ description: Generate detailed buyer personas combining research with optional p
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.
 
-# AI-Powered Buyer Persona Builder
+# Buyer Persona Builder
 
-Generate detailed buyer personas for [specify company_name] in [specify industry].
+Generate {{ num_personas | default(3) }} data-driven buyer personas for [specify company_name] in [specify industry]. Combines industry research with platform audience data to create actionable personas with targeting recommendations.
 
-## Overview
+**Parameters:** b2c_product | Existing customers: Not provided
 
-Create {{ num_personas | default(3) }} data-driven buyer personas combining research with optional platform audience insights. Each persona includes demographics, psychographics, pain points, and platform-specific targeting recommendations.
+## OUTPUT FORMAT (CRITICAL - follow this EXACT structure)
 
-## Parameters
-- Company: [specify company_name]
-- Industry: [specify industry]
-- Product Type: b2c_product
-- Number of Personas: {{ num_personas | default(3) }}
-- Existing Customer Description: Not provided
+### EXECUTIVE SUMMARY
+Based on {{ "platform data and " if ga4_property_id else "" }}industry research, {{ num_personas | default(3) }} buyer personas identified for [specify company_name].
+- Primary persona: [Name] ([X]% of ideal customers)
+- Secondary personas: [Names]
 
-- GA4 Property: [specify ga4_property_id]
-
-
----
-
-## PHASE 1: Audience Research
-
-### Research Prompts
-
-**Prompt 1 - Industry Buyer Research:**
-```
-Research typical buyers in [specify industry]:
-- Demographics (age, gender, income, education, location)
-- Job titles and roles (if B2B)
-- Common pain points and challenges
-- Buying motivations and triggers
-- Decision-making process
-- Information sources they trust
-- Objections and barriers to purchase
-```
-
-**Prompt 2 - Competitor Audience Analysis:**
-```
-Analyze who competitors in [specify industry] are targeting:
-- Target demographics from their advertising
-- Messaging themes and appeals
-- Audience segments they focus on
-- Gaps or underserved segments
-```
-
-{% if product_type == "b2b_saas" or product_type == "b2b_services" %}
-**Prompt 3 - B2B Buying Committee:**
-```
-For [specify industry] B2B purchases, identify:
-- Decision makers (titles, responsibilities)
-- Influencers in the buying process
-- End users vs buyers
-- Budget holders
-- Typical buying committee size
-- Sales cycle length
-```
-
-
----
-
-## PHASE 2: Platform Data Enrichment (If Connected)
-
-
-### GA4 Audience Insights
-```
-ga4_run_report(
-    property_id="[specify ga4_property_id]",
-    start_date="90 days ago",
-    end_date="today",
-    metrics=["activeUsers", "sessions", "conversions"],
-    dimensions=["userAgeBracket", "userGender", "country", "deviceCategory"]
-)
-
-ga4_get_traffic_sources(
-    property_id="[specify ga4_property_id]",
-    start_date="90 days ago",
-    end_date="today"
-)
-```
-
-
-### Meta Audience Insights (If Connected)
-```
-meta_get_insights(
-    account_id=account_id,
-    date_preset="last_90d",
-    level="account",
-    breakdowns=["age", "gender", "country"]
-)
-```
-
-### LinkedIn Demographics (If Connected)
-```
-linkedin_get_analytics with demographic breakdowns for:
-- Job function
-- Seniority
-- Industry
-- Company size
-```
-
----
-
-## PHASE 3: Persona Generation
-
-### Persona Framework
-
-For each persona, develop:
-
-1. **Identity**
-   - Name (realistic, memorable)
-   - Photo description (for visualization)
-   - One-line summary
-
-2. **Demographics**
-   - Age range
-   - Gender
-   - Location
-   - Income/budget level
-   - Education
-   - Family status (B2C) / Job title (B2B)
-
-3. **Psychographics**
-   - Values and beliefs
-   - Lifestyle
-   - Personality traits
-   - Interests and hobbies
-
-4. **Goals & Pain Points**
-   - Primary goals
-   - Key challenges
-   - Frustrations
-   - Desired outcomes
-
-5. **Buying Behavior**
-   - Decision drivers
-   - Information sources
-   - Objections
-   - Buying triggers
-
-6. **Platform Behavior**
-   - Preferred social platforms
-   - Content consumption habits
-   - Device preferences
-   - Best times to reach
-
-7. **Targeting Recommendations**
-   - Meta targeting parameters
-   - Google Ads audiences
-   - LinkedIn targeting (if B2B)
-   - TikTok targeting (if relevant)
-
----
-
-## Output Format
-
-```
-================================================================================
-                    BUYER PERSONA REPORT
-                    [specify company_name] | [specify industry]
-================================================================================
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 EXECUTIVE SUMMARY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Based on research and {{ "platform data" if ga4_property_id else "industry analysis" }},
-we've identified {{ num_personas | default(3) }} key buyer personas for [specify company_name].
-Primary persona: [Name] ([X]% of ideal customers)
-Secondary personas: [Names]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📊 PERSONA OVERVIEW
-────────────────────
-
+### PERSONA OVERVIEW
 | Persona | Segment | Est. % of Market | Priority | Best Platform |
 |---------|---------|------------------|----------|---------------|
 | [Name 1] | [Segment] | [XX]% | Primary | [Platform] |
 | [Name 2] | [Segment] | [XX]% | Secondary | [Platform] |
 | [Name 3] | [Segment] | [XX]% | Tertiary | [Platform] |
 
-================================================================================
-                    PERSONA 1: [PERSONA NAME]
-                    "[One-line description/quote]"
-================================================================================
+### PERSONA [N]: [NAME] - "[Archetype]"
 
-🎭 IDENTITY
-───────────
-**Name:** [Realistic first name]
-**Archetype:** [e.g., "The Busy Professional", "The Value Seeker"]
-**Summary:** [One sentence describing this persona]
-
-📋 DEMOGRAPHICS
-───────────────
-| Attribute | Details |
-|-----------|---------|
-| Age | [XX-XX years] |
-| Gender | [Distribution or primary] |
-| Location | [Geographic focus] |
-| Income | EUR [XX,XXX - XX,XXX] |
-| Education | [Level] |
-| {% if product_type in ["b2b_saas", "b2b_services"] %}Job Title | [Title]Family Status | [Status] |
-| {% if product_type in ["b2b_saas", "b2b_services"] %}Company Size | [Size range]Living Situation | [Details] |
-
-🧠 PSYCHOGRAPHICS
-─────────────────
-**Values:**
-- [Value 1]
-- [Value 2]
-- [Value 3]
-
-**Personality:**
-- [Trait 1]
-- [Trait 2]
-
-**Interests & Hobbies:**
-- [Interest 1]
-- [Interest 2]
-- [Interest 3]
-
-**Media Consumption:**
-- Platforms: [Primary platforms]
-- Content types: [Preferred content]
-- Influencers/brands they follow: [Examples]
-
-🎯 GOALS & PAIN POINTS
-──────────────────────
-
-**Primary Goals:**
-1. [Goal 1 - specific and actionable]
-2. [Goal 2]
-3. [Goal 3]
-
-**Key Pain Points:**
-1. 😤 [Pain point 1 - emotional language]
-   *"[Quote that represents this frustration]"*
-2. 😤 [Pain point 2]
-3. 😤 [Pain point 3]
-
-**Desired Outcomes:**
-- [What success looks like for them]
-- [How they measure success]
-
-💳 BUYING BEHAVIOR
-──────────────────
-
-**Decision Drivers (Ranked):**
-1. [Primary driver - e.g., price, quality, convenience]
-2. [Secondary driver]
-3. [Tertiary driver]
-
-**Information Sources:**
-- Discovery: [How they find products]
-- Research: [Where they validate]
-- Trust signals: [What builds confidence]
-
-**Common Objections:**
-- "[Objection 1]" → Counter: [How to address]
-- "[Objection 2]" → Counter: [How to address]
-
-**Buying Triggers:**
-- [Trigger 1 - e.g., seasonal, life event, pain threshold]
-- [Trigger 2]
-
-**Budget & Timing:**
-- Budget range: EUR [XX - XX]
-- Decision timeline: [X days/weeks]
-- Purchase frequency: [One-time/Recurring]
-
-📱 PLATFORM BEHAVIOR
-────────────────────
-
-| Platform | Usage | Best Content | Best Time |
-|----------|-------|--------------|-----------|
-| Facebook | [High/Med/Low] | [Type] | [Time] |
-| Instagram | [High/Med/Low] | [Type] | [Time] |
-| LinkedIn | [High/Med/Low] | [Type] | [Time] |
-| TikTok | [High/Med/Low] | [Type] | [Time] |
-| Google | [Search behavior] | [Keywords] | [Intent] |
-| YouTube | [High/Med/Low] | [Type] | [Time] |
-
-**Device Preferences:**
-- Primary: [Mobile/Desktop]
-- Shopping behavior: [Device patterns]
-
-🎯 TARGETING RECOMMENDATIONS
-────────────────────────────
-
-### Meta Ads (Facebook/Instagram)
+**Identity:** [One sentence describing this persona]
 
 **Demographics:**
-- Age: [XX-XX]
-- Gender: [Selection]
-- Locations: [Specific locations]
+| Attribute | Details |
+|-----------|---------|
+| Age | [XX-XX] |
+| Gender | [Distribution] |
+| Location | [Geographic focus] |
+| Income | [Range] |
+| Education | [Level] |
+{% if product_type in ["b2b_saas", "b2b_services"] %}| Job Title | [Title] |
+| Company Size | [Range] || Family Status | [Status] |
 
-**Detailed Targeting:**
-- Interests: [Interest 1], [Interest 2], [Interest 3]
-- Behaviors: [Behavior 1], [Behavior 2]
-- Life events: [If relevant]
+**Goals & Pain Points:**
+- Goals: [Top 3 goals as numbered list]
+- Pain points: [Top 3 frustrations - use emotional language with representative quotes]
+- Desired outcome: [What success looks like]
 
-**Custom Audiences:**
-- Website visitors: [Specific pages]
-- Engagement: [Video viewers, page engagers]
-- Lookalike: Based on [source]
+**Buying Behavior:**
+- Decision drivers (ranked): [e.g., price, quality, convenience]
+- Information sources: Discovery → Research → Validation
+- Key objections: "[Objection]" → Counter: [How to address]
+- Triggers: [What prompts purchase - seasonal, life event, pain threshold]
+- Budget range & decision timeline
 
-**Placements:**
-- Recommended: [Feed, Stories, Reels]
-- Avoid: [If any]
+**Platform Behavior:**
+| Platform | Usage | Best Content Type | Best Time |
+|----------|-------|-------------------|-----------|
+| Facebook | [H/M/L] | [Type] | [Time] |
+| Instagram | [H/M/L] | [Type] | [Time] |
+| LinkedIn | [H/M/L] | [Type] | [Time] |
+| TikTok | [H/M/L] | [Type] | [Time] |
+| Google | [Search behavior] | [Keywords] | [Intent] |
 
-### Google Ads
+**Targeting Recommendations:**
 
-**Search Campaigns:**
-- High-intent keywords: [Keyword 1], [Keyword 2]
-- Informational keywords: [Keyword 1], [Keyword 2]
-- Negative keywords: [Exclusions]
+*Meta:* Age [XX-XX], interests [[list]], behaviors [[list]], custom audiences [[source]], placements [[recommended]]
 
-**Audience Segments:**
-- In-market: [Relevant segments]
-- Affinity: [Relevant segments]
-- Custom intent: [Keywords/URLs]
+*Google Ads:* High-intent keywords [[list]], audience segments [in-market/affinity], negative keywords [[exclusions]]
 
-**Display/YouTube:**
-- Topics: [Relevant topics]
-- Placements: [Specific sites/channels]
+{% if product_type in ["b2b_saas", "b2b_services"] %}*LinkedIn:* Job titles [[list]], functions [[list]], seniority [[level]], company size [[range]], industries [[list]]
 
-{% if product_type in ["b2b_saas", "b2b_services"] %}
-### LinkedIn Ads
+*TikTok:* Age [XX-XX], interests [[categories]], content strategy: hook style, themes, creator style (UGC/polished/educational)
 
-**Job Targeting:**
-- Job titles: [Title 1], [Title 2], [Title 3]
-- Job functions: [Function 1], [Function 2]
-- Seniority: [Level]
+**Messaging:**
+- Value prop: "[Tailored to this persona's pain points]"
+- Key messages: [3 messages addressing pain point, goal, objection]
+- Tone: [Descriptors with example phrases]
+- Words that resonate vs avoid
 
-**Company Targeting:**
-- Industries: [Industry 1], [Industry 2]
-- Company size: [Range]
-- Company growth: [If relevant]
+[REPEAT for each persona]
 
-**Skills & Interests:**
-- Skills: [Skill 1], [Skill 2]
-- Groups: [Relevant groups]
-
-
-### TikTok Ads
-
-**Targeting:**
-- Age: [XX-XX]
-- Interests: [Category 1], [Category 2]
-- Behaviors: [Behavior 1]
-
-**Content Strategy:**
-- Hook style: [What grabs their attention]
-- Content themes: [What resonates]
-- Creator style: [UGC/Polished/Educational]
-
-📝 MESSAGING GUIDELINES
-───────────────────────
-
-**Value Proposition for This Persona:**
-"[Tailored value prop that speaks to their specific pain points]"
-
-**Key Messages:**
-1. [Message addressing primary pain point]
-2. [Message addressing goal]
-3. [Message addressing objection]
-
-**Tone of Voice:**
-- [Descriptor 1] - [Example phrase]
-- [Descriptor 2] - [Example phrase]
-
-**Words/Phrases That Resonate:**
-✅ [Word 1], [Word 2], [Word 3]
-
-**Words/Phrases to Avoid:**
-❌ [Word 1], [Word 2]
-
-**Ad Copy Examples:**
-
-*Headline:*
-"[Example headline targeting this persona]"
-
-*Primary text:*
-"[Example ad copy - 2-3 sentences]"
-
-*CTA:*
-[Recommended CTA for this persona]
-
-================================================================================
-[REPEAT STRUCTURE FOR PERSONA 2, 3, etc.]
-================================================================================
-
-📊 PERSONA COMPARISON MATRIX
-────────────────────────────
-
+### PERSONA COMPARISON MATRIX
 | Attribute | Persona 1 | Persona 2 | Persona 3 |
 |-----------|-----------|-----------|-----------|
 | Age | [Range] | [Range] | [Range] |
 | Primary Platform | [Platform] | [Platform] | [Platform] |
 | Main Pain Point | [Pain] | [Pain] | [Pain] |
-| Price Sensitivity | [High/Med/Low] | [H/M/L] | [H/M/L] |
-| Decision Speed | [Fast/Medium/Slow] | [F/M/S] | [F/M/S] |
+| Price Sensitivity | [H/M/L] | [H/M/L] | [H/M/L] |
+| Decision Speed | [F/M/S] | [F/M/S] | [F/M/S] |
 | Best Ad Format | [Format] | [Format] | [Format] |
-| Estimated CAC | [specify currency] [XX] | [specify currency] [XX] | [specify currency] [XX] |
+| Estimated CAC | [Amount] | [Amount] | [Amount] |
 
-🎯 CAMPAIGN STRUCTURE RECOMMENDATIONS
-─────────────────────────────────────
+### CAMPAIGN STRUCTURE
+| Campaign | Persona | Budget % | Platforms | Objective |
+|----------|---------|----------|-----------|-----------|
+| Prospecting 1 | [Primary] | [XX]% | [Platforms] | [Objective] |
+| Prospecting 2 | [Secondary] | [XX]% | [Platforms] | [Objective] |
+| Prospecting 3 | [Tertiary] | [XX]% | [Platforms] | [Objective] |
 
-**Recommended Campaign Setup:**
-
-1. **Prospecting - Persona 1 (Primary)**
-   - Budget allocation: [XX]%
-   - Platforms: [Platforms]
-   - Objective: [Objective]
-
-2. **Prospecting - Persona 2**
-   - Budget allocation: [XX]%
-   - Platforms: [Platforms]
-   - Objective: [Objective]
-
-3. **Prospecting - Persona 3**
-   - Budget allocation: [XX]%
-   - Platforms: [Platforms]
-   - Objective: [Objective]
-
-**A/B Testing Priority:**
+**A/B testing priority:**
 1. [Test messaging for Persona 1 vs 2]
 2. [Test creative style for Persona X]
 3. [Test platform allocation]
 
-📋 DATA SOURCES & CONFIDENCE
-────────────────────────────
-
+### DATA CONFIDENCE
 | Data Point | Source | Confidence |
 |------------|--------|------------|
-| Demographics | [Source] | [High/Med/Low] |
-| Psychographics | [Source] | [High/Med/Low] |
-| Platform behavior | [Source] | [High/Med/Low] |
-| Buying behavior | [Source] | [High/Med/Low] |
+| Demographics | [Source] | [H/M/L] |
+| Psychographics | [Source] | [H/M/L] |
+| Platform behavior | [Source] | [H/M/L] |
+| Buying behavior | [Source] | [H/M/L] |
 
-**Validation Recommendations:**
-- [ ] Run creative tests per persona
-- [ ] Track conversion rates by targeting
-- [ ] Survey customers to validate assumptions
-- [ ] Review in 90 days with performance data
-```
+**Validation next steps:** Run creative tests per persona, track conversion rates by targeting, survey customers in 90 days.
 
----
+## EXECUTION STEPS
 
-## Product Type Considerations
+### Step 1: Research Industry Buyers
+Research typical buyers in [specify industry]: demographics, job titles (B2B), pain points, buying motivations, decision process, trusted information sources, objections. Also analyze competitor targeting for gaps.
+{% if product_type == "b2b_saas" or product_type == "b2b_services" %}
+For B2B: identify decision makers, influencers, end users, budget holders, buying committee size, sales cycle length.
 
-### B2C Product
-- Focus on lifestyle, values, emotional drivers
-- Include family/household context
-- Emphasize price sensitivity and purchase triggers
 
-### B2B SaaS
-- Focus on job responsibilities and KPIs
-- Include buying committee dynamics
-- Emphasize ROI and business outcomes
+### Step 2: Gather Platform Data (if connected)
 
-### D2C E-commerce
-- Focus on shopping behavior and preferences
-- Include brand loyalty and switching triggers
-- Emphasize convenience and experience
+**GA4:** `ga4_run_report(property_id="[specify ga4_property_id]", start_date="90daysAgo", end_date="today", metrics=["activeUsers","sessions","conversions"], dimensions=["userAgeBracket","userGender","country","deviceCategory"])`
 
-### B2B Services
-- Focus on business challenges and expertise needs
-- Include trust and credibility factors
-- Emphasize relationship and support expectations
+Also run: `ga4_run_report(property_id="[specify ga4_property_id]", metrics=["sessions","totalUsers","newUsers"], dimensions=["sessionDefaultChannelGrouping"], start_date="90daysAgo", end_date="today")`
+
+
+**Meta:** `meta_get_insights(account_id=account_id, date_preset="last_90d", level="account", breakdowns=["age","gender","country"])`
+
+**LinkedIn:** `linkedin_get_analytics(account_id=account_id, fields=["impressions","clicks"], demographic_breakdowns=["JOB_FUNCTION","SENIORITY","INDUSTRY","COMPANY_SIZE"])`
+
+### Step 3: Generate Personas
+Combine research + platform data. For each persona, fill in all sections from the per-persona template: Identity, Demographics, Goals & Pain Points, Buying Behavior, Platform Behavior, Targeting Recommendations, Messaging.
+
+### Step 4: Create Targeting Recommendations
+Translate each persona into concrete platform targeting parameters. Be specific (actual interest names, audience segments, keyword lists).
+
+### Step 5: Present Results
+Follow OUTPUT FORMAT above EXACTLY. Fill all tables with real data.
+
+## EDGE CASES
+- **No platform data available:** Build research-only personas, mark Data Confidence as LOW, recommend connecting platforms for enrichment
+- **B2B vs B2C:** B2B: focus on job roles, buying committees, business outcomes. B2C: focus on lifestyle, emotions, purchase triggers
+- **Single platform only:** Still create full personas but note limited data; targeting section focuses on available platform
+- **No existing customer data:** Rely on industry research and competitor analysis; flag all data as "hypothesis - validate with real data"
+- **Very niche industry:** May only support 2 personas; don't force a third if segments don't differ meaningfully
+- **Mixed B2B/B2C:** Create separate personas for each buyer type, clearly label which is B2B vs B2C

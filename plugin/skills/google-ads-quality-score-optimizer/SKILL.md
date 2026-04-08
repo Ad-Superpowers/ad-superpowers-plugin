@@ -1,16 +1,10 @@
 ---
-name: quality-score-optimizer
+name: google-ads-quality-score-optimizer
 description: |
   This skill should be used when the user asks to "improve Quality Score", "reduce CPC through QS",
   "diagnose low Quality Score", "optimize ad relevance", or mentions "landing page experience",
   "expected CTR", or "Quality Score components".
   Do NOT use for: full account audits (use account-auditor), landing-page-only issues without QS context.
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "google_ads"
-  phase: "fase-4-ecommerce-advanced"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Quality Score Optimizer
 

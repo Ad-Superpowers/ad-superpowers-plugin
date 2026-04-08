@@ -1,17 +1,11 @@
 ---
-name: ad-copy-generator
+name: meta-ad-copy-generator
 description: |
   This skill should be used when the user asks to "write ad copy", "generate headlines",
   "create primary text", or mentions "Meta ad copy", "ad descriptions",
   or "hook formulas for ads". Do NOT use for: video scripts (use video-script-writer),
   creative brainstorming (use creative-diversification-generator), A/B test design
   (use ab-test-planner).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-3-audience-creative"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # Ad Copy Generator
 

@@ -3,12 +3,6 @@ name: competitor-analysis-toolkit
 description: |
   This skill should be used when the user asks to "analyze competitor ads", "estimate competitor ad spend", "research competitors in Meta Ad Library", mentions "share of voice", "auction insights", or "competitive positioning strategy".
   Do NOT use for: keyword gap analysis between organic and paid (use seo-sea-keyword-gap-analyzer), channel selection decisions (use channel-selection-framework), or creative fatigue on own ads (use platform-specific fatigue skills).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-2-onboarding"
-compatibility: "Requires AdSuperpowers MCP server with multiple platform connections connection"
 ---
 # Competitor Analysis Toolkit for Advertising
 

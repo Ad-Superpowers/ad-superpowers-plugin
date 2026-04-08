@@ -5,12 +5,6 @@ description: |
   "fix TikTok learning limited status", "predict TikTok edit impact", or mentions
   "TikTok ad group stuck in learning", "TikTok 50 conversions requirement", or "when to edit TikTok campaigns".
   Do NOT use for: TikTok creative fatigue detection (use tiktok-creative-fatigue-tracker), TikTok benchmark lookups (use tiktok-benchmark-database), or TikTok attribution questions (use tiktok-attribution-guide).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "tiktok"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with TikTok Ads connection"
 ---
 # TikTok Learning Phase Tracker
 

@@ -5,12 +5,6 @@ description: |
   "check asset performance decay", "find when to refresh Google Ads creatives",
   or mentions "PMax asset group fatigue", "Display ad burnout", "YouTube creative fatigue",
   or "asset rating decline".
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "google_ads"
-  phase: "fase-3-campaigns-creative"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Google Ads Creative Fatigue Tracker
 

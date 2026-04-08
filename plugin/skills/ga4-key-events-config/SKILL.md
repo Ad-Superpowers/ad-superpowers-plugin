@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "configure key events", "set up conversions",
   "mark events as key events", or mentions "conversion values", "primary vs secondary conversions", or "GA4 goal setup".
   Do NOT use for: event tracking setup (use ga4-event-tracking-setup), Google Ads conversion import details (use ga4-conversion-import), or attribution models (use ga4-attribution-advisor).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "ga4"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 Key Events Configuration
 

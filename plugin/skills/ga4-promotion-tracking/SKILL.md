@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "track internal promotions", "measure coupon effectiveness",
   "set up promotion tracking in GA4", or mentions "promotion banners", "coupon ROI", or "A/B testing promotions".
   Do NOT use for: e-commerce event setup (use ga4-ecommerce-setup), revenue analysis and reporting (use ga4-revenue-analysis).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "ga4"
-  phase: "fase-4-ecommerce"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 Promotion Tracking Guide
 

@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "configure channel groupings", "create custom channel groups",
   "fix source/medium mapping", or mentions "branded vs non-branded traffic", "default channel groups", or "affiliate tracking channels".
   Do NOT use for: UTM parameter setup (use ga4-cross-platform-tracking), attribution model selection (use ga4-attribution-advisor).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "ga4"
-  phase: "fase-3-attribution"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 Channel Groupings Guide
 

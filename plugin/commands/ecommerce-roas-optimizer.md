@@ -10,92 +10,109 @@ description: Deep-dive analysis for e-commerce businesses with Shopify integrati
 
 # E-commerce ROAS Optimizer
 
-Deep analysis of e-commerce advertising performance with Shopify integration.
+Analyze e-commerce ad performance for last 30 days, focusing on [specify product_category].
 
-## Industry Benchmarks
-| Category | Typical ROAS | Source |
-|----------|--------------|--------|
-| Apparel | ~4.5x | Industry Data |
-| Garden/Outdoor | ~6.7x | Industry Data |
-| Electronics | ~3.2x | Industry Data |
-| Beauty | ~5.1x | Industry Data |
+## OUTPUT FORMAT (CRITICAL - follow this EXACT structure)
 
-## Instructions
+### REVENUE OVERVIEW
+| Metric | Value | vs Prior Period | vs Target |
+|--------|-------|-----------------|-----------|
+| Ad Revenue | | | |
+| Ad Spend | | | |
+| Blended ROAS | | | |
+| Orders from Ads | | | |
+| AOV | | | |
 
-### 1. Gather E-commerce Data
-From advertising platforms:
-- Campaign/ad performance by product category
-- ROAS, CPA, conversion value
+### PRODUCT PERFORMANCE - WINNERS
+| Product/Category | Revenue | ROAS | Orders | Platform | Action |
+|------------------|---------|------|--------|----------|--------|
+(Sorted by ROAS descending, top 10)
 
-From Shopify (if connected):
-- Product-level sales data
-- Inventory levels
-- Profit margins (if available)
+### PRODUCT PERFORMANCE - LOSERS
+| Product/Category | Spend | ROAS | Issue | Recommendation |
+|------------------|-------|------|-------|----------------|
+(ROAS < 1.5x or below target, sorted by spend descending)
 
-### 2. Analyze Product Performance
+### CATALOG CAMPAIGN BREAKDOWN
+| Campaign Type | Platform | Spend | ROAS | Top Products |
+|---------------|----------|-------|------|-------------|
+| Advantage+ Sales | Meta | | | |
+| Shopping / PMax | Google | | | |
 
+### OPTIMIZATION ACTIONS
+1. SCALE: [Products with ROAS > target + sufficient volume]
+2. PAUSE: [Products with ROAS < 1x after 50+ clicks]
+3. FIX: [Products with high spend but low ROAS - bid/creative/landing page]
+
+### BENCHMARKS
+Your actual ROAS vs industry:
+| Category | Your ROAS | Industry Avg | Status |
+|----------|-----------|-------------|--------|
+
+## Industry Benchmarks (Reference)
+| Category | Typical ROAS |
+|----------|-------------|
+| Apparel | ~4.5x |
+| Garden/Outdoor | ~6.7x |
+| Electronics | ~3.2x |
+| Beauty | ~5.1x |
+| Home & Furniture | ~3.8x |
+| Health & Wellness | ~4.2x |
+
+## EXECUTION STEPS
+
+### Step 1: Discover Accounts
+- `meta_list_ad_accounts()`
+- `google_ads_list_accounts()`
+- `ga4_list_properties()`
+
+### Step 2: Pull Meta Shopping Campaign Data
+
+`meta_get_insights(account_id="FROM_STEP_1", date_preset="last_30d", level="campaign", fields=["campaign_name","spend","impressions","clicks","actions","action_values","purchase_roas","cpm","cpc","ctr"])`
+
+Then drill into top campaigns at ad level:
+`meta_get_insights(account_id="FROM_STEP_1", date_preset="last_30d", level="ad", fields=["ad_name","spend","actions","action_values","purchase_roas"], filtering=[{"field":"campaign.name","operator":"CONTAIN","value":"shopping"}])`
+
+### Step 3: Pull Google Ads Shopping/PMax Data
+
+`google_ads_run_gaql(customer_id="FROM_STEP_1", query="SELECT campaign.name, campaign.advertising_channel_type, metrics.cost_micros, metrics.conversions, metrics.conversions_value, metrics.impressions, metrics.clicks, metrics.ctr, metrics.average_cpc FROM campaign WHERE campaign.advertising_channel_type IN ('SHOPPING', 'PERFORMANCE_MAX') AND segments.date DURING LAST_30_DAYS ORDER BY metrics.cost_micros DESC")`
+
+For product-level data:
+`google_ads_run_gaql(customer_id="FROM_STEP_1", query="SELECT segments.product_item_id, segments.product_title, segments.product_type_l1, metrics.cost_micros, metrics.conversions, metrics.conversions_value, metrics.clicks, metrics.impressions FROM shopping_performance_view WHERE segments.date DURING LAST_30_DAYS ORDER BY metrics.cost_micros DESC LIMIT 50")`
+
+### Step 4: Pull GA4 Revenue Data
+
+`ga4_run_report(property_id="FROM_STEP_1", start_date="30daysAgo", end_date="yesterday", metrics=["totalRevenue","ecommercePurchases","averagePurchaseRevenue","transactions"], dimensions=["sessionDefaultChannelGroup"])`
+
+For product-level:
+`ga4_run_report(property_id="FROM_STEP_1", start_date="30daysAgo", end_date="yesterday", metrics=["itemRevenue","itemsPurchased","itemsViewed"], dimensions=["itemName"])`
+
+### Step 5: Analyze
+
+**ROAS Calculation:**
 ```
-Product ROAS = Revenue from Ads / Ad Spend on Product
-
-Efficiency Score = ROAS * (Inventory Level Factor) * (Margin Factor)
+Product ROAS = Revenue attributed to ads / Ad spend on product
+Blended ROAS = Total ad revenue / Total ad spend
+Efficiency Score = ROAS * Volume Factor (orders > 10 = 1.0, 5-10 = 0.8, <5 = 0.5)
 ```
 
-### 3. Output Format
+**Winner/Loser Thresholds:**
+- Winner: ROAS > category benchmark AND orders >= 5
+- Loser: ROAS < 1.5x AND spend > €100 AND clicks > 50
+- Inconclusive: < 50 clicks (insufficient data)
 
-```
-================================================================================
-                         E-COMMERCE ROAS OPTIMIZER
-                    Period: Last 30 Days
-================================================================================
+**Cross-Platform Reconciliation:**
+- Compare Meta-reported revenue vs GA4 Paid Social revenue
+- Compare Google-reported conversions_value vs GA4 Paid Search revenue
+- Flag if variance > 30%
 
-REVENUE OVERVIEW:
------------------
-| Metric          | Value       | vs Last Period | vs Target    |
-|-----------------|-------------|----------------|--------------|
-| Ad Revenue      | €XX,XXX     | +/-XX%         | +/-XX%       |
-| Ad Spend        | €XX,XXX     | +/-XX%         | On/Under/Over|
-| Blended ROAS    | X.XXx       | +/-XX%         | +/-XX%       |
-| Orders from Ads | XXX         | +/-XX%         | -            |
-| AOV             | €XXX.XX     | +/-XX%         | -            |
+### Step 6: Present Results
+Follow OUTPUT FORMAT above EXACTLY. Fill all tables with real data.
 
-TOP PERFORMING PRODUCTS:
-------------------------
-| Product              | Revenue  | ROAS   | Orders | Stock  | Action       |
-|----------------------|----------|--------|--------|--------|--------------|
-| [Best Product]       | €X,XXX   | X.XXx  | XX     | High   | Scale budget |
-| [Product 2]          | €X,XXX   | X.XXx  | XX     | Med    | Maintain     |
-| [Product 3]          | €X,XXX   | X.XXx  | XX     | Low    | Restock!     |
-
-UNDERPERFORMING PRODUCTS:
--------------------------
-| Product              | Spend   | ROAS   | Issue          | Recommendation |
-|----------------------|---------|--------|----------------|----------------|
-| [Product X]          | €XXX    | 0.8x   | Below target   | Pause/Review   |
-| [Product Y]          | €XXX    | 1.2x   | High CPA       | Optimize bids  |
-
-CATALOG CAMPAIGN ANALYSIS:
---------------------------
-Meta Advantage+ Shopping:
-- ROAS: X.XXx | Spend: €X,XXX | Top products: [list]
-
-Google Shopping/PMax:
-- ROAS: X.XXx | Spend: €X,XXX | Top products: [list]
-
-INVENTORY-AWARE RECOMMENDATIONS:
---------------------------------
-1. SCALE: [Products with high ROAS + good inventory]
-2. PAUSE: [Products with low ROAS or out of stock]
-3. RESTOCK ALERT: [High performers running low]
-
-OPTIMIZATION OPPORTUNITIES:
----------------------------
-- Product feed improvements: [specific suggestions]
-- Budget reallocation: [from X to Y]
-- New products to test: [based on category performance]
-
-BENCHMARKS VS YOUR PERFORMANCE:
--------------------------------
-Your category ([Category]): Target ROAS [X.Xx]
-Your actual: [X.Xx]
-Status: [Above/Below] benchmark by XX%
-```
+## EDGE CASES
+- Shopify not connected: Use GA4 ecommerce data instead; note "Shopify not connected - using GA4 revenue data"
+- No shopping/PMax campaigns: Analyze all campaigns with purchase conversions instead
+- Zero revenue reported: Flag as tracking issue - check purchase event setup in GA4 and platform pixels
+- Single platform only: Run analysis for that platform, skip cross-platform comparison
+- New account (<7 days data): Note "Insufficient data for reliable ROAS analysis" and show available metrics
+- Product-level data unavailable: Fall back to campaign-level analysis

@@ -3,12 +3,6 @@ name: first-party-data-strategy
 description: |
   This skill should be used when the user asks to "set up server-side tracking", "implement CAPI", "build a first-party data strategy", mentions "Consent Mode V2", "cookieless advertising", or "GDPR-compliant tracking setup".
   Do NOT use for: attribution discrepancy diagnosis (use attribution-reconciler), GTM container auditing (use gtm-container-auditor), or incrementality measurement (use incrementality-testing-guide).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-2-onboarding"
-compatibility: "Requires AdSuperpowers MCP server with multiple platform connections connection"
 ---
 # First-Party Data Strategy Guide
 

@@ -10,256 +10,111 @@ description: Automatically detect unusual performance shifts across all accounts
 
 # Anomaly Detective
 
-Scan all accounts for unusual performance anomalies with **budget impact estimation** and **vertical seasonality context**.
+Scan all accounts for unusual performance anomalies. Sensitivity: medium.
 
-## Severity Levels
+## OUTPUT FORMAT (CRITICAL - follow this EXACT structure)
 
-| Level | Criteria | Action Urgency | Budget Impact |
-|-------|----------|----------------|---------------|
-| 🔴 CRITICAL | >200% deviation OR conversion tracking down | ACT NOW (0-4h) | >€500/day at risk |
-| 🟠 HIGH | >100% deviation OR core metric collapse | ACT TODAY (4-24h) | €100-500/day at risk |
-| 🟡 MEDIUM | >50% deviation | MONITOR (24-48h) | €50-100/day at risk |
-| 🟢 LOW | >25% deviation | REVIEW (this week) | <€50/day at risk |
+### EXECUTIVE SUMMARY
+| Severity | Count | Daily Budget at Risk |
+|----------|-------|---------------------|
+| CRITICAL | | |
+| HIGH | | |
+| MEDIUM | | |
+| LOW | | |
+| **Total Weekly Impact if Unaddressed** | | **amount** |
 
-## Detection Logic
+### CRITICAL - ACT NOW (0-4 hours)
+For each:
+| Account | Platform | Anomaly | Change | Daily Impact | Root Cause | Action |
+|---------|----------|---------|--------|-------------|------------|--------|
 
-### Statistical Approach
-- Compare today/recent period vs. rolling 7-day average (same day of week when possible)
-- Minimum threshold: 20 impressions to avoid noise
-- Severity scoring based on spend impact AND deviation percentage
+### HIGH - ACT TODAY (4-24 hours)
+Same table format as CRITICAL.
 
-### Alert Thresholds (Sensitivity: medium)
-| Alert Type | LOW | MEDIUM | HIGH | Severity |
-|------------|-----|--------|------|----------|
-| Spend Spike | >200% | >150% | >120% | By impact |
-| Conversion Drop | >50% | >30% | >20% | 🔴/🟠/🟡 |
-| CPC Anomaly | >40% | >25% | >15% | 🟡/🟢 |
-| Impression Loss | >60% | >40% | >25% | 🟠/🟡 |
-| CTR Drop | >35% | >20% | >15% | 🟡/🟢 |
+### MEDIUM - MONITOR (24-48 hours)
+| Account | Platform | Anomaly | Change | Seasonal? | Recommendation |
+|---------|----------|---------|--------|-----------|----------------|
 
-## CRITICAL: Vertical Seasonality Patterns
+### LOW - REVIEW THIS WEEK
+Bullet list: [Account]: [metric] [change]% - [context]
 
-Before flagging an anomaly, check if it matches expected seasonal patterns:
+### SEASONALITY CONTEXT
+| Account | Anomaly | Seasonal? | Confidence | Expected Pattern |
+|---------|---------|-----------|------------|-----------------|
+(Mark: YES = don't panic | MAYBE = monitor | NO = investigate)
 
-### Travel & Hospitality
-| Period | Pattern | Don't Flag If... |
-|--------|---------|------------------|
-| Jul-Aug | +40-80% spend/conversions | Summer peak - NORMAL |
-| Jan | -30-50% dip | Post-holiday slow - NORMAL |
-| Mar-Apr | +20-30% recovery | Spring break booking - NORMAL |
-| Dec 15-25 | -40% conversions | Holiday pause - NORMAL |
+### INVESTIGATION CHECKLISTS
+**Conversion drops:** Pixel/tag firing? Landing page loading? Checkout flow? Payment processing? Ad disapprovals?
+**Spend spikes:** Budget caps? Bid strategy? Bid limits? Audience expansion?
 
-### E-commerce / Retail
-| Period | Pattern | Don't Flag If... |
-|--------|---------|------------------|
-| Nov (BFCM) | +100-300% spike | Black Friday/Cyber Monday - NORMAL |
-| Dec 1-20 | +50-100% | Holiday shopping - NORMAL |
-| Dec 26-Jan 15 | +30% (returns/gift cards) | Post-holiday surge - NORMAL |
-| Jan 15-Feb | -40-60% dip | Post-holiday slow - NORMAL |
+### NO ANOMALIES
+[List accounts with stable performance - GREEN status]
 
-### Education / Training
-| Period | Pattern | Don't Flag If... |
-|--------|---------|------------------|
-| Aug-Sep | +60-100% | Back-to-school/enrollment - NORMAL |
-| Jan-Feb | +30-50% | Spring enrollment - NORMAL |
-| Jun-Jul | -40-60% | Summer break - NORMAL |
-| Dec | -30% | Semester end - NORMAL |
+## EXECUTION STEPS
 
-### B2B / SaaS
-| Period | Pattern | Don't Flag If... |
-|--------|---------|------------------|
-| Q1 (Jan-Mar) | +30-50% | New budget cycle - NORMAL |
-| Q4 (Oct-Dec) | +40-60% | Use-it-or-lose-it budgets - NORMAL |
-| Aug | -30-40% | Summer slowdown - NORMAL |
-| Dec 20-Jan 5 | -50-70% | Holiday shutdown - NORMAL |
+### Step 1: Discover Accounts
+- `meta_list_ad_accounts()`
+- `google_ads_list_accounts()`
+- `linkedin_list_ad_accounts()`
+- `tiktok_get_advertiser_info()`
 
-### Healthcare / Wellness
-| Period | Pattern | Don't Flag If... |
-|--------|---------|------------------|
-| Jan | +50-100% | New Year resolutions - NORMAL |
-| Sep | +20-30% | Back-to-routine - NORMAL |
-| Dec | -20-30% | Holiday pause - NORMAL |
+### Step 2: Pull Time-Series Data (Last 14 Days, Daily Granularity)
 
-## Instructions
+**Meta:** `meta_get_insights(account_id="FROM_STEP_1", date_preset="last_14d", level="account", fields=["spend","impressions","clicks","actions","action_values","cpm","cpc","ctr","purchase_roas"], time_increment=1)`
 
-### 1. Gather Time-Series Data
-For each account/campaign:
-- Pull daily data for last 14 days
-- Calculate 7-day rolling averages (same day of week)
-- Compare current period to baseline
-- Calculate daily spend for budget impact estimation
+**Google Ads:** `google_ads_run_gaql(customer_id="FROM_STEP_1", query="SELECT segments.date, metrics.impressions, metrics.clicks, metrics.ctr, metrics.average_cpc, metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM customer WHERE segments.date DURING LAST_14_DAYS ORDER BY segments.date DESC")`
 
-### 2. Detect Anomalies with Budget Impact
+**TikTok:** `tiktok_get_report(start_date="14_DAYS_AGO", end_date="YESTERDAY", level="campaign", metrics=["spend","impressions","clicks","conversions","conversion_rate","cpc","cpm"], group_by="stat_time_day")`
 
-```python
-def detect_anomaly(current, baseline, threshold, daily_spend):
-    change = (current - baseline) / baseline * 100
+**LinkedIn:** `linkedin_get_analytics(account_id="FROM_STEP_1", start_date="14_DAYS_AGO", end_date="YESTERDAY", fields=["impressions","clicks","costInLocalCurrency","externalWebsiteConversions"])`
 
-    # Calculate budget impact
-    if "spend" in metric_type:
-        daily_impact = abs(current - baseline)
-    elif "conversion" in metric_type:
-        daily_impact = abs(change) * daily_spend * 0.01  # Rough CPA impact
-    else:
-        daily_impact = daily_spend * abs(change) * 0.005  # Efficiency impact
+### Step 3: Detect Anomalies
 
-    # Determine severity
-    if abs(change) > threshold * 2 or daily_impact > 500:
-        severity = "CRITICAL"
-        urgency = "ACT NOW (0-4h)"
-    elif abs(change) > threshold * 1.5 or daily_impact > 100:
-        severity = "HIGH"
-        urgency = "ACT TODAY (4-24h)"
-    elif abs(change) > threshold:
-        severity = "MEDIUM"
-        urgency = "MONITOR (24-48h)"
-    else:
-        severity = "LOW"
-        urgency = "REVIEW (this week)"
+**Baseline:** 7-day rolling average (same day-of-week when possible). Minimum 20 impressions to avoid noise.
 
-    return {
-        "detected": True,
-        "change": change,
-        "severity": severity,
-        "urgency": urgency,
-        "daily_impact": daily_impact,
-        "weekly_impact": daily_impact * 7
-    }
-```
+**Alert thresholds by sensitivity (medium):**
 
-### 3. Seasonality Check
+| Alert Type | LOW sens. | MEDIUM sens. | HIGH sens. |
+|------------|-----------|--------------|------------|
+| Spend Spike | >200% | >150% | >120% |
+| Conversion Drop | >50% | >30% | >20% |
+| CPC Anomaly | >40% | >25% | >15% |
+| Impression Loss | >60% | >40% | >25% |
+| CTR Drop | >35% | >20% | >15% |
 
-For each detected anomaly:
-```python
-def check_seasonality(anomaly, vertical, current_date):
-    # Check against vertical patterns
-    patterns = VERTICAL_PATTERNS[vertical]
+**Severity assignment:**
 
-    for pattern in patterns:
-        if pattern.matches(current_date, anomaly.direction):
-            return {
-                "is_seasonal": True,
-                "confidence": pattern.confidence,
-                "expected_range": pattern.expected_range,
-                "message": f"This appears to be typical {vertical} seasonality"
-            }
+| Level | Criteria | Urgency | Budget Impact |
+|-------|----------|---------|---------------|
+| CRITICAL | >200% deviation OR conversions = 0 | ACT NOW (0-4h) | >500/day |
+| HIGH | >100% deviation OR core metric collapse | ACT TODAY (4-24h) | 100-500/day |
+| MEDIUM | >50% deviation | MONITOR (24-48h) | 50-100/day |
+| LOW | >25% deviation | REVIEW (this week) | <50/day |
 
-    return {"is_seasonal": False}
-```
+**Budget impact estimation:**
+- Spend anomaly: daily_impact = abs(current_spend - baseline_spend)
+- Conversion anomaly: daily_impact = abs(change_pct) * daily_spend * 0.01
+- Efficiency anomaly: daily_impact = daily_spend * abs(change_pct) * 0.005
 
-### 4. Root Cause Analysis
+### Step 4: Seasonality Check
 
-For each anomaly, check:
-- ✅ Is this expected seasonality for the vertical?
-- Did budget change?
-- Were ads paused/activated?
-- Did bidding strategy change?
-- Is there a platform-wide issue?
-- Day-of-week effects?
+Before flagging, check against vertical patterns:
 
-### 5. Output Format
+**E-commerce:** Nov BFCM +100-300% (normal), Dec holiday +50-100%, Jan post-holiday -40-60%
+**B2B/SaaS:** Q1 +30-50% (new budgets), Aug -30-40% (summer), Dec 20-Jan 5 -50-70%
+**Travel:** Jul-Aug +40-80% (summer peak), Jan -30-50%, Dec 15-25 -40%
+**Education:** Aug-Sep +60-100% (enrollment), Jun-Jul -40-60%
+**Healthcare:** Jan +50-100% (resolutions), Sep +20-30% (back-to-routine)
 
-```
-================================================================================
-                         ANOMALY DETECTIVE
-                    Scan Period: Last 24-48 Hours
-                    Sensitivity: medium
-================================================================================
+Mark each anomaly: YES (seasonal, high confidence) | MAYBE (possible, monitor) | NO (investigate)
 
-EXECUTIVE SUMMARY:
-------------------
-Total Anomalies: [X]
-- 🔴 CRITICAL: [X] (€XXX/day at risk)
-- 🟠 HIGH: [X] (€XXX/day at risk)
-- 🟡 MEDIUM: [X] (€XXX/day at risk)
-- 🟢 LOW: [X] (€XXX/day at risk)
+### Step 5: Present Results
+Follow OUTPUT FORMAT above EXACTLY. Include all tables with real data.
 
-💰 TOTAL DAILY BUDGET IMPACT: €XXX - €XXX
-📅 TOTAL WEEKLY IMPACT IF UNADDRESSED: €X,XXX - €X,XXX
-
-🔴 CRITICAL - ACT NOW (0-4 hours):
-----------------------------------
-Account: [Name] | Platform: [Meta/Google/etc.]
-* SPEND SPIKE: +175% vs 7-day average
-  - Today: €1,245 | Average: €452
-  - 💰 Daily Impact: €793/day overspend
-  - ⏱️ Action Urgency: ACT NOW - 4 hours max
-  - 🔍 Root Cause: [Auto-generated suggestion]
-  - ✅ Recommended Action: [Specific step]
-  - 📋 Checklist: [ ] Check bid caps [ ] Review budgets [ ] Pause if needed
-
-Account: [Name] | Platform: [Meta/Google/etc.]
-* CONVERSION TRACKING DOWN: 0 conversions in 24h
-  - Normal: 45 conversions/day
-  - 💰 Daily Impact: €2,250 revenue at risk (at €50 CPA)
-  - ⏱️ Action Urgency: ACT NOW - 4 hours max
-  - 🔍 Probable Cause: Pixel/tag issue, payment system, or website down
-  - ✅ Recommended Action: Check tracking immediately
-  - 📋 Checklist:
-    [ ] Test pixel/tag in browser dev tools
-    [ ] Verify landing page loading
-    [ ] Check checkout/payment flow
-    [ ] Review platform conversion settings
-
-🟠 HIGH - ACT TODAY (4-24 hours):
----------------------------------
-Account: [Name]
-* CONVERSION DROP: -45% vs baseline
-  - Today: 12 conversions | Average: 22
-  - 💰 Daily Impact: €150-300 revenue loss
-  - ⏱️ Action Urgency: ACT TODAY - 24 hours
-  - 📅 Seasonality Check: [❌ NOT seasonal / ✅ May be seasonal]
-  - 🔍 Probable Cause: [Analysis]
-  - ✅ Recommended Action: [Step]
-
-🟡 MEDIUM - MONITOR (24-48 hours):
-----------------------------------
-Account: [Name]
-* CPC SPIKE: +28% vs baseline
-  - Today: €2.45 | Average: €1.91
-  - 💰 Daily Impact: ~€54/day (at current volume)
-  - ⏱️ Action Urgency: MONITOR - 48 hours
-  - 📅 Seasonality Check: ✅ Possible Q1 B2B budget flush
-  - 🔍 Analysis: [Context]
-  - ✅ Recommendation: Monitor for 48h before action
-
-🟢 LOW - REVIEW THIS WEEK:
---------------------------
-* [Account]: CTR down 18% - within normal variance, no action needed
-
-📅 SEASONALITY CONTEXT:
------------------------
-Current Date: [Date]
-Detected Vertical Patterns:
-
-⚠️ SEASONAL ALERTS (Don't Panic!):
-| Account | Anomaly | Seasonal? | Confidence | Expected Range |
-|---------|---------|-----------|------------|----------------|
-| [Travel Co] | +45% spend | ✅ YES | HIGH | Jul travel peak normal |
-| [E-comm] | +120% conv | ✅ YES | HIGH | BFCM expected |
-| [SaaS] | -35% leads | ❓ MAYBE | MEDIUM | Aug B2B slowdown possible |
-
-TRUE ANOMALIES (Investigate!):
-| Account | Anomaly | Seasonal? | Reason |
-|---------|---------|-----------|--------|
-| [Retail] | -60% conv | ❌ NO | Not aligned with any pattern |
-
-INVESTIGATION CHECKLISTS:
--------------------------
-For conversion drops, verify:
-[ ] Conversion tracking firing correctly (check browser dev tools)
-[ ] Landing page loading properly (test in incognito)
-[ ] No checkout/form issues (test full flow)
-[ ] Payment processing working (check payment provider status)
-[ ] No ad disapprovals (check platform notifications)
-
-For spend spikes, verify:
-[ ] Budget caps in place
-[ ] Bid strategy settings correct
-[ ] No bid limit changes
-[ ] Audience expansion not enabled unintentionally
-
-✅ NO ANOMALIES DETECTED:
--------------------------
-[List of accounts with stable performance - GREEN status]
-```
+## EDGE CASES
+- No data for a platform: Skip it, note "No data available for [platform]"
+- Account with <3 days of data: Exclude from anomaly detection, note "Insufficient history"
+- All metrics are 0: Flag as CRITICAL - potential tracking failure, not a normal anomaly
+- Weekday vs weekend variance: Use same-day-of-week baseline to avoid false positives
+- Multiple anomalies on same account: List all, but group under the highest severity
+- API error on one platform: Note the error, continue with remaining platforms

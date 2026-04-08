@@ -1,16 +1,10 @@
 ---
-name: conversion-tracking-setup
+name: google-ads-conversion-tracking-setup
 description: |
   This skill should be used when the user asks to "set up conversion tracking", "implement Google Tag",
   "configure Enhanced Conversions", "import offline conversions", or mentions "gtag setup",
   "conversion value tracking", or "primary vs secondary conversions".
   Do NOT use for: debugging existing tracking issues (use conversion-tracking-debugger), Meta pixel setup (use meta tools), GA4 event setup (use ga4 tools).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "google_ads"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Conversion Tracking Setup
 

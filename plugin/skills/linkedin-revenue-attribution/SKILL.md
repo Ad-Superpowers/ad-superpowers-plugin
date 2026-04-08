@@ -5,12 +5,6 @@ description: |
   "connect CRM to LinkedIn attribution", "measure LinkedIn pipeline impact", or mentions
   "LinkedIn revenue attribution", "B2B sales cycle attribution", or "LinkedIn value reporting".
   Do NOT use for: LinkedIn cost benchmarks (use linkedin-cost-monitor or linkedin-benchmark-database), LinkedIn lead gen optimization (use linkedin-lead-gen-optimizer), or LinkedIn bid strategy (use linkedin-bid-strategy-selector).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "linkedin"
-  phase: "fase-3-attribution"
-compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
 # LinkedIn Revenue Attribution
 

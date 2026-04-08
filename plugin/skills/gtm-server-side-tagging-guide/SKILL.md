@@ -7,12 +7,6 @@ description: |
   "sGTM", or "first-party data strategy".
   Do NOT use for: client-side GTM tag setup (use gtm-conversion-setup-guide), strategic tracking planning
   (use tracking-plan-builder), or consent mode implementation (use gtm-consent-mode-guide).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server"
 ---
 
 # Server-Side GTM Guide

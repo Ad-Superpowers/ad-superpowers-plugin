@@ -1,16 +1,10 @@
 ---
-name: attribution-model-advisor
+name: google-ads-attribution-model-advisor
 description: |
   This skill should be used when the user asks to "choose an attribution model",
   "set up Data-Driven Attribution", "compare attribution models", "analyze conversion paths",
   or mentions "DDA", "cross-channel attribution", or "lookback window optimization".
   Do NOT use for: bid strategy selection (use bid-strategy-selector), conversion tracking setup (use conversion-tracking-setup), or campaign performance diagnosis (use performance-troubleshooter).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "google_ads"
-  phase: "fase-4-measurement-attribution"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Attribution Model Advisor
 

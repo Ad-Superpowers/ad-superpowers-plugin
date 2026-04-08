@@ -12,100 +12,86 @@ description: Compare two campaigns, time periods, or campaign types head-to-head
 
 Compare two campaigns or time periods side-by-side.
 
-## Comparison Type: ab_test
+**Comparison Type:** ab_test
 
-## Instructions
+## OUTPUT FORMAT (CRITICAL - follow this EXACT structure)
 
-### 1. Gather Comparison Data
+### CONTESTANTS
+- **A:** [Campaign/Period A Name]
+- **B:** [Campaign/Period B Name]
+- Period: [Date Range]
 
-**For A/B Test:**
-- Campaign A metrics (control)
-- Campaign B metrics (variant)
-- Same time period, same audience split
+### HEAD-TO-HEAD
+| Metric | A | B | Difference | Winner |
+|--------|---|---|------------|--------|
+| Spend | [amount] | [amount] | +/-XX% | A/B |
+| Impressions | [value] | [value] | +/-XX% | A/B |
+| Clicks | [value] | [value] | +/-XX% | A/B |
+| CTR | X.XX% | X.XX% | +/-XX% | A/B |
+| Conversions | [value] | [value] | +/-XX% | A/B |
+| Conv. Rate | X.XX% | X.XX% | +/-XX% | A/B |
+| CPA | [amount] | [amount] | +/-XX% | A/B |
+| ROAS | X.XXx | X.XXx | +/-XX% | A/B |
 
-**For Period Comparison:**
-- Period 1 metrics (baseline)
-- Period 2 metrics (comparison)
-- Same campaigns, different dates
+### WINNER DECLARATION
+**WINNER: [A or B]**
+- Primary KPI ([metric]): [Winner] outperformed by XX%
+- Statistical Significance: [Significant / Not Significant / Need More Data]
+- Confidence Level: [High / Medium / Low]
 
-**For Campaign Type Comparison:**
-- Campaign Type A metrics (e.g., PMax)
-- Campaign Type B metrics (e.g., Standard Shopping)
+### KEY INSIGHTS
+1. [Main takeaway]
+2. [Secondary insight]
+3. [Unexpected finding]
 
-### 2. Statistical Significance (for A/B tests)
+### RECOMMENDED ACTIONS
+1. [Action based on results]
+2. [Action based on results]
+
+### CAVEATS
+- [Data quality issues, external factors, sample size notes]
+
+## EXECUTION STEPS
+
+### Step 1: Identify Campaigns to Compare
+Ask user for campaign names/IDs and platform, or time periods.
+
+### Step 2: Pull Campaign Data
+
+**Meta (A/B test):** `meta_get_insights(account_id="...", level="campaign", filtering=[{"field":"campaign.name","operator":"CONTAIN","value":"CAMPAIGN_A"}], date_preset="last_30d", fields=["spend","impressions","clicks","actions","action_values","ctr","cpc","cpm","purchase_roas"])`
+
+Repeat for Campaign B.
+
+**Meta (period comparison):** Same campaign, different `time_range` parameters.
+
+**Google Ads:** `google_ads_run_gaql(customer_id="...", query="SELECT campaign.name, metrics.cost_micros, metrics.impressions, metrics.clicks, metrics.conversions, metrics.conversions_value, metrics.ctr, metrics.average_cpc FROM campaign WHERE campaign.name LIKE '%CAMPAIGN_A%' AND segments.date DURING LAST_30_DAYS")`
+
+**TikTok:** `tiktok_get_report(start_date="...", end_date="...", level="campaign", metrics=["spend","impressions","clicks","conversions","conversion_rate"])`
+
+**LinkedIn:** `linkedin_get_analytics(account_id="...", start_date="...", end_date="...")`
+
+### Step 3: Statistical Significance (for A/B tests)
 
 ```python
-# Simplified significance check
-# For proper testing, use chi-squared or z-test
-
-sample_a = conversions_a
-sample_b = conversions_b
 rate_a = conversions_a / clicks_a
 rate_b = conversions_b / clicks_b
-
 relative_lift = (rate_b - rate_a) / rate_a * 100
 
-# Rough significance threshold
 if sample_a > 100 and sample_b > 100:
-    if abs(relative_lift) > 10:
-        significance = "Likely Significant"
-    else:
-        significance = "Not Significant - Need more data"
+    if abs(relative_lift) > 10: significance = "Likely Significant"
+    else: significance = "Not Significant - Need more data"
 else:
     significance = "Insufficient sample size"
 ```
 
-### 3. Output Format
+Min sample: 100 conversions per variant for reliable results.
 
-```
-================================================================================
-                         CAMPAIGN BATTLE REPORT
-                    A/B Test Analysis
-================================================================================
+### Step 4: Present Results
+Follow OUTPUT FORMAT above. Declare winner on primary KPI.
 
-CONTESTANTS:
-------------
-A: [Campaign/Period A Name]
-B: [Campaign/Period B Name]
-Period: [Date Range]
-
-HEAD-TO-HEAD COMPARISON:
-------------------------
-| Metric          | A              | B              | Difference  | Winner |
-|-----------------|----------------|----------------|-------------|--------|
-| Spend           | €X,XXX         | €X,XXX         | +/-XX%      | A/B    |
-| Impressions     | XXX,XXX        | XXX,XXX        | +/-XX%      | A/B    |
-| Clicks          | X,XXX          | X,XXX          | +/-XX%      | A/B    |
-| CTR             | X.XX%          | X.XX%          | +/-XX%      | A/B    |
-| Conversions     | XXX            | XXX            | +/-XX%      | A/B    |
-| Conv. Rate      | X.XX%          | X.XX%          | +/-XX%      | A/B    |
-| CPA             | €XX.XX         | €XX.XX         | +/-XX%      | A/B    |
-| ROAS            | X.XXx          | X.XXx          | +/-XX%      | A/B    |
-
-WINNER DECLARATION:
--------------------
-WINNER: [A or B]
-
-Primary KPI ([CPA/ROAS/CVR]): [Winner] outperformed by XX%
-Statistical Significance: [Significant / Not Significant / Need More Data]
-Confidence Level: [High / Medium / Low]
-
-KEY INSIGHTS:
--------------
-1. [Main takeaway from comparison]
-2. [Secondary insight]
-3. [Unexpected finding]
-
-RECOMMENDED ACTIONS:
---------------------
-Based on this comparison:
-1. [Action item #1]
-2. [Action item #2]
-3. [Action item #3]
-
-CAVEATS:
---------
-- [Any data quality issues]
-- [External factors to consider]
-- [Minimum sample size recommendations]
-```
+## EDGE CASES
+- Insufficient data (<100 conversions per side): Note low confidence, don't declare winner
+- Different budgets: Normalize by spend (efficiency metrics) for fair comparison
+- Missing campaigns: Ask user to verify campaign names/IDs
+- Cross-platform comparison: Note attribution differences between platforms
+- Zero conversions on one side: Flag as clear loser, no significance test needed

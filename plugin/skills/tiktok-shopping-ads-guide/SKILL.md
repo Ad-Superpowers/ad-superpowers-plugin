@@ -6,12 +6,6 @@ description: |
   "build collection ads on TikTok", or mentions "TikTok Shopping",
   "Video Shopping Ads", or "TikTok product catalog".
   Do NOT use for: general TikTok creative strategy (use tiktok-hook-optimization-guide), audience building (use tiktok-audience-strategy), or Spark Ads (use tiktok-spark-ads-strategy).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "tiktok"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with TikTok Ads connection"
 ---
 
 # TikTok Shopping Ads Guide

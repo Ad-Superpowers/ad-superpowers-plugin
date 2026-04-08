@@ -1,16 +1,10 @@
 ---
-name: scaling-calculator
+name: google-ads-scaling-calculator
 description: |
   This skill should be used when the user asks to "scale Google Ads budget", "calculate incremental ROAS",
   "analyze diminishing returns", "plan a scaling roadmap", or mentions "iROAS",
   "break-even calculation", or "profit maximization model".
   Do NOT use for: initial campaign setup (use search-campaign-builder), bid strategy selection (use learning-phase-tracker).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "google_ads"
-  phase: "fase-4-ecommerce-advanced"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Scaling Calculator
 

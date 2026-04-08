@@ -10,530 +10,142 @@ description: Predicts future campaign performance using historical platform data
 
 # AI-Powered Performance Forecasting
 
-Generate performance forecasts with confidence intervals for [specify company_name].
-
-## Overview
-
-This workflow analyzes historical performance data to project future results with uncertainty ranges. Uses industry benchmarks, seasonality factors, and trend analysis to create realistic forecasts with confidence intervals rather than single-point estimates.
-
-## Parameters
-- Company: [specify company_name]
-- Industry: [specify industry]
-- Forecast Period: Next 90 days
-- Planned Monthly Budget: €10,000
-- Meta Account ID: [specify meta_account_id]
-- Google Ads Customer ID: [specify google_ads_customer_id]
-- GA4 Property ID: [specify ga4_property_id]
-- Historical Data Period: [specify historical_days] days
-
----
-
-## PHASE 1: Historical Data Collection
-
-### Required Data Points
-
-To generate accurate forecasts, collect the following from connected platforms:
-
-
-#### Meta Ads Historical Data
-```
-meta_get_insights(
-    account_id="[specify meta_account_id]",
-    date_preset="last_90d",
-    level="account",
-    fields=["spend", "impressions", "clicks", "conversions", "purchase_roas"]
-)
-```
-
-**Also collect daily breakdown:**
-```
-meta_get_insights(
-    account_id="[specify meta_account_id]",
-    date_preset="last_90d",
-    time_increment="1",
-    level="account"
-)
-```
-
-
-
-#### Google Ads Historical Data
-```
-google_ads_run_gaql(
-    customer_id="[specify google_ads_customer_id]",
-    query="""
-        SELECT
-            segments.date,
-            metrics.cost_micros,
-            metrics.impressions,
-            metrics.clicks,
-            metrics.conversions,
-            metrics.conversions_value
-        FROM customer
-        WHERE segments.date DURING LAST_90_DAYS
-        ORDER BY segments.date
-    """
-)
-```
-
-
-
-#### GA4 Conversion Data
-```
-ga4_run_report(
-    property_id="[specify ga4_property_id]",
-    start_date="90daysAgo",
-    end_date="yesterday",
-    metrics=["sessions", "conversions", "totalRevenue"],
-    dimensions=["date", "sessionDefaultChannelGroup"]
-)
-```
-
-
-### Manual Data Input (if platforms not connected)
-
-If platform data is not available, provide historical metrics:
-
-| Metric | Last 30 Days | Last 60 Days | Last 90 Days |
-|--------|-------------|-------------|--------------|
-| **Total Spend** | €____ | €____ | €____ |
-| **Conversions** | ____ | ____ | ____ |
-| **Revenue** | €____ | €____ | €____ |
-| **ROAS** | ____x | ____x | ____x |
-| **Avg CPA** | €____ | €____ | €____ |
-| **Avg CTR** | ___% | ___% | ___% |
-
----
-
-## PHASE 2: Trend Analysis
-
-### Performance Trend Identification
-
-**Calculate Key Trends:**
-
-| Metric | 90-Day Trend | 30-Day Trend | Direction |
-|--------|-------------|-------------|-----------|
-| Spend Efficiency | [Calculate from data] | [Calculate] | ↑↓→ |
-| Conversion Rate | [Calculate from data] | [Calculate] | ↑↓→ |
-| ROAS | [Calculate from data] | [Calculate] | ↑↓→ |
-| CPM | [Calculate from data] | [Calculate] | ↑↓→ |
-| CPC | [Calculate from data] | [Calculate] | ↑↓→ |
-
-### Trend Direction Classification
-
-| Trend Category | Definition | Forecast Impact |
-|----------------|------------|-----------------|
-| **Strong Uptrend** | +15% or more | Apply +10% to base forecast |
-| **Moderate Uptrend** | +5% to +15% | Apply +5% to base forecast |
-| **Stable** | -5% to +5% | Use base forecast |
-| **Moderate Downtrend** | -5% to -15% | Apply -5% to base forecast |
-| **Strong Downtrend** | -15% or worse | Apply -10% to base forecast |
-
-### Platform-Specific Trend Factors
-
-| Factor | Meta Impact | Google Impact | LinkedIn Impact | TikTok Impact |
-|--------|------------|--------------|-----------------|---------------|
-| **Algorithm changes** | Medium | Low | Low | High |
-| **Privacy changes** | High | Medium | Low | Medium |
-| **Auction pressure** | Medium | High | Medium | Medium |
-| **Creative fatigue rate** | High | Low | Low | Very High |
-
----
-
-## PHASE 3: Seasonality Analysis
-
-### [specify industry] Seasonality Factors
-
-**Monthly Performance Multipliers:**
-
-| Month | Typical Index | Notes |
-|-------|--------------|-------|
-| January | 0.85 | Post-holiday lull |
-| February | 0.90 | Recovery begins |
-| March | 0.95 | Spring ramp-up |
-| April | 1.00 | Baseline |
-| May | 1.00 | Baseline |
-| June | 0.95 | Early summer dip |
-| July | 0.90 | Summer slowdown |
-| August | 0.85 | Peak vacation |
-| September | 1.05 | Back-to-business |
-| October | 1.10 | Pre-holiday ramp |
-| November | 1.25 | Black Friday/sales |
-| December | 1.15 | Holiday peak (early) then drop |
-
-**Index interpretation:** 1.00 = baseline, 0.90 = 10% below normal, 1.20 = 20% above normal
-
-### Forecast Period Seasonality: Next 90 days
-
-Based on current date and forecast period, apply these adjustments:
-
-| Month in Forecast | Seasonality Index | Adjusted Multiplier |
-|-------------------|------------------|---------------------|
-| Month 1 | [From table] | [Index × Trend factor] |
-| Month 2 | [From table] | [Index × Trend factor] |
-| Month 3 | [From table] | [Index × Trend factor] |
-
-### Special Events Impact
-
-| Event | Expected Dates | CPM Impact | Conversion Impact |
-|-------|---------------|------------|-------------------|
-| Black Friday | Late November | +50-100% | +30-50% |
-| Cyber Monday | After Black Friday | +40-80% | +25-40% |
-| Christmas | December 1-24 | +30-60% | +20-40% |
-| January Sales | January 1-14 | +20-40% | +15-25% |
-| Summer Sales | June-July | +10-20% | +10-15% |
-
----
-
-## PHASE 4: Monte Carlo-Style Uncertainty Modeling
-
-### Confidence Interval Framework
-
-Instead of single-point forecasts, we model uncertainty with confidence intervals:
-
-**Confidence Levels:**
-- **90% Confidence:** Very likely range (conservative)
-- **70% Confidence:** Likely range (realistic)
-- **50% Confidence:** Central estimate (optimistic)
-
-### Variable Distribution Assumptions
-
-| Metric | Distribution | Low (10th %ile) | Base (50th) | High (90th %ile) |
-|--------|-------------|-----------------|-------------|------------------|
-| **CPM** | Normal | Base × 0.80 | Historical avg | Base × 1.30 |
-| **CTR** | Normal | Base × 0.85 | Historical avg | Base × 1.15 |
-| **CVR** | Log-normal | Base × 0.70 | Historical avg | Base × 1.40 |
-| **CPA** | Log-normal | Base × 0.75 | Historical avg | Base × 1.50 |
-| **ROAS** | Log-normal | Base × 0.60 | Historical avg | Base × 1.50 |
-
-### Uncertainty Factors by Platform
-
-| Platform | Forecast Uncertainty | Why |
-|----------|---------------------|-----|
-| **Google Search** | Low (±15%) | Stable, intent-based |
-| **Meta** | Medium (±25%) | Algorithm variability, creative dependency |
-| **LinkedIn** | Medium (±20%) | Smaller audiences, B2B volatility |
-| **TikTok** | High (±35%) | Rapid creative fatigue, trend-dependent |
-
----
-
-## PHASE 5: Forecast Generation
-
-### Planned Budget for Forecast Period
-
-**Monthly Budget:** €10,000
-**Forecast Period:** Next 90 days (3 months)
-**Total Forecast Budget:** €{{ (monthly_budget | default(10000) | float * 3) | round | int }}
-
-### Base Forecast Calculation
-
-Using historical data + seasonality + trend adjustments:
-
-```
-Base Conversions = (Historical Daily Conversions × Days in Period) × Seasonality Index × Trend Factor
-Base ROAS = Historical ROAS × Trend Factor × (1 - Platform Uncertainty)
-Base Revenue = Budget × Base ROAS
-```
-
-### Forecasted Performance Ranges
-
-#### Conversions Forecast
-
-| Timeframe | Pessimistic (10th) | Expected (50th) | Optimistic (90th) | Confidence |
-|-----------|-------------------|-----------------|-------------------|------------|
-| Month 1 | [Calculate] | [Calculate] | [Calculate] | ±25% |
-| Month 2 | [Calculate] | [Calculate] | [Calculate] | ±20% |
-| Month 3 | [Calculate] | [Calculate] | [Calculate] | ±20% |
-| **Total** | **[Sum]** | **[Sum]** | **[Sum]** | - |
-
-#### ROAS Forecast
-
-| Timeframe | Pessimistic (10th) | Expected (50th) | Optimistic (90th) | Confidence |
-|-----------|-------------------|-----------------|-------------------|------------|
-| Month 1 | [Base × 0.70] | [Base] | [Base × 1.30] | ±30% |
-| Month 2 | [Base × 0.75] | [Base] | [Base × 1.25] | ±25% |
-| Month 3 | [Base × 0.75] | [Base] | [Base × 1.25] | ±25% |
-
-#### Revenue Forecast
-
-| Timeframe | Budget | Pessimistic Rev | Expected Rev | Optimistic Rev |
-|-----------|--------|----------------|--------------|----------------|
-| Month 1 | €{{ monthly_budget | default(10000) | round | int }} | €[Budget × Low ROAS] | €[Budget × Base ROAS] | €[Budget × High ROAS] |
-| Month 2 | €{{ monthly_budget | default(10000) | round | int }} | €[Calculate] | €[Calculate] | €[Calculate] |
-| Month 3 | €{{ monthly_budget | default(10000) | round | int }} | €[Calculate] | €[Calculate] | €[Calculate] |
-
----
-
-## PHASE 6: Scenario Analysis
-
-### Scenario 1: Base Case (Most Likely)
-
-**Assumptions:**
-- Current trends continue
-- No major platform changes
-- Consistent budget allocation
-- Normal seasonality
-
-**Projected Outcomes:**
-
-| Metric | Month 1 | Month 2 | Month 3 | Total |
-|--------|---------|---------|---------|-------|
-| Spend | €{{ monthly_budget | default(10000) | round | int }} | €{{ monthly_budget | default(10000) | round | int }} | €{{ monthly_budget | default(10000) | round | int }} | €{{ (monthly_budget | default(10000) | float * 3) | round | int }} |
-| Conversions | [Base] | [Base] | [Base] | [Sum] |
-| ROAS | [Base]x | [Base]x | [Base]x | [Avg]x |
-| Revenue | [Calculate] | [Calculate] | [Calculate] | [Sum] |
-
-**Probability:** 60%
-
-### Scenario 2: Upside Case (Optimistic)
-
-**Assumptions:**
-- Creative testing succeeds (new winners)
-- Algorithm favorability improves
-- Strong seasonal performance
-- Efficient scaling
-
-**Projected Outcomes:**
-
-| Metric | Month 1 | Month 2 | Month 3 | Total |
-|--------|---------|---------|---------|-------|
-| Conversions | [Base × 1.2] | [Base × 1.3] | [Base × 1.3] | [Sum] |
-| ROAS | [Base × 1.2]x | [Base × 1.3]x | [Base × 1.3]x | [Weighted avg]x |
-| Revenue | [Calculate] | [Calculate] | [Calculate] | [Sum] |
-
-**Probability:** 25%
-
-### Scenario 3: Downside Case (Pessimistic)
-
-**Assumptions:**
-- Creative fatigue accelerates
-- CPM inflation continues
-- Conversion rates decline
-- Competitive pressure increases
-
-**Projected Outcomes:**
-
-| Metric | Month 1 | Month 2 | Month 3 | Total |
-|--------|---------|---------|---------|-------|
-| Conversions | [Base × 0.8] | [Base × 0.75] | [Base × 0.7] | [Sum] |
-| ROAS | [Base × 0.7]x | [Base × 0.65]x | [Base × 0.6]x | [Weighted avg]x |
-| Revenue | [Calculate] | [Calculate] | [Calculate] | [Sum] |
-
-**Probability:** 15%
-
----
-
-## Output Format
-
-```
-================================================================================
-                    PERFORMANCE FORECAST
-                    [specify company_name] - Next 90 Days
-                    Budget: €{{ (monthly_budget | default(10000) | float * 3) | round | int }} total
-================================================================================
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 EXECUTIVE SUMMARY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-**Forecast Overview:**
-Based on [X days] of historical data, [platform data sources], seasonality patterns,
-and uncertainty modeling, here are projected outcomes for the next 90 days:
-
-**Key Projections (Expected Case):**
-| Metric | Projection | Confidence Range |
-|--------|------------|------------------|
-| Total Spend | €{{ (monthly_budget | default(10000) | float * 3) | round | int }} | Fixed (planned) |
-| Conversions | [Expected] | [Low] - [High] (70% CI) |
-| Revenue | €[Expected] | €[Low] - €[High] (70% CI) |
-| Blended ROAS | [Expected]x | [Low]x - [High]x (70% CI) |
-| Avg CPA | €[Expected] | €[Low] - €[High] (70% CI) |
-
-**Forecast Confidence:** [High/Medium/Low] based on data quality and platform variability.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📊 MONTHLY FORECAST BREAKDOWN
-─────────────────────────────
-
-### Month 1: [Month Name]
-
-| Metric | Pessimistic | Expected | Optimistic |
-|--------|------------|----------|------------|
-| Budget | €X,XXX | €X,XXX | €X,XXX |
-| Conversions | XXX | XXX | XXX |
-| ROAS | X.Xx | X.Xx | X.Xx |
-| Revenue | €X,XXX | €X,XXX | €X,XXX |
-| CPA | €XX | €XX | €XX |
-
-**Seasonality Factor:** [X.XX] ([Description])
-**Key Considerations:** [Month-specific notes]
-
----
-
-### Month 2: [Month Name]
-[Repeat format]
-
----
-
-### Month 3: [Month Name]
-[Repeat format]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📈 CONFIDENCE INTERVAL VISUALIZATION
-────────────────────────────────────
-
-**ROAS Forecast Range:**
-
-```
-Month 1: [Low]x ████████████████████████████ [High]x
-                      ▲ Expected: [X.X]x
-
-Month 2: [Low]x ██████████████████████████ [High]x
-                    ▲ Expected: [X.X]x
-
-Month 3: [Low]x ████████████████████████ [High]x
-                  ▲ Expected: [X.X]x
-```
-
-**Conversion Forecast Range:**
-
-```
-Month 1: [Low] ████████████████████████████ [High]
-                    ▲ Expected: [XXX]
-
-Month 2: [Low] ██████████████████████████ [High]
-                  ▲ Expected: [XXX]
-
-Month 3: [Low] ████████████████████████ [High]
-                ▲ Expected: [XXX]
-```
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🎯 SCENARIO SUMMARY
-───────────────────
-
-| Scenario | Probability | Total Conv. | Total Revenue | ROAS |
-|----------|------------|-------------|---------------|------|
-| **Downside** | 15% | [Low] | €[Low] | [Low]x |
-| **Base Case** | 60% | [Expected] | €[Expected] | [Exp]x |
-| **Upside** | 25% | [High] | €[High] | [High]x |
-
-**Expected Value Calculation:**
-EV(Conversions) = (0.15 × [Low]) + (0.60 × [Expected]) + (0.25 × [High]) = [EV]
-EV(Revenue) = (0.15 × €[Low]) + (0.60 × €[Expected]) + (0.25 × €[High]) = €[EV]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📅 SEASONALITY IMPACT
-─────────────────────
-
-| Month | Seasonality Index | Impact Description |
-|-------|------------------|-------------------|
-| [Month 1] | [X.XX] | [Above/Below average - reason] |
-| [Month 2] | [X.XX] | [Above/Below average - reason] |
-| [Month 3] | [X.XX] | [Above/Below average - reason] |
-
-**Seasonal Recommendations:**
-- [Month with high index]: [Increase budget / expect better performance]
-- [Month with low index]: [Plan for efficiency / reduce expectations]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-⚠️ FORECAST RISKS & SENSITIVITIES
-─────────────────────────────────
-
-### Key Risk Factors
-
+Generate performance forecasts with confidence intervals for [specify company_name] ([specify industry]).
+
+**Forecast Period:** Next 90 days
+**Monthly Budget:** EUR10,000
+**Meta Account:** [specify meta_account_id]
+**Google Ads:** [specify google_ads_customer_id]
+**GA4 Property:** [specify ga4_property_id]
+
+## OUTPUT FORMAT (CRITICAL - follow this EXACT structure)
+
+### EXECUTIVE SUMMARY
+| Metric | Projection | 70% Confidence Range |
+|--------|------------|---------------------|
+| Total Spend | [planned amount] | Fixed |
+| Conversions | [expected] | [low] - [high] |
+| Revenue | [expected] | [low] - [high] |
+| Blended ROAS | [expected]x | [low]x - [high]x |
+| Avg CPA | [expected] | [low] - [high] |
+
+**Forecast Confidence:** [High/Medium/Low]
+
+### MONTHLY BREAKDOWN
+| Month | Budget | Conversions (P/E/O) | ROAS (P/E/O) | Seasonality |
+|-------|--------|--------------------|--------------| ------------|
+| M1 | [amount] | [low]/[exp]/[high] | [low]/[exp]/[high]x | [index] |
+| M2 | [amount] | [low]/[exp]/[high] | [low]/[exp]/[high]x | [index] |
+| M3 | [amount] | [low]/[exp]/[high] | [low]/[exp]/[high]x | [index] |
+P=Pessimistic (10th %ile), E=Expected (50th), O=Optimistic (90th)
+
+### SCENARIO SUMMARY
+| Scenario | Probability | Conversions | Revenue | ROAS |
+|----------|------------|-------------|---------|------|
+| Downside | 15% | [low] | [low] | [low]x |
+| Base Case | 60% | [expected] | [expected] | [exp]x |
+| Upside | 25% | [high] | [high] | [high]x |
+
+**Expected Value:** EV = (0.15 x Low) + (0.60 x Expected) + (0.25 x High)
+
+### KEY RISKS
 | Risk | Probability | Impact | Mitigation |
-|------|------------|--------|------------|
-| CPM inflation > 20% | Medium | -15% ROAS | Budget flexibility, creative refresh |
-| Creative fatigue | High | -20% CVR | Weekly creative pipeline |
-| Platform algorithm change | Low | ±25% variance | Diversify platforms |
-| Competitive pressure | Medium | -10% ROAS | Monitor auction insights |
-| Conversion tracking issues | Low | Measurement gap | Regular QA checks |
+|------|-----------|--------|-----------|
 
-### Sensitivity Analysis
+### RECOMMENDATIONS
+1. Set targets at Expected Case level
+2. Build [X%] contingency for downside
+3. Trigger optimization reviews if hitting downside range
+4. Weekly: check pacing vs forecast | Monthly: full refresh
 
-**Impact of 10% CPM Increase:**
-- Conversions: [New projection] (-X% from base)
-- ROAS: [New projection] (-X% from base)
+## EXECUTION STEPS
 
-**Impact of 10% CVR Improvement:**
-- Conversions: [New projection] (+X% from base)
-- ROAS: [New projection] (+X% from base)
+### Step 1: Collect Historical Data (last 90 days)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+**Meta:** `meta_get_insights(account_id="FROM_DISCOVERY", date_preset="last_90d", level="account", time_increment="1", fields=["spend","impressions","clicks","conversions","purchase_roas"])`
 
-✅ FORECAST CONFIDENCE ASSESSMENT
-─────────────────────────────────
+**Google Ads:** `google_ads_run_gaql(customer_id="FROM_DISCOVERY", query="SELECT segments.date, metrics.cost_micros, metrics.impressions, metrics.clicks, metrics.conversions, metrics.conversions_value FROM customer WHERE segments.date DURING LAST_90_DAYS ORDER BY segments.date")`
 
-**Overall Confidence Level:** [High / Medium / Low]
+**GA4:** `ga4_run_report(property_id="FROM_DISCOVERY", start_date="90daysAgo", end_date="yesterday", metrics=["sessions","conversions","totalRevenue"], dimensions=["date","sessionDefaultChannelGroup"])`
 
-| Factor | Score | Notes |
-|--------|-------|-------|
-| Historical data quality | [1-5] | [Notes on data completeness] |
-| Trend stability | [1-5] | [Notes on trend consistency] |
-| Platform predictability | [1-5] | [Notes on platform variance] |
-| Seasonal alignment | [1-5] | [Notes on seasonal patterns] |
-| External factors | [1-5] | [Notes on market conditions] |
+**TikTok:** `tiktok_get_report(start_date="90_DAYS_AGO", end_date="TODAY", level="campaign", metrics=["spend","impressions","clicks","conversions"])`
 
-**Average Score:** [X.X/5]
+**LinkedIn:** `linkedin_get_analytics(account_id="FROM_DISCOVERY", start_date="90_DAYS_AGO", end_date="TODAY")`
 
-**Recommendation:** [Interpret confidence and suggest buffer/contingency]
+If accounts not connected, request manual historical data (spend, conversions, revenue, ROAS for last 30/60/90 days).
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+### Step 2: Trend Analysis
 
-💡 RECOMMENDATIONS
-──────────────────
+Calculate 90-day and 30-day trends for: Spend Efficiency, Conversion Rate, ROAS, CPM, CPC.
 
-**Based on this forecast:**
+**Trend classification and forecast impact:**
+| Trend | Definition | Forecast Adjustment |
+|-------|-----------|-------------------|
+| Strong Uptrend | +15%+ | +10% to base |
+| Moderate Uptrend | +5 to +15% | +5% to base |
+| Stable | -5 to +5% | Use base |
+| Moderate Downtrend | -5 to -15% | -5% from base |
+| Strong Downtrend | -15%+ | -10% from base |
 
-1. **Budget Planning:**
-   - [Recommendation based on forecast ranges]
-   - Build [X%] contingency for downside scenario
+**Platform variability factors:**
+| Factor | Meta | Google | LinkedIn | TikTok |
+|--------|------|--------|----------|--------|
+| Algorithm changes | Medium | Low | Low | High |
+| Privacy impact | High | Medium | Low | Medium |
+| Creative fatigue | High | Low | Low | Very High |
 
-2. **Performance Targets:**
-   - Set targets at [Expected Case] level
-   - Trigger optimization reviews if hitting [Downside] range
+### Step 3: Apply Seasonality
 
-3. **Monitoring Cadence:**
-   - Weekly: Check pacing vs. forecast
-   - Bi-weekly: Compare actuals to confidence intervals
-   - Monthly: Full forecast refresh
+**Monthly performance multipliers (adjust for [specify industry]):**
+| Month | Index | Notes |
+|-------|-------|-------|
+| Jan | 0.85 | Post-holiday lull |
+| Feb-Mar | 0.90-0.95 | Recovery/spring ramp |
+| Apr-May | 1.00 | Baseline |
+| Jun-Aug | 0.85-0.95 | Summer slowdown |
+| Sep-Oct | 1.05-1.10 | Back-to-business, pre-holiday |
+| Nov | 1.25 | Black Friday (CPMs +50-100%) |
+| Dec | 1.15 | Holiday peak then drop |
 
-4. **Suggested Next Workflows:**
-   - [ ] **Budget Pacing Monitor** - Track actual vs. forecasted spend
-   - [ ] **Weekly Performance Pulse** - Regular performance check-ins
-   - [ ] **Anomaly Detector** - Alert when outside confidence intervals
+Index: 1.00 = baseline, 0.90 = 10% below, 1.20 = 20% above.
+
+### Step 4: Uncertainty Modeling
+
+**Confidence intervals by metric:**
+| Metric | 10th %ile | 50th (Base) | 90th %ile |
+|--------|----------|-------------|----------|
+| CPM | Base x 0.80 | Historical avg | Base x 1.30 |
+| CTR | Base x 0.85 | Historical avg | Base x 1.15 |
+| CVR | Base x 0.70 | Historical avg | Base x 1.40 |
+| CPA | Base x 0.75 | Historical avg | Base x 1.50 |
+| ROAS | Base x 0.60 | Historical avg | Base x 1.50 |
+
+**Platform forecast uncertainty:**
+Google Search: Low (+/-15%, stable intent-based) | Meta: Medium (+/-25%, algorithm + creative) | LinkedIn: Medium (+/-20%, B2B volatility) | TikTok: High (+/-35%, creative fatigue + trends)
+
+### Step 5: Build Forecast
+
+**Base formula:**
+```
+Conversions = (Historical Daily Avg x Days) x Seasonality x Trend Factor
+ROAS = Historical ROAS x Trend Factor x (1 - Platform Uncertainty)
+Revenue = Budget x ROAS
 ```
 
----
+**Three scenarios:**
+- **Base Case (60%):** Current trends continue, consistent budget, normal seasonality
+- **Upside (25%):** Creative testing wins, algorithm favorability, strong seasonal performance
+- **Downside (15%):** Creative fatigue, CPM inflation, competitive pressure increases
 
-## Forecast Methodology Notes
+**Forecast accuracy expectations:** 30 days: +/-15-20% | 60 days: +/-20-30% | 90 days: +/-25-35% | 180 days: +/-35-50%
 
-### Data Requirements for Accurate Forecasting
+### Step 6: Present Results
+Follow OUTPUT FORMAT above. Always present ranges, never single-point estimates. Explain confidence level based on data quality.
 
-| Data Type | Minimum | Recommended | Impact on Accuracy |
-|-----------|---------|-------------|-------------------|
-| Historical days | 30 | 90+ | ±20% accuracy improvement |
-| Daily granularity | Yes | Yes | Critical for trend detection |
-| Platform breakdown | 1 platform | All active | Better attribution |
-| Conversion data | Basic | With value | Enables ROAS forecasting |
-
-### Forecast Accuracy Expectations
-
-| Forecast Horizon | Expected Accuracy | Confidence |
-|------------------|------------------|------------|
-| 30 days | ±15-20% | High |
-| 60 days | ±20-30% | Medium |
-| 90 days | ±25-35% | Medium |
-| 180 days | ±35-50% | Low |
-
-### When to Refresh Forecasts
-
-- **Weekly:** If actuals deviate >15% from forecast
-- **Monthly:** Standard refresh cadence
-- **Immediately:** After major platform changes, algorithm updates, or budget changes
+## EDGE CASES
+- No platform accounts connected: Use manual historical data + industry benchmarks
+- Less than 30 days of data: Widen confidence intervals by 50%, note reduced accuracy
+- All metrics are 0: Flag tracking issue, provide benchmark-only forecast
+- Single platform only: Forecast that platform, note inability to cross-validate
+- Major platform change during historical period: Exclude pre-change data, note shorter baseline
+- API error: Note the error, forecast with available data, widen uncertainty

@@ -1,17 +1,11 @@
 ---
-name: pmax-search-cannibalization-detector
+name: google-ads-pmax-search-cannibalization-detector
 description: |
   This skill should be used when the user asks to "detect PMax Search cannibalization",
   "check if PMax is stealing brand traffic", "analyze branded ROAS inflation",
   "set up brand exclusions", or mentions "PMax cannibalizing Search",
   "incrementality testing", or "PMax stealing traffic".
   Do NOT use for: general PMax optimization (use performance-max-optimizer), SEO vs SEA keyword gaps (use seo-sea-keyword-gap-analyzer), Shopping structure advice (use shopping-campaign-structure-advisor).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "google_ads"
-  phase: "fase-3-campaigns-creative"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # PMax Search Cannibalization Detector
 

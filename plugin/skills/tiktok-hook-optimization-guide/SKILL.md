@@ -6,12 +6,6 @@ description: |
   "get hook formulas for TikTok", or mentions "hook rate",
   "video retention drop-off", or "scroll-stopping techniques".
   Do NOT use for: overall creative fatigue analysis (use tiktok-creative-fatigue-tracker), audience targeting (use tiktok-audience-strategy), or Spark Ads strategy (use tiktok-spark-ads-strategy).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "tiktok"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with TikTok Ads connection"
 ---
 
 # TikTok Hook Optimization Guide

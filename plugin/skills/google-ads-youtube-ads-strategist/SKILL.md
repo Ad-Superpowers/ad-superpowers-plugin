@@ -1,17 +1,11 @@
 ---
-name: youtube-ads-strategist
+name: google-ads-youtube-ads-strategist
 description: |
   This skill should be used when the user asks to "plan YouTube Ads strategy",
   "choose video ad formats", "set up Bumper ads", "target YouTube audiences",
   or mentions "TrueView", "ABCD framework", "YouTube remarketing",
   or "video campaign optimization".
   Do NOT use for: standard Display campaigns (use display-campaign-optimizer), Performance Max video assets (use pmax-asset-group-optimizer).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.2.0"
-  platform: "google_ads"
-  phase: "fase-5-full-funnel-automation"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # YouTube Ads Strategist
 

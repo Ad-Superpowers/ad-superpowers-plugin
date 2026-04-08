@@ -1,15 +1,9 @@
 ---
-name: gaql-query-guide
+name: google-ads-gaql-query-guide
 description: |
   This skill should be used when the user asks to "write a GAQL query", "build a Google Ads report",
   "select metrics and dimensions", "filter by date range in GAQL", or mentions "video_views",
   "campaign_search_term_view", "LAST_90_DAYS", or "Google Ads Query Language".
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "google_ads"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # GAQL Query Guide (API v23)
 

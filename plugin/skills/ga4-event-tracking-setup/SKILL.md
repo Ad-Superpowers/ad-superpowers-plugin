@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "set up GA4 events", "configure custom events",
   "track form submissions", or mentions "click tracking", "GA4 event parameters", or "user properties".
   Do NOT use for: Data Layer implementation (use ga4-data-layer-guide), key events/conversions setup (use ga4-key-events-config), or e-commerce event tracking (use ga4-ecommerce-setup).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "ga4"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 Event Tracking Setup
 

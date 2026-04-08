@@ -1,16 +1,10 @@
 ---
-name: search-campaign-builder
+name: google-ads-search-campaign-builder
 description: |
   This skill should be used when the user asks to "build a Search campaign", "write RSA ad copy",
   "improve Ad Strength", "set up sitelinks and callouts", or mentions "lead generation campaign",
   "call extensions", "lead forms", or "search campaign structure".
   Do NOT use for: Performance Max campaigns (use performance-max-optimizer), Shopping campaigns (use shopping-campaign-structure-advisor), bid strategy selection (use bid-strategy-selector).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "google_ads"
-  phase: "fase-3-lead-generation"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Search Campaign Builder
 

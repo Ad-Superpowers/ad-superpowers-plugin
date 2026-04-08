@@ -5,12 +5,6 @@ description: |
   "diagnose high LinkedIn CPL", "fix LinkedIn ads not spending", or mentions
   "LinkedIn low engagement", "LinkedIn performance drop", or "reduce LinkedIn ad costs".
   Do NOT use for: LinkedIn bid strategy selection (use linkedin-bid-strategy-selector), LinkedIn lead gen form optimization (use linkedin-lead-gen-optimizer), or LinkedIn benchmark lookups (use linkedin-benchmark-database).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "linkedin"
-  phase: "fase-1-foundation"
-compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
 # LinkedIn Ads Performance Troubleshooter
 

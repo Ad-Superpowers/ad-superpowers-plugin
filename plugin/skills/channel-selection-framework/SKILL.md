@@ -3,12 +3,6 @@ name: channel-selection-framework
 description: |
   This skill should be used when the user asks to "choose an advertising platform", "compare Meta vs Google vs LinkedIn", "plan a media mix", mentions "which channel should I use", "budget allocation across platforms", or "best platform for my audience".
   Do NOT use for: cross-platform attribution issues (use attribution-reconciler), audience persona creation (use buyer-persona-framework), or market sizing for budget justification (use market-sizing-guide).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-2-onboarding"
-compatibility: "Requires AdSuperpowers MCP server with multiple platform connections connection"
 ---
 # Channel Selection Framework for Advertising
 

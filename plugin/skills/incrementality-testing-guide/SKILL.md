@@ -3,12 +3,6 @@ name: incrementality-testing-guide
 description: |
   This skill should be used when the user asks to "run an incrementality test", "measure true ad impact", "design a geo lift test", mentions "incremental ROAS", "holdout experiment", or "is my advertising actually working".
   Do NOT use for: attribution discrepancy diagnosis (use attribution-reconciler), A/B testing landing pages (use landing-page-optimization-guide), or first-party data / tracking setup (use first-party-data-strategy).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-2-onboarding"
-compatibility: "Requires AdSuperpowers MCP server with multiple platform connections connection"
 ---
 # Incrementality Testing Guide
 

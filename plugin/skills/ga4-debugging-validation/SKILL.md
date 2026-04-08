@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "debug GA4 tracking", "validate tag implementation",
   "use DebugView", or mentions "data quality checks", "GA4 audit", or "event tracking not working".
   Do NOT use for: e-commerce event setup (use ga4-ecommerce-setup), BigQuery data analysis (use ga4-bigquery-export).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "ga4"
-  phase: "fase-5-advanced"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 Debugging & Validation Guide
 

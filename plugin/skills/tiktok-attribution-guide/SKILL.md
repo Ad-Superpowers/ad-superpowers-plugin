@@ -5,12 +5,6 @@ description: |
   "compare TikTok VTA vs CTA", "reconcile TikTok and GA4 conversions", or mentions
   "TikTok view-through attribution", "TikTok attribution windows", or "measure TikTok true impact".
   Do NOT use for: TikTok app install attribution/MMP (use tiktok-app-performance-tracker), TikTok creative performance (use tiktok-video-performance-analyzer), or TikTok benchmark lookups (use tiktok-benchmark-database).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "tiktok"
-  phase: "fase-3-attribution"
-compatibility: "Requires AdSuperpowers MCP server with TikTok Ads connection"
 ---
 # TikTok Attribution Guide
 

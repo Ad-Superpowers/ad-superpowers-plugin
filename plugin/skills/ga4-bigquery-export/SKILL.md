@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "export GA4 to BigQuery", "query raw GA4 event data",
   "set up BigQuery linking", or mentions "GA4 data warehouse", "BigQuery dashboard", or "unsampled GA4 data".
   Do NOT use for: GA4 Data API reporting (use ga4-api-reporting), standard GA4 UI reports (use ga4-revenue-analysis).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "ga4"
-  phase: "fase-5-advanced"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 BigQuery Export Guide
 

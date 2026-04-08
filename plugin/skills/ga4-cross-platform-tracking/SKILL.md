@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "set up UTM parameters", "track Meta ads in GA4",
   "implement cross-platform tracking", or mentions "auto-tagging vs UTM", "campaign naming conventions", or "LinkedIn/TikTok attribution in GA4".
   Do NOT use for: channel grouping configuration (use ga4-channel-groupings), attribution model selection (use ga4-attribution-advisor).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "ga4"
-  phase: "fase-3-attribution"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 Cross-Platform Tracking Guide
 

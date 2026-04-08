@@ -1,16 +1,10 @@
 ---
-name: ga4-integration-guide
+name: google-ads-ga4-integration-guide
 description: |
   This skill should be used when the user asks to "link Google Ads to GA4",
   "import GA4 conversions into Google Ads", "sync GA4 audiences", "align attribution models",
   or mentions "UTM tagging", "cross-platform tracking", or "data-driven attribution".
   Do NOT use for: GA4 standalone reporting (use ga4 MCP tools directly), conversion tracking setup (use conversion-tracking-setup), enhanced conversions (use enhanced-conversions-setup).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "google_ads"
-  phase: "fase-3-lead-generation"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # GA4 Integration Guide
 

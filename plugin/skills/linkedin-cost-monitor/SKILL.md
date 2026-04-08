@@ -5,12 +5,6 @@ description: |
   "benchmark LinkedIn CPC in Europe", "detect LinkedIn cost spikes", or mentions
   "why is LinkedIn so expensive", "LinkedIn CPL normal for Netherlands", or "LinkedIn cost trends EU".
   Do NOT use for: general LinkedIn benchmark lookups across all metrics (use linkedin-benchmark-database), LinkedIn bid strategy questions (use linkedin-bid-strategy-selector), or LinkedIn performance troubleshooting (use linkedin-performance-troubleshooter).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "linkedin"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
 # LinkedIn Cost Monitor
 

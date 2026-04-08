@@ -1,17 +1,11 @@
 ---
-name: lookalike-strategy-planner
+name: meta-lookalike-strategy-planner
 description: |
   This skill should be used when the user asks to "create lookalike audiences", "optimize LAL percentages",
   "choose source audiences", or mentions "lookalike strategy", "LAL underperforming",
   or "Advantage+ audience signals". Do NOT use for: audience overlap issues
   (use audience-overlap-detector), full-funnel design (use full-funnel-designer),
   campaign structure (use campaign-structure-advisor).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-3-audience-creative"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # Lookalike Strategy Planner
 

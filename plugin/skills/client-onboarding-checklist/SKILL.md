@@ -5,12 +5,6 @@ description: |
   "audit an ad account before takeover", "build a client kickoff checklist",
   "structure a 30/60/90 day plan", or mentions "agency onboarding" or "account takeover".
   Do NOT use for: specific platform campaign builds (use platform-specific skills), billing/contract setup (outside scope), or creative production workflows (use creative-fatigue-analyzer).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "cross-platform"
-  phase: "fase-2-onboarding"
-compatibility: "Requires AdSuperpowers MCP server with platform connections for the client's accounts"
 ---
 
 # Agency Client Onboarding Checklist

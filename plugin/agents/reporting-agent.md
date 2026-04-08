@@ -3,7 +3,6 @@ name: reporting-agent
 description: Generates structured performance reports — weekly summaries, monthly executive reports, client reports, cross-platform comparisons, competitive reports, and e-commerce analytics. Use when the user asks for a performance report, weekly pulse, monthly summary, client-ready overview, competitive report, revenue analysis, or wants to compare platform performance.
 model: sonnet
 color: blue
-maxTurns: 25
 tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput, mcp__plugin_ad-superpowers_ad-superpowers__meta_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__meta_query, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_insights, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_creatives, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_list_accounts, mcp__plugin_ad-superpowers_ad-superpowers__google_ads_run_gaql, mcp__plugin_ad-superpowers_ad-superpowers__ga4_list_properties, mcp__plugin_ad-superpowers_ad-superpowers__ga4_run_report, mcp__plugin_ad-superpowers_ad-superpowers__gsc_list_sites, mcp__plugin_ad-superpowers_ad-superpowers__gsc_search_analytics, mcp__plugin_ad-superpowers_ad-superpowers__linkedin_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__linkedin_get_analytics, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_advertiser_info, mcp__plugin_ad-superpowers_ad-superpowers__tiktok_get_report, Skill, mcp__plugin_ad-superpowers_ad-superpowers__workflow
 ---
 

@@ -6,12 +6,6 @@ description: |
   "detect performance anomalies", or mentions "N-gram analysis script",
   "broken URL checker", or "Google Ads automation scripts".
   Do NOT use for: manual campaign optimization (use performance-troubleshooter), keyword strategy planning (use keyword-strategy-planner), or Quality Score improvement (use quality-score-optimizer).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "google_ads"
-  phase: "fase-4-ecommerce-advanced"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Google Ads Scripts Library
 

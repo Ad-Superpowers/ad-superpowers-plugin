@@ -4,12 +4,6 @@ description: |
   This skill should be used when the user asks to "set up e-commerce tracking in GA4", "implement purchase events",
   "configure add_to_cart tracking", or mentions "view_item events", "product dataLayer", or "enhanced e-commerce GA4".
   Do NOT use for: promotion and coupon tracking (use ga4-promotion-tracking), revenue analysis and reporting (use ga4-revenue-analysis).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.1.0"
-  platform: "ga4"
-  phase: "fase-4-ecommerce"
-compatibility: "Requires AdSuperpowers MCP server with Google Analytics 4 connection"
 ---
 # GA4 E-commerce Setup Guide
 

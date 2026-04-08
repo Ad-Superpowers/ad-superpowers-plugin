@@ -5,12 +5,6 @@ description: |
   "refresh TikTok ad creatives", "plan TikTok creative rotation", or mentions
   "TikTok CTR declining", "TikTok CPM spiking", or "how many creatives for TikTok".
   Do NOT use for: TikTok video hook/length optimization (use tiktok-video-performance-analyzer), TikTok benchmark lookups (use tiktok-benchmark-database), or TikTok learning phase questions (use tiktok-learning-phase-tracker).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "tiktok"
-  phase: "fase-3-campaigns-creative"
-compatibility: "Requires AdSuperpowers MCP server with TikTok Ads connection"
 ---
 # TikTok Creative Fatigue Tracker
 

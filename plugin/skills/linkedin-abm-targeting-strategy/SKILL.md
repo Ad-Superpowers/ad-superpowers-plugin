@@ -5,12 +5,6 @@ description: |
   "build an ABM campaign", "reach the buying committee", "create a company list for LinkedIn",
   or mentions "account-based marketing", "decision-maker targeting", or "account penetration".
   Do NOT use for: general LinkedIn campaign optimization (use linkedin-performance-troubleshooter), lead form strategy (use linkedin-lead-gen-optimizer), or campaign scaling (use linkedin-campaign-scaling-guide).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "linkedin"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with LinkedIn Ads connection"
 ---
 
 # LinkedIn ABM Targeting Strategy

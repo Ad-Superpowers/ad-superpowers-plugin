@@ -1,17 +1,11 @@
 ---
-name: attribution-window-advisor
+name: meta-attribution-window-advisor
 description: |
   This skill should be used when the user asks to "choose an attribution window",
   "compare click vs view-through attribution", "set up incremental attribution", or mentions
   "Meta attribution settings", "iOS 14 attribution", or "attribution window configuration".
   Do NOT use for: cross-platform attribution reconciliation (use cross-platform-attribution-reconciler),
   CAPI setup (use capi-implementation-guide), EMQ optimization (use emq-optimizer).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.0.0"
-  platform: "meta"
-  phase: "fase-2-measurement"
-compatibility: "Requires AdSuperpowers MCP server with Meta Ads connection"
 ---
 # Attribution Window Advisor
 

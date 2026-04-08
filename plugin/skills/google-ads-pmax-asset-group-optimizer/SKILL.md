@@ -1,17 +1,11 @@
 ---
-name: pmax-asset-group-optimizer
+name: google-ads-pmax-asset-group-optimizer
 description: |
   This skill should be used when the user asks to "optimize PMax asset groups",
   "analyze asset group performance", "configure listing groups",
   "set up search themes", or mentions "audience signals optimization",
   "creative testing in PMax", or "asset group structure".
   Do NOT use for: standard Search/Display campaign setup (use search-campaign-builder), bid strategy selection (use learning-phase-tracker).
-metadata:
-  author: "AdSuperpowers"
-  version: "1.2.0"
-  platform: "google_ads"
-  phase: "fase-5-full-funnel-automation"
-compatibility: "Requires AdSuperpowers MCP server with Google Ads connection"
 ---
 # Performance Max Asset Group Optimizer
 
