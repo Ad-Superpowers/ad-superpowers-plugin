@@ -2,7 +2,7 @@
   "name": "ad-superpowers",
   "owner": {
     "name": "Ad Superpowers",
-    "email": "support@adsuperpowers.ai"
+    "email": "contact@adsuperpowers.ai"
   },
   "plugins": [
     {
@@ -12,7 +12,7 @@
       "version": "2.1.6",
       "author": {
         "name": "Ad Superpowers",
-        "email": "support@adsuperpowers.ai"
+        "email": "contact@adsuperpowers.ai"
       },
       "homepage": "https://adsuperpowers.ai",
       "category": "productivity",

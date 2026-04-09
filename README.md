@@ -184,7 +184,7 @@ Trial requires a credit card and converts to Pro after 14 days unless cancelled.
 
 * Website: [adsuperpowers.ai](https://adsuperpowers.ai)
 * Dashboard: [app.adsuperpowers.ai](https://app.adsuperpowers.ai)
-* Email: support@adsuperpowers.ai
+* Email: contact@adsuperpowers.ai
 
 ## License
 
