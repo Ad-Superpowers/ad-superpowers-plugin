@@ -1,9 +1,9 @@
 ---
-description: Deep-dive analysis for e-commerce businesses with Shopify integration. Analyze product-level ROAS, identify winners/losers, and get inventory-aware recommendations. (requires Pro subscription)
+description: Deep-dive analysis for e-commerce businesses. Analyze product-level ROAS via Meta Shopping, Google Shopping/PMax and GA4 e-commerce data, identify winners/losers, and get actionable recommendations. (requires Pro subscription)
 disable-model-invocation: true
 ---
 
-> **Platforms:** meta, google_ads, shopify, google_analytics
+> **Platforms:** meta, google_ads, google_analytics
 > **Tier:** pro
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
@@ -111,7 +111,6 @@ Efficiency Score = ROAS * Volume Factor (orders > 10 = 1.0, 5-10 = 0.8, <5 = 0.5
 Follow OUTPUT FORMAT above EXACTLY. Fill all tables with real data.
 
 ## EDGE CASES
-- Shopify not connected: Use GA4 ecommerce data instead; note "Shopify not connected - using GA4 revenue data"
 - No shopping/PMax campaigns: Analyze all campaigns with purchase conversions instead
 - Zero revenue reported: Flag as tracking issue - check purchase event setup in GA4 and platform pixels
 - Single platform only: Run analysis for that platform, skip cross-platform comparison

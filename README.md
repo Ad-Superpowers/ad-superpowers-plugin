@@ -1,22 +1,21 @@
 # Ad Superpowers for Claude
 
-Manage, analyze, and optimize your ad campaigns across 8 platforms through natural language in Claude Code and Claude Desktop.
+Manage, analyze, and optimize your ad campaigns across 7 platforms through natural language in Claude Code and Claude Desktop.
 
-**115 expert skills** · **30 workflow commands** · **5 specialized agents** · **33 MCP tools**
+**115 expert skills** · **35 workflow commands** · **5 specialized agents** · **33 MCP tools**
 
 ## Platforms
 
 | Platform | Skills | MCP Tools | What you can do |
 |----------|-------:|----------:|------------------|
-| **Meta Ads** | 23 | 8 | Campaign management, creative fatigue analysis, audience targeting, ad creation, budget optimization |
+| **Meta Ads** | 23 | 9 | Campaign management, creative fatigue analysis, audience targeting, ad creation, budget optimization |
 | **Google Ads** | 32 | 4 | GAQL queries, Performance Max, keyword strategy, bid optimization, campaign creation |
 | **Google Analytics 4** | 18 | 2 | Event tracking, attribution models, audience building, ecommerce analysis |
 | **Google Search Console** | 2 | 3 | SEO performance, keyword rankings, indexing diagnostics, sitemap management |
 | **Google Tag Manager** | · | 3 | Container auditing, consent mode, server-side tagging, conversion setup |
 | **LinkedIn Ads** | 11 | 4 | B2B lead gen, ABM targeting, revenue attribution, Thought Leader Ads, CTV |
 | **TikTok Ads** | 10 | 6 | Creative fatigue, video performance, Smart+ campaigns, Search Ads, Shop |
-| **Cross-platform** | 19 | · | Attribution reconciliation, SEO vs SEA gaps, budget allocation, competitive analysis |
-| **Gemini (image gen)** | · | 1 | AI image generation for ad creatives, BYOK via Gemini API key |
+| **Cross-platform** | 19 | 2 | Unified `workflow` + `skill` tools; attribution reconciliation, SEO vs SEA gaps, budget allocation, competitive analysis |
 
 ## Install
 
@@ -24,7 +23,7 @@ Pick the path that matches how you use Claude. All four give you the MCP tools; 
 
 ### Claude Code (terminal or VSCode extension)
 
-**Requires Claude Code `2.1.74` or newer.** Earlier versions have an upstream bug ([anthropics/claude-code#21560](https://github.com/anthropics/claude-code/issues/21560)) that prevents plugin-defined subagents from accessing MCP tools, which breaks all 5 specialized agents in this plugin. The MCP tools and skills work on older versions, but the agents will refuse cleanly instead of running. Upgrade with `npm i -g @anthropic-ai/claude-code@latest` (terminal) or via the VSCode extension marketplace, then `Developer: Reload Window`.
+**Requires Claude Code `2.1.74` or newer.** Earlier versions had an upstream bug ([anthropics/claude-code#21560](https://github.com/anthropics/claude-code/issues/21560)) that prevented plugin-defined subagents from accessing MCP tools; it is fixed in 2.1.74+. Upgrade with `npm i -g @anthropic-ai/claude-code@latest` (terminal) or via the VSCode extension marketplace, then `Developer: Reload Window`.
 
 Add the marketplace once, then install the plugin:
 
@@ -33,7 +32,7 @@ Add the marketplace once, then install the plugin:
 /plugin install ad-superpowers@ad-superpowers
 ```
 
-That's it. The MCP server, all 115 skills, 30 workflow commands, 5 agents, and safety confirmations are bundled.
+That's it. The MCP server, all 115 skills, 35 workflow commands, 5 agents, and safety confirmations are bundled.
 
 ### Cowork (Claude Desktop's agentic coding mode)
 
@@ -45,7 +44,7 @@ Cowork supports plugins through an admin UI, not through a slash command. This p
 4. Set distribution: **Available for install** (members can opt in) or **Installed by default**
 5. Members then open **Browse plugins** inside Cowork to install it
 
-Once installed, members get the full plugin experience (skills, commands, agents, and MCP tools) inside Cowork.
+Once installed, members get the skills, commands, and MCP tools inside Cowork. The 5 bundled subagents do not currently launch in Cowork — see [Known limitations](#known-limitations) below for details and the Skill-based workarounds.
 
 ### Claude Desktop (chat mode, via Connectors)
 
@@ -92,7 +91,7 @@ No API keys to configure, no manual MCP setup. Authentication happens via OAuth 
 | `/ad-superpowers:anomaly-detective` | Detect performance anomalies across campaigns |
 | `/ad-superpowers:competitive-landscape-analyzer` | Competitive positioning analysis |
 
-[See all 30 commands](plugin/commands/)
+[See all 35 commands](plugin/commands/)
 
 ### Specialized agents
 
@@ -131,28 +130,47 @@ All write operations include safety confirmations:
 
 ## Known limitations
 
-### Specialized agents may run with reduced capabilities
+### Bundled subagents do not launch in Cowork (Claude Desktop agentic mode)
 
-The 5 bundled agents (`marketing-strategist`, `media-buyer`, `creative-analyst`, `reporting-agent`, `tracking-specialist`) are designed to call Ad Superpowers MCP tools directly when Claude Code dispatches them. As of Claude Code's current release, **MCP tools shipped from a plugin's `.mcp.json` are not propagated into plugin-defined subagents**. This is a Claude Code platform limitation tracked upstream at [anthropics/claude-code#21560](https://github.com/anthropics/claude-code/issues/21560), not an Ad Superpowers bug.
+The 5 bundled agents (`marketing-strategist`, `media-buyer`, `creative-analyst`, `reporting-agent`, `tracking-specialist`) launch correctly in **Claude Code** (terminal and VSCode extension, 2.1.74+). They do **not** currently launch in **Cowork**, the agentic coding mode inside Claude Desktop.
 
-What this means in practice:
+**What's happening:** When the plugin is installed in a Cowork session, Cowork's plugin loader reads the plugin's skills, commands, and MCP server correctly, but it does not register the markdown files in `agents/` with the Agent tool's `subagent_type` registry. The Agent tool in Cowork still only exposes its five built-in subagents (`general-purpose`, `Explore`, `Plan`, `statusline-setup`, `claude-code-guide`). Attempting `Agent(subagent_type="creative-analyst", ...)` returns "agent type not found." Our agent files validate cleanly against the [plugin spec](https://code.claude.com/docs/en/plugins-reference#agents), so this is a Cowork harness limitation, not a plugin defect.
 
-* When Claude Code spawns one of these agents via the `Agent` tool, the agent's tool registry only contains read-only tools (`Glob`, `Grep`, `Read`, `WebFetch`, `WebSearch`). The Ad Superpowers MCP tools are absent.
-* The agents are programmed to **detect this and refuse cleanly** rather than fabricate data. You'll see a structured failure report instead of an invented analysis.
-* Asking Claude directly (without explicit agent dispatch) is unaffected — the main thread has full access to all 33 MCP tools, all 30 workflow commands, and all 115 skills. **The plugin works fully when used in the main conversation.**
+This is consistent with other known Cowork plugin-loading issues tracked upstream ([#39274](https://github.com/anthropics/claude-code/issues/39274), [#40774](https://github.com/anthropics/claude-code/issues/40774)), and there is currently no plugin-author-side opt-in, whitelist, or setting that changes this behavior. We have filed a request with Anthropic to expose plugin-bundled agents through Cowork's Agent tool.
 
-We will re-enable the agents for direct MCP access once the upstream Claude Code fix lands. If you want to be notified, ⭐ the [issue on GitHub](https://github.com/anthropics/claude-code/issues/21560).
+**What works in Cowork today:** Everything except `Agent()` dispatch.
+
+* All 115 skills load and auto-invoke on relevant questions
+* All 35 workflow commands are discoverable and runnable
+* All 33 MCP tools are callable from the main conversation
+* All write operations (create campaign, duplicate ad, update budget) work
+* The agents' **prompts and logic** are also available as slash commands and skills — you get the same analysis, it just runs in the main context window instead of a separate subagent
+
+So in practice, asking Claude directly in Cowork — *"run a creative fatigue scan on my Meta account"* or *"write a weekly performance report"* — gives you the same deliverable the subagent would have produced. It loads the relevant skill (`meta-creative-fatigue-analyzer`, `weekly-performance-pulse`, etc.) and calls the MCP tools directly in the main thread.
+
+### Claude Code (terminal and VSCode)
+
+No known limitations on 2.1.74+. All skills, commands, MCP tools, and subagents work as documented. Earlier versions had [#21560](https://github.com/anthropics/claude-code/issues/21560) (subagents couldn't access plugin MCP tools); that is fixed.
+
+### Host compatibility matrix
+
+| Component | Claude Code CLI / VSCode | Cowork (Claude Desktop) | Claude Desktop (chat, via Connector) | ChatGPT (Apps) |
+|-----------|:---:|:---:|:---:|:---:|
+| 115 skills | ✅ | ✅ | ❌ | ❌ |
+| 35 commands | ✅ | ✅ | ❌ | ❌ |
+| 33 MCP tools | ✅ | ✅ | ✅ | ✅ |
+| 5 subagents | ✅ | ❌ (use skills instead) | ❌ | ❌ |
 
 ## Pricing
 
-| Tier | Monthly | Connected accounts | Platforms |
-|------|---------|--------------------|-----------|
-| **Free** | €0 | 3 | Meta, Google Ads, GA4, Search Console |
-| **Pro** | €79 | 25 | All 8 platforms |
-| **Team** | €249 | 100 | All 8 platforms |
-| **Enterprise** | Custom | Unlimited | All plus custom integrations |
+| Tier | Monthly | Annual | Tool calls/mo | Accounts | Users | Platforms |
+|------|--------:|-------:|--------------:|---------:|------:|-----------|
+| **Trial** | €0 (14-day) | — | 200 | 25 | 1 | All 7 |
+| **Pro** | €99 | €79 | 1,500 | 25 | 1 | All 7 |
+| **Team** | €249 | €199 | 6,000 | 100 | 5 | All 7 |
+| **Enterprise** | Custom | Custom | Unlimited | Unlimited | Unlimited | All plus custom integrations |
 
-20% discount on annual plans. Start free at [adsuperpowers.ai](https://adsuperpowers.ai).
+Trial requires a credit card and converts to Pro after 14 days unless cancelled. Annual plans get a 20% discount. A "tool call" is one MCP tool invocation; workflows that fan out to multiple tools count each invocation. Start at [adsuperpowers.ai](https://adsuperpowers.ai).
 
 ## Security
 
