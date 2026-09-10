@@ -132,11 +132,19 @@ Other creative types, same `meta_create_ad` call:
 - **Carousel** — pass `slides=[{image_hash, name, link}, ...]` (2–10 cards).
 - **Per-placement carousel variants** — `placement_assets` entries of the shape `{slides, placements}`.
 
-### Batch writes (no self-pacing needed)
+For local Meta JPEG/PNG up to 20 MB (20,000,000 bytes), follow `media-upload-guide`:
+`assets_stage` → client HTTP PUT → `meta_upload_image(stage_id=...)` →
+`image_hash` → the existing `meta_create_ad(image_hash=...)`. The preview must
+be available and the client must have file/HTTP access. Reuse an existing
+account-library hash when possible. Do not add media arguments to campaigns.
+A new staged image normally costs two successful calls; 50 cost 100 before
+ad creation and checks. On unknown upload outcomes stop and inspect, not restage.
+
+### Batch writes and pacing
 
 There is **no bulk-create tool** — a batch is several `meta_create_ad` calls. You do not need to pace them yourself:
 
-- The server mirrors Meta's documented rate model (writes are score-weighted, and **uploads count as writes**) and has an error-613 circuit breaker plus backoff on Meta's own usage headers. There is **no artificial per-hour write cap** — sequential writes in a normal drop need no self-pacing.
+- The server mirrors Meta's documented rate model (writes are score-weighted, and **uploads count as writes**) and has an error-613 circuit breaker plus backoff on Meta's own usage headers. Follow provider backoff, staging capacity hints and ordinary workspace plan limits. The removal of a historical hourly cap does not mean unlimited calls or uploads.
 - Run the calls **sequentially** rather than as an unbounded parallel fan-out: sequential calls give clean per-ad results and let the server react to Meta's signals between calls.
 - If a write is throttled, the error says so — back off, then resume where you left off; wait guidance is included where Meta provides it.
 - If one ad in a batch hits a **Meta API** error, the others still succeed — that call returns a structured error result rather than aborting the run, so you can retry just the failures. Bad **inputs** are different: invalid media combinations, missing placements, a malformed carousel, or a `facebook_only` + Instagram conflict raise a validation error before the API call, so check each call's inputs before firing the batch.
@@ -172,4 +180,4 @@ Common stumbles and the fix:
 
 ## Account integrity reminder
 
-Every `meta_create_ad` and every upload is a write. The server's protection stack mirrors Meta's own rate model and backs off on Meta's throttle signals — there is **no artificial hourly cap**, so a normal batch needs no self-pacing. If a write is throttled, the error says so; back off and resume. Everything ships PAUSED so you can review before any spend.
+Every `meta_create_ad` and every upload is a write. The server backs off on Meta's throttle signals. Follow explicit retry hints and the upload guide's bounded window; workspace quotas still apply. If a write is throttled, the error says so; back off and resume. Everything ships PAUSED so you can review before any spend.

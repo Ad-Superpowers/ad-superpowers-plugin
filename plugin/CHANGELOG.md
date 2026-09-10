@@ -2,6 +2,23 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.4.0] - 2026-09-10
+
+### Changed
+
+- Document private staging, client file/HTTP requirements, exact 20 MB image
+  limits, source confidentiality and same-stage recovery. Upload admission
+  remains closed; installing this plugin does not enable a pilot.
+- Report production acceptance of 500 MB videos at TikTok and Google Ads.
+  Meta and LinkedIn large-video failures remain unresolved, and the unavailable
+  Meta staging recipe is withdrawn. Acceptance is not ad approval.
+- Align creative-refresh and ad-launch instructions with the upload guide and
+  require separate authorization before creating or activating advertisements.
+- Include the current source's bounded Ad Library research guidance and
+  operator-enabled Merchant label pilot notice. Neither enables access merely
+  by installing the plugin; competitor spend is not inferred from ad counts.
+- Refresh generated tool metadata from the current server source.
+
 ## [2.3.1] - 2026-08-28
 
 ### Fixed

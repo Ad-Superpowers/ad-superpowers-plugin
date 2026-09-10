@@ -2,21 +2,25 @@
 
 Manage, analyze, and optimize your ad campaigns across 8 platforms through natural language in Claude Code and Claude Desktop.
 
-**120 expert skills** · **35 slash commands** (29 workflow, 6 utility) · **5 specialized agents** · **51 MCP tools**
+**120 expert skills** · **35 slash commands** (29 workflow, 6 utility) · **5 specialized agents** · **57 MCP tools**
 
 ## Platforms
 
 | Platform | Skills | MCP Tools | What you can do |
 |----------|-------:|----------:|------------------|
 | **Meta Ads** | 26 | 14 | Campaign management, creative fatigue analysis, audience targeting, ad creation, budget optimization |
-| **Google Ads** | 32 | 4 | GAQL queries, Performance Max, keyword strategy, bid optimization, campaign creation |
+| **Google Ads** | 32 | 5 | GAQL queries, Performance Max, keyword strategy, bid optimization, campaign creation |
 | **Google Analytics 4** | 18 | 2 | Event tracking, attribution models, audience building, ecommerce analysis |
 | **Google Search Console** | 2 | 3 | SEO performance, keyword rankings, indexing diagnostics, sitemap management |
 | **Google Tag Manager** | 4 | 4 | Container auditing, consent mode, server-side tagging, conversion setup |
-| **Google Merchant Center** | 0 | 3 | Feed accounts, product issues, disapprovals ranked by click potential, shopping performance (read-only) |
-| **LinkedIn Ads** | 11 | 5 | B2B lead gen, ABM targeting, revenue attribution, Thought Leader Ads, CTV |
+| **Google Merchant Center** | 0 | 6 | Feed and Shopping reads; separate operator-enabled, guided customLabel4 pilot for one registered product, with a preview and explicit token confirmation for each apply and revert |
+| **LinkedIn Ads** | 11 | 6 | B2B lead gen, ABM targeting, revenue attribution, Thought Leader Ads, CTV |
 | **TikTok Ads** | 10 | 9 | Creative fatigue, video performance, Smart+ campaigns, Search Ads, Shop |
 | **Cross-platform** | 17 | 7 | Unified `workflow`, `workspace_info`, `skill`, `skill_update`, `workflow_update`, `clients`, and `clients_update` tools; client profiles, attribution reconciliation, SEO vs SEA gaps, budget allocation, competitive analysis |
+
+The total also includes `assets_stage`, the private image/video staging tool outside these platform rows. Upload admission is currently closed. Production tests accepted 20 MB images at all four upload destinations and 500 MB videos at TikTok and Google Ads; large-video routes for Meta and LinkedIn remain unavailable. See [media upload availability](https://adsuperpowers.ai/docs/media-upload).
+
+Merchant Center reads are generally available. The label pilot is enabled by an operator on request, not by installing this plugin. Its guided acceptance route uses Claude Desktop; this is not a claim of acceptance in Claude Code or Cowork. It does not support general product corrections, batch updates, prices, stock, primary feeds, or feed rules. Pending is not processed; UNKNOWN stops all further changes. When the pilot's Google authorization expires, its owner must reauthorize in the same workspace with the same Google identity. Revert removes only our own single-label input. See the [pilot guide](https://adsuperpowers.ai/docs/merchant-label-pilot).
 
 ## Install
 
@@ -165,7 +169,7 @@ No known limitations on 2.1.74+. All skills, commands, MCP tools, and subagents 
 |-----------|:---:|:---:|:---:|:---:|
 | 120 skills | ✅ | ✅ | ❌ | ❌ |
 | 35 commands | ✅ | ✅ | ❌ | ❌ |
-| 51 MCP tools | ✅ | ✅ | ✅ | ✅ |
+| 57 MCP tools | ✅ | ✅ | ✅ | ✅ |
 | 5 subagents | ✅ | ❌ (use skills instead) | ❌ | ❌ |
 
 ## Paid early access

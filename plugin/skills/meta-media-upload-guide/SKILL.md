@@ -4,43 +4,38 @@ description: "This skill should be used when the user asks to \"upload a video t
 ---
 # Meta Media Upload Guide
 
+Requires the Ad Superpowers MCP server with a Meta Ads connection.
+
 The single source of truth for getting creative assets into Meta Ads when using Ad Superpowers' MCP tools. Eliminates the most common workflow confusion: **"why won't Claude upload my local file?"**.
 
-## Three Upload Tiers (in order of preference)
+## Choose the upload route
 
-Three routes get media into Meta. Prefer them in this order — they trade off convenience for friction.
+Reuse an existing destination-account `image_hash` or `video_id` first (PATH B).
+For a **local JPEG/PNG up to 20 MB (20,000,000 bytes)**, prefer **private staging** when `assets_stage`
+is available (PATH C). The client needs file access and HTTP upload (for example a local shell); the remote MCP
+server cannot open a client path or an attachment in another application. Client
+support must be tested, not inferred from a product name. Staging is a preview, default off: do not claim
+that its presence proves customer release readiness or enable it yourself.
 
-**Tier 1 — Public URL (preferred for everything).**
-The lowest-friction path. Works for images and videos alike. Meta fetches server-side, no MCP transport cost. Use this whenever the asset already lives on a URL (Notion, Google Drive, Dropbox, Canva, S3, Cloudinary, your own CDN).
+An already public, direct HTTPS media URL remains supported (PATH A). For
+`meta_upload_image(image_url=...)`, AdSuperpowers downloads the image and uploads
+it to Meta. Do not publish private client files merely to obtain a URL.
 
-**Tier 2 — Local file upload (images only, up to 4 MB).**
-`meta_upload_image(image_data=<base64>)` accepts base64-encoded bytes directly from Claude Desktop (Cowork) or Claude Code. The MCP tool decodes and forwards to Meta's `adimages` endpoint as bytes. Great for one-off image uploads from a file on disk. **Videos do not have this path** — a typical ad video is 5–50 MB and the MCP transport is not designed for GB-scale binary payloads. Host videos somewhere and use Tier 1.
+Legacy `meta_upload_image(image_data=...)` remains available with the existing
+4 MiB raw-byte limit. Around **50 KB is a practical context warning**, not an
+additional enforced limit. Avoid sending ordinary creative-sized base64 strings
+through the conversation. If staging or local shell access is unavailable, use
+an approved existing URL or manual Ads Manager upload and library discovery.
+Private Meta video is currently unavailable: the attended 500 MB test returned
+HTTP 413 with an uncertain outcome. Do not repeat or restage it automatically.
+PATH D documents the interface, not a working large-file route. Use an existing
+approved asset, an already approved URL or authorized manual Ads Manager upload.
+The preview is closed after the attended production acceptance test; do not
+assume that a customer workspace can stage files.
 
-**Tier 3 — Manual Ads Manager upload + library discovery.**
-Drag-drop into the Ads Manager Media Library UI (NL: "Media op advertentieaccountniveau" / "Zakelijke media"), then `meta_query(account_id, "adimages")` or `"advideos"` to list hashes + IDs. Ideal for bulk drops (50+ files) and for situations where Meta is the only sanctioned store.
-
-**Why not inline bytes for video?** A 50 MB video → ~67 MB base64 → bloats every message in the conversation and often exceeds the MCP response limit. Meta's own recommendation is server-side URL fetch for video. Don't fight it.
-
-## Decision Tree
-
-```
-START: What do you have?
-│
-├─► Public URL already (Canva export, Notion, Drive direct link, Dropbox, etc.)
-│   └─► PATH A — image_url / video_url on meta_create_ad (Tier 1)
-│
-├─► image_hash / video_id already in Meta's library
-│   └─► PATH B — reuse by hash/id (fastest, zero upload cost)
-│
-├─► Local IMAGE file on disk, ≤ 4 MB
-│   └─► PATH C — meta_upload_image(image_data=<base64>) (Tier 2)
-│
-├─► Local VIDEO file on disk (any size)
-│   └─► PATH D — host first (Drive/Dropbox/Cloudinary/S3), then PATH A
-│
-└─► A folder of 10+ creatives for bulk
-    └─► PATH E — Ads Manager UI drag-drop → meta_query(adimages/advideos) (Tier 3)
-```
+For a folder, use the bounded staged workflow below when available. Manual
+Ads Manager drag/drop remains an alternative, especially when Meta must be the
+only remote store. Uploading media does not authorize creating or activating ads.
 
 **Filename hints reduce friction on every path.** Use consistent aspect-ratio suffixes when you name files (`_1x1`, `_9x16`, `_4x5`, `_16x9`, `_1.91x1`) so Claude can match the right asset to the right placement automatically after upload. See "Filename-based aspect ratio matching" below.
 
@@ -49,7 +44,7 @@ START: What do you have?
 Simplest case. The URL must be:
 
 - **Publicly reachable HTTPS** (open an incognito browser window to verify — no auth wall, no VPN)
-- **Direct link to the media file itself**, not a viewer page (for Google Drive / Dropbox, see PATH C hosting rules)
+- **Direct link to the media file itself**, not a viewer page (for Google Drive / Dropbox, see PATH D hosting rules)
 - **Format**: JPG / PNG for images; MP4 / MOV for video; GIF also accepted
 - **Size constraints** (Meta-side): video 1s–241min, resolution ≥120x120, file ≤4 GB via URL fetch
 - **Temporary URLs are fine** — Meta ingests the bytes server-side within seconds, so expiring links (presigned S3, Canva exports) work.
@@ -123,46 +118,108 @@ meta_create_ad(..., image_hash=hash_to_use)
 
 **Gotcha:** `image_hash` is scoped to the ad account. You cannot reuse a hash from account A in account B. Each account needs its own copy.
 
-## PATH C — Local IMAGE file (base64 upload, Tier 2)
+## PATH C — Local JPEG/PNG with private staging (preferred)
 
-You have a `.jpg` / `.png` on disk, under 4 MB raw. Use `meta_upload_image` with `image_data`:
+Image generation is an external/client function, not an MCP upload capability.
+For video use PATH D; for another platform use its own guide and inputs.
+A stage is bound to its platform, account and media type. The byte transfer bypasses the MCP payload, but
+metadata and files already given to an AI client may still be in its context.
 
-```python
-# AI client (Claude Desktop / Cowork / Claude Code) reads the file:
-#   with open("/path/to/hero.jpg", "rb") as f:
-#       image_bytes = f.read()
-#   image_data = base64.b64encode(image_bytes).decode()
-#
-# Then calls:
-meta_upload_image(
-    account_id="act_...",
-    image_data="<base64 string>",
-    name="spring-2026-hero_1x1_1080x1080",  # encode aspect-ratio hint
-)
-# → returns {success, image_hash, width, height, image_url (Meta CDN), deploy_hint}
+At first use explain that original media, including embedded metadata, passes
+through AdSuperpowers and temporary private storage at its provider before
+uploading to the chosen Meta account. This does not need a new confirmation per
+file when the user has already authorized the upload. Preserve their original.
 
-# Then use the returned hash:
-meta_create_ad(
-    account_id="act_...",
-    adset_id="...",
-    headline="...", body="...", link_url="https://...",
-    image_hash="<returned hash>",
-)
-```
+1. Compute bytecount and SHA-256 locally, printing only metadata (for example
+   `wc -c < hero.jpg` and `sha256sum hero.jpg`). Do not print or base64 the file.
+2. Call `assets_stage(platform="meta", account_id="act_...", asset_type="image",
+   filename="hero.jpg", content_type="image/jpeg", size_bytes=...,
+   sha256_expected="<local SHA-256>")`. PNG uses `image/png`. This route supports
+   up to 20 MB (20,000,000 bytes) and 16 megapixels; provider/placement limits
+   can be stricter, and the returned stage policy is authoritative.
+3. Send the file with the returned method, URL and headers from the local client.
+   Keep the capability in memory. If using curl, supply its URL and returned
+   headers through `--config -` on stdin and the file through `--data-binary
+   @hero.jpg`; never interpolate the capability into argv, shell history or a
+   generated script. Do not enable verbose/trace logging or redirects.
 
-**Naming discipline pays off.** The `name` argument is how you find the asset back later via `meta_query(adimages)` — and how Claude can auto-pick the right ratio per placement (see Filename Matching section below). Prefer descriptive names with aspect hints:
+   Treat the URL as a credential: no shared logs or committed manifests
+   containing it. Only the local HTTP client opens `hero.jpg`; never pass a
+   `file_path` to MCP. No temporary public/signed read URL is involved.
+4. On HTTP 201 call `meta_upload_image(account_id="act_...", stage_id="stg_...",
+   name="hero_1x1")`. Supply exactly one of `stage_id`, `image_data`, `image_url`.
+   Compare returned SHA-256 with the local hash; store the resulting image_hash.
+   A separate, authorized ad-creation call can use that hash.
 
-- `spring-hero_1x1_1080x1080.jpg`
-- `nike-summer_9x16_1080x1920.jpg`
-- `bundle-offer_4x5.png`
+The upload URL expires after 10 minutes and permits one admitted attempt.
+`finalize_before` is 24 hours from reservation; the 10-minute URL expiry does
+not expire an already ready stage. Persisted results can replay until
+`result_expires_at` (30 days). Source objects are scheduled for deletion after
+success/failure/expiry, normally on a 15-minute cleanup cadence. Physical deletion
+may lag during an outage; this is not a guaranteed physical retention deadline.
+Replay rechecks current org/account access and the exact original connection.
+Another authorized colleague in the same org may finalize/replay; actor attribution
+is not a private-storage boundary. Always keep the original account and `name`.
 
-**Size cap:** 4 MB raw (~5.4 MB base64). For larger images, either downsize (1080x1080 JPEG quality 85 is typically well under 500 KB) or host the file and use PATH A.
+| Outcome | Next action |
+|---|---|
+| Own PUT 429: `upload_capacity_exceeded`, `upload_attempt_consumed=false`, `Retry-After` | Wait the hint, then retry the same PUT before expiry. It is a pacing hint, not reserved capacity. |
+| Lost PUT response / network error / proxy 429 | Do not blindly resend PUT. Attempt finalization of the known stage to learn its state. |
+| `finalization_capacity_exceeded` / `finalization_in_progress` | Wait, then repeat the same stage/name. Capacity refusal happens before blobread and spends no service attempt. |
+| `finalization_retryable` | Wait `retry_after`, keep the same stage/name; max three service attempts and at least 60 seconds cooldown. |
+| `outcome_unknown` | Check the destination library; never automatically restage or resend. Filename or local SHA alone cannot prove Meta acceptance. |
+| `stage_conflict` / access denied | Restore the original parameters or resolve access to the bound connection; do not switch destinations. |
+| Definitive expired/failed stage with no uncertain platform effect | Fix the cause, then stage afresh if still authorized. |
 
-**Cowork caveat:** Claude Desktop in Cowork mode reads local files and passes base64 along — this is the path that just works. Without Cowork, you're back to hosting the file first or using Claude Code with filesystem access.
+### Folder workflow and local manifest
 
-## PATH D — Local VIDEO file (host first, Tier 1)
+Use a window of **two files**, reserving only when a slot is free; at most five
+open stages per org. Store path, SHA, destination, immutable name, stage-ID,
+status and image_hash in a local manifest. Keep capabilities and credentials out
+of it. On restart reuse completed hashes; retry only the explicitly safe states
+above. Stop automatic processing for uncertain results and quota exhaustion.
 
-Video bytes are too large for MCP transport. Pick a hosting option, get a public URL, then use `meta_upload_video(video_url=...)` or `meta_create_ad(video_url=...)`.
+One successful stage and one successful finalization cost **two tool calls**;
+HTTP PUT costs none. A successful result replay costs another call. Estimate quota
+before starting: 50 new images normally need 100 successful calls, excluding
+replays, checks and ad creation. A 50-call trial cannot cover that full batch.
+Ordinary plan limits apply; this is not a reservation or a quota bypass.
+A sequential 50-file client flow was proven with local app/MCP/PG/Redis,
+real Storage and simulated Meta. On 9 September 2026, the attended production
+pilot accepted four synthetic PNG images and one 5.4 MB MP4 at Meta, confirmed
+same-account image hashes and explicit video readiness, and created five PAUSED
+ads under a new PAUSED campaign and ad set. All five staging sources were
+removed by automatic cleanup; video readiness was still observed afterward.
+This is not a hosted 50-file acceptance or a general customer release. There is
+no measured 1,000-file or parallel-bulk capacity claim. Startup cleanup does not
+prove the daily orphan-scan recurrence; that observation remains pending.
+
+Rollback stops new stages and all PUT requests, including unused issued URLs.
+Already ready stages and stored results remain usable within their deadlines;
+cleanup continues with retained Storage configuration. Do not keep retrying a
+PUT that returns `asset_upload_disabled`.
+
+### Legacy inline image fallback
+
+`meta_upload_image(account_id="act_...", image_data="<base64>", name="hero")`
+retains its existing raw-byte cap of 4 MiB. Use for small inputs when appropriate;
+50 KB is guidance about context cost, never a new rejection rule. Prefer staging
+for normal images; lack of shell access does not make remote file paths work.
+
+## PATH D — Local MP4 video with private staging
+
+Private Meta video is currently unavailable. The attended 500 MB attempt was
+not accepted and has an uncertain outcome. Do not reserve another stage or
+repeat its bytes automatically. The service's configured ceiling is not a
+working upload recipe.
+
+Reuse an existing account video ID, an explicitly authorized manual Ads Manager
+upload, or an already approved direct URL. Do not publish a private file just
+to obtain a URL. The hosting examples below apply only when sharing has already
+been authorized. Existing successful stage receipts can be inspected with
+`meta_upload_video(account_id=..., stage_id=..., title=..., action="status")`;
+keep their account and title unchanged. Status inspection never resumes bytes
+and processing readiness does not authorize ad creation or spend.
 
 ### Hosting options (ranked by practicality)
 
@@ -220,7 +277,7 @@ aws s3 presign s3://your-bucket/ads/video.mp4 --expires-in 3600
 
 Meta fetches within seconds — a 1-hour TTL is plenty.
 
-## PATH E — Bulk upload via Ads Manager UI (Tier 3)
+## PATH E — Bulk upload via Ads Manager UI (manual route)
 
 You have a folder with 50+ creatives. Avoid one-at-a-time uploads.
 
@@ -373,9 +430,10 @@ Do NOT try to stretch a 1:1 asset across Stories placement — Meta's placement 
 
 ### "Claude Desktop says it can't upload local files"
 
-- For **images ≤ 4 MB**: use PATH C. `meta_upload_image(image_data=<base64>)` accepts inline bytes. Cowork can read the file and encode automatically. If the AI says "I can't", prompt it explicitly: "Use the `meta_upload_image` tool with the file base64-encoded via `image_data`".
-- For **larger images or any video**: use PATH D. Host the file first (Google Drive direct link, Dropbox, Cloudinary, S3), then pass the URL. MCP binary transport is not designed for GB-scale payloads.
-- Claude Code behaves the same — it reads files from disk and base64-encodes for `meta_upload_image`, OR hosts + passes URL for videos.
+For local JPEG/PNG within the returned policy, use PATH C if `assets_stage` and
+local shell access are available. Do not paste base64 as the default workaround.
+Without that combination use a small legacy inline input, an approved existing
+URL, or manual Ads Manager upload. Local video remains on PATH D.
 
 ### "I uploaded a video 2 minutes ago but `meta_query(advideos)` doesn't show it"
 
@@ -383,7 +441,7 @@ Do NOT try to stretch a 1:1 asset across Stories placement — Meta's placement 
 
 ## Quick Workflow Recipes
 
-### Recipe 1 — Single image ad from Canva URL (fastest path, Tier 1)
+### Recipe 1 — Single image ad from Canva URL (URL route)
 
 ```
 1. In Canva: Share → Anyone with the link → Copy (or Download → Copy link)
@@ -395,41 +453,20 @@ Do NOT try to stretch a 1:1 asset across Stories placement — Meta's placement 
    )
 ```
 
-### Recipe 2 — Single image ad from a local file on disk (Tier 2)
+### Recipe 2 — Single image from a local file on disk
 
-```
-1. User attaches hero_1x1_1080x1080.jpg to the conversation
-   (Cowork mode reads it automatically; Claude Code reads it via file path).
-2. Claude base64-encodes the bytes.
-3. Claude: meta_upload_image(
-     account_id="act_...",
-     image_data="<base64 string>",
-     name="spring-hero_1x1_1080x1080",
-   )
-   # → returns {image_hash: "abc...", width: 1080, height: 1080}
-4. Claude: meta_create_ad(
-     account_id="act_...",
-     adset_id="...",
-     headline="...", body="...", link_url="https://...",
-     image_hash="abc...",
-   )
-```
+Follow PATH C: local SHA/size → assets_stage → curl PUT →
+meta_upload_image(stage_id=..., name=...). Reuse the returned image_hash in a
+separately authorized meta_create_ad call. Use the legacy inline fallback only
+when staging is unavailable and context cost is acceptable.
 
-### Recipe 3 — Single video ad from a local file (Tier 1 via hosting)
+### Recipe 3 — Single video ad from a local file
 
-```
-1. Upload video.mp4 to Dropbox → copy share link
-2. Change ?dl=0 → ?dl=1
-3. Claude: meta_create_ad(
-     account_id="act_...",
-     adset_id="...",
-     headline="...", body="...", link_url="https://...",
-     video_url="<Dropbox direct URL>",
-   )
-   # Meta fetches, processes, polls up to 10s for ready state.
-```
+Private Meta video staging is unavailable. Follow PATH D's existing-asset,
+authorized manual upload or already approved URL alternatives. Reuse a verified
+`video_id` only in a separately authorized ad-creation action.
 
-### Recipe 4 — Reuse a Stories-shaped asset from last week (Tier 0 — best)
+### Recipe 4 — Reuse a Stories-shaped asset from last week (reuse existing asset)
 
 ```
 1. meta_query(account_id, "adimages", since="2026-04-13")
@@ -437,7 +474,7 @@ Do NOT try to stretch a 1:1 asset across Stories placement — Meta's placement 
 3. meta_create_ad(..., image_hash=<that hash>)
 ```
 
-### Recipe 5 — Multi-ratio campaign from a folder of local images (Tier 2 batch)
+### Recipe 5 — Multi-ratio campaign from a folder of local images
 
 **Preferred**: bundle all aspect ratios into ONE ad via `placement_assets`. This matches how Ads Manager "Customize media" works, preserves social proof across placements, and counts as 1 write instead of 3-4.
 
@@ -455,12 +492,9 @@ Claude reads filenames, applies Filename Matching rules:
   hero_9x16_*   → 9:16 (Stories, Reels)
   hero_1.91x1_* → 1.91:1 (right column, link preview)
 
-Step 1 — upload all variants via meta_upload_image:
-  meta_upload_image(account_id, image_data=<base64 1x1>, name="hero_1x1_1080x1080")
-  meta_upload_image(account_id, image_data=<base64 4x5>, name="hero_4x5_1080x1350")
-  meta_upload_image(account_id, image_data=<base64 9x16>, name="hero_9x16_1080x1920")
-  meta_upload_image(account_id, image_data=<base64 1.91x1>, name="hero_1.91x1_1200x628")
-  → collect image_hash values
+Step 1 — upload variants with the PATH C window/manifest:
+  local size/SHA → assets_stage → curl PUT → meta_upload_image(stage_id, name)
+  → collect one destination image_hash per variant; never send folder base64
 
 Step 2 — create ONE ad with placement_assets bundling all variants:
   meta_create_ad(
@@ -545,7 +579,7 @@ A frequent mix-up. `placement_assets` builds an `asset_feed_spec` with placement
 
 Dynamic Creative is a different thing: an ad set created with `is_dynamic_creative=true`, where Meta auto-optimizes across multiple text/asset variants (`body_variants`). If you pass `body_variants` to an ad on a *standard* ad set, `meta_create_ad` returns success (even noting it will A/B test) but Meta drops the extra variants — do not trust that note unless the ad set has `is_dynamic_creative=true`. So decide up front: one message shown well per placement → `placement_assets` on a standard ad set; multiple variants for Meta to optimize → a Dynamic Creative ad set. The end-to-end decision lives in `ad-launch-playbook`.
 
-### Recipe 6 — Bulk drop 50+ creatives via Ads Manager (Tier 3)
+### Recipe 6 — Bulk drop 50+ creatives via Ads Manager (manual route)
 
 ```
 1. Ads Manager → Media Library → drag whole folder → wait for processing
@@ -559,9 +593,11 @@ Dynamic Creative is a different thing: an ad set created with `is_dynamic_creati
 ## Integration Points
 
 **Tools used by this skill:**
-- `meta_upload_image` — upload a local image file (base64, ≤4 MB) OR from a public URL, returns `image_hash`
+- `assets_stage` — reserve a private, bound JPEG/PNG or MP4 upload when available
+- `meta_upload_image` — finalize stage_id (preferred for local files), legacy base64 or public URL; returns image_hash
 - `meta_create_ad` — build image or video ads with hash or URL; supports `placement_assets` for multi-aspect-ratio bundling (one ad serves different variants per placement via Meta's asset_customization_rules)
-- `meta_upload_video` + `meta_get_video_status` — pre-upload video asset pipeline (URL only)
+- `meta_upload_video` — finalize a private video stage and explicitly check it with `action="status"`; also supports the existing URL route
+- `meta_get_video_status` — inspect a video ID from the existing URL/manual route
 - `meta_query(adimages)` — discover existing image library with `aspect_ratio_bucket` enrichment
 - `meta_query(advideos)` — discover existing video library with dimension derivation
 
@@ -569,6 +605,6 @@ Dynamic Creative is a different thing: an ad set created with `is_dynamic_creati
 - `ad-launch-playbook` — the end-to-end campaign → ad set → ads runbook; calls this skill for the media step
 - `meta-ad-copy-generator` — write the copy first, then use this skill for the media
 - `meta-creative-diversification-generator` — plan the creative matrix first, then use this skill per concept
-- `meta-video-script-writer` — script the video first, then host the rendered file
+- `meta-video-script-writer` — script the video first, then choose an authorized upload route
 
-**Account integrity reminder:** every `meta_create_ad` call is a write. The server's protection stack mirrors Meta's documented rate model and backs off on Meta's throttle signals — there is **no artificial hourly cap**, so a bulk flow needs no self-imposed pacing. If a call returns a throttle error, back off and resume where you left off.
+**Account integrity reminder:** every `meta_create_ad` call is a write. The server's protection stack mirrors Meta's documented rate model and backs off on Meta's throttle signals — there is **no artificial hourly cap**, while staged media uses the bounded window and capacity hints above. If a call returns a throttle error, back off and resume where you left off.
