@@ -1,10 +1,10 @@
 ---
-description: "End-to-end creative refresh pipeline: analyze ad performance, detect fatigue, build a creative brief from your top performers, then upload and deploy a new image you provide (existing Meta image_hash, supported private local preview, or direct public HTTPS URL). Image generation happens outside the app. Bring your own image from Photoshop, Canva, Midjourney, Gemini, or anywhere. (requires Pro subscription)"
+description: "End-to-end creative refresh pipeline: analyze ad performance, detect fatigue, build a creative brief from your top performers, then upload and deploy a new image you provide (existing Meta image_hash, authorized private local staging, or direct public HTTPS URL). Image generation happens outside the app. Bring your own image from Photoshop, Canva, Midjourney, Gemini, or anywhere."
 disable-model-invocation: true
 ---
 
 > **Platforms:** meta
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.
@@ -19,7 +19,7 @@ End-to-end creative refresh pipeline: analyze performance → detect fatigue →
 - Connected Meta Ads account
 - A new image you want to deploy (after Step 5):
   - **Existing asset:** reuse an image_hash from the selected ad account.
-  - **Local image:** JPEG/PNG up to **20 MB (20,000,000 bytes)** and 16 megapixels, using private staging only when assets_stage is available and your client has file access and HTTP upload. This preview is not a general production release.
+  - **Local image:** JPEG/PNG up to **20 MB (20,000,000 bytes)** and 16 megapixels, using private staging when your workspace currently has upload access to the selected Meta account and your client has file access and HTTP upload. Tool discovery alone does not establish access.
   - **Public URL:** an approved, direct HTTPS image URL. A Drive/Dropbox sharing page is not necessarily a downloadable file. Existing source validation and limits apply.
   - **No file/HTTP access:** use an already approved direct URL or manually upload in Ads Manager, then discover the account-library hash. Do not require public hosting of private files.
 
@@ -119,7 +119,7 @@ Wait for the user to provide an image, a destination-account image_hash, or an a
 Follow `media-upload-guide` for the full input and retry procedure. Confirm the selected workspace/account and existing upload authorization.
 
 - Reuse an existing image_hash in that account without uploading again.
-- For a local JPEG/PNG with a capable client and available preview: calculate size/SHA-256 locally, call `assets_stage(platform="meta", account_id="FROM_STEP_1", asset_type="image", filename=..., content_type=..., size_bytes=..., sha256_expected=...)`, PUT the original bytes with the returned URL/headers from the client, then call `meta_upload_image(account_id="FROM_STEP_1", stage_id=..., name=...)`. Keep the returned image_hash for Step 7. Do not send base64 through the conversation for this route or save the upload capability in a manifest.
+- For a local JPEG/PNG with a capable client and current workspace/account upload access: calculate size/SHA-256 locally, call `assets_stage(platform="meta", account_id="FROM_STEP_1", asset_type="image", filename=..., content_type=..., size_bytes=..., sha256_expected=...)`, PUT the original bytes with the returned URL/headers from the client, then call `meta_upload_image(account_id="FROM_STEP_1", stage_id=..., name=...)`. Keep the returned image_hash for Step 7. Do not send base64 through the conversation for this route or save the upload capability in a manifest.
 - Explain that original bytes, including embedded metadata, pass through AdSuperpowers and temporary private Storage to Meta. Keep the original; this is not a library or backup. Only this byte transfer bypasses the MCP payload, not files already given to the AI client.
 - For an approved direct HTTPS URL use `meta_upload_image(account_id="FROM_STEP_1", image_url=...)`, then use its image_hash in Step 7. The existing `meta_create_ad(image_url=...)` route is also available when the combined upload/ad write is authorized.
 - Preserve workspace, original connection, account and immutable finalization name. On a lost PUT response, try finalizing the existing stage. On `finalization_retryable`, follow retry_after using the same stage/name. On `outcome_unknown`, stop and inspect the account library; never blindly upload or restage.
@@ -146,7 +146,7 @@ Ads are created as PAUSED for final review. Activation through `meta_update()` r
 ## EDGE CASES
 - **No fatigued ads:** Confirm healthy status. Still offer a proactive refresh if any ad is >10 days old.
 - **User has no image yet:** Stop at Step 5 with the creative brief. Resume from Step 6 once they have a usable image source.
-- **User only has a local image:** Use the private preview if available and the client supports file/HTTP access; otherwise use the manual account-library route. See media-upload-guide.
+- **User only has a local image:** Use private staging when current workspace/account upload access permits it and the client supports file/HTTP access; otherwise use the manual account-library route. See media-upload-guide.
 - **Image is not PNG/JPEG:** Ask the user to convert (Meta only accepts standard image formats).
 - **Image transfer fails (Step 6):** surface the structured `assets_stage` or `meta_upload_image` error and its retry hint. Check the selected account, source requirements and upload permissions. Stop on `outcome_unknown`; inspect the existing stage and destination before any new write. Ad-creation errors belong to Step 7.
 - **No ad sets available:** Help the user identify the right ad set via `meta_query`.

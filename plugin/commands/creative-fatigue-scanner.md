@@ -1,10 +1,10 @@
 ---
-description: "Proactively detect ad creative fatigue before performance tanks. Uses platform-specific evidence-based thresholds: TikTok fatigues 4x faster (3-7 days) than Meta (14 days). Google Ads uses asset ratings (4-8 weeks). LinkedIn has longest cycles (4-6 weeks). (requires Pro subscription)"
+description: "Proactively detect ad creative fatigue before performance tanks. Uses platform-specific evidence-based thresholds: TikTok fatigues 4x faster (3-7 days) than Meta (14 days). Google Ads uses asset ratings (4-8 weeks). LinkedIn has longest cycles (4-6 weeks)."
 disable-model-invocation: true
 ---
 
 > **Platforms:** meta, tiktok, linkedin, google_ads
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

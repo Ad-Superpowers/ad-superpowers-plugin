@@ -1,10 +1,10 @@
 ---
-description: "Comprehensive landing page analysis combining page crawling, GA4 performance data, and CRO best practices. Identifies conversion opportunities and provides actionable recommendations. (requires Pro subscription)"
+description: "Comprehensive landing page analysis combining page crawling, GA4 performance data, and CRO best practices. Identifies conversion opportunities and provides actionable recommendations."
 disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok, google_analytics
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

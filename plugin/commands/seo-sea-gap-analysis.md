@@ -1,10 +1,10 @@
 ---
-description: "Compare organic keywords (Search Console) with paid keywords (Google Ads) to find cannibalization, savings opportunities, and content gaps. Identifies keywords where you're paying for clicks you could get organically, and paid keywords that need organic content. (requires Pro subscription)"
+description: "Compare organic keywords (Search Console) with paid keywords (Google Ads) to find cannibalization, savings opportunities, and content gaps. Identifies keywords where you're paying for clicks you could get organically, and paid keywords that need organic content."
 disable-model-invocation: true
 ---
 
 > **Platforms:** google_search_console, google_ads
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

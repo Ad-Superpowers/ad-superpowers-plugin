@@ -1,10 +1,10 @@
 ---
-description: "Monitor your website's technical SEO health using Google Search Console. Checks sitemap status, indexing coverage, and inspects key pages for crawl issues, canonical conflicts, mobile usability problems, and rich results eligibility. (requires Pro subscription)"
+description: "Monitor your website's technical SEO health using Google Search Console. Checks sitemap status, indexing coverage, and inspects key pages for crawl issues, canonical conflicts, mobile usability problems, and rich results eligibility."
 disable-model-invocation: true
 ---
 
 > **Platforms:** google_search_console
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

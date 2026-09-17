@@ -4,7 +4,7 @@ disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok
-> **Tier:** free
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

@@ -1,10 +1,10 @@
 ---
-description: "Generate detailed buyer personas combining research with optional platform audience data. Creates 2-4 actionable personas with platform-specific targeting recommendations. (requires Pro subscription)"
+description: "Generate detailed buyer personas combining research with optional platform audience data. Creates 2-4 actionable personas with platform-specific targeting recommendations."
 disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok, google_analytics
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

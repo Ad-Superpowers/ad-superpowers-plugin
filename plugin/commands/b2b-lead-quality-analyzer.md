@@ -1,10 +1,10 @@
 ---
-description: "Analyze lead quality across platforms with LinkedIn-specific benchmarks. Compare CPL by industry, MQL/SQL rates, Lead Gen Forms vs Landing Pages, and LTV:CAC framework for B2B. (requires Pro subscription)"
+description: "Analyze lead quality across platforms with LinkedIn-specific benchmarks. Compare CPL by industry, MQL/SQL rates, Lead Gen Forms vs Landing Pages, and LTV:CAC framework for B2B."
 disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

@@ -1,10 +1,10 @@
 ---
-description: "Predicts future campaign performance using historical platform data, seasonality patterns, and trend analysis. Uses Monte Carlo-style uncertainty modeling to provide confidence intervals for projected spend, conversions, and ROAS. Helps set realistic expectations and plan for multiple scenarios. (requires Pro subscription)"
+description: "Predicts future campaign performance using historical platform data, seasonality patterns, and trend analysis. Uses Monte Carlo-style uncertainty modeling to provide confidence intervals for projected spend, conversions, and ROAS. Helps set realistic expectations and plan for multiple scenarios."
 disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok, google_analytics
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

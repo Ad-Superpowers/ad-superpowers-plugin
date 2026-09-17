@@ -1,10 +1,10 @@
 ---
-description: "High-level monthly report designed for stakeholders. Focuses on business impact, ROI, key learnings, and strategic recommendations. (requires Pro subscription)"
+description: "High-level monthly report designed for stakeholders. Focuses on business impact, ROI, key learnings, and strategic recommendations."
 disable-model-invocation: true
 ---
 
 > **Platforms:** all
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

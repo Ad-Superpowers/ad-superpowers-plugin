@@ -134,8 +134,9 @@ Other creative types, same `meta_create_ad` call:
 
 For local Meta JPEG/PNG up to 20 MB (20,000,000 bytes), follow `media-upload-guide`:
 `assets_stage` → client HTTP PUT → `meta_upload_image(stage_id=...)` →
-`image_hash` → the existing `meta_create_ad(image_hash=...)`. The preview must
-be available and the client must have file/HTTP access. Reuse an existing
+`image_hash` → the existing `meta_create_ad(image_hash=...)`. The workspace must
+have current upload access to that account and the client must have file/HTTP
+access. Reuse an existing
 account-library hash when possible. Do not add media arguments to campaigns.
 A new staged image normally costs two successful calls; 50 cost 100 before
 ad creation and checks. On unknown upload outcomes stop and inspect, not restage.

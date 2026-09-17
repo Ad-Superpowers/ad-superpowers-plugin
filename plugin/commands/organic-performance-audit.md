@@ -1,10 +1,10 @@
 ---
-description: "Comprehensive audit of your organic search performance using Google Search Console data. Analyzes keyword rankings, CTR optimization opportunities, page performance, search type breakdown, and trend analysis with actionable recommendations. (requires Pro subscription)"
+description: "Comprehensive audit of your organic search performance using Google Search Console data. Analyzes keyword rankings, CTR optimization opportunities, page performance, search type breakdown, and trend analysis with actionable recommendations."
 disable-model-invocation: true
 ---
 
 > **Platforms:** google_search_console
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

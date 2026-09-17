@@ -1,10 +1,10 @@
 ---
-description: "Deep-dive analysis for e-commerce businesses. Analyze product-level ROAS via Meta Shopping, Google Shopping/PMax and GA4 e-commerce data, identify winners/losers, and get actionable recommendations. (requires Pro subscription)"
+description: "Deep-dive analysis for e-commerce businesses. Analyze product-level ROAS via Meta Shopping, Google Shopping/PMax and GA4 e-commerce data, identify winners/losers, and get actionable recommendations."
 disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, google_analytics
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

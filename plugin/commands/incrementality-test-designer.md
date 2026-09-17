@@ -1,10 +1,10 @@
 ---
-description: "Design rigorous incrementality tests to measure true advertising impact. Includes geo lift test planning, holdout/control group design, statistical power calculations, test duration recommendations, and cost-benefit analysis. Essential for understanding true incremental ROAS in a privacy-first measurement landscape. (requires Pro subscription)"
+description: "Design rigorous incrementality tests to measure true advertising impact. Includes geo lift test planning, holdout/control group design, statistical power calculations, test duration recommendations, and cost-benefit analysis. Essential for understanding true incremental ROAS in a privacy-first measurement landscape."
 disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok, google_analytics
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

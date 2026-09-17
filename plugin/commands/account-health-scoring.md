@@ -1,10 +1,10 @@
 ---
-description: "Get a 0-100 health score for each account with prioritized issue list and quick win recommendations. Perfect for managing large portfolios. (requires Pro subscription)"
+description: "Get a 0-100 health score for each account with prioritized issue list and quick win recommendations. Perfect for managing large portfolios."
 disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

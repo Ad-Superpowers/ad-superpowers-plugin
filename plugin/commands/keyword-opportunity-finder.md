@@ -1,10 +1,10 @@
 ---
-description: "Discover new keyword opportunities in Google Ads. Analyze search terms, find gaps, and get bid recommendations. (requires Pro subscription)"
+description: "Discover new keyword opportunities in Google Ads. Analyze search terms, find gaps, and get bid recommendations."
 disable-model-invocation: true
 ---
 
 > **Platforms:** google_ads
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

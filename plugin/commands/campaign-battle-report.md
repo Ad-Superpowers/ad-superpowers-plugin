@@ -1,10 +1,10 @@
 ---
-description: "Compare two campaigns, time periods, or campaign types head-to-head. Includes statistical significance indicators for A/B tests. (requires Pro subscription)"
+description: "Compare two campaigns, time periods, or campaign types head-to-head. Includes statistical significance indicators for A/B tests."
 disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

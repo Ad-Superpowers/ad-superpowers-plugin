@@ -1,10 +1,10 @@
 ---
-description: "Analyze Google Ads auction insights to understand competitive landscape. See who you're competing against and where you're winning or losing. (requires Pro subscription)"
+description: "Analyze Google Ads auction insights to understand competitive landscape. See who you're competing against and where you're winning or losing."
 disable-model-invocation: true
 ---
 
 > **Platforms:** google_ads
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

@@ -2,6 +2,20 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.4.1] - 2026-09-17
+
+### Changed
+
+- Align media instructions with private staging for images up to 20 MB and
+  videos up to 500 MB at Meta, TikTok, LinkedIn and Google Ads under current
+  workspace and destination-account permissions.
+- Restore the local MP4 staging recipe for Meta, including an explicit
+  same-stage processing-status check before use. Preserve stop-and-inspect
+  behavior for uncertain attempts and separate authorization for ad creation.
+- Replace obsolete preview and unresolved-route notices. Keep acceptance,
+  readiness and ad approval distinct; record the observed empty daily retention
+  recurrence without claiming sustained throughput or every day's execution.
+
 ## [2.4.0] - 2026-09-10
 
 ### Changed

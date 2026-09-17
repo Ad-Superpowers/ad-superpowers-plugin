@@ -1,10 +1,10 @@
 ---
-description: "Compare advertising performance across Meta, Google, LinkedIn, and TikTok with attribution reconciliation, incrementality analysis, and competitive context. Includes expected discrepancy ranges, 'which number to trust' guidance, iROAS framework (incremental ROAS estimates by platform), MMM-lite recommendations, privacy-adjusted confidence framework, specific budget reallocation recommendations, reach/frequency analysis, EU vs US benchmarks, and optional competitive position analysis via Google Ads auction insights. (requires Pro subscription)"
+description: "Compare advertising performance across Meta, Google, LinkedIn, and TikTok with attribution reconciliation, incrementality analysis, and competitive context. Includes expected discrepancy ranges, 'which number to trust' guidance, iROAS framework (incremental ROAS estimates by platform), MMM-lite recommendations, privacy-adjusted confidence framework, specific budget reallocation recommendations, reach/frequency analysis, EU vs US benchmarks, and optional competitive position analysis via Google Ads auction insights."
 disable-model-invocation: true
 ---
 
 > **Platforms:** meta, google_ads, linkedin, tiktok
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.

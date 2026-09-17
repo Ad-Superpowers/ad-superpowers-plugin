@@ -14,8 +14,9 @@ Reuse an existing destination-account `image_hash` or `video_id` first (PATH B).
 For a **local JPEG/PNG up to 20 MB (20,000,000 bytes)**, prefer **private staging** when `assets_stage`
 is available (PATH C). The client needs file access and HTTP upload (for example a local shell); the remote MCP
 server cannot open a client path or an attachment in another application. Client
-support must be tested, not inferred from a product name. Staging is a preview, default off: do not claim
-that its presence proves customer release readiness or enable it yourself.
+support must be tested, not inferred from a product name. Use a connected Meta
+account that your workspace is currently allowed to modify. Tool discovery alone
+does not establish upload access; do not change rollout settings yourself.
 
 An already public, direct HTTPS media URL remains supported (PATH A). For
 `meta_upload_image(image_url=...)`, AdSuperpowers downloads the image and uploads
@@ -26,12 +27,11 @@ Legacy `meta_upload_image(image_data=...)` remains available with the existing
 additional enforced limit. Avoid sending ordinary creative-sized base64 strings
 through the conversation. If staging or local shell access is unavailable, use
 an approved existing URL or manual Ads Manager upload and library discovery.
-Private Meta video is currently unavailable: the attended 500 MB test returned
-HTTP 413 with an uncertain outcome. Do not repeat or restage it automatically.
-PATH D documents the interface, not a working large-file route. Use an existing
-approved asset, an already approved URL or authorized manual Ads Manager upload.
-The preview is closed after the attended production acceptance test; do not
-assume that a customer workspace can stage files.
+For a local MP4 up to **500 MB (500,000,000 bytes)**, follow the private staging
+route in PATH D. Preserve IDs and outcomes from earlier attempts: a later
+successful upload does not resolve an old uncertain attempt. Never repeat or
+restage an uncertain upload automatically. An existing approved asset, an
+already approved URL or authorized manual Ads Manager upload remains an option.
 
 For a folder, use the bounded staged workflow below when available. Manual
 Ads Manager drag/drop remains an alternative, especially when Meta must be the
@@ -191,8 +191,10 @@ same-account image hashes and explicit video readiness, and created five PAUSED
 ads under a new PAUSED campaign and ad set. All five staging sources were
 removed by automatic cleanup; video readiness was still observed afterward.
 This is not a hosted 50-file acceptance or a general customer release. There is
-no measured 1,000-file or parallel-bulk capacity claim. Startup cleanup does not
-prove the daily orphan-scan recurrence; that observation remains pending.
+no measured 1,000-file or parallel-bulk capacity claim. A complete empty daily
+orphan-inventory recurrence was observed in production and dev on 13 September
+2026. This confirms one recurrence per environment, not every day's execution
+or deletion of a non-empty orphan inventory. Startup alone is not recurrence.
 
 Rollback stops new stages and all PUT requests, including unused issued URLs.
 Already ready stages and stored results remain usable within their deadlines;
@@ -208,18 +210,38 @@ for normal images; lack of shell access does not make remote file paths work.
 
 ## PATH D — Local MP4 video with private staging
 
-Private Meta video is currently unavailable. The attended 500 MB attempt was
-not accepted and has an uncertain outcome. Do not reserve another stage or
-repeat its bytes automatically. The service's configured ceiling is not a
-working upload recipe.
+Use MP4 with H.264 video and optional AAC audio, up to **500 MB (500,000,000
+bytes)**, 1–1800 seconds, with each dimension between 120 and 1920 pixels. The
+client needs local file access and HTTP upload. Current account permissions and
+the returned stage policy still apply; placement requirements can be stricter.
 
-Reuse an existing account video ID, an explicitly authorized manual Ads Manager
-upload, or an already approved direct URL. Do not publish a private file just
-to obtain a URL. The hosting examples below apply only when sharing has already
-been authorized. Existing successful stage receipts can be inspected with
-`meta_upload_video(account_id=..., stage_id=..., title=..., action="status")`;
-keep their account and title unchanged. Status inspection never resumes bytes
-and processing readiness does not authorize ad creation or spend.
+1. Compute the exact bytecount and SHA-256 locally. Preserve the original and
+   explain the private staging flow as in PATH C.
+2. Reserve with `assets_stage(platform="meta", account_id="act_...",
+   asset_type="video", filename="launch.mp4", content_type="video/mp4",
+   size_bytes=..., sha256_expected="<local SHA-256>")`.
+3. Send the original bytes once using the returned method, URL and headers.
+   Apply PATH C's capability handling: private HTTP PUT from the client, no
+   redirects or verbose tracing, and no file bytes or capability in MCP/chat.
+4. After HTTP201, call `meta_upload_video(account_id="act_...",
+   stage_id="stg_...", title="launch.mp4")`. Save the stage, account, title,
+   returned video ID and receipt. `stage_id` and `video_url` are exclusive.
+5. Inspect that same record with `meta_upload_video(account_id="act_...",
+   stage_id="stg_...", title="launch.mp4", action="status")`. Each call reads
+   the recorded video's status once. Upload acceptance alone does not establish
+   readiness; require an explicit `ready_for_use=true` observation before use.
+
+The title becomes fixed on the first finalization; keep account, stage and title
+unchanged for status and retained-result replay. Private video attempts never
+retry provider writes automatically. Pending processing, a failed status read
+or `outcome_unknown` does not authorize another reservation or retransmission.
+Status inspection never resumes bytes. Creating an ad or spending still needs
+separate authorization even after the video is ready.
+
+Reuse an existing account video ID when possible. An explicitly authorized manual
+Ads Manager upload or already approved direct URL remains an alternative. Do not
+publish a private file just to obtain a URL; the hosting examples below apply
+only when sharing has already been authorized.
 
 ### Hosting options (ranked by practicality)
 
@@ -462,9 +484,11 @@ when staging is unavailable and context cost is acceptable.
 
 ### Recipe 3 — Single video ad from a local file
 
-Private Meta video staging is unavailable. Follow PATH D's existing-asset,
-authorized manual upload or already approved URL alternatives. Reuse a verified
-`video_id` only in a separately authorized ad-creation action.
+Follow PATH D: local size/SHA → video `assets_stage` → private client PUT →
+`meta_upload_video(stage_id=..., title=...)` → explicit same-stage `action="status"`.
+Keep the account and title unchanged. Reuse the returned `video_id` only after
+readiness is observed and ad creation is separately authorized. An uncertain
+upload must not be automatically repeated or restaged.
 
 ### Recipe 4 — Reuse a Stories-shaped asset from last week (reuse existing asset)
 

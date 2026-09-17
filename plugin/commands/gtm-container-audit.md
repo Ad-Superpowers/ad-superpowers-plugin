@@ -1,10 +1,10 @@
 ---
-description: "Audit your Google Tag Manager containers for misconfigurations, duplicate tracking, unused tags/triggers, consent compliance gaps, and performance issues. Returns a prioritized remediation roadmap with health scores. (requires Pro subscription)"
+description: "Audit your Google Tag Manager containers for misconfigurations, duplicate tracking, unused tags/triggers, consent compliance gaps, and performance issues. Returns a prioritized remediation roadmap with health scores."
 disable-model-invocation: true
 ---
 
 > **Platforms:** google_tag_manager
-> **Tier:** pro
+> Included in trial and paid plans. Your existing quota and permissions still apply.
 > 
 > This command requires the Ad Superpowers MCP connector to access your ad account data.
 > Connect at https://app.adsuperpowers.ai if you haven't already.
