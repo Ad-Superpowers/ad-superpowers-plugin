@@ -6,7 +6,7 @@ description: "This skill should be used when the user asks to \"write a video sc
 
 ## Overview
 
-This skill generates video scripts optimized for Meta Ads, focusing on the crucial first 3 seconds, effective storytelling structures, and platform-specific best practices for maximum engagement and conversion.
+This skill writes video scripts for Meta Ads, with a focus on the first 3 seconds, storytelling structures and placement-specific formats.
 
 ## Video Ad Fundamentals
 
@@ -14,26 +14,21 @@ This skill generates video scripts optimized for Meta Ads, focusing on the cruci
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  ATTENTION DISTRIBUTION IN VIDEO ADS                            │
+│  OPEN WITH THE HOOK                                             │
 │                                                                 │
-│  0-3 sec:  ████████████████████████████████████  75% drop-off   │
-│  3-10 sec: ████████████████████  50% keep watching              │
-│  10-15 sec:████████████████  40% engaged                        │
-│  15-30 sec:██████████████  30% complete                         │
-│  30+ sec:  ████████████  20% completion                         │
+│  Viewers can scroll past at any moment. Put the strongest       │
+│  visual, line or on-screen text first, and make the opening     │
+│  readable without sound.                                        │
 │                                                                 │
-│  The first 3 seconds determine EVERYTHING                       │
+│  Where viewers drop off differs per ad and per account. Check   │
+│  the account's own retention data (see MCP Tool Usage) instead  │
+│  of general benchmarks.                                         │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Optimal Video Lengths
+### Video Length
 
-| Format | Minimum | Sweet Spot | Maximum |
-|--------|---------|------------|---------|
-| Feed Video | 5 sec | 15-30 sec | 60 sec |
-| Stories | 5 sec | 10-15 sec | 60 sec |
-| Reels | 5 sec | 15-30 sec | 90 sec |
-| In-Stream | 5 sec | 15 sec | 15 sec |
+Check the current length limits for each placement in Meta's ad specs before scripting (Meta Ads Guide: https://www.facebook.com/business/ads-guide/update). Treat length as a variable to test in the account rather than assuming a fixed sweet spot.
 
 ## Hook Framework (First 3 Seconds)
 
@@ -42,13 +37,13 @@ This skill generates video scripts optimized for Meta Ads, focusing on the cruci
 | # | Hook Type | Script Example | Visual |
 |---|-----------|----------------|--------|
 | 1 | **Pattern Interrupt** | "STOP! Don't scroll past this..." | Bold text, movement |
-| 2 | **Shocking Statement** | "This will save you $1,000" | Money visual, surprise |
+| 2 | **Shocking Statement** | "This will save you [a real, verifiable amount]" | Money visual, surprise |
 | 3 | **Question Hook** | "Are you making this mistake too?" | Direct to camera |
 | 4 | **Result Hook** | "Here's how I went from X to Y" | Before/after |
 | 5 | **Demo Hook** | [No text, product in action] | Product close-up |
 | 6 | **Controversy** | "Experts are wrong about..." | Strong statement |
 | 7 | **Relatable Pain** | "POV: You [relatable situation]" | Act out situation |
-| 8 | **Social Proof** | "10,000 people already bought this" | Testimonial montage |
+| 8 | **Social Proof** | "[Real number] people already bought this" | Testimonial montage |
 | 9 | **Curiosity** | "What if I told you that..." | Mysterious setup |
 | 10 | **Tutorial Tease** | "Here's how you get [desired result]" | Show step 1 |
 
@@ -93,7 +88,7 @@ SCRIPT TEMPLATE:
 
 [20-30 sec] CTA
 ├── Visual: [Product + logo/website]
-├── Audio: "Link in bio / Click below"
+├── Audio: "Tap the button below"
 └── Text: "[OFFER] Shop Now"
 ```
 
@@ -152,7 +147,7 @@ SCRIPT TEMPLATE:
 
 [55-60 sec] CTA
 ├── Visual: Product + call to action
-├── Audio: "Want the same result? Link in bio"
+├── Audio: "Want the same result? Tap the button below"
 └── Text: "[CTA]"
 ```
 
@@ -184,7 +179,7 @@ SCRIPT TEMPLATE:
 
 [25-30 sec] CTA
 ├── Visual: All points recap + product
-├── Audio: "More tips? Follow for more / Link in bio"
+├── Audio: "More tips? Follow for more / Tap the button below"
 └── Text: "[CTA]"
 ```
 
@@ -194,23 +189,25 @@ SCRIPT TEMPLATE:
 
 ```
 FORMAT: Vertical 9:16, 15-30 sec
-STYLE: Native, casual, trending audio
+STYLE: Native, casual, audio you have the rights to use in ads
 
-[0-2 sec] HOOK
-├── Trending audio/sound start
+[0-3 sec] HOOK
+├── Start with audio you have the rights to use in ads
 ├── Text overlay: Hook statement
 └── Quick movement/transition
 
-[2-15 sec] CONTENT
+[3-15 sec] CONTENT
 ├── Fast pacing, quick cuts
 ├── Native Reels transitions
-└── Subtitles required (85% watch without sound)
+└── Subtitles required (many people watch with the sound off)
 
 [15-30 sec] PAYOFF + CTA
 ├── Satisfying conclusion
 ├── "Follow for more" or product link
 └── Relevant hashtags in caption
 ```
+
+Audio rights: Meta says the music in its licensed library is intended for personal, non-commercial use, and that Sound Collection tracks can be used for commercial purposes like ads ('Access to the licensed music library on Instagram', Meta Business Help Center).
 
 ### Facebook Feed Script
 
@@ -237,26 +234,30 @@ STYLE: More professional, more context
 ### Stories Script
 
 ```
-FORMAT: Vertical 9:16, 5-60 sec (sweet spot: 10-15 sec)
+FORMAT: Vertical 9:16 (check the current Stories length limit in Meta's ad specs)
 STYLE: Urgent, snappy, tap-through focused
 
-NOTE: No "swipe up" — Stories now use tap/link sticker for CTAs.
+NOTE: Script a tap on the call to action, not "swipe up". Link stickers work
+only in organic Instagram Stories: Meta places the ad's call to action at the
+bottom of the ad (on Instagram, a call-to-action sticker, still rolling out).
 
-[0-2 sec] INSTANT HOOK
-├── Movement or text sticker
-├── Poll/question element optional
+[0-3 sec] INSTANT HOOK
+├── Movement or text overlay
+├── A poll or any other sticker rules out the Instagram CTA sticker
 └── No time to lose
 
-[2-12 sec] CORE MESSAGE
+[3-12 sec] CORE MESSAGE
 ├── 1 key message per story
-├── Native stickers/GIFs
-└── Interactive elements
+├── Avoid GIFs, emojis and link stickers (Meta's Stories advice)
+└── Short, fast scenes
 
 [12-15 sec] TAP CTA
-├── Clear tap/link sticker instruction (NOT "swipe up")
-├── Arrow/gesture animation pointing to link sticker
-└── Link sticker prominent at bottom of frame
+├── Clear instruction to tap the call to action (NOT "swipe up")
+├── Arrow/gesture animation pointing to the CTA at the bottom
+└── Keep text and logos out of the bottom, where the CTA sits
 ```
+
+Sources: 'About the link sticker for Instagram Stories' and 'Creative best practices for Stories', Meta Business Help Center. For the safe zones in pixels or percent, use the Ads Guide page for the placement.
 
 ## UGC Brief Template
 
@@ -365,15 +366,15 @@ VERSION B: [Type, e.g. "Testimonial Style"]
 
 ## Example Interaction
 
-**User**: "I need a video script for a skincare serum. Instagram Reels, 20-30 seconds, UGC style. The serum helps with acne and is 100% natural."
+**User**: "I need a video script for a travel backpack. Instagram Reels, 20-30 seconds, UGC style. The backpack opens flat like a suitcase and has a separate laptop compartment."
 
 **Claude response**:
 
-"Here is a UGC-style video script for your skincare serum:
+"Here is a UGC-style video script for your travel backpack:
 
 ---
 
-**VIDEO SCRIPT - Skincare Serum (Acne)**
+**VIDEO SCRIPT - Travel Backpack**
 
 Platform: Instagram Reels
 Length: 25 seconds
@@ -382,27 +383,27 @@ Style: Authentic UGC testimonial
 ---
 
 **[0-3 sec] HOOK**
-├── Visual: Close-up face, finger pointing at (old) acne spots
+├── Visual: Close-up face, then a quick cut to an overstuffed backpack
 ├── Audio: "Okay I HAVE to share this with you guys..."
-├── Text: "acne journey"
+├── Text: "packing struggle"
 └── Tip: Look directly into camera, enthusiastic but authentic
 
 **[3-10 sec] BEFORE/PROBLEM**
-├── Visual: Old photos/videos with acne (or describe)
-├── Audio: "I dealt with acne for years. I literally tried EVERYTHING..."
+├── Visual: Old travel clips of digging through a bag (or describe)
+├── Audio: "Every trip, the thing I need is at the bottom of my bag. I literally tried EVERYTHING..."
 ├── Text: "nothing worked"
 └── Tip: Quickly scroll through old content on phone
 
 **[10-18 sec] DISCOVERY + SOLUTION**
-├── Visual: Product unboxing/applying serum
-├── Audio: "Until someone recommended this serum. 100% natural, no junk. After 2 weeks I ALREADY saw a difference."
-├── Text: "100% natural" → "week 2"
-└── Tip: Show texture, dropper, applying to skin
+├── Visual: Product unboxing, then unzipping the backpack so it opens flat
+├── Audio: "Until someone recommended this backpack. It opens flat like a suitcase, and the laptop has its own compartment."
+├── Text: "opens flat" → "laptop compartment"
+└── Tip: Show the zip opening all the way, then the laptop sliding in
 
 **[18-25 sec] RESULT + CTA**
-├── Visual: Current skin close-up, glowing
-├── Audio: "Now? Just look. If you also struggle with acne - link in my bio. Trust me."
-├── Text: "link in bio"
+├── Visual: Packed backpack zipped shut, walking to the gate
+├── Audio: "Now? Just look. If you also dig through your bag on every trip: tap the button below. Trust me."
+├── Text: "tap below"
 └── Tip: Confident smile, tap CTA gesture
 
 ---
@@ -411,7 +412,7 @@ Style: Authentic UGC testimonial
 - Film in natural light (window)
 - Casual clothing, not heavy on makeup
 - Authentic tone > polished
-- Add trending audio in editing
+- In editing, add audio you have the rights to use in ads
 
 Want me to create an alternative version with a different hook?"
 
@@ -420,21 +421,21 @@ Want me to create an alternative version with a different hook?"
 ### Pull video creative performance before writing new scripts:
 
 ```python
-# Get video-level metrics to identify which hooks and lengths are working
+# List the account's top ads (by spend) with their copy, CTA and basic performance
 meta_get_creatives(
     account_id="act_XXXXXXXXX",
     scope="account"
 )
 
-# Then pull video-specific engagement metrics
+# Then pull video engagement metrics per ad
 meta_get_insights(
     account_id="act_XXXXXXXXX",
-    fields=["video_thruplay_watched_actions", "video_30_sec_watched_actions",
+    fields=["impressions", "actions", "video_play_actions",
             "video_p25_watched_actions", "video_p50_watched_actions", "video_p75_watched_actions",
-            "video_p95_watched_actions", "ctr", "spend"],
+            "video_p100_watched_actions", "video_avg_time_watched_actions", "ctr", "spend"],
     date_preset="last_30d",
     level="ad"
 )
 ```
 
-Use the video retention breakpoints (P25/P50/P75/P95) to understand where viewers drop off in existing scripts. High drop-off at P25 (first ~25% of video) indicates a weak hook — use this as the primary brief input when writing replacement scripts.
+Use the video retention breakpoints (P25/P50/P75/P100) to see where viewers drop off in existing scripts. To judge the opening, divide 3-second views (the `video_view` action type inside `actions`) by impressions and compare the result with the account's other video ads, not with a general benchmark. Ads whose opening holds fewer viewers than the rest of the account are the primary brief input when writing replacement scripts. ThruPlay and 30-second views are not available through meta_get_insights. Meta's Ads Action Stats reference lists `video_view` as "3-Second Video Views".

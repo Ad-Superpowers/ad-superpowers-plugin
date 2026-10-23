@@ -6,7 +6,7 @@ description: "This skill should be used when the user asks to \"write ad copy\",
 
 ## Overview
 
-This skill generates effective ad copy for Meta Ads using proven copywriting frameworks, psychological triggers, and platform-specific guidelines for maximum conversion.
+This skill writes ad copy for Meta Ads using common copywriting frameworks, psychological triggers and Meta's placement specs.
 
 ## Meta Ads Copy Structure
 
@@ -16,26 +16,29 @@ This skill generates effective ad copy for Meta Ads using proven copywriting fra
 ┌─────────────────────────────────────────────────────────────────┐
 │  META AD COPY COMPONENTS                                        │
 │                                                                 │
-│  PRIMARY TEXT (125-150 characters visible)                      │
-│  └── Max 2000 characters, first ~125 most important            │
+│  PRIMARY TEXT (Meta's Ads Guide, per placement)                 │
+│  └── 50-150 characters (Facebook Feed), 125 (Instagram Feed,    │
+│      Stories), 44 (Instagram Reels)                             │
 │                                                                 │
-│  HEADLINE (25-40 characters ideal)                              │
-│  └── Max 255 characters, short & punchy works best             │
+│  HEADLINE (Meta's Ads Guide, per placement)                     │
+│  └── 27 characters (Facebook Feed), 40 (Instagram Feed images,  │
+│      Facebook Stories)                                          │
 │                                                                 │
-│  DESCRIPTION (optional, 20-30 characters)                       │
-│  └── Max 30 characters, supporting the headline                │
+│  DESCRIPTION (optional)                                         │
+│  └── The Ads Guide gives no recommended length for Feed         │
 │                                                                 │
 │  CTA BUTTON (fixed menu)                                        │
 │  └── Shop Now, Learn More, Sign Up, etc.                       │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+Lengths are recommendations from Meta's Ads Guide (checked 10 Oct 2026, https://www.facebook.com/business/ads-guide/update), not hard limits; see Optimal Lengths below.
+
 ## Hook Formulas (First Sentence)
 
 ### The 3-Second Rule
 
 ```
-There are ~3 seconds to capture attention.
 The first sentence determines whether people stop scrolling.
 ```
 
@@ -44,10 +47,10 @@ The first sentence determines whether people stop scrolling.
 | # | Framework | Example |
 |---|-----------|---------|
 | 1 | **Problem + Solution** | "Tired of [problem]? Here's the solution." |
-| 2 | **Shocking Statistic** | "80% of [audience] make this mistake..." |
+| 2 | **Shocking Statistic** | "[A real, sourced percentage] of [audience] make this mistake..." |
 | 3 | **Ask a Question** | "Did you know that [surprising fact]?" |
 | 4 | **Direct Address** | "This is for you if you [situation]..." |
-| 5 | **Social Proof** | "50,000+ people already joined..." |
+| 5 | **Social Proof** | "[Real number] people already joined..." |
 | 6 | **Urgency** | "Today only: [offer]" |
 | 7 | **Curiosity Gap** | "The secret behind [desired result]..." |
 | 8 | **Before/After** | "From [negative] to [positive] in [time]" |
@@ -67,7 +70,7 @@ S - Solve: Present your solution
 EXAMPLE:
 "Getting headaches from Excel spreadsheets again? [PROBLEM]
 It costs you hours every week and you keep making mistakes. [AGITATE]
-With [Product] you automate everything in 5 minutes. [SOLVE]"
+With [Product] you automate everything in [real, measured time]. [SOLVE]"
 ```
 
 ### AIDA Framework (Attention-Interest-Desire-Action)
@@ -81,8 +84,8 @@ A - Action: Call to action
 
 EXAMPLE:
 "Stop wasting money on ineffective ads. [ATTENTION]
-Our AI analyzes 100+ data points per campaign. [INTEREST]
-Customers see an average 3x higher ROAS. [DESIRE]
+Our AI analyzes [real number] data points per campaign. [INTEREST]
+Customers see [a real, sourced result]. [DESIRE]
 Start your free trial → [ACTION]"
 ```
 
@@ -96,7 +99,7 @@ B - Bridge: Your product as the bridge
 
 EXAMPLE:
 "You work 60 hours a week and barely see your family. [BEFORE]
-Imagine: same revenue, but 20 fewer hours of work. [AFTER]
+Imagine: same revenue, but [real, measured number] fewer hours of work. [AFTER]
 [Product] automates your workflows so you get your time back. [BRIDGE]"
 ```
 
@@ -110,22 +113,24 @@ STRUCTURE:
 - Ultra-specific: Is it specific?
 
 EXAMPLE:
-"Save 10 hours per week [USEFUL] - this week only 50% off [URGENT].
-The only tool that combines AI + human review [UNIQUE].
-327 companies increased their conversion by 47% [ULTRA-SPECIFIC]."
+"Save [real, measured hours] per week [USEFUL] - [only if true: this week only N% off] [URGENT].
+[Only if true: the only tool that combines AI + human review] [UNIQUE].
+[Real number] companies increased their conversion by [real, measured %] [ULTRA-SPECIFIC]."
 ```
 
 ## Copy per Funnel Stage
+
+The CTA lines name Meta call-to-action button types; not every type is available for every campaign objective ('Ad Creative Link Data Call To Action', Marketing API reference).
 
 ### TOFU Copy (Awareness)
 
 ```
 GOAL: Educate, spark interest, build problem awareness
 TONE: Informative, curiosity-building, low barrier
-CTA: Learn More, Watch Video, Read More
+CTA: Learn More, Watch Video, See More
 
 EXAMPLE:
-"Did you know 73% of marketers struggle with [problem]?
+"Did you know [a real, sourced percentage] of marketers struggle with [problem]?
 
 In this video we explain why this happens and
 what you can do about it. No sales pitch, just value.
@@ -138,14 +143,14 @@ Watch the video"
 ```
 GOAL: Build trust, show benefits, differentiate
 TONE: Helpful, expert, social proof
-CTA: Sign Up, Get Started, Download, Try Free
+CTA: Sign Up, Download, Subscribe, Learn More
 
 EXAMPLE:
-"Over 10,000 marketers already use [Product] to
+"Over [real number] marketers already use [Product] to
 optimize their Meta Ads.
 
-- Average 47% lower CPA
-- 3x faster reporting
+- [Real, measured CPA result]
+- [Real, measured reporting time saved]
 - Automatic optimizations
 
 Try 14 days free - no credit card required."
@@ -156,17 +161,17 @@ Try 14 days free - no credit card required."
 ```
 GOAL: Push conversion, create urgency, remove objections
 TONE: Direct, urgent, results-oriented
-CTA: Shop Now, Buy Now, Get Offer, Claim Discount
+CTA: Shop Now, Buy Now, Get Offer, Order Now
 
 EXAMPLE:
-"You've looked at [Product] 3 times already.
+"You've looked at [Product] before.
 
 This is your sign:
 25% off - today only
 Free shipping
 30-day return policy
 
-More than 5,000 5-star reviews.
+More than [real number] 5-star reviews.
 Order now"
 ```
 
@@ -246,19 +251,19 @@ CTA Button: [Shop Now/Get Offer]
 
 ```
 SCARCITY
-├── "Only 5 left in stock"
+├── "Only [real stock count] left in stock"
 ├── "Last day of the sale"
 └── "Limited edition"
 
 SOCIAL PROOF
-├── "10,000+ satisfied customers"
-├── "4.9/5 (2,847 reviews)"
+├── "[Real number]+ satisfied customers"
+├── "[Real rating]/5 ([real review count] reviews)"
 └── "As seen in [well-known media]"
 
 AUTHORITY
-├── "Recommended by experts"
-├── "Award-winning"
-└── "10+ years of experience"
+├── "[Named expert or body, if real]"
+├── "[Award name, if real]"
+└── "[Real number]+ years of experience"
 
 RECIPROCITY
 ├── "Free [valuable content]"
@@ -280,11 +285,12 @@ CURIOSITY
 
 ### Facebook vs Instagram vs Threads vs Meta Audience Network
 
+Rules of thumb, not Meta figures: check them against the account's own history. Only the character counts, the Threads note and the Audience Network placements come from the Meta pages cited below the block.
+
 ```
 FACEBOOK:
 ├── Longer copy can work (test!)
 ├── More context & detail allowed
-├── Desktop users read more
 └── Emojis work, but keep subtle
 
 INSTAGRAM:
@@ -293,35 +299,41 @@ INSTAGRAM:
 ├── Lifestyle & aspirational tone
 └── Under 125 characters ideal
 
-THREADS (400M+ MAU, launched as ad placement March 2026):
+THREADS:
 ├── Conversational, community-first tone
 ├── Shorter copy — feels like a post
 ├── Avoid hard-sell language
-└── Works well for brand awareness and engagement
+└── No CTA button in the feed: tapping the headline opens the link
 
 STORIES/REELS:
-├── Ultra short (< 50 characters)
+├── Ads Guide: 44 characters (Instagram Reels), 125 (Stories)
 ├── Native, casual tone
 ├── Emojis as visual elements
 └── Urgency works well
 
 META AUDIENCE NETWORK:
 ├── Works with same copy as Feed
-├── Banner + interstitial formats
+├── Native, banner, interstitial and rewarded video placements
 └── Often excluded in manual placement tests
 ```
+
+Threads: 'Extend Meta Campaigns With Ads in Threads', Meta for Business, https://www.facebook.com/business/ads/threads. Placements and lengths: Meta's Ads Guide, https://www.facebook.com/business/ads-guide/update.
 
 ## Character Limits & Best Practices
 
 ### Optimal Lengths
 
-| Component | Minimum | Optimal | Maximum |
-|-----------|---------|---------|---------|
-| Primary Text | 40 | 100-150 | 2000 |
-| Headline | 15 | 25-40 | 255 |
-| Description | 10 | 20-30 | 30 |
+| Component | Facebook Feed | Instagram Feed | Instagram Reels |
+|-----------|---------------|----------------|-----------------|
+| Primary Text | 50-150 | 125 | 44 |
+| Headline | 27 | 40 (image ads) | not listed |
+| Description | not listed | not listed | not listed |
+
+Recommended character counts from Meta's Ads Guide (image and video ad specs per placement, checked 10 Oct 2026: https://www.facebook.com/business/ads-guide/update). Stories: 125 characters of primary text, and a 40-character headline on Facebook Stories. The guide gives recommendations, not hard limits, and the figures change: check the page for the placement you buy.
 
 ### Formatting Tips
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ```
 DO:
@@ -345,8 +357,8 @@ DON'T:
 
 ```
 TEST PRIORITY:
-1. Hook/first sentence (highest impact)
-2. Headline (second highest)
+1. Hook/first sentence
+2. Headline
 3. CTA button choice
 4. Length (short vs long)
 5. Tone (formal vs casual)
@@ -357,29 +369,29 @@ TEST PRIORITY:
 
 ## Example Interaction
 
-**User**: "I need ad copy for my online fitness coaching program. Target audience is women 25-45 who want to lose weight. It's a 12-week program for €297."
+**User**: "I need ad copy for my online Spanish course. Target audience is adults 25-45 who want to get by in Spanish on holiday. It's a 12-week program for €297."
 
 **Claude response**:
 
-"I'll create 3 copy variations for your fitness coaching program:
+"I'll create 3 copy variations for your Spanish course:
 
 ---
 
 **VARIATION 1: Problem-Agitate-Solve**
 
 *Primary Text:*
-Tried crash diets but the weight always comes back?
+Tried language apps but still freeze when someone speaks Spanish to you?
 
-You're not alone. 90% of diets fail because they're not sustainable.
+You're not alone. [A real, sourced figure, or drop this line.]
 
 In my 12-week program you'll learn:
-- Eat without strict dieting
-- Train in 30 min/day
-- Results that last
+- Order, ask for directions and make small talk
+- Practice in short daily sessions
+- Phrases you will actually use
 
-500+ women already joined. Your turn?
+[Real number] students already joined. Your turn?
 
-*Headline:* Lose weight without crash diets
+*Headline:* Spanish for your next holiday
 *Description:* 12-week program
 *CTA:* Learn More
 
@@ -388,11 +400,11 @@ In my 12-week program you'll learn:
 **VARIATION 2: Transformation Focus**
 
 *Primary Text:*
-From 'I hate my body' to 'I feel amazing'
+From pointing at the menu to ordering in Spanish
 
-Lisa lost 12 kg in 12 weeks. No starving, no extreme workouts.
+[Real student's name and result, shared with permission.]
 
-'For the first time in years I feel energized and confident.'
+'[Real quote from that student]'
 
 Discover how the 12-week program can help you →
 
@@ -405,18 +417,18 @@ Discover how the 12-week program can help you →
 **VARIATION 3: Direct Offer**
 
 *Primary Text:*
-12 weeks to a fitter, healthier you
+12 weeks of Spanish for your next trip
 
-- Personalized meal plans
-- Home workouts (30 min)
+- Personalized lesson plans
+- Short daily lessons
 - Weekly coaching calls
-- Community of 500+ women
+- Community of [real number] learners
 
-Limited time: €297 (normally €397)
+Limited time: €297 (normally [real previous price])
 + Free bonus week included
 
 *Headline:* Start your 12-week transformation
-*Description:* Limited availability
+*Description:* [Only if true: Limited availability]
 *CTA:* Get Offer
 
 ---

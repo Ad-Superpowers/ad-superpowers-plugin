@@ -34,18 +34,29 @@ This skill helps set up automated rules in Meta Ads Manager that continuously mo
 
 ```
 NAVIGATION:
-Ads Manager → Rules → Create Rule
+Ads Manager → Automated rules → + Create rule
 OR
-Ads Manager → Select items → Rules → Create New Rule
+Ads Manager → Campaigns table → check items → More → Create a new rule
 
 RULE TYPES:
-├── Reduce Audience Overlap
-├── Reduce Auction Overlap
-├── Optimize Ad Creative
-└── Custom Rule (most flexible)
+├── Custom rule (you choose the conditions and actions)
+├── Reduce auction overlap (template)
+└── Reduce audience fragmentation (template)
+
+SCHEDULE (how often the rule runs):
+├── Every 30 minutes: Meta checks the rule at least once every
+│   30 minutes (API: SEMI_HOURLY, at the start of every half-hour)
+├── Daily: once a day, at midnight in the ad account's time zone
+└── Custom: chosen days and times, e.g. every day at 06:00
 ```
 
+Sources: "Create an automated rule in Meta Ads Manager", "View and manage active rules in Meta Ads Manager", and the Marketing API guide "Schedule Based Rules", which runs a daily rule at midnight in the ad account's time zone. A fixed time such as "Daily at 06:00" in the templates below needs a Custom schedule.
+
 ## Rule Categories & Use Cases
+
+Rules of thumb, not Meta figures: check them against the account's own history.
+
+**Campaign budget:** when a campaign uses Advantage+ campaign budget (the `meta_create` default, `budget_mode="CBO"`), Meta does not let you create rules with cost-related conditions, such as Cost per Result, that turn its ad sets or ads on or off or only send a notification. Apply those rules to the campaign, or use them on ad sets that set their own budgets (`budget_mode="ABO"`). Under a campaign budget the ad sets have no budget of their own, so budget rules go on the campaign. Source: "About rules with cost-related conditions in Meta Ads Manager".
 
 ### Category 1: Budget Protection Rules
 
@@ -59,7 +70,7 @@ RULE: CPA Limit Pause
 │   ├── Cost per Result > $[MAX CPA]
 │   └── Impressions > 1000 (wait for data)
 ├── Time Range: Last 3 days
-├── Schedule: Continuously
+├── Schedule: Every 30 minutes
 └── Notification: On
 
 RULE: ROAS Minimum Guard
@@ -69,7 +80,7 @@ RULE: ROAS Minimum Guard
 │   ├── Purchase ROAS < [MIN ROAS]
 │   └── Amount Spent > $100
 ├── Time Range: Last 7 days
-├── Schedule: Continuously
+├── Schedule: Every 30 minutes
 └── Notification: On
 ```
 
@@ -135,7 +146,7 @@ RULE: Learning Phase Budget Lock
 ├── Apply to: Ad Sets
 ├── Action: Send notification only (!)
 ├── Conditions:
-│   ├── Delivery is "Learning"
+│   ├── Hours Since Creation < 168 (first 7 days)
 │   └── Results < 50
 ├── Time Range: Last 7 days
 ├── Schedule: Daily
@@ -144,9 +155,11 @@ Warning: Do NOT auto-pause during learning!
 
 RULE: Post-Learning Performance Check
 ├── Apply to: Ad Sets
-├── Action: Turn off ad set
+├── Action: Send notification only (check learning_stage_info before
+│   turning the ad set off by hand: an older ad set can be back in
+│   learning after a significant edit)
 ├── Conditions:
-│   ├── Delivery is NOT "Learning"
+│   ├── Hours Since Creation > 168
 │   ├── Cost per Result > $[TARGET CPA x 1.5]
 │   └── Amount Spent > $[CPA TARGET x 50]
 ├── Time Range: Last 7 days
@@ -154,7 +167,11 @@ RULE: Post-Learning Performance Check
 └── Notification: On
 ```
 
+Rules have no condition for the Delivery status ("Learning"), so Hours Since Creation stands in for it; it does not see significant edits, which can restart learning. Check the Delivery column, or `learning_stage_info` (see MCP Tool Integration), before acting. Meta: an ad set usually exits the learning phase after about 50 results in the week after its last significant edit ("About the learning phase", Meta Business Help Center).
+
 ## Rule Builder Templates
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ### Template 1: Complete Budget Protection Set
 
@@ -168,11 +185,12 @@ RULE 1: Emergency Stop
 ├── Action: Turn off
 ├── Conditions:
 │   ├── Cost per Purchase > $[CPA TARGET x 2]
-│   └── Purchases = 0
 │   └── Amount Spent > $[CPA TARGET]
 ├── Time Range: Today
 ├── Schedule: Every 30 minutes
 └── Why: Stop bleeding on clearly losing ads
+Note: Cost per Purchase has no value while there are no purchases;
+Rule 3 covers that case.
 
 RULE 2: CPA Limit Daily
 ├── Name: [ACCOUNT]_CPA_Limit_Daily
@@ -182,7 +200,7 @@ RULE 2: CPA Limit Daily
 │   ├── Cost per Purchase > $[CPA TARGET x 1.3]
 │   └── Purchases > 3
 ├── Time Range: Last 3 days
-├── Schedule: Continuously
+├── Schedule: Every 30 minutes
 └── Why: Pause on persistently high CPA
 
 RULE 3: No Conversions Alert
@@ -190,7 +208,7 @@ RULE 3: No Conversions Alert
 ├── Apply to: All active ad sets
 ├── Action: Notification only
 ├── Conditions:
-│   ├── Purchases = 0
+│   ├── Purchases < 1
 │   └── Amount Spent > $[CPA TARGET x 2]
 ├── Time Range: Last 3 days
 ├── Schedule: Daily at 09:00
@@ -231,12 +249,17 @@ RULE 2: Scale Down Losers
 
 RULE 3: Weekend Budget Boost
 ├── Name: [ACCOUNT]_Weekend_Boost
-├── Apply to: All active campaigns
-├── Action: Increase daily budget by 30%
+├── Apply to: Selected campaigns
+├── Action: Increase daily budget by $[X]
 ├── Conditions:
-│   └── Current day is Saturday OR Sunday
-├── Schedule: Custom (Fri 18:00)
-└── Why: Extra budget for weekend traffic
+│   └── Impressions > 0 (holds for any delivering campaign)
+├── Time Range: Last 7 days
+├── Schedule: Custom (Saturday 00:00)
+└── Why: Extra budget on weekends, if the account's history shows
+    stronger weekend results
+Rules have no day-of-week condition: the Custom schedule picks the days.
+The rule does not lower the budget again: plan that step by hand or with
+a separate rule.
 ```
 
 ### Template 3: Creative Rotation Rules
@@ -266,16 +289,18 @@ RULE 2: High Frequency Warning
 ├── Schedule: Daily at 09:00
 └── Why: Signal for creative refresh
 
-RULE 3: Cost per ThruPlay Alert
+RULE 3: Video Cost Alert
 ├── Name: [ACCOUNT]_Video_Cost_Alert
-├── Apply to: Video ads
+├── Apply to: Ads (select the video ads)
 ├── Action: Turn off ad
 ├── Conditions:
-│   ├── Cost per ThruPlay > $0.15
-│   └── ThruPlays > 500
+│   ├── Cost per Result > $[from this account's history]
+│   └── Impressions > 5000
 ├── Time Range: Last 7 days
 ├── Schedule: Daily
 └── Why: Pause expensive video ads
+Note: Meta's published condition lists have no ThruPlay condition;
+a result is the outcome of the objective and settings you selected.
 ```
 
 ## Condition Builder Guide
@@ -305,16 +330,15 @@ CONVERSION METRICS:
 
 VIDEO METRICS:
 ├── Video Plays
-├── ThruPlays
-├── Cost per ThruPlay
-├── Video Average Play Time
-├── Video Plays at 25%, 50%, 75%, 100%
 
-STATUS METRICS:
-├── Delivery (Learning, Active, etc.)
-├── Current Day (Mon, Tue, etc.)
-├── Current Time
+TIME CONDITIONS:
+├── Hours Since Creation
+├── Current time (epoch seconds)
+└── No condition for the Delivery status ("Learning") or the day of
+    the week: pick days with a Custom schedule
 ```
+
+The condition dropdown in Ads Manager is the full, current list. Sources: "Available conditions for automated rules in Meta Ads Manager" and the Marketing API rules evaluation spec.
 
 ### Condition Combinations
 
@@ -325,15 +349,29 @@ AND (all conditions must be true):
 ├── CPA > $20 AND Impressions > 1000
 └── Both must be true for action
 
-OR (one condition is enough):
-├── CPA > $30 OR CTR < 0.3%
-└── Either one triggers action
+NO OR WITHIN A RULE:
+├── "CPA > $30 OR CTR < 0.3%" needs two rules with the same action
+└── Each rule then triggers on its own condition
 
-COMPLEX EXAMPLE:
-(CPA > $25 AND Purchases > 5) OR (CTR < 0.5% AND Impressions > 5000)
+COMPLEX EXAMPLE, BUILT AS TWO RULES:
+Rule A: CPA > $25 AND Purchases > 5
+Rule B: CTR < 0.5% AND Impressions > 5000
+
+OPERATORS: is greater than, is smaller than, is between, is not between
+(so "Purchases = 0" is written "Purchases < 1")
+
+LIMITS:
+├── One of each condition per rule
+├── One level per rule: campaigns, ad sets or ads, not a mix
+├── Up to 250 rules per ad account, active and inactive together
+└── Rules can't run on ads about social issues, elections or politics
 ```
 
+Sources: "About conditions for automated rules in Meta Ads Manager": all conditions must be met, so an OR needs a separate rule per condition. "Limits to automated rules in Meta Ads Manager" for the limits.
+
 ## Best Practices & Warnings
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ### Do's
 
@@ -358,7 +396,7 @@ RECOMMENDED:
 ```
 AVOID:
 ├── Auto-pausing during Learning Phase
-│   └── Let learning phase complete (50 conv)
+│   └── Let learning phase complete (about 50 results in a week)
 ├── Too short time ranges (Today/Yesterday)
 │   └── Too volatile, unreliable data
 ├── Too low impression thresholds
@@ -381,7 +419,7 @@ RULE AUDIT CHECKLIST
 
 □ INVENTORY
 ├── How many rules are active?
-├── Which rules haven't triggered in >30 days?
+├── Which rules haven't triggered since the last review?
 └── Are there conflicting rules?
 
 □ THRESHOLDS
@@ -413,11 +451,17 @@ STEP 1: Get recent CPA baseline
 STEP 2: Check frequency levels
 → meta_get_insights(account_id="...", fields=["frequency","impressions"], date_preset="last_7d", level="adset")
 
-STEP 3: Review current learning phase status
-→ meta_get_insights(account_id="...", fields=["spend","impressions","actions"], date_preset="last_3d", level="adset")
+STEP 3: Review current learning phase status (an ad set field; insights do not return it)
+→ meta_query(account_id="...", entity_type="adsets", effective_status=["ACTIVE"], fields=["id","name","learning_stage_info"])
 ```
 
-Use the actual CPA from `meta_query` results to set rule thresholds — never guess.
+`learning_stage_info.status` is LEARNING, SUCCESS or FAIL (learning limited). Meta returns it only for active ad sets, not for ad sets with dynamic creative, and not all ad accounts are eligible for it. `dynamic_lp_conversions_threshold` is, in Meta's words, the "new conversions threshold for dynamic learning phase status" ("Ad Campaign Learning Stage Info", Marketing API reference).
+
+Use the actual CPA from the `meta_get_insights` results to set rule thresholds; never guess. `meta_get_insights` returns one page: while a response has `paging.next`, fetch the next page with `meta_query(account_id, "adsets", pagination_url=<paging.next>)` and add its rows.
+
+Meta's rules documentation notes that rule time ranges can include today's data, unlike most reports (Marketing API rules evaluation spec), so a rule's "Last 7 days" can differ slightly from `date_preset="last_7d"`.
+
+Ad Superpowers has no tool that creates or edits automated rules: build them in Ads Manager.
 
 ## Example Interaction
 
@@ -448,7 +492,7 @@ Conditions:
 Time Range: Today
 Schedule: Every 30 minutes
 ```
-*Stops immediately on extreme CPA*
+*Stops ad sets with extreme CPA at the next rule check (at least every 30 minutes)*
 
 ---
 
@@ -461,7 +505,7 @@ Conditions:
 ├── Cost per Purchase > $19.50 (1.3x target)
 └── Purchases > 3
 Time Range: Last 3 days
-Schedule: Continuously
+Schedule: Every 30 minutes
 ```
 *Pauses on persistently high CPA*
 
@@ -473,7 +517,7 @@ Name: No_Conv_Warning
 Apply to: All active ad sets
 Action: Send notification only
 Conditions:
-├── Purchases = 0
+├── Purchases < 1
 └── Amount Spent > $30 (2x target)
 Time Range: Last 3 days
 Schedule: Daily at 09:00
@@ -484,7 +528,9 @@ Schedule: Daily at 09:00
 
 **Important:**
 - Do NOT set an auto-pause rule during learning phase
-- Wait until you've had at least 50 conversions
+- Wait until the ad set has left the learning phase: Meta says that usually takes about 50 results in the week after the last significant edit. Rules can't see the learning phase, so check the Delivery column first.
+- If the campaign uses a campaign budget, apply these rules to the campaign: Meta does not allow cost-based rules that turn its ad sets off or only notify.
+- Rules of thumb, not Meta figures: check them against the account's own history. That covers the multipliers above.
 - Check after 1 week whether the thresholds are working well
 
 After rules are live, monitor via:

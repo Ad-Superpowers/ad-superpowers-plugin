@@ -441,8 +441,7 @@ See [detailed-reference.md](references/detailed-reference.md) for details.
 - **Current attribution model:** [Last Click/DDA/etc.]
 - **Average path length:** [X touchpoints]
 - **Average time to conversion:** [X days]
-
-
+```
 
 See [detailed-reference.md](references/detailed-reference.md) for details.
 

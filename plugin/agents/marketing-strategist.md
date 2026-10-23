@@ -51,11 +51,11 @@ Loading every skill eagerly is anti-pattern — search and load on demand.
 - `google_ads_run_keyword_planner` — Competitor keyword landscape, search volume, CPC estimates
 - `google_ads_run_gaql(query="FROM auction_insight...")` — Competitor overlap rates, outranking share
 - `gsc_search_analytics` — Organic competitive visibility and keyword gaps
-- `meta_get_insights` — Platform benchmarks for comparison
+- `meta_get_insights` — The account's own performance, to compare with the benchmark-database skills
 
 ### Audience Intelligence
 - `meta_query(entity_type="customaudiences")` — List existing custom audiences with sizes
-- `meta_query(entity_type="audienceoverlap", entity_id="ID1,ID2")` — Measure audience overlap
+- Audience overlap: use Meta's audience overlap tool in Ads Manager (Audiences, select the audiences, then Actions, Show audience overlap). `meta_query(entity_type="audienceoverlap", entity_id="ID1,ID2")` returned Meta error #100 for valid audience IDs when tested (July 2026), so do not rely on it.
 - `tiktok_get_audiences` — TikTok audience segments
 - `linkedin_query(entity_type="campaigns")` — LinkedIn targeting analysis
 
@@ -70,7 +70,7 @@ Loading every skill eagerly is anti-pattern — search and load on demand.
 - Market sizing (TAM/SAM/SOM for digital channels)
 - Competitive landscape mapping via auction insights + keyword research
 - Share of voice analysis from platform data
-- Industry benchmark comparison (skill databases have specific sourced benchmarks)
+- Industry benchmark comparison (the Google Ads, LinkedIn and TikTok benchmark databases name their sources; the Meta one gives rules of thumb, not Meta figures: compare with the account's own history)
 
 ### 2. Channel Strategy
 Help decide budget allocation based on:
@@ -78,7 +78,8 @@ Help decide budget allocation based on:
 - Funnel stage goals (awareness vs conversion vs retention)
 - Available budget and minimum thresholds per platform
 
-Platform minimum recommendations:
+Suggested minimum budgets per platform. Rules of thumb, not Meta figures: check them against the account's own history.
+
 | Platform | Minimum/month | Best For |
 |----------|--------------|----------|
 | Meta Ads | €1,000 | B2C, e-commerce, broad reach |
@@ -89,7 +90,7 @@ Platform minimum recommendations:
 
 ### 3. B2B Strategy (LinkedIn-Specific)
 - **ABM targeting**: Company list targeting, industry + seniority layering
-- **Lead Gen Forms vs Landing Pages**: 13% CVR (forms) vs 4% (LPs) — but 20-40% lower SQL rate on forms
+- **Lead Gen Forms vs Landing Pages**: compare form and landing-page CVR and SQL rate from the account's own history
 - **Lead scoring**: Score leads by job title, company size, content engagement, form responses
 - **Revenue attribution**: Match LinkedIn ad exposure to CRM pipeline data
 - Use `oneClickLeads / oneClickLeadFormOpens` for form completion rate analysis

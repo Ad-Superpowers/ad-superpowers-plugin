@@ -47,6 +47,8 @@ This skill provides a systematic framework for performing complete Meta Ads acco
 TRACKING AUDIT
 ==============
 
+Thresholds are rules of thumb, not Meta figures: check them against the account's own history.
+
 □ PIXEL STATUS
 ├── Is the pixel installed and active?
 ├── Pixel ID correct on all relevant domains?
@@ -65,23 +67,22 @@ TRACKING AUDIT
 ├── Are events firing correctly? (test conversions)
 ├── Are custom events needed?
 ├── Value tracking for purchases?
+├── Note: web events need no AEM setup or 8-event prioritization any more,
+│   and domain verification is no longer required for event configuration
 └── Score: [green OK / yellow Issues / red Critical]
 
-□ DOMAIN VERIFICATION
-├── Is the domain verified?
-├── Aggregated Event Measurement (AEM) configured?
-├── Event prioritization correct?
+□ ATTRIBUTION SETTING
+├── Which setting does each ad set use? (Meta lists 1-day or 7-day click,
+│   1-day view and 1-day engage-through; since 10 June 2025 Insights API results follow each ad set's setting)
+├── Results under different settings are not directly comparable: use Compare attribution settings
+├── Reports or rules still built on 7-day view or 28-day view windows, which the Insights API no longer returns (since 12 January 2026)?
 └── Score: [green OK / yellow Issues / red Critical]
 
-□ ATTRIBUTION WINDOW (Critical — Jan 2026 change)
-├── Are reports using the correct default? (7d click + 1d view)
-├── Note: 7d view and 28d view attribution REMOVED by Meta (Jan 2026)
-├── Historical data using old windows cannot be compared to current data
-├── Any reports or rules referencing 28d attribution must be updated
-└── Score: [green OK / yellow Issues / red Critical]
-
-TRACKING SCORE: ___/50 points
+TRACKING SCORE: ___/40 points
 ```
+
+Sources (checked 2026-10-10): Meta Business Help Center, "About Meta's Aggregated Event Measurement"; "About attribution models and attribution settings"; Marketing API reference, Ad Account Insights
+(`action_attribution_windows`: `default` means 7d_click and 1d_view).
 
 ### Section 2: Account Structure
 
@@ -89,25 +90,27 @@ TRACKING SCORE: ___/50 points
 STRUCTURE AUDIT
 ===============
 
+Ideal counts are rules of thumb, not Meta figures: check them against the account's own history.
+
 □ CAMPAIGN ORGANIZATION
-├── How many active campaigns? (Ideal: 3-8)
+├── How many active campaigns? (rule of thumb: 3-8 for a typical account; the 4-tier model in campaign-structure-advisor uses 2-4)
 ├── Clear funnel segmentation? (TOFU/MOFU/BOFU)
 ├── Logical campaign objectives?
 ├── No duplicate campaigns?
 └── Score: [green OK / yellow Issues / red Critical]
 
 □ AD SET STRUCTURE
-├── Number of ad sets per campaign (Ideal: 2-5)
-├── Sufficient budget per ad set for learning?
+├── Number of ad sets per campaign (rule of thumb: 2-5)
+├── Sufficient budget per ad set for learning? (Meta: about 50 results in the week after the last significant edit)
 ├── No overlapping audiences?
 ├── Logical audience segmentation?
 └── Score: [green OK / yellow Issues / red Critical]
 
 □ ADS ORGANIZATION
-├── Number of ads per ad set (Ideal: 3-6, Andromeda engine recommends 15+ distinct creatives per account)
+├── Per ad set: active ads, distinct concepts (look-alike ads count as one: Meta treats them as variations of the same creative) and the spend share of the top 3 ads. Descriptive only; Meta's diversification guidance gives no target number
 ├── Creative diversity present?
 ├── No duplicate ads?
-├── Advantage+ Creative (formerly DCO) correctly configured?
+├── Advantage+ creative and dynamic creative (two separate features) set up as intended?
 └── Score: [green OK / yellow Issues / red Critical]
 
 □ NAMING CONVENTIONS
@@ -126,6 +129,8 @@ STRUCTURE SCORE: ___/40 points
 AUDIENCE AUDIT
 ==============
 
+Thresholds are rules of thumb, not Meta figures: check them against the account's own history.
+
 □ CUSTOM AUDIENCES
 ├── Which custom audiences exist?
 ├── Are they up-to-date (recent data)?
@@ -138,13 +143,14 @@ AUDIENCE AUDIT
 ├── Source audience quality?
 ├── Percentage selection appropriate?
 ├── Are value-based LALs being used?
-├── Note: Lookalikes deprioritized in 2026 — Advantage+ Audience is now Meta's recommended approach
+├── Note: with Advantage+ audience on, Meta can expand beyond inputs such as lookalikes;
+│   location, minimum age, language and custom audience exclusions stay fixed
 └── Score: [green OK / yellow Issues / red Critical]
 
 □ INTEREST/BEHAVIOR TARGETING
 ├── Relevance of selected interests?
 ├── Audience size not too broad/narrow?
-├── Are Advantage+ Audiences active on prospecting campaigns? (Recommended over manual interests in 2026)
+├── Advantage+ audience A/B tested on prospecting? (Meta recommends testing it for almost all campaign types, not for retargeting)
 ├── Testing of new interests?
 └── Score: [green OK / yellow Issues / red Critical]
 
@@ -157,6 +163,8 @@ AUDIENCE AUDIT
 
 AUDIENCE SCORE: ___/40 points
 ```
+
+Sources (checked 2026-10-10): Meta Business Help Center, "About Advantage+ audience"; Marketing API, "Advantage+ audience".
 
 ### Section 4: Creative Performance
 
@@ -273,25 +281,23 @@ UNUSED FEATURES AUDIT
 =====================
 This section identifies money left on the table - features that are
 available but not being used, representing optimization opportunities.
+Thresholds are rules of thumb, not Meta figures: check them against the account's own history.
 
 □ ADVANTAGE+ FEATURES (Underutilized?)
 ├── Advantage+ Sales Campaigns
-│   └── E-commerce account with $5k+/month? Not using Advantage+ Sales?
-│       → Potential: 10-20% ROAS improvement
+│   └── Sales objective without an Advantage+ sales campaign? (Meta recommends
+│       Advantage+ campaigns for sales, leads and app promotion objectives)
 ├── Advantage+ Placements
 │   └── Manual placements only? Missing reach opportunities
-│       → Potential: 15-30% more reach at same cost
 ├── Advantage Detailed Targeting
 │   └── Disabled? AI audience expansion not working
-│       → Potential: 10-15% more conversions
 ├── Advantage+ Creative
 │   └── Not using? Missing creative optimization
-│       → Potential: 5-10% CTR improvement
 └── Score: [green Using / yellow Partially / red Not Using]
 
 □ CONVERSIONS API (CAPI) - Enabled but Low Volume?
-├── CAPI enabled but <50% of events from server?
-│   └── Missing: Better attribution, lower CPM
+├── Conversions API event coverage below 75% of Pixel events? (Meta's goal)
+│   └── Missing: Better attribution
 ├── Only PageView sent? Missing Add-to-Cart, Purchase?
 │   └── Missing: Conversion signal strength
 ├── Event Match Quality <6.0?
@@ -310,9 +316,9 @@ available but not being used, representing optimization opportunities.
 └── Score: [green Using All / yellow Partially / red Many Unused]
 
 □ CATALOG & SHOPPING FEATURES (E-commerce)
-├── Catalog connected but no Dynamic Ads?
+├── Catalog connected but no Advantage+ catalog ads (formerly dynamic ads)?
 │   └── Missing: Personalized product recommendations
-├── Advantage+ Catalog Ads not enabled?
+├── Advantage+ creative for catalog not used?
 │   └── Missing: Automated creative optimization
 ├── Collection Ads not tested?
 │   └── Missing: Mobile shopping experience
@@ -326,7 +332,7 @@ available but not being used, representing optimization opportunities.
 ├── No Advantage Campaign Budget enabled?
 │   └── Missing: Automated budget allocation across ad sets
 ├── No cost caps or bid caps when needed?
-│   └── Risk: Uncontrolled spending
+│   └── Risk: No control over cost per result (budgets cap spend)
 ├── No scheduled ad set rules (day/time)?
 │   └── Missing: Performance optimization by schedule
 └── Score: [green Using / yellow Basic / red None]
@@ -338,19 +344,19 @@ available but not being used, representing optimization opportunities.
 │   └── Missing: Brand impact measurement
 ├── A/B testing (Experiments) not used?
 │   └── Missing: Statistical testing framework
-├── Attribution comparison report not reviewed?
+├── Compare attribution settings not reviewed?
 │   └── Missing: Understanding of attribution impact
 └── Score: [green Using / yellow Basic / red None]
 
 UNUSED FEATURES SCORE: ___/60 points
-
-OPPORTUNITY COST ESTIMATE:
-├── Each unused Advantage+ feature: ~$500-2,000/month missed
-├── Low CAPI adoption: ~15-25% higher CPMs
-├── Unused audiences: ~20-30% efficiency loss
-├── No automation: ~2-5 hours/week manual work
-└── TOTAL ESTIMATED OPPORTUNITY: $___/month
 ```
+
+Sources (checked 2026-10-10): Meta Business Help Center, "About Advantage+ audience" (Meta's recommendation of
+Advantage+ campaigns); Marketing API, "Advantage+ Campaign
+Experience for Sales, App, and Leads" (Advantage+ sales campaigns replace Advantage+ shopping campaigns, which can no
+longer be created through the API);
+Conversions API, "Dataset Quality API" (event coverage is the 7-day average share of Pixel events that the Conversions
+API also sends with matching deduplication keys; Meta gives 75% as the goal).
 
 ## Health Score Calculator
 
@@ -372,7 +378,7 @@ Unused Features      │     60     │    ___
 ─────────────────────┼────────────┼───────────
 TOTAL                │    300     │    ___
 
-SCORE INTERPRETATION:
+SCORE INTERPRETATION (our scoring model, not a Meta measure):
 ├── 250-300: Excellent - Minor optimizations
 ├── 200-249: Good - Several improvements needed
 ├── 150-199: Fair - Significant work required
@@ -386,6 +392,8 @@ SCORE INTERPRETATION:
 ```
 ISSUE PRIORITIZATION
 ====================
+
+Thresholds are rules of thumb, not Meta figures: check them against the account's own history.
 
 CRITICAL (Fix within 24 hours):
 ├── Tracking not working
@@ -473,10 +481,11 @@ MONTH 1 (Medium):
 
 EXPECTED IMPACT
 ───────────────
-After implementation we expect:
-├── CPA: [X%] improvement
-├── ROAS: [X%] improvement
-└── Efficiency: [X%] improvement
+Estimate only from this account's own data and state the assumptions;
+otherwise write "not estimated":
+├── CPA: [current value] → [estimate, if supported]
+├── ROAS: [current value] → [estimate, if supported]
+└── Efficiency: [current value] → [estimate, if supported]
 ```
 
 ## Quick Audit Checklist
@@ -487,13 +496,15 @@ After implementation we expect:
 QUICK AUDIT (15 minutes)
 ========================
 
+Thresholds are rules of thumb, not Meta figures: check them against the account's own history.
+
 □ Pixel active? (Events Manager → Test Events)
 □ Conversions last 7 days? (yes/no/how many)
 □ Learning phase issues? (% in learning)
 □ CPA vs target? (under/on/over)
 □ Frequency <3? (yes/no)
 □ CTR >1%? (yes/no)
-□ Active creatives >3 per ad set? (yes/no)
+□ Genuinely different concepts in each ad set, not only look-alike variations? (yes/no)
 □ Budget fully spending? (yes/no)
 
 QUICK SCORE: ___/8
@@ -515,11 +526,21 @@ Use these MCP calls to pull actual account data before scoring each section:
 2. Ad set performance + delivery:
 → meta_get_insights(account_id="...", level="adset", date_preset="last_7d", fields=["cost_per_action_type","spend","frequency","impressions"])
 
-3. Ad-level creative health:
+3. Ad-level creative health (ranks by spend within the first 100 ad rows of the period; 10 ads by default, max 25):
 → meta_get_creatives(account_id="...", scope="account", date_preset="last_7d")
 
 4. Top/bottom performers (last 30 days):
 → meta_get_insights(account_id="...", level="campaign", date_preset="last_30d", fields=["spend","actions","cost_per_action_type","impressions"])
+
+5. Learning phase status (active ad sets only; not returned for ad sets with dynamic creative, and not every ad account gets it):
+→ meta_query(account_id="...", entity_type="adsets", effective_status=["ACTIVE"], fields=["id","name","learning_stage_info"], format="full")
+
+6. Pixel activity:
+→ meta_query(account_id="...", entity_type="adspixels")   (last_fired_time per pixel)
+→ meta_query(account_id="...", entity_type="dataset_quality", entity_id="<pixel_id>")   (EMQ, match keys and dedup per web event; status "unavailable" means no access, not bad tracking)
+
+meta_get_insights returns one page of rows: while a response has paging.next, fetch the next page with
+meta_query(account_id="...", entity_type="adsets", pagination_url=<paging.next>) and add its rows.
 ```
 
 Feed results directly into the audit sections above to score each area objectively.
@@ -556,19 +577,21 @@ Can you tell me the following:
 
 **STEP 2: Key Things I'll Check From the Data**
 
+Thresholds below are rules of thumb, not Meta figures: check them against the account's own history.
+
 **Tracking Check:**
-- Pixel active + EMQ score for Purchase event (target: 6.0+)
-- Attribution window: confirm reports use 7d click + 1d view (28d view removed Jan 2026)
+- Pixel active (last_fired_time); EMQ for the Purchase event from meta_query(account_id, "dataset_quality", entity_id=<pixel_id>) (target: 6.0+)
+- Attribution setting per ad set (Meta lists 1-day or 7-day click, 1-day view and 1-day engage-through)
 
 **Structure Check:**
-- Number of active campaigns (ideal: 3-8)
-- Ad sets per campaign (ideal: 2-5)
+- Number of active campaigns (rule of thumb: 3-8; 2-4 in the 4-tier model)
+- Ad sets per campaign (rule of thumb: 2-5)
 - Creative count and diversity
 
 **Performance Check (Last 7 days):**
 - CPA vs target
 - ROAS vs target
-- Learning phase % (should be <20% of budget)
+- Learning phase % (should be <20% of budget; status from learning_stage_info)
 
 ---
 

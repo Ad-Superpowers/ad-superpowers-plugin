@@ -4,21 +4,22 @@ description: "This skill should be used when the user asks to \"set up campaign 
 ---
 # Meta Ads Campaign Structure Advisor
 
-Framework for setting up and optimizing Meta Ads account structures using the 4-tier funnel methodology. Based on Meta's Performance 5 framework and proven agency best practices 2025-2026.
+Framework for setting up and optimizing Meta Ads account structures using the 4-tier funnel methodology. It draws on Meta's Performance 5 practices (simplify accounts, automation, diverse creative, data quality, results validation: "Performance Marketing on Meta", Meta for Business, https://www.facebook.com/business/ads/performance-marketing, undated, checked 2026-10-10). The 4-tier structure and its numbers are our working model, not Meta's.
 
-> **April 2026 API Update:** Meta API v25.0 (Feb 2026) unifies Advantage+ Sales Campaigns (ASC) into a single campaign type with 3 automation levers (budget, audience, placement). The legacy `smart_promotion_type` / AAC distinction is deprecated (deadline May 19, 2026). `advantage_state_info` is the new field. In practice, the 4-tier structure below remains valid — ASC is the SCALE campaign type. **New placement:** Threads (400M+ MAU, March 2026) — add to placement mix for scale campaigns.
+> **Advantage+ API change (checked 2026-10-10):** Marketing API v24.0 (October 8, 2025) introduced one unified Advantage+ campaign structure. A sales campaign is in the Advantage+ state when its three automation levers (budget, audience, placement) are on; the read-only field `advantage_state_info` shows each lever. Since v24.0 (October 8, 2025), legacy Advantage+ shopping campaigns (created with `smart_promotion_type`) and Advantage+ app campaigns can no longer be created, duplicated or updated in versioned calls; since May 19, 2026 this applies to all API versions (v25.0 changelog). The legacy existing-customer budget cap (`existing_customer_budget_percentage`) is not available for new Advantage+ campaigns. Sources: Marketing API changelog, Version 25.0 and Version 24.0; "Advantage+ Campaigns". In this framework an Advantage+ sales campaign is the SCALE tier. **Threads:** the Threads feed is an ad placement, and campaigns created in Ads Manager are opted in by default ("Extend Meta Campaigns With Ads in Threads", Meta for Business, https://www.facebook.com/business/ads/threads); in API targeting, `threads_stream` needs Instagram `stream` in the same ad set.
 
 ## Core Principle
 
-**Creative = Targeting.** Meta's Andromeda algorithm selects ads based on creative quality, not audience parameters. Creative diversification and systematic testing are the primary growth levers.
+**Diversify concepts, not cosmetic variations.** Meta's guidance ('Demystifying creative diversification', Meta for Business, 16 Dec 2025, https://www.facebook.com/business/news/demystifying-creative-diversification) says ads that look or feel alike are treated as variations of the same creative and share learnings. It recommends ads that are truly different in look, feel, storyline and message, and ads that speak to different audience motivations or use cases. It gives no number. Creative diversification and systematic testing are the levers this framework works on.
 
-**Simplification = Better Performance.** Accounts with 2-4 campaigns perform 32% better on CPA than fragmented structures.
+**Simplify the structure.** Working rule: prefer a few consolidated campaigns over a fragmented structure (see the 4-tier model below).
 
 ## How this maps to our MCP tools today
 
 Before applying the structures below, know what `meta_create` actually does today:
 
-- **Campaign creation always requires a budget**, so every campaign created via the tool is **CBO** (the budget lives on the campaign). Per-ad-set budgets (ABO) are not creatable through the tool yet — model ABO splits in Ads Manager if you need them.
+- **Choose the budget mode when you create the campaign.** `meta_create(entity_type="campaign")` takes `budget_mode`: `"CBO"` (the default) needs `daily_budget` or `lifetime_budget` (in cents) on the campaign; `"ABO"` takes no campaign budget, and each ad set then sets its own `daily_budget` or `lifetime_budget`. The TEST tier below uses ABO.
+- **Pass `special_ad_categories` on every campaign create.** Meta rejects the call without it ("(#100) The parameter special_ad_categories is required"); pass `[]` when no special ad category applies.
 - **Under CBO, ad sets must not carry their own budget** — omit it; they share the campaign budget.
 - The funnel below is the strategy; for the click-by-click create sequence (campaign → ad set → ads), `use ad-launch-playbook`.
 
@@ -31,13 +32,15 @@ Before applying the structures below, know what `meta_create` actually does toda
 | **RETARGET** | Manual Sales | 15-25% | Convert warm traffic |
 | **RETAIN** | Manual Sales | 5-10% | Maximize customer LTV |
 
+Rules of thumb, not Meta figures: check them against the account's own history. This covers the budget shares and audience windows in this section.
+
 ### SCALE Campaign (ASC) - 60-70% budget
 - **Targeting:** 100% Broad (Advantage+ Audience)
 - **Creatives:** Only validated winners - no new tests here
 - **Goal:** Maximum scale with proven performers
 
 ### TEST Campaign (Prospecting) - 10-20% budget
-- **Broad Pack [date]** - Contains 3-5 new creatives for testing
+- **Broad Pack [date]** - Contains a batch of new creatives for testing
 - **Broad Pack [date]** - New batch of creatives (weekly/biweekly)
 - **Interest #1 Winners** - Receives graduated winners for interest targeting
 - **Interest #2 Winners** - Receives graduated winners for other interests
@@ -50,7 +53,7 @@ Before applying the structures below, know what `meta_create` actually does toda
 - **Goal:** Convert warm traffic with high purchase intent
 
 ### RETAIN Campaign - 5-10% budget
-- **All Time Purchasers** - Upsell/Cross-sell messaging
+- **All Time Purchasers** - Upsell/Cross-sell messaging (build it from a customer list: a pixel-based website custom audience only keeps people for a limited retention window, "Website Custom Audiences", Marketing API)
 - **180 Day Purchasers** - Replenishment/New Products messaging
 - **Goal:** Reactivate existing customers and increase LTV
 
@@ -75,7 +78,7 @@ New creative made
 
 **Why Broad Pack?**
 - Broad targeting gives the algorithm maximum freedom to find the best audience
-- ABO (Ad Set Budget Optimization) ensures equal budget distribution between creatives
+- ABO (Ad Set Budget Optimization) gives the Broad Pack ad set its own budget
 - Date in name makes tracking creative batches simple
 
 ### Step 2: Evaluation Against Winner Criteria
@@ -86,7 +89,7 @@ After sufficient spend and time, each creative is evaluated:
 Creative in Broad Pack
          ↓
   Spend >= minimum threshold?
-  (e.g., 3x CPA or 3x AOV)
+  (MAX(3x CPA, 3x AOV); see Winner Criteria)
          ↓
     NO → Keep testing OR kill if underperforming
     YES → Evaluate performance
@@ -196,27 +199,29 @@ Interest #2 Winners
 
 ### When Does a Creative NOT Advance?
 
-A creative is paused (killed) and does not advance when:
+A creative is paused (killed) and does not advance when (rules of thumb for this framework, not Meta figures: check them against the account's own history):
 
 1. **No conversions after 2-3x CPA spend** → Pause immediately
 2. **ROAS < 50% of target after significant spend** → Pause
 3. **CTR < 0.5% with €100+ spend** → Pause or iterate
-4. **Hook rate < 20% after 10,000+ impressions** → Creative problem, iterate
+4. **Hook rate clearly below the account's own history after 10,000+ impressions** → Creative problem, iterate
 
 ### Practical Example
 
 ```
 Scenario: E-commerce brand, AOV €80, Target ROAS 4x, Target CPA €20
+Winner bar (Medium AOV): spend >= MAX(3 x €20, 3 x €80) = €240,
+5-8 purchases, ROAS >= 3x
 
 Week 1:
 - Launch Broad Pack 2025-01-15 with Creative A, B, C, D
-- Each creative gets equal budget (ABO)
+- The Broad Pack ad set has its own budget (ABO)
 
-Week 2 (after €60+ spend per creative):
-- Creative A: €65 spend, 4 purchases, €400 revenue → ROAS 6.15x ✓
-- Creative B: €70 spend, 2 purchases, €160 revenue → ROAS 2.29x (below threshold)
-- Creative C: €55 spend, 0 purchases → KILL
-- Creative D: €60 spend, 3 purchases, €280 revenue → ROAS 4.67x ✓
+Week 3-4 (after €240+ spend per creative; C was stopped early):
+- Creative A: €260 spend, 16 purchases, €1,600 revenue → ROAS 6.15x ✓
+- Creative B: €280 spend, 8 purchases, €640 revenue → ROAS 2.29x (below threshold)
+- Creative C: €55 spend, 0 purchases → KILL (in week 2)
+- Creative D: €240 spend, 12 purchases, €1,120 revenue → ROAS 4.67x ✓
 
 Actions:
 - Creative A → Copy to SCALE + Interest #1 Winners + Interest #2 Winners
@@ -227,6 +232,8 @@ Actions:
 
 ## Campaign Settings per Tier
 
+Budget steps, frequency levels, test durations and audience windows in this section are rules of thumb, not Meta figures: check them against the account's own history. The existing-customer and ad-limit rows are Meta facts with their sources.
+
 ### SCALE - Advantage+ Sales Campaign (ASC)
 
 | Setting | Value |
@@ -234,12 +241,12 @@ Actions:
 | Campaign Type | Advantage+ Sales Campaign |
 | Budget Type | Advantage Campaign Budget (formerly CBO) |
 | Targeting | 100% Broad (Advantage+ Audience) |
-| Existing Customer Cap | 0-10% (for pure acquisition) |
+| Existing Customer Cap | Not available on new Advantage+ campaigns (legacy Advantage+ shopping field `existing_customer_budget_percentage`; "Advantage+ Campaigns", Marketing API); that guide replicates the cap with two ad sets, one that includes an existing-customer custom audience under a spending limit and one that excludes it |
 | Creatives | Only validated winners |
-| Max ads | 150 per campaign, 50 per ad set |
+| Max ads | 50 non-archived ads per ad set (Ad Set reference, Marketing API) |
 
 **Scaling rules:**
-- Increase budget by max 20-25% per 24-48 hours
+- Increase budget in steps of about 20%, a few days apart (rule of thumb, not a Meta figure)
 - Monitor frequency: >3.0 = creative fatigue risk
 - Add new winners, don't immediately pause old ones
 
@@ -250,7 +257,7 @@ Actions:
 | Campaign Type | Manual Sales Campaign |
 | Budget Type | ABO (Ad Set Budget Optimization) |
 | Targeting | Broad (Broad Packs) + Interest (Winners) |
-| Structure | 3-5 creatives per Broad Pack ad set |
+| Structure | A batch of new creatives per Broad Pack ad set |
 | Test duration | Minimum 5-7 days |
 
 **Broad Pack naming:**
@@ -291,6 +298,8 @@ Ad Set: "Broad Pack [YYYY-MM-DD]"
 - Referral programs
 
 ## Winner Criteria Framework
+
+The thresholds below are rules of thumb for this framework, not Meta figures: check them against the account's own history.
 
 ### Step 1: Determine Client Parameters
 
@@ -336,8 +345,8 @@ Winner Criteria:
 
 | Metric | Benchmark | Action if Below |
 |--------|-----------|-----------------|
-| Hook Rate | >=25% (target: 30-45%) | Iterate first 3 seconds |
-| Hold Rate | >=40% (target: 60%+) | Check pacing and narrative |
+| Hook Rate | 3-second views (`video_view` in `actions`) / impressions; compare with the account's own history | Iterate first 3 seconds |
+| Hold Rate | `video_p50_watched_actions` / 3-second views (our proxy: ThruPlay is not available in `meta_get_insights`); compare with the account's own history | Check pacing and narrative |
 | CTR | >=1% (target: 2%+) | Test other hooks/angles |
 | CPC | <= account average | Monitor, don't pause yet |
 
@@ -348,9 +357,11 @@ Winner Criteria:
 - ROAS <50% of target after 5+ days
 - CTR <0.5% with significant spend (>€100)
 - Frequency >3.0 with declining performance
-- Hook rate <20% after 10,000+ impressions
+- Hook rate clearly below the account's own history after 10,000+ impressions
 
 ## Creative Velocity Guidelines
+
+Rules of thumb for this framework, not Meta figures.
 
 **How many new creatives per month?**
 
@@ -368,11 +379,11 @@ Winner Criteria:
 - ~20% experimental new formats/angles
 
 **Win rate expectations:**
-- ~2% of creatives become true scale winners
-- ~10% show initial profitability
-- Iterations on winners often outperform originals
+- Track the account's own win rate (winners / creatives tested, per batch) and plan creative volume from it
 
 ## Budget Allocation Templates
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ### Template A: Growth Focus (Recommended)
 ```
@@ -402,6 +413,8 @@ RETAIN:           5%
 
 ### Identifying Red Flags
 
+Rules of thumb, not Meta figures: check them against the account's own history. The exception is the 50-per-week line, which follows Meta's learning-phase rule: an ad set shows "Learning limited" when it is unlikely to get about 50 optimization events in the week after its last significant edit (Meta Business Help Center, "About learning limited", undated, checked 2026-10-10).
+
 | Red Flag | Impact | Action |
 |----------|--------|--------|
 | >5 active campaigns | Data fragmentation | Consolidate to 4-tier model |
@@ -413,21 +426,23 @@ RETAIN:           5%
 
 ### Audit Questions
 
-1. **Structure:** How many active campaigns? (Ideal: 2-4)
-2. **Learning:** How many ad sets in "Learning Limited"? (Ideal: <20%)
+1. **Structure:** How many active campaigns? (Ideal: 2-4; a rule of thumb for this 4-tier model)
+2. **Learning:** What share of spend goes to ad sets in the learning phase? (Meta's Performance 5 page, https://www.facebook.com/business/ads/performance-marketing, links keeping under 20% of spend in the learning phase to a lower cost per purchase.) Separately, how many ad sets show Learning limited?
 3. **Testing:** Is there a dedicated test campaign? (Must: Yes)
 4. **Winners:** How are winners identified and scaled?
 5. **Creative velocity:** How many new creatives per month?
-6. **Attribution:** Is CAPI implemented with EMQ >=6?
+6. **Attribution:** Is the Conversions API set up, with an Event Match Quality rating of Good or Great? (Meta's Conversions API docs call a "Good" or "Great" rating optimal: "Monitor Your Conversions API Gateway Setup", updated Feb 2, 2025; they also recommend aiming for a score of 6.0 or higher where possible: "Verifying Your Setup", updated Nov 24, 2025; both checked 2026-10-10.)
 
 ### MCP: Pull Account Structure for Audit
 
 ```python
 # Get active campaigns with delivery status and budget
-meta_query(account_id="act_XXXXX", entity_type="campaigns", effective_status=["ACTIVE"], fields=["id","name","status","daily_budget","lifetime_budget","objective","buying_type"])
+# format="full" keeps every requested field; above 30 campaigns the default "auto" format compacts the list
+meta_query(account_id="act_XXXXX", entity_type="campaigns", effective_status=["ACTIVE"], fields=["id","name","status","daily_budget","lifetime_budget","objective","buying_type"], format="full")
 
-# Get ad sets for a campaign (learning status, audience info)
-meta_query(account_id="act_XXXXX", entity_type="adsets", effective_status=["ACTIVE"], fields=["id","name","status","daily_budget","targeting","optimization_goal"])
+# Get active ad sets in the account (learning status, audience info); add parent_id=<campaign_id> for one campaign
+# learning_stage_info.status is LEARNING, SUCCESS or FAIL; Meta returns it only for active ad sets
+meta_query(account_id="act_XXXXX", entity_type="adsets", effective_status=["ACTIVE"], fields=["id","name","status","daily_budget","targeting","optimization_goal","learning_stage_info"])
 ```
 
 ## Naming Convention
@@ -480,7 +495,7 @@ Example: `VID_UGC_PROBLEM_V2` or `IMG_LIFESTYLE_BENEFIT_V1`
 4. Implement naming conventions
 
 ### Week 2: Testing Launch
-1. Launch first Broad Pack with 4-6 creatives
+1. Launch first Broad Pack with a batch of new creatives
 2. Set up tracking and reporting dashboard
 3. Monitor early signals (hook rate, CTR)
 
@@ -538,7 +553,8 @@ Example: `VID_UGC_PROBLEM_V2` or `IMG_LIFESTYLE_BENEFIT_V1`
 - Week 3-4: [actions]
 
 ## Expected Impact
-- CPA reduction: [%]
-- ROAS improvement: [%]
-- Learning Limited reduction: [%]
+Estimate only from this account's own data and state the assumptions; otherwise write "not estimated".
+- CPA: [current value] → [estimate, if supported]
+- ROAS: [current value] → [estimate, if supported]
+- Share of ad sets in Learning Limited: [current %] → [estimate, if supported]
 ```

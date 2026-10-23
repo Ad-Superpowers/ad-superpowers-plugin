@@ -4,25 +4,31 @@ description: "This skill should be used when the user asks to \"set up CAPI\", \
 ---
 # CAPI Implementation Guide
 
-Guide for implementing Meta's Conversions API (CAPI) for server-side tracking. CAPI is practically mandatory for any account spending >€1k/month — without it, you lose **20-40% of conversion signals** (higher in markets with strong privacy regulations or high iOS share). Target Event Match Quality (EMQ) of **6.0+**, with 7+ for Purchase events.
+Guide for implementing Meta's Conversions API (CAPI) for server-side tracking. Meta recommends using CAPI in addition to the Meta Pixel and sharing the same events through both: CAPI can deliver website events the Pixel may lose to network connectivity issues or page loading errors. How many events the Pixel misses differs per site, so measure it (browser versus server event counts in Events Manager) instead of assuming a percentage. Meta's Conversions API docs typically recommend aiming for an Event Match Quality (EMQ) score of **6.0** or higher where possible.
 
-## Why CAPI Is Mandatory (Not Optional)
+Sources: "Best Practices" and "Verifying Your Setup", Conversions API docs, Meta for Developers (checked 2026-10-10).
+
+## Why Use CAPI Next to the Pixel
 
 ```
 Browser Tracking Challenges:
 ├── iOS 14.5+ App Tracking Transparency
 ├── Safari ITP (Intelligent Tracking Prevention)
-├── Ad blockers (30%+ of users)
-├── Cookie deprecation
+├── Ad blockers
+├── Third-party cookie blocking (Chrome leaves this to the user)
 └── GDPR/privacy regulations
 
 CAPI Benefits:
-├── Bypasses browser limitations
+├── Sends events the Pixel may lose (network issues, page load errors)
 ├── First-party data direct to Meta
 ├── Better Event Match Quality
 ├── Redundant tracking (Pixel + CAPI)
 └── More accurate attribution
 ```
+
+Chrome: Google keeps its current approach of offering users a third-party cookie choice in Chrome's settings and
+will not roll out a standalone prompt ("Next steps for Privacy Sandbox and tracking protections in Chrome",
+Google, 22 Apr 2025, https://privacysandbox.google.com/blog/privacy-sandbox-next-steps).
 
 ## Implementation Decision Tree
 
@@ -30,19 +36,19 @@ CAPI Benefits:
 WHAT IS YOUR PLATFORM?
 │
 ├─► Shopify
-│   └─► Native Shopify integration (2 hours)
+│   └─► Native Shopify integration
 │
 ├─► WooCommerce
-│   └─► Plugin or sGTM (4-8 hours)
+│   └─► Plugin or sGTM
 │
 ├─► BigCommerce / Magento
-│   └─► Partner integration (2-4 hours)
+│   └─► Partner integration
 │
 ├─► Custom Website
-│   └─► Direct API or sGTM (8-40 hours)
+│   └─► Direct API or sGTM
 │
 └─► Any Platform + GTM
-    └─► Server-side GTM (4-8 hours)
+    └─► Server-side GTM
 ```
 
 ## Implementation Methods
@@ -56,21 +62,23 @@ Setup Steps:
 1. Shopify Admin → Settings → Apps and Sales Channels
 2. Install Meta (Facebook & Instagram) app
 3. Connect Meta Business Account
-4. Enable "Data Sharing" → Maximum
+4. Facebook & Instagram → Settings → Data sharing settings → Maximum
 5. Verify in Events Manager
 
-Time: 1-2 hours
 Skill level: Beginner
-Coverage: ~95% events automatically
 ```
+
+Shopify's "Enhanced" and "Maximum" data-sharing levels use the Conversions API next to the Pixel; "Standard" is
+Pixel only (Shopify Help Center, Meta pixel data sharing,
+https://help.shopify.com/en/manual/promoting-marketing/analyze-marketing/meta-data-sharing, checked 2026-10-10).
 
 **WooCommerce**
 
 ```
-Option A: Facebook for WooCommerce Plugin
-1. Install plugin from WooCommerce marketplace
-2. Connect Facebook account
-3. Enable Conversions API checkbox
+Option A: Meta for WooCommerce plugin (formerly Facebook for WooCommerce)
+1. Install the plugin from the WordPress.org plugin directory
+2. Connect it to your Meta business account (Marketing → Facebook)
+3. Conversions API events are sent automatically (no extra setting)
 4. Configure event settings
 
 Option B: Third-party plugin (PixelYourSite, etc.)
@@ -78,6 +86,10 @@ Option B: Third-party plugin (PixelYourSite, etc.)
 - Better deduplication control
 - Premium features for advanced setup
 ```
+
+Option A source: "Meta for WooCommerce" on WordPress.org (https://wordpress.org/plugins/facebook-for-woocommerce/)
+and the WooCommerce documentation, which says the Conversions API "is automatically implemented and no additional
+setting is required" (https://woocommerce.com/document/facebook-for-woocommerce/, checked 2026-10-10).
 
 ### Method 2: Server-side GTM (sGTM)
 
@@ -106,17 +118,17 @@ Requirements:
 ```
 1. Server Container Setup
    ├── Create sGTM container in GTM
-   ├── Deploy to Google Cloud (App Engine)
+   ├── Deploy to Google Cloud Run (Google's recommended setup)
    ├── Configure custom domain (CNAME record)
-   └── Estimated cost: $100-300/month
+   └── Hosting cost: Google estimates about $45/month (USD) per server and recommends at least 2 to reduce the risk of data loss
 
 2. Web Container Configuration
    ├── Update GA4 tag to send to server container
-   ├── Add Facebook Pixel tag (browser-side backup)
-   └── Configure transport URL to sGTM
+   ├── Add Meta Pixel tag (browser side of the redundant setup)
+   └── Set server_container_url to the sGTM URL
 
 3. Server Container Tags
-   ├── Add Facebook Conversions API tag
+   ├── Add Meta's "Conversions API Tag" (Template Gallery)
    ├── Configure event mappings
    ├── Add customer information parameters
    └── Setup event_id for deduplication
@@ -127,29 +139,39 @@ Requirements:
    └── Check deduplication working
 ```
 
+Sources: "Set up server-side tagging with Cloud Run" (Google for Developers, updated 2026-05-12) for hosting and cost;
+"An introduction to server-side tagging"
+for `server_container_url`; "Conversions API for Server-Side Google Tag Manager (GTM)", Meta for Developers for the tag template.
+
 ### Method 3: Conversions API Gateway
 
-**Meta's Managed Gateway:**
+**Meta's self-serve gateway, hosted in your cloud account or by a hosting partner:**
 
 ```
 Benefits:
 ├── Codeless setup
-├── Managed infrastructure
-├── Automatic updates
+├── Runs in your own cloud account (AWS or GCP) or a partner's
+├── Automatic updates (with host admin consent)
 └── Simplified maintenance
 
-Setup via Partners:
-├── Stape.io (popular, affordable)
-├── AWS-hosted gateway
-└── Other certified partners
+Hosting options:
+├── Your own AWS account (setup wizard in Events Manager)
+├── Your own GCP account
+└── A hosting partner, for example Stape (partner fees)
 
 Steps:
 1. Events Manager → Data Sources → Pixel
-2. Settings → Conversions API → Gateway
-3. Follow partner setup wizard
-4. Add CNAME record to DNS
+2. Settings → "Set up with Conversions API Gateway" → Get started
+3. Follow the setup wizard (cloud setup, hosting region)
+4. Add a custom domain at your DNS provider (recommended)
 5. Verify connection
 ```
+
+Source: "Conversions API Gateway" and its setup guide, Meta for Developers
+(checked 2026-10-10).
+Meta: "The only cost of the Conversions API Gateway is the associated cloud resource or partner fees." Stape
+describes its gateway hosting as "a server instance in the GCP cloud environment"
+(https://stape.io/blog/how-to-set-up-meta-conversions-api-gateway, updated 4 Aug 2025).
 
 ### Method 4: Direct API Implementation
 
@@ -165,13 +187,13 @@ def send_capi_event(event_name, email, event_id, value=None):
     access_token = "YOUR_ACCESS_TOKEN"
     pixel_id = "YOUR_PIXEL_ID"
 
-    # Hash user data
-    hashed_email = hashlib.sha256(email.lower().encode()).hexdigest()
+    # Hash user data (Meta's rule for em: trim spaces, lowercase, then SHA-256)
+    hashed_email = hashlib.sha256(email.strip().lower().encode()).hexdigest()
 
     payload = {
         "data": [{
             "event_name": event_name,
-            "event_time": int(time.time()),
+            "event_time": int(time.time()),  # Unix seconds; Meta rejects a request with any event older than 7 days
             "event_id": event_id,  # For deduplication
             "event_source_url": "https://yoursite.com/thank-you",
             "action_source": "website",
@@ -188,10 +210,15 @@ def send_capi_event(event_name, email, event_id, value=None):
         "access_token": access_token
     }
 
+    # v25.0: Marketing API version of 18 Feb 2026; check the current one in the
+    # Marketing API changelog (Meta for Developers).
     url = f"https://graph.facebook.com/v25.0/{pixel_id}/events"
     response = requests.post(url, json=payload)
     return response.json()
 ```
+
+Website events must include `event_source_url` and `client_user_agent`, as above ("Server Event Parameters" and
+"Customer Information Parameters", Meta for Developers).
 
 ## Event Deduplication
 
@@ -202,7 +229,7 @@ Without deduplication: Pixel event + CAPI event = 2x conversions (double countin
 ### Deduplication Setup
 
 ```
-Requirement: Same event_id for both Pixel AND CAPI event
+Requirement: Same event_id and event_name for both Pixel AND CAPI event
 
 Pixel Event:
 fbq('track', 'Purchase', {value: 50, currency: 'EUR'}, {eventID: 'order_12345'});
@@ -216,9 +243,14 @@ CAPI Event:
 
 Meta's Logic:
 ├── Same event_name + event_id within 48 hours?
-├── → Treated as 1 event
+├── → Treated as 1 event (Meta generally keeps the first one received)
 └── → No double counting
 ```
+
+Source: "Handling Duplicate Pixel and Conversions API Events" and "Server Event Parameters", Meta for Developers
+(checked
+2026-10-10). Meta can also deduplicate on event_name plus fbp and/or external_id, but generally only when the
+browser event arrives first.
 
 ### Event ID Best Practices
 
@@ -230,7 +262,7 @@ Good Event IDs:
 └── Composite: "purchase_user123_1642345678"
 
 Bad Event IDs:
-├── Random per pageload (not reproducible)
+├── Random value made separately in browser and server (never matches)
 ├── Timestamp only (not unique enough)
 ├── Missing (no deduplication possible)
 └── Hardcoded "1" (all events match)
@@ -240,11 +272,11 @@ Bad Event IDs:
 
 ```
 Checklist for correct deduplication:
-□ Go to Events Manager → Pixel → Events
+□ Go to Events Manager → Pixel → Overview
 □ Click on specific event (e.g., Purchase)
-□ Check "Event Source": should show "Received from 2 sources"
+□ Connection Method shows the event from both browser and server
 □ Event count should NOT be doubled
-□ "Deduplicated" indicator visible
+□ Event Deduplication tab: rate of events deduplicated (Meta warns when too low)
 
 If NOT deduplicated:
 ├── Check event_id matching
@@ -262,7 +294,7 @@ BEFORE IMPLEMENTING CAPI:
   └── Business Settings → Brand Safety → Domains → Verify
 
 □ Pixel Installed
-  └── Working browser-side pixel required for redundancy
+  └── CAPI needs the Pixel ID; Meta recommends Pixel + CAPI (redundant setup)
 
 □ Access Token
   └── Events Manager → Settings → Generate Access Token
@@ -321,7 +353,7 @@ STEP 4: Events Manager Diagnostics
 24 HOURS AFTER GO-LIVE:
 
 □ Server events visible in Events Manager
-□ Event Match Quality >6 (ideally >7)
+□ Event Match Quality 6.0+ where possible (Meta's recommendation)
 □ Deduplication working (2 sources, 1 count)
 □ No errors in Diagnostics
 □ Pixel + CAPI both firing
@@ -342,8 +374,8 @@ STEP 4: Events Manager Diagnostics
 
 ```
 Native Integration:
-1. Settings → Apps → Meta
-2. Data Sharing: Maximum
+1. Sales channels → Facebook & Instagram → Settings
+2. Data sharing settings: Maximum
 3. Done (CAPI automatically enabled)
 
 Verify:
@@ -354,25 +386,28 @@ Verify:
 ### WooCommerce Quick Reference
 
 ```
-With Facebook for WooCommerce:
-1. WooCommerce → Marketing → Facebook
-2. Advanced Settings → Enable Conversions API
-3. Enter Access Token
+With Meta for WooCommerce:
+1. WordPress admin → Marketing → Facebook
+2. Connect to your Meta business account
+3. CAPI runs automatically (no extra setting)
 4. Test checkout flow
 
 With PixelYourSite Pro:
-1. Settings → Conversions API
-2. Enter Access Token
-3. Enable "Send server events"
-4. Configure deduplication
+1. PixelYourSite Pro → Meta (Facebook)
+2. Enter Pixel ID and Conversion API access token
+3. Turn on "Enable Conversion API"
+4. PYS adds an event_id to each event; with any caching layer, keep both Ajax options in Global Settings → Events delivery on
 ```
+
+PixelYourSite steps: "Meta (Facebook) settings setup", PixelYourSite documentation
+(https://www.pixelyoursite.com/docs/meta-facebook-settings-setup, checked 2026-10-10).
 
 ### Custom Site Quick Reference
 
 ```
 sGTM Route:
 1. Setup sGTM on Google Cloud
-2. Add Facebook CAPI tag
+2. Add Meta's Conversions API Tag
 3. Map events from GA4
 4. Add customer parameters
 5. Setup deduplication
@@ -391,8 +426,13 @@ Direct API Route:
 # Review recent campaign performance — if ROAS looks lower than expected, check EMQ first
 meta_get_insights(account_id="act_XXXXX", level="campaign", date_preset="last_7d", fields=["spend","actions","cost_per_action_type","website_purchase_roas"])
 
-# Check pixel health via Events Manager UI (pixel diagnostics are not exposed via meta_query)
-# Events Manager → Data Sources → Pixel → Diagnostics tab
+# List the account's pixels: last_fired_time, enable_automatic_matching, automatic_matching_fields,
+# first_party_cookie_status (the _fbp cookie needs first-party cookies on)
+meta_query(account_id="act_XXXXX", entity_type="adspixels")
+
+# EMQ, match keys, deduplication and freshness per web event (pixel id from adspixels)
+meta_query(account_id="act_XXXXX", entity_type="dataset_quality", entity_id="<pixel_id>")
+# Test events and the full Diagnostics tab stay in Events Manager
 # Or: Pull campaign entities for a quick status overview
 meta_query(account_id="act_XXXXX", entity_type="campaigns", effective_status=["ACTIVE"], fields=["id","name","status","objective"])
 ```

@@ -583,12 +583,8 @@ CREATIVE FATIGUE: GOOGLE ADS vs OTHERS
 
 ## Output Template
 
-When diagnosing Google Ads creative fatigue, provide:
-
-```
-
-
-See [detailed-reference.md](references/detailed-reference.md) for details.
+When diagnosing Google Ads creative fatigue, provide the report in the format of the "Google Ads
+Creative Fatigue Analysis" template in [detailed-reference.md](references/detailed-reference.md).
 
 
 

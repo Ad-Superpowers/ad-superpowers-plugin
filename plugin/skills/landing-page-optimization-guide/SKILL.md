@@ -266,4 +266,6 @@ ga4_run_report(
 )
 ```
 
+If the response has `partial: true`, repeat the call with `offset` set to `next_offset` until `partial` is false, so the ranking covers every page.
+
 Sort by `sessions DESC` to find high-traffic pages with poor `keyEvents` or high `bounceRate` — these are your highest-impact optimisation targets. Pages with <30s session duration + high bounce = above-the-fold messaging failing immediately.

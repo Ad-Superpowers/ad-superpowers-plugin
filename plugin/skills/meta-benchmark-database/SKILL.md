@@ -6,21 +6,22 @@ description: "This skill should be used when the user asks to \"compare my metri
 
 ## Overview
 
-This skill provides an extensive database of Meta Ads benchmarks by industry, funnel stage, and campaign type, so you can assess how your metrics perform relative to market standards.
+This skill gives rule-of-thumb ranges for Meta Ads metrics by industry, funnel stage and ad format, so you can place an account's metrics in rough context. Compare with the account's own history first; use these ranges when that history is thin.
 
 ## Benchmark Disclaimer
 
 ```
 IMPORTANT CONTEXT
 
-These benchmarks are based on:
-├── Sovran "Meta Ads CPM by Industry 2026" (Q1 2026, updated quarterly)
-├── Databox peer benchmarks "Facebook Ads CTR/CPC/CPM" (Feb 2026)
-├── Tinuiti "Digital Ads Benchmark Report Q4 2025" (Jan 2026)
+Rules of thumb, not Meta figures: check them against the account's own history.
+├── The Poor/Average/Good/Excellent bands are our working ranges,
+│   not figures from Meta or from a named benchmark report
 ├── Primarily focused on Western markets
-├── Attribution: 7d click + 1d view (Meta default since Jan 2026 — 28d view removed)
+├── Attribution: Meta reports results by each ad set's attribution
+│   setting, so compare figures read at the same setting. Since
+│   12 January 2026 the Insights API no longer returns 7-day view
+│   or 28-day view results
 └── Subject to seasonal fluctuations
-Note: AdEspresso stopped publishing benchmarks after 2022 — removed as source.
 
 Benchmarks are GUIDELINES, not absolute truths:
 ├── Your specific niche may differ significantly
@@ -29,7 +30,11 @@ Benchmarks are GUIDELINES, not absolute truths:
 └── Always compare with your own historical data
 ```
 
+Attribution sources: "Limits and Best Practices", Meta Marketing API docs (beginning 10 June 2025, API results follow each ad set's attribution setting, as Ads Manager does); "Ads Insights API Metric Availability Updates", Meta for Developers, 16 Oct 2025 (7-day view and 28-day view windows no longer returned from 12 January 2026).
+
 ## Benchmarks by Industry
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ### E-commerce
 
@@ -40,7 +45,7 @@ E-COMMERCE BENCHMARKS
 Metric          │ Poor    │ Average │ Good    │ Excellent
 ────────────────┼─────────┼─────────┼─────────┼──────────
 CTR (All)       │ <1.0%   │ 1.0-2.0%│ 2.0-3.0%│ >3.0%
-CTR (Link)      │ <1.2%   │ 1.2-2.0%│ 2.0-3.0%│ >3.0%
+CTR (Link)      │ at or below CTR (All), which counts link clicks too; compare with the account's history
 CPC             │ >$1.50  │ $0.80-1.50│ $0.40-0.80│ <$0.40
 CPM             │ >$18    │ $10-18  │ $5-10   │ <$5
 CPA (Purchase)  │ >$50    │ $25-50  │ $15-25  │ <$15
@@ -113,17 +118,21 @@ Metric          │ Poor    │ Average │ Good    │ Excellent
 CTR             │ <0.6%   │ 0.6-1.2%│ 1.2-2%  │ >2%
 CPC             │ >$1.50  │ $0.70-1.50│$0.30-0.70│ <$0.30
 CPM             │ >$12    │ $6-12   │ $3-6    │ <$3
-Cost per Store Visit │ >$15│ $8-15  │ $4-8    │ <$4
 Cost per Call   │ >$20    │ $10-20  │ $5-10   │ <$5
 Cost per Direction│>$8    │ $4-8    │ $2-4    │ <$2
 
 NOTES:
 ├── Radius targeting: Tight radius = higher CPM
-├── Store visits: Not available for all locations
+├── Store visits: no cost per store visit to compare (Meta folded
+│   the store traffic objective into its six simplified objectives)
 └── Calls: Most trackable local metric
 ```
 
+Store traffic source: "About the store traffic objective in Meta Ads Manager", Meta Business Help Center.
+
 ## Benchmarks by Funnel Stage
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ### TOFU (Top of Funnel)
 
@@ -131,17 +140,21 @@ NOTES:
 TOFU BENCHMARKS - AWARENESS
 ===========================
 
-Objective: Reach / Brand Awareness / Video Views
+Objective: Awareness (reach, brand awareness); video views sit
+under both Awareness and Engagement
 
 Metric          │ Poor    │ Average │ Good    │ Excellent
 ────────────────┼─────────┼─────────┼─────────┼──────────
 CPM             │ >$10    │ $5-10   │ $3-5    │ <$3
 Reach (per $)   │ <100    │ 100-200 │ 200-350 │ >350
 Frequency/week  │ >4      │ 2.5-4   │ 1.5-2.5 │ 1-1.5
-Video Views     │ <20%    │ 20-40%  │ 40-60%  │ >60%
-ThruPlay Rate   │ <10%    │ 10-20%  │ 20-35%  │ >35%
+ThruPlay Rate   │ compare with the account's own video ads
 Cost/ThruPlay   │ >$0.10  │ $0.05-0.10│$0.02-0.05│<$0.02
-3-sec View Rate │ <30%    │ 30-50%  │ 50-70%  │ >70%
+3-sec View Rate │ compare with the account's own video ads
+
+ThruPlay and Cost/ThruPlay: Ads Manager only (not available
+through meta_get_insights). 3-sec view rate through the tool:
+the video_view action type in actions, divided by impressions.
 ```
 
 ### MOFU (Middle of Funnel)
@@ -150,7 +163,7 @@ Cost/ThruPlay   │ >$0.10  │ $0.05-0.10│$0.02-0.05│<$0.02
 MOFU BENCHMARKS - CONSIDERATION
 ===============================
 
-Objective: Traffic / Engagement / Lead Gen
+Objective: Traffic / Engagement / Leads
 
 Metric          │ Poor    │ Average │ Good    │ Excellent
 ────────────────┼─────────┼─────────┼─────────┼──────────
@@ -169,7 +182,7 @@ Email Signup    │ <1%     │ 1-3%    │ 3-6%    │ >6%
 BOFU BENCHMARKS - CONVERSION
 ============================
 
-Objective: Conversions / Catalog Sales
+Objective: Sales (website conversions or catalog)
 
 Metric          │ Poor    │ Average │ Good    │ Excellent
 ────────────────┼─────────┼─────────┼─────────┼──────────
@@ -182,7 +195,11 @@ Cart Abandon    │ >80%    │ 70-80%  │ 60-70%  │ <60%
 Checkout Comp.  │ <30%    │ 30-50%  │ 50-70%  │ >70%
 ```
 
+Objective names follow Meta's six objectives (Awareness, Traffic, Engagement, Leads, App promotion, Sales), as the Facebook Ads Guide lists them ("Awareness Image Ad Specs on Facebook Feed", https://www.facebook.com/business/ads-guide/update/image/facebook-feed). The older objectives were deprecated with Marketing API v17.0 ("Bidding overview"). Video views are available under both Awareness and Engagement ("Facebook ad campaign objectives and goals", Meta for Business, https://www.facebook.com/business/ads/ad-objectives).
+
 ## Benchmarks by Ad Format
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ### Static Image Ads
 
@@ -206,12 +223,18 @@ VIDEO AD BENCHMARKS
 
 Metric          │ Poor    │ Average │ Good    │ Excellent
 ────────────────┼─────────┼─────────┼─────────┼──────────
-3-sec View Rate │ <25%    │ 25-40%  │ 40-60%  │ >60%
-ThruPlay Rate   │ <8%     │ 8-15%   │ 15-25%  │ >25%
-Avg Watch Time  │ <3s     │ 3-6s    │ 6-10s   │ >10s
-Video Complete  │ <5%     │ 5-12%   │ 12-20%  │ >20%
+3-sec View Rate │ compare with the account's own video ads
+ThruPlay Rate   │ compare with the account's own video ads
+Avg Watch Time  │ compare with the account's own video ads of similar length
+Video Complete  │ compare with the account's own video ads of similar length
 CTR (post-view) │ <0.5%   │ 0.5-1%  │ 1-2%    │ >2%
 Cost/ThruPlay   │ >$0.12  │ $0.06-0.12│$0.03-0.06│<$0.03
+
+ThruPlay and Cost/ThruPlay: Ads Manager only (not available
+through meta_get_insights). Through the tool, 3-sec views are
+the video_view action type in actions, and
+video_avg_time_watched_actions plus video_p25_watched_actions
+to video_p100_watched_actions give watch time and drop-off.
 ```
 
 ### Carousel Ads
@@ -244,6 +267,8 @@ Product Views   │ <3      │ 3-6     │ 6-10    │ >10
 
 ## Seasonal Adjustment Factors
 
+Rules of thumb, not Meta figures: check them against the account's own history.
+
 ```
 SEASONAL VARIATIONS
 ====================
@@ -264,6 +289,8 @@ November        │   1.35     │   1.20     │ Black Friday
 December        │   1.40     │   1.25     │ Holiday peak
 
 Usage: Benchmark x Factor = Seasonally Adjusted Benchmark
+With a year of account history, use the account's own
+month-to-month CPM and CPA changes instead of these factors.
 ```
 
 ## Benchmark Comparison Template
@@ -304,13 +331,19 @@ Never benchmark against user-provided numbers alone — always pull live account
 
 ```
 1. Get current metrics (last 30 days):
-→ meta_get_insights(account_id="...", level="campaign", date_preset="last_30d", fields=["spend","ctr","cpc","cpm","cost_per_action_type","impressions"])
+→ meta_get_insights(account_id="...", level="campaign", date_preset="last_30d", fields=["spend","impressions","ctr","inline_link_click_ctr","inline_link_clicks","cpc","cpm","actions","cost_per_action_type","purchase_roas"])
 
 2. Drill into ad set level for audience-specific benchmarks:
 → meta_get_insights(account_id="...", level="adset", date_preset="last_30d", fields=["ctr","cpc","cost_per_action_type","frequency"])
+
+3. meta_get_insights does not follow paging. If a response has
+   paging.next, fetch the next page with:
+→ meta_query(account_id="...", entity_type="ads", pagination_url="<paging.next>")
 ```
 
-Then compare the returned metrics against the benchmark tables above, applying seasonal adjustment factors if relevant.
+`ctr` is CTR (All) and `inline_link_click_ctr` is CTR (Link). Not every metric in the tables comes back from `meta_get_insights`: ThruPlay and cost per ThruPlay are Ads Manager only, Instant Experience metrics are not available through the tool either, and bounce rate and time on site come from the site's analytics (for example `ga4_run_report`), not from Meta.
+
+Then compare the returned metrics with the account's own history first and with the rule-of-thumb tables above second, applying seasonal adjustment factors if relevant.
 
 ## Example Interaction
 
@@ -318,37 +351,37 @@ Then compare the returned metrics against the benchmark tables above, applying s
 
 **Claude response**:
 
-"Let me compare your metrics against e-commerce fashion benchmarks:
+"Let me place your metrics against the rule-of-thumb ranges for fashion e-commerce:
 
 ---
 
 **BENCHMARK COMPARISON - Fashion E-commerce:**
 
-| Metric | Your Value | Benchmark Range | Status |
+| Metric | Your Value | Rule-of-thumb Range | Status |
 |--------|------------|-----------------|--------|
-| CTR | 1.2% | 1-2% (average-good) | Good |
-| CPA | $35 | $20-40 (average) | OK |
-| ROAS | 2.8x | 2.5-4x (average-good) | Good |
+| CTR (All) | 1.2% | 1.0-2.0% (average band) | Average |
+| CPA | $35 | $20-40 (fashion range) | Within range |
+| ROAS | 2.8x | 2.5-4x (fashion range) | Within range |
 
 ---
 
 **INTERPRETATION:**
 
-**CTR (1.2%)** - You're in the 'good' range. Your creatives are grabbing attention.
+**CTR (1.2%)** - In the average band. Compare it with this campaign's own CTR over the last months before drawing conclusions about the creatives.
 
-**CPA ($35)** - Average for fashion. There's room for improvement.
+**CPA ($35)** - Inside the fashion range. Whether that is good depends on your order value and margin.
 
-**ROAS (2.8x)** - Healthy. Above breakeven, room to scale.
+**ROAS (2.8x)** - Inside the fashion range. It is profitable only above your breakeven ROAS (1 / gross margin; for example 2.5x at a 40% margin).
 
 ---
 
 **RECOMMENDATIONS:**
 
 1. **Lowering CPA** is your biggest opportunity
-   - Test more creatives (UGC is often cheaper)
+   - Test genuinely different creative concepts, for example UGC-style against studio
    - Optimize landing page conversion
    - Check audience overlap
 
-2. **Scale potential**: With 2.8x ROAS you can increase budget if CPA stays stable
+2. **Scale potential**: If 2.8x is above your breakeven ROAS, raise the budget in steps while CPA holds
 
 Would you like specific benchmarks for another metric or a comparison with last period?"

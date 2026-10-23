@@ -3,7 +3,7 @@ name: tracking-specialist
 description: Audits tracking implementations, troubleshoots conversion measurement, manages GTM containers, validates GA4 events and e-commerce tracking, configures key events, debugs conversion discrepancies, manages BigQuery exports, ensures privacy compliance, and analyzes SEO vs SEA keyword overlap. Use when the user asks about GTM audits, conversion tracking, missing events, tag management, data layer issues, SEO vs SEA overlap, keyword cannibalization, measurement validation, GA4 setup, e-commerce tracking, consent mode, server-side tagging, CAPI, enhanced conversions, attribution windows, or privacy compliance.
 model: sonnet
 color: yellow
-tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput, mcp__plugin_ad-superpowers_ad-superpowers__gtm_list_containers, mcp__plugin_ad-superpowers_ad-superpowers__gtm_audit, mcp__plugin_ad-superpowers_ad-superpowers__gtm_manage, mcp__plugin_ad-superpowers_ad-superpowers__ga4_list_properties, mcp__plugin_ad-superpowers_ad-superpowers__ga4_run_report, mcp__plugin_ad-superpowers_ad-superpowers__gsc_list_sites, mcp__plugin_ad-superpowers_ad-superpowers__gsc_search_analytics, mcp__plugin_ad-superpowers_ad-superpowers__gsc_manage_url, Skill, mcp__plugin_ad-superpowers_ad-superpowers__workflow
+tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, BashOutput, mcp__plugin_ad-superpowers_ad-superpowers__gtm_list_containers, mcp__plugin_ad-superpowers_ad-superpowers__gtm_audit, mcp__plugin_ad-superpowers_ad-superpowers__gtm_manage, mcp__plugin_ad-superpowers_ad-superpowers__ga4_list_properties, mcp__plugin_ad-superpowers_ad-superpowers__ga4_run_report, mcp__plugin_ad-superpowers_ad-superpowers__gsc_list_sites, mcp__plugin_ad-superpowers_ad-superpowers__gsc_search_analytics, mcp__plugin_ad-superpowers_ad-superpowers__gsc_manage_url, mcp__plugin_ad-superpowers_ad-superpowers__meta_list_ad_accounts, mcp__plugin_ad-superpowers_ad-superpowers__meta_get_insights, Skill, mcp__plugin_ad-superpowers_ad-superpowers__workflow
 ---
 
 # Tracking Specialist
@@ -70,7 +70,7 @@ Loading every skill eagerly is anti-pattern — search and load on demand.
 ### GTM Container Audit Framework
 1. **Container health** — Total tags, orphaned tags, duplicates, size
 2. **Platform pixel coverage:**
-   - Meta Pixel + CAPI (server-side) — check EMQ score (⚠️ UI-only)
+   - Meta Pixel + CAPI (server-side): check the EMQ score in Events Manager (no MCP tool reads it)
    - Google Ads conversion tags + enhanced conversions
    - LinkedIn Insight Tag
    - TikTok Pixel + advanced matching
@@ -84,7 +84,7 @@ Loading every skill eagerly is anti-pattern — search and load on demand.
 - Check for double-counting (duplicate tags)
 - Validate enhanced conversions / CAPI deduplication
 - Verify attribution windows match business goals
-- Check Event Match Quality (Meta EMQ) — ⚠️ UI-only, check Events Manager
+- Check Event Match Quality (Meta EMQ) in Events Manager. Meta's Dataset Quality API also returns it, but no MCP tool here reads it
 
 ### Server-Side Tagging
 - When to implement (high-traffic sites, privacy-first, ad blocker bypass)

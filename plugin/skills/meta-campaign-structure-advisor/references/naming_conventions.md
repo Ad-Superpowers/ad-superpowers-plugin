@@ -19,12 +19,12 @@ Good naming conventions give you:
 | Component | Options | Example |
 |-----------|---------|---------|
 | Brand | Company name or abbreviation | `Acme`, `ACM` |
-| Objective | `Conv`, `Traffic`, `Awareness`, `Leads`, `Engagement` | `Conv` |
+| Objective | `Sales`, `Traffic`, `Awareness`, `Leads`, `Engagement` | `Sales` |
 | Funnel | `TOFU`, `MOFU`, `BOFU`, `Retarget` | `BOFU` |
-| Geo | ISO country code | `NL`, `BE`, `DACH` |
+| Geo | ISO country code, or a region code such as `DACH` | `NL`, `BE`, `DACH` |
 | MMYY | Month/year | `0126` |
 
-**Example**: `Acme_Conv_BOFU_NL_0126`
+**Example**: `Acme_Sales_BOFU_NL_0126`
 
 ### Ad Set Level
 
@@ -58,7 +58,7 @@ Good naming conventions give you:
 ## Complete Example
 
 ```
-Campaign: Acme_Conv_BOFU_NL_0126
+Campaign: Acme_Sales_BOFU_NL_0126
 └── Ad Set: LAL_1pct_Purchasers_AllPlace
     ├── Ad: UGC_Video_v1_ProblemHook
     ├── Ad: UGC_Video_v2_BenefitHook
@@ -74,25 +74,25 @@ Campaign: Acme_Conv_BOFU_NL_0126
 
 Add `_TestA` / `_TestB` to the campaign name:
 ```
-Acme_Conv_BOFU_NL_0126_TestA
-Acme_Conv_BOFU_NL_0126_TestB
+Acme_Sales_BOFU_NL_0126_TestA
+Acme_Sales_BOFU_NL_0126_TestB
 ```
 
 ### Seasonal Campaigns
 
 Add the season or event:
 ```
-Acme_Conv_BOFU_NL_BF24  (Black Friday 2024)
-Acme_Conv_BOFU_NL_XMAS24
-Acme_Conv_BOFU_NL_SUMMER25
+Acme_Sales_BOFU_NL_BF24  (Black Friday 2024)
+Acme_Sales_BOFU_NL_XMAS24
+Acme_Sales_BOFU_NL_SUMMER25
 ```
 
 ### Multi-Product
 
 Add the product category:
 ```
-Acme_Conv_BOFU_NL_0126_Shoes
-Acme_Conv_BOFU_NL_0126_Bags
+Acme_Sales_BOFU_NL_0126_Shoes
+Acme_Sales_BOFU_NL_0126_Bags
 ```
 
 ## UTM Parameters Alignment
@@ -102,20 +102,22 @@ Make sure UTM parameters match the naming:
 ```
 utm_source=facebook
 utm_medium=paid
-utm_campaign=Acme_Conv_BOFU_NL_0126
+utm_campaign=Acme_Sales_BOFU_NL_0126
 utm_content=UGC_Video_v2_ProblemHook
 ```
 
 ## Regex Patterns for Validation
 
+These accept every example above, including season codes such as `BF24` in place of `MMYY` and a two-part audience detail such as `1pct_Purchasers`.
+
 ### Campaign Name Validation
 ```regex
-^[A-Za-z]+_[A-Za-z]+_[A-Z]{4}_[A-Z]{2,4}_\d{4}(_[A-Za-z0-9]+)?$
+^[A-Za-z]+_[A-Za-z]+_[A-Za-z]+_[A-Z]{2,4}_(\d{4}|[A-Z]+\d{2})(_[A-Za-z0-9]+)?$
 ```
 
 ### Ad Set Name Validation
 ```regex
-^[A-Za-z]+_[A-Za-z0-9]+_[A-Za-z]+$
+^[A-Za-z]+_[A-Za-z0-9]+(_[A-Za-z0-9]+)?_[A-Za-z]+$
 ```
 
 ### Ad Name Validation

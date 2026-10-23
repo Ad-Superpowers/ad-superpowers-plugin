@@ -28,18 +28,24 @@ This skill helps calculate optimal scaling strategies for Meta Ads, including bu
 │  ├── Seasonal opportunities missed                              │
 │  └── Inefficient growth                                         │
 │                                                                 │
-│  Sweet spot: 15-20% budget increase per 3-4 days               │
-│              as long as performance stays stable                │
+│  Rule of thumb, not a Meta figure: 15-20% budget increase per   │
+│  3-4 days, as long as performance stays stable                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ### The 20% Rule
 
 ```
-META'S RECOMMENDED SCALING:
+OUR SCALING RULE OF THUMB:
 ==========================
 
-Budget increases up to 20% do NOT trigger a learning phase reset.
+Rules of thumb, not Meta figures: check them against the account's own history.
+
+Raise the budget by at most 20% per step, then wait about 3 days.
+Meta gives no percentage. It says a budget change may or may not be a
+significant edit, depending on the magnitude of the change: $100 to $101
+is not likely to restart learning, $100 to $1000 may. Small steps make
+a restart less likely, not impossible.
 
 Example:
 ├── Day 1: $50/day
@@ -48,8 +54,13 @@ Example:
 ├── Day 10: $86/day (+20%)
 └── Day 13: $103/day (+20%)
 
-After 2 weeks: Budget doubled without learning phase reset!
+After about 2 weeks: budget doubled in steps of 20% or less.
 ```
+
+Source: Meta Business Help Center, "Significant edits and learning phase" (page undated; checked 2026-10-10). With Advantage+
+campaign budget, a campaign budget change might put several ad sets back into learning. In Ad Superpowers,
+`meta_update` refuses a budget change of more than 20% unless you pass `acknowledge_learning_reset=True`.
+That 20% is the tool's own guard, not a Meta rule.
 
 ## Scaling Readiness Check
 
@@ -59,6 +70,8 @@ After 2 weeks: Budget doubled without learning phase reset!
 BEFORE YOU SCALE - VALIDATE:
 ==============================
 
+Rules of thumb, not Meta figures: check them against the account's own history.
+
 □ PERFORMANCE STABILITY
 ├── CPA stable last 7 days? (variation <15%)
 ├── Sufficient conversions? (>50 per week)
@@ -67,13 +80,13 @@ BEFORE YOU SCALE - VALIDATE:
 
 □ AUDIENCE HEADROOM
 ├── Current frequency <2.5?
-├── Audience size >10x daily budget?
+├── Audience large enough for the higher budget?
 ├── Reach still has growth potential?
 └── Ready if: All 3 checks positive
 
 □ CREATIVE STRENGTH
 ├── CTR stable or rising?
-├── At least 3-5 active creatives?
+├── Active ads are genuinely different concepts, not cosmetic variants of one?
 ├── No creative fatigue signals?
 └── Ready if: All 3 checks positive
 
@@ -90,7 +103,13 @@ SCALING GO/NO-GO:
 └── <6 checks: NO-GO - Do not scale
 ```
 
+The 50-per-week check follows Meta's learning phase figure: an ad set usually exits learning after about 50
+results in the week after its last significant edit (Meta Business Help Center, "About the learning phase", checked 2026-10-10).
+
 ## Scaling Calculator
+
+Rules of thumb, not Meta figures: check them against the account's own history. This covers the step sizes,
+waiting days, test budget share and minimum conversions below.
 
 ### Vertical Scaling (Budget Increase)
 
@@ -107,19 +126,19 @@ INPUT:
 CALCULATION:
 ├── Budget multiplier: Y / X = [M]x
 ├── Estimated scaling period: log(M) / log(1.2) x 3 days
-├── CPA buffer: (W - Z) / Z x 100 = [B]%
+├── CPA margin: (W - Z) / W x 100 = [B]%
 └── Risk level: [Low/Medium/High]
 
 EXAMPLE:
 Current: $100/day → Target: $500/day
 
-Scaling timeline (20% increments):
-├── Week 1: $100 → $120 → $144
-├── Week 2: $173 → $207 → $249
-├── Week 3: $299 → $358 → $430
-└── Week 4: $516 - Target reached!
+Scaling timeline (20% steps, one step every 3 days):
+├── Days 1-9:   $100 → $120 → $144
+├── Days 10-18: $173 → $207 → $249
+├── Days 19-27: $299 → $358 → $430
+└── Day 28:     $516 - Target reached!
 
-Total period: ~3-4 weeks for 5x scale
+Total period: about 4 weeks for 5x scale
 ```
 
 ### Horizontal Scaling (More Ad Sets)
@@ -155,6 +174,9 @@ Rule: Test budget = max 30% of total
 
 ## Scaling Scenarios
 
+Rules of thumb, not Meta figures: check them against the account's own history. The CPA impact of a step
+differs per account, so estimate it only from the account's own past budget changes.
+
 ### Scenario 1: Conservative Scale (Low Risk)
 
 ```
@@ -163,7 +185,7 @@ CONSERVATIVE SCALING PLAN
 
 Situation: Stable performance, want to maintain
 
-Budget increases: 15% per 4 days
+Budget increases: 15% every 3-4 days (twice a week)
 Timeline: Slow but steady
 Risk: Low
 
@@ -180,7 +202,7 @@ WEEK 3:
 └── Day 19-21: $201/day (+15%)
 
 RESULT: 2x budget in 3 weeks
-Expected CPA impact: +5-10%
+Expected CPA impact: [from this account's history]
 ```
 
 ### Scenario 2: Moderate Scale (Medium Risk)
@@ -195,18 +217,17 @@ Budget increases: 20% per 3 days
 Timeline: Balanced
 Risk: Medium
 
-WEEK 1:
+SCHEDULE:
 ├── Day 1-3: $100/day
 ├── Day 4-6: $120/day (+20%)
-└── Day 7: $144/day (+20%)
+├── Day 7-9: $144/day (+20%)
+├── Day 10-12: $172/day (+20%)
+├── Day 13-15: $206/day (+20%)
+└── Day 16-18: $247/day (+20%)
+(amounts rounded down, so no step is above 20%)
 
-WEEK 2:
-├── Day 8-10: $173/day (+20%)
-├── Day 11-13: $207/day (+20%)
-└── Day 14: $249/day (+20%)
-
-RESULT: 2.5x budget in 2 weeks
-Expected CPA impact: +10-20%
+RESULT: 2.5x budget in about 2.5 weeks
+Expected CPA impact: [from this account's history]
 ```
 
 ### Scenario 3: Aggressive Scale (High Risk)
@@ -234,7 +255,10 @@ WEEK 1:
 └── Day 7: $337/day (+50%)
 
 RESULT: 3.4x budget in 1 week
-Expected CPA impact: +20-40% (temporary)
+Expected CPA impact: [from this account's history]
+Steps this large may restart learning (Meta: it depends on the
+magnitude of the change), and meta_update needs
+acknowledge_learning_reset=True for any step above 20%.
 
 FALLBACK PLAN:
 If CPA >target + 30%:
@@ -244,6 +268,8 @@ If CPA >target + 30%:
 ```
 
 ## Scaling Decision Tree
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ```
 SCALING DECISION FLOWCHART
@@ -287,12 +313,14 @@ Day │ Budget │ Spend │ Conv │  CPA  │ ROAS │ Freq │ Status
  1  │ $100   │ $98   │  8   │ $12.25│ 3.2x │ 1.2  │ green
  2  │ $100   │ $100  │  9   │ $11.11│ 3.5x │ 1.3  │ green
  3  │ $100   │ $99   │  7   │ $14.14│ 2.8x │ 1.4  │ green
- 4  │ $120   │ $118  │  8   │ $14.75│ 2.7x │ 1.5  │ green Scale
- 5  │ $120   │ $120  │  7   │ $17.14│ 2.3x │ 1.6  │ yellow
+ 4  │ $120   │ $118  │  9   │ $13.11│ 3.0x │ 1.5  │ green Scale
+ 5  │ $120   │ $120  │  8   │ $15.00│ 2.6x │ 1.6  │ yellow
  6  │ $120   │ $119  │  9   │ $13.22│ 3.0x │ 1.7  │ green
  7  │ $144   │ $142  │ 10   │ $14.20│ 2.8x │ 1.8  │ green Scale
 
-ALERT TRIGGERS:
+Baseline CPA (days 1-3): $297 / 24 conversions = $12.38
+
+ALERT TRIGGERS (rules of thumb, not Meta figures: check them against the account's own history):
 ├── yellow Warning: CPA +15% vs baseline
 ├── red Stop: CPA +30% vs baseline or >target
 ├── red Stop: Frequency >3.0
@@ -338,14 +366,14 @@ Days = (log(5) / log(1.2)) x 3
 Days = (1.61 / 0.18) x 3
 Days = 8.9 x 3 = ~27 days
 
-QUICK REFERENCE TABLE:
+QUICK REFERENCE TABLE (one step every 3 days, rounded up):
 ──────────────────────────────────────────
 Multiplier │ 15% steps   │ 20% steps
 ──────────────────────────────────────────
-    2x     │   16 days   │   12 days
-    3x     │   25 days   │   19 days
-    5x     │   37 days   │   27 days
-   10x     │   53 days   │   39 days
+    2x     │   15 days   │   12 days
+    3x     │   24 days   │   21 days
+    5x     │   36 days   │   27 days
+   10x     │   51 days   │   39 days
 ──────────────────────────────────────────
 ```
 
@@ -360,7 +388,7 @@ SCALING PLAN - [ACCOUNT/CAMPAIGN]
 CURRENT SITUATION:
 ├── Daily budget: $[X]
 ├── CPA: $[Y] (target: $[Z])
-├── CPA margin: (Y-Z)/Z x 100 = [M]%
+├── CPA margin: (Z-Y)/Z x 100 = [M]%
 ├── Weekly conversions: [N]
 └── Frequency: [F]
 
@@ -405,14 +433,26 @@ Before building a scale plan, always verify the pre-scaling checklist with real 
 1. Performance stability check (last 7 days):
 → meta_get_insights(account_id="...", level="adset", date_preset="last_7d", fields=["cost_per_action_type","spend","impressions","reach","frequency"])
 
-2. Learning phase status:
-→ meta_get_insights(account_id="...", level="adset", date_preset="last_3d", fields=["spend","impressions","actions"])
+2. Learning phase status (insights do not report it; Meta returns it for active ad sets only,
+   not for ad sets with dynamic creative, and not every ad account gets it):
+→ meta_query(account_id="...", entity_type="adsets", effective_status=["ACTIVE"], fields=["id","name","learning_stage_info"], format="full")
+  learning_stage_info.status: LEARNING, SUCCESS (exited) or FAIL (not enough results to exit)
 
 3. Check current frequency (audience headroom):
 → meta_get_insights(account_id="...", level="adset", date_preset="last_14d", fields=["frequency","reach","impressions"])
+
+meta_get_insights returns one page of rows: while a response has paging.next, fetch the next page with
+meta_query(account_id="...", entity_type="adsets", pagination_url=<paging.next>) and add its rows.
+
+Note for later budget changes (this readiness check makes none): meta_update takes amounts in
+cents (under CBO, change the campaign, not the ad set) and refuses a change of more than 20% from
+the current budget unless you pass acknowledge_learning_reset=True. That 20% is Ad Superpowers'
+own guard, not a Meta rule.
 ```
 
-Use the results to fill in the scaling readiness checklist before committing to a timeline.
+Use the results to fill in the scaling readiness checklist before committing to a timeline. The learning stage
+field is described in the Marketing API reference, "Ad Campaign Learning Stage Info"
+(checked 2026-10-10).
 
 ## Example Interaction
 
@@ -437,35 +477,27 @@ Use the results to fill in the scaling readiness checklist before committing to 
 **RECOMMENDED TIMELINE (20% steps, ~4 weeks):**
 
 ```
-Week 1:
 ├── Day 1-3: $100/day (baseline)
 ├── Day 4-6: $120/day (+20%)
-└── Day 7: $144/day (+20%)
-
-Week 2:
-├── Day 8-10: $173/day (+20%)
-├── Day 11-13: $207/day (+20%)
-└── Day 14: $249/day (+20%)
-
-Week 3:
-├── Day 15-17: $299/day (+20%)
-├── Day 18-20: $358/day (+20%)
-└── Day 21: $430/day (+20%)
-
-Week 4:
-├── Day 22-24: $516/day - Target reached!
-└── Day 25+: Stabilize
+├── Day 7-9: $144/day (+20%)
+├── Day 10-12: $173/day (+20%)
+├── Day 13-15: $207/day (+20%)
+├── Day 16-18: $249/day (+20%)
+├── Day 19-21: $299/day (+20%)
+├── Day 22-24: $358/day (+20%)
+├── Day 25-27: $430/day (+20%)
+└── Day 28+: $516/day - Target reached, then stabilize
 ```
 
 ---
 
 **MONITORING:**
-Stop and stabilize if:
+Stop and stabilize if (rules of thumb, not Meta figures: check them against the account's own history):
 - CPA > $18 (more than 20% increase)
 - Frequency > 2.5
 - CTR drops >15%
 
-**TIP:** Consider launching a test campaign with new audiences in parallel for horizontal scale. With Advantage+ Audience (2026 recommended approach), Meta handles audience expansion automatically — so horizontal scale via new ad sets is less critical than it used to be when using Advantage+ campaigns.
+**TIP:** Consider launching a test campaign with new audiences in parallel for horizontal scale. If your ad sets use Advantage+ audience, Meta's delivery can already reach people beyond your audience inputs, so check first whether a separate audience adds anything. Meta recommends A/B testing Advantage+ audience for almost all campaign types, but not for retargeting (Meta Business Help Center, "About Advantage+ audience", checked 2026-10-10).
 
 **MONITOR DAILY with MCP:**
 ```

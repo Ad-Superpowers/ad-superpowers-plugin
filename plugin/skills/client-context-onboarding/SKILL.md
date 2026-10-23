@@ -124,7 +124,11 @@ For each planned client, match against the `clients(action="list")` from step 1:
 
 - **Already exists** → `clients_update(action="update", client=<slug or UUID>, ...)`
   with a patch-merge. Do not create a duplicate. Leave `status` as is (only set
-  `status="active"` if the user explicitly activates now).
+  `status="active"` if the user explicitly activates now). `attention_points` is
+  not merged: an update replaces the whole field. Read it first with
+  `clients(action="get", client=...)`, replace only the onboarding headings, keep
+  every other `## ` section (for example `## Creative`) as it was, and write the
+  whole field back.
 - **New** → `clients_update(action="create", name=..., status="draft", ...)`.
 
 Handle `limit_reached` per client: skip that one, continue with the rest, and report
@@ -160,7 +164,7 @@ compressed, inside `attention_points`.
 | `overall_goal` | <= 1000 chars | The single primary goal, stated tightly |
 | `channels[]` | <= 10, keyed by platform | Per-platform `budget` (>= 0), `goal` (<= 500 chars), and optional structured `targets` + `primary_metric` (see below) |
 | `linked_accounts[]` | <= 50, keyed by (platform, account_id) | `account_id` <= 255 (required), `account_name` <= 255 (optional) |
-| `attention_points` | <= 5000 chars | The fixed digest below |
+| `attention_points` | <= 10000 chars, shared with other skills | The fixed digest below (about 3000 chars) |
 
 Valid platforms: `meta`, `google_ads`, `google_analytics`,
 `google_search_console`, `google_tag_manager`, `linkedin`, `tiktok`.
@@ -200,9 +204,11 @@ linked_accounts merge by key, and the response echoes a `changed` map plus a new
 ## The attention_points Subtemplate
 
 `attention_points` is the catch-all digest. Always use these fixed headings so rich
-research compresses consistently and stays inside the 5000-character limit. Skip a
-heading if there is nothing to say. Keep the total around 3000 characters to leave
-margin. If you approach 5000, shorten rather than let the write fail.
+research compresses consistently. Skip a heading if there is nothing to say. Keep this
+digest around 3000 characters: other skills add their own sections to the same field
+(a creative snapshot of up to 2500 characters, later platform snapshots), and the whole
+field should stay at or under 6000. The hard limit is 10000. Past 6000 the write still
+succeeds but `clients_update` returns a `warning`: summarize older sections then.
 
 ```
 ## Positioning        (<= 400 chars: what the company is and how it stands out)

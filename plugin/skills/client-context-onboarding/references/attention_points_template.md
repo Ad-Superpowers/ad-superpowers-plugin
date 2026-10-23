@@ -1,10 +1,13 @@
 # attention_points subtemplate + worked example
 
-`attention_points` is the lean profile's catch-all digest (max 5000 characters).
-Use the fixed headings below every time so rich research compresses consistently.
-Skip a heading when there is nothing to say. Aim for ~3000 characters total; if you
-approach 5000, shorten rather than let the write fail. Never include end-customer
-personal data.
+`attention_points` is the lean profile's catch-all digest (max 10000 characters,
+shared with other skills' sections such as a creative snapshot). Use the fixed
+headings below every time so rich research compresses consistently. Skip a heading
+when there is nothing to say. Aim for ~3000 characters for this digest and keep the
+whole field at or under 6000; past that the write still succeeds but returns a
+`warning`, so summarize older sections. An update replaces the whole field: when the
+client already has `attention_points`, read it first, replace only these headings and
+keep other skills' sections as they are. Never include end-customer personal data.
 
 ## The fixed headings
 

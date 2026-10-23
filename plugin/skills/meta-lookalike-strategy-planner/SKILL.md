@@ -8,7 +8,7 @@ description: "This skill should be used when the user asks to \"create lookalike
 
 This skill helps create high-quality Lookalike Audiences by selecting the right source audiences, choosing optimal percentages, and applying advanced strategies for maximum performance.
 
-> **2026 Context:** Meta increasingly recommends Advantage+ Audience (broad targeting with audience suggestions) over manual Lookalikes for most campaign types. Lookalikes remain valuable as **audience suggestions** within Advantage+ campaigns, and for specific use cases where you need more targeting control. For Advantage+ Sales Campaigns (ASC), upload your Customer Match list as an audience signal instead of creating standalone LALs. Note: "Advantage+ Shopping Campaigns" branding was deprecated in API v25.0 — the unified product is now called **Advantage+ Sales Campaigns**.
+> **2026 Context:** Meta recommends A/B testing Advantage+ audience for almost all campaign types, but not for retargeting ("About Advantage+ audience", Meta Business Help Center). Lookalikes remain useful as **audience suggestions** in those campaigns, and as audience controls where you need more targeting control. When you add a lookalike built from a website, app or customer list source to a new ad set, Meta turns on Advantage+ lookalike by default, so delivery can go beyond the percentage you chose ("About Advantage+ lookalike"). To keep the percentage as a limit, add the lookalike under "Further limit your audience" (or "Further limit the reach of your ads") and clear "Use as a suggestion" ("How to use custom or lookalike audiences"). In an Advantage+ sales campaign you can add a customer list custom audience as an audience suggestion instead of building separate lookalike ad sets. Since 19 May 2026 the Marketing API no longer allows creating, duplicating or updating legacy **Advantage+ shopping campaigns** (Marketing API changelog v25.0, 18 Feb 2026). New sales campaigns start in the Advantage+ setup; a sales campaign with Advantage+ audience, placements and budget on is what Meta calls an **Advantage+ sales campaign** ("About Advantage+ sales campaigns").
 
 ## Lookalike Fundamentals
 
@@ -19,14 +19,13 @@ This skill helps create high-quality Lookalike Audiences by selecting the right 
 │  LOOKALIKE CREATION PROCESS                                     │
 │                                                                 │
 │  1. SOURCE AUDIENCE (your data)                                 │
-│     └── Minimum 100 people (1,000+ recommended)                 │
+│     └── Minimum 100 people (Meta suggests 1,000-5,000)          │
 │                                                                 │
-│  2. META's ALGORITHM analyzes:                                  │
-│     ├── Demographic data                                        │
-│     ├── Interests & behavior                                    │
-│     ├── Engagement patterns                                     │
-│     ├── Purchase behavior                                       │
-│     └── Cross-platform activity                                 │
+│  2. META's SYSTEM uses source information such as:              │
+│     ├── Demographics                                            │
+│     ├── Interests                                               │
+│     ├── Behaviors                                               │
+│     └── (Meta's examples, not the full signal list)             │
 │                                                                 │
 │  3. LOOKALIKE OUTPUT                                            │
 │     └── Top X% of people most similar to source                 │
@@ -35,7 +34,11 @@ This skill helps create high-quality Lookalike Audiences by selecting the right 
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+Sources (Meta Business Help Center): "About lookalike audiences" and "Create a lookalike audience". People in the source audience are left out of the lookalike.
+
 ## Source Audience Ranking
+
+Rules of thumb, not Meta figures: check them against the account's own history. Meta's own floor is 100 people in the source, and it suggests 1,000-5,000.
 
 ### Tier 1: Highest Quality (Recommended)
 
@@ -77,32 +80,38 @@ DO NOT USE AS SOURCE:
 
 ## Percentage Selection Guide
 
+Rules of thumb, not Meta figures: check them against the account's own history. The "Best for" lines and the decision tree below are our working rules.
+
 ### Percentage vs Reach Trade-off
 
 ```
 LOOKALIKE PERCENTAGE SPECTRUM
 =============================
+Size = that % of the people in the ad set's locations.
+Ads Manager shows the size estimate in the ad set.
 
-1%  ████                    ~200K-500K people
+1%  ████
     └── Most similar to source
     └── Best for: High-value products, limited budget
 
-2%  ████████                ~400K-1M people
+2%  ████████
     └── Good balance of quality/reach
     └── Best for: General prospecting
 
-3%  ████████████            ~600K-1.5M people
+3%  ████████████
     └── Broader reach, still relevant
     └── Best for: Scalable campaigns
 
-5%  ████████████████████    ~1M-2.5M people
+5%  ████████████████████
     └── Large reach, more variation
     └── Best for: Awareness, large budgets
 
-10% ████████████████████████████████████████  ~2M-5M people
+10% ████████████████████████████████████████
     └── Very broad, limited similarity
     └── Best for: Maximum reach needed
 ```
+
+Meta: you pick a percentage of the population of the location, smaller percentages match the source more closely, and new lookalikes take their location from the ad set, so their size estimate appears in the ad set, not in Audiences ("About lookalike audiences" and "Create a lookalike audience", cited above).
 
 ### Percentage Selection Decision Tree
 
@@ -130,42 +139,51 @@ START: Which percentage should I choose?
 
 ## Advanced Lookalike Strategies
 
+Rules of thumb, not Meta figures: check them against the account's own history. The budget splits and thresholds below are our working rules.
+
 ### Strategy 1: Value-Based Lookalikes
 
 ```
 STEPS:
-1. Create Custom Audience of purchasers
-2. During creation: "Include LTV" or purchase value
-3. Meta optimizes for high-value matches
+1. Export buyers with a value per customer (LTV, order value)
+2. Upload them as a customer list with a customer value column
+3. Create a lookalike from that customer value custom audience
 
 SETUP IN META:
-├── Audiences → Create Audience → Custom Audience
-├── Website → Purchase event
-├── "Sort by value" or "Include value"
-└── Create Lookalike from this audience
+├── Audiences → Create audience → Custom audience → Customer list
+├── Customer value prompt: "Yes", then pick the value column
+├── Import & create
+└── Create audience → Lookalike audience → pick this source
 
-RESULT: LAL finds people who resemble your BEST customers
+RESULT: LAL looks for people similar to your valuable customers
 ```
+
+Sources: "Create a customer value custom audience" and "Create a value-based lookalike audience", Meta Business Help Center.
 
 ### Strategy 2: Layered Lookalikes
 
 ```
 GOAL: Maximum reach without overlap
 
-SETUP:
+SETUP (create the three ranges as one lookalike set):
 ├── Ad Set 1: LAL 0-1% (most valuable)
 │   └── Budget: 40% of LAL budget
 │
 ├── Ad Set 2: LAL 1-3%
-│   └── Exclude: LAL 0-1%
+│   └── No exclusion needed: the set's ranges do not overlap
 │   └── Budget: 35% of LAL budget
 │
 └── Ad Set 3: LAL 3-5%
-    └── Exclude: LAL 0-3%
+    └── No exclusion needed: the set's ranges do not overlap
     └── Budget: 25% of LAL budget
 
 BENEFIT: Test which layer performs best
+CAUTION: With Advantage+ lookalike on (the default), delivery can
+go beyond each range; add each lookalike as an audience control
+to keep the layers apart.
 ```
+
+Meta: lookalikes created as a set are non-overlapping, so you don't have to exclude the more or less similar ones ("Create lookalike audience sets to optimize your bids").
 
 ### Strategy 3: Multi-Source Lookalikes
 
@@ -180,7 +198,8 @@ SETUP:
 └── LAL 2%: Video Completers (95% viewed)
 
 IMPORTANT: Check overlap between these LALs!
-Often 20-40% overlap, use exclusions if needed
+Measure it (Audiences → Actions → Show audience overlap),
+then use exclusions if needed
 ```
 
 ### Strategy 4: Stacked Lookalikes
@@ -202,6 +221,8 @@ DRAWBACK: Can "dilute" signal if sources are too diverse
 ```
 
 ## Lookalike Troubleshooting
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ### Problem: LAL performs worse than Interest audiences
 
@@ -241,7 +262,8 @@ SOLUTIONS:
 
 ```
 LOOKALIKE REFRESH CYCLE:
-├── Meta updates LALs automatically every 3-7 days
+├── Meta refreshes LALs automatically (see "Last Updated"
+│   on the audience); Meta does not publish the interval
 ├── Source audience must keep growing
 └── Stagnation = source audience is stagnating
 
@@ -254,6 +276,8 @@ ACTION:
 ## Lookalike Creation Template
 
 ### When user asks for a LAL strategy:
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ```
 LOOKALIKE STRATEGY TEMPLATE
@@ -295,10 +319,12 @@ EXCLUSIONS SETUP:
 
 ### Checklist for Best Source Quality
 
+Only the source size line is Meta's; the rest are rules of thumb, not Meta figures: check them against the account's own history.
+
 ```
 SOURCE AUDIENCE CHECKLIST:
 
-□ Minimum 1,000 people in source (ideal 5,000+)
+□ At least 100 people in source (Meta suggests 1,000-5,000)
 □ Data is recent (last 180 days)
 □ Based on conversion events (not pageviews)
 □ Geographically relevant to target market
@@ -313,7 +339,7 @@ SOURCE AUDIENCE CHECKLIST:
 
 **Claude response**:
 
-"With 2,000 purchasers in 6 months, you have an excellent foundation for lookalikes! Here is my recommended strategy:
+"With 2,000 purchasers in 6 months, your source is inside the 1,000-5,000 range Meta suggests for lookalike sources. Here is my recommended strategy:
 
 **Primary Lookalike (highest priority):**
 - Source: Purchasers (180 days)
@@ -323,10 +349,10 @@ SOURCE AUDIENCE CHECKLIST:
 **Also consider a Value-Based LAL:**
 - Source: Top 20% customers by order value
 - Percentage: 1%
-- Why: Finds people who resemble your BEST customers
+- Why: Meta looks for people similar to your higher-value customers
 
 **Questions to optimize further:**
-1. Do you have access to order value data in your pixel events?
+1. Can you export your customers with their order value or LTV? (Meta builds value-based lookalikes from a customer list with a value column.)
 2. How many repeat purchasers do you have (2+ orders)?
 3. What is your daily budget for prospecting?
 
@@ -340,13 +366,21 @@ With that info I can fine-tune the percentages and build out a layered strategy!
 # List custom audiences to identify your highest-quality source options
 meta_query(
     account_id="act_XXXXXXXXX",
+    entity_type="customaudiences"
+)
+# Default fields: id, name, approximate_count_lower_bound,
+# approximate_count_upper_bound, subtype, description, time_created,
+# time_updated, delivery_status, operation_status, data_source.
+# 50 audiences per page by default; for more, pass pagination_url=<paging.next>.
+# When more than 50 audiences come back, format="auto" keeps only id and name: pass format="full".
+
+# See which audiences the active ad sets use (targeting.custom_audiences)
+meta_query(
+    account_id="act_XXXXXXXXX",
     entity_type="adsets",
     effective_status=["ACTIVE"],
     fields=["id", "name", "targeting", "optimization_goal"]
 )
-# Note: Custom audience listing is not directly available via MCP tools.
-# Use Ads Manager → Audiences to view custom audience details (subtype, size, last updated).
-# The adsets query above shows which audiences are in use via targeting.custom_audiences.
 ```
 
-Look for audiences with `approximate_count` > 1,000 and recent `time_updated`. Purchaser audiences (OFFLINE_CONVERSION or WEBSITE with Purchase event) in the 500–10,000 range are ideal LAL sources. Avoid audiences with counts below 300 or last updated more than 180 days ago.
+Rules of thumb, not Meta figures: check them against the account's own history. Look for audiences whose `approximate_count_lower_bound` is at least 1,000 and whose `time_updated` is recent. Purchaser audiences (a customer list of buyers, or a website audience built on the Purchase event) are usually the better LAL sources. Skip sources below 300 people or not updated in the last 180 days. Meta's floor is 100 people and it suggests 1,000-5,000.

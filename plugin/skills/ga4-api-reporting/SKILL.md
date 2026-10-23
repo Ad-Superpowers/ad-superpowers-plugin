@@ -8,7 +8,7 @@ Complete guide for using the GA4 Data API for custom reporting and automated das
 
 ## Quick Note: Ad Superpowers MCP Tool
 
-The Ad Superpowers MCP server wraps the GA4 Data API into the `ga4_run_report()` tool, which handles authentication and pagination automatically. Use it for ad-hoc analysis before building custom API integrations:
+The Ad Superpowers MCP server wraps the GA4 Data API into the `ga4_run_report()` tool, which handles authentication. It returns up to 2,500 rows per call by default, fewer when a page would be too large for one response; when the response has `partial: true`, pass `next_offset` as `offset` to fetch the next page. Use it for ad-hoc analysis before building custom API integrations:
 
 ```python
 ga4_run_report(

@@ -1,8 +1,8 @@
 # Ad Superpowers for Claude
 
-Manage, analyze, and optimize your ad campaigns across 8 platforms through natural language in Claude Code and Claude Desktop.
+Analyze your advertising and analytics accounts across 8 platforms in Claude Code and Claude Desktop, make changes in Meta, Google Ads, TikTok and Tag Manager, and submit or delete Search Console sitemaps.
 
-**120 expert skills** · **35 slash commands** (29 workflow, 6 utility) · **5 specialized agents** · **58 MCP tools**
+**120 expert skills** · **35 slash commands** (29 workflow, 6 utility) · **5 specialized agents** · **59 MCP tools**
 
 ## Platforms
 
@@ -18,7 +18,7 @@ Manage, analyze, and optimize your ad campaigns across 8 platforms through natur
 | **TikTok Ads** | 10 | 9 | Creative fatigue, video performance, Smart+ campaigns, Search Ads, Shop |
 | **Cross-platform** | 17 | 8 | Unified `workflow`, `workspace_info`, `skill`, `skill_update`, `workflow_update`, `clients`, `clients_update`, and the pilot-only `change_history_query` tools; client profiles, attribution reconciliation, SEO vs SEA gaps, budget allocation, competitive analysis |
 
-The total also includes `assets_stage`, the private image/video staging tool outside these platform rows. Upload images up to 20 MB and videos up to 500 MB through AdSuperpowers to Meta, TikTok, LinkedIn and Google Ads, using a connected destination account your workspace is currently allowed to modify. The client needs local file access and HTTP upload; installing this plugin does not grant account permissions. Upload acceptance, processing readiness and ad approval are separate. See [media upload availability](https://adsuperpowers.ai/docs/media-upload).
+The total also includes `assets_stage`, the private image/video staging tool outside these platform rows. When your workspace has upload access, you can upload images up to 20 MB and videos up to 500 MB through Ad Superpowers to Meta, TikTok, LinkedIn and Google Ads, using a connected account your workspace is allowed to change. Seeing the upload tool does not mean your workspace has upload access. The client needs local file access and HTTP upload; installing this plugin does not grant account permissions. Upload acceptance, processing readiness and ad approval are separate. See [media upload availability](https://adsuperpowers.ai/docs/media-upload).
 
 Merchant Center reads are generally available. The label pilot is enabled by an operator on request, not by installing this plugin. Its guided acceptance route uses Claude Desktop; this is not a claim of acceptance in Claude Code or Cowork. It does not support general product corrections, batch updates, prices, stock, primary feeds, or feed rules. Pending is not processed; UNKNOWN stops all further changes. When the pilot's Google authorization expires, its owner must reauthorize in the same workspace with the same Google identity. Revert removes only our own single-label input. See the [pilot guide](https://adsuperpowers.ai/docs/merchant-label-pilot).
 
@@ -37,7 +37,7 @@ Add the marketplace once, then install the plugin:
 /plugin install ad-superpowers@ad-superpowers
 ```
 
-That's it. The MCP server, all 120 skills, 35 slash commands, 5 agents, and safety confirmations are bundled.
+That's it. The MCP server, all 120 skills, 35 slash commands and 5 agents are bundled.
 
 ### Cowork (Claude Desktop's agentic coding mode)
 
@@ -64,13 +64,7 @@ If you want the full experience, use Claude Code or Cowork instead.
 
 ### ChatGPT
 
-ChatGPT can reach the Ad Superpowers MCP server as a custom connector. You'll get the MCP tools but not the bundled skills, commands, or agents.
-
-1. Open ChatGPT settings and go to connectors
-2. Add a custom connector pointing at `https://mcp.adsuperpowers.ai/v1`
-3. Complete the OAuth flow in your browser
-
-Whether custom connectors are available to you depends on your ChatGPT plan.
+Install the published Ad Superpowers plugin in ChatGPT and sign in with your own Ad Superpowers account. You get the MCP tools but not the bundled skills, commands or agents. See the [ChatGPT setup guide](https://adsuperpowers.ai/docs/setup/chatgpt).
 
 ## Setup
 
@@ -133,10 +127,10 @@ Claude automatically uses the right skill based on your question. Skills provide
 * Pause or resume campaigns and update budgets
 * Create Google Ads campaigns (budget, campaign, ad group, ads, keywords)
 
-All write operations include safety confirmations:
+Write controls:
 
-* Campaigns always create paused so you can review before going live
-* Budget changes require explicit approval
+* Write access is on by default. The workspace owner can set the whole workspace, or a single team member, to read-only; write tools are then hidden and blocked
+* New Meta and TikTok campaigns and ads start paused, and new LinkedIn campaigns and ads start as drafts, unless you ask for them to go live
 * Destructive operations are clearly flagged
 
 ## Known limitations
@@ -169,17 +163,17 @@ No known limitations on 2.1.74+. All skills, commands, MCP tools, and subagents 
 |-----------|:---:|:---:|:---:|:---:|
 | 120 skills | ✅ | ✅ | ❌ | ❌ |
 | 35 commands | ✅ | ✅ | ❌ | ❌ |
-| 58 MCP tools | ✅ | ✅ | ✅ | ✅ |
+| 59 MCP tools | ✅ | ✅ | ✅ | ✅ |
 | 5 subagents | ✅ | ❌ (use skills instead) | ❌ | ❌ |
 
 ## Paid early access
 
-| Tier | Monthly | Annual | Tool calls/mo | Accounts | Users | Platforms |
+| Tier | Monthly | Annual | Tool calls/mo | Account slots per platform | Users | Platforms |
 |------|--------:|-------:|--------------:|---------:|------:|-----------|
 | **Pro** | €99 | €79 | 1,500 | 25 | 1 | All 8 |
 | **Team** | €249 | €199 | 6,000 | 100 | 5 | All 8 |
 
-Each organization can use one 14-day Pro or Team trial, capped at 200 tool calls. Trial requires a credit card and converts to the selected plan after 14 days unless cancelled. Annual plans get a 20% discount. A "tool call" is one MCP tool invocation; workflows that fan out to multiple tools count each invocation. Enterprise enquiries use custom usage and volume pricing. Start at [adsuperpowers.ai](https://adsuperpowers.ai).
+Free trial: 14 days from workspace creation, 50 tool calls per month. No credit card. The trial includes 25 account slots per platform, 1 user and all 8 platforms. To continue after the trial, choose a paid plan. Annual plans get a 20% discount. A "tool call" is one MCP tool invocation; workflows that fan out to multiple tools count each invocation. Enterprise enquiries use custom usage and volume pricing. Start at [adsuperpowers.ai](https://adsuperpowers.ai).
 
 ## Security
 

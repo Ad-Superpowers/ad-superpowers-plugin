@@ -111,7 +111,7 @@ Use `gtm_audit` to get a comprehensive GTM container audit, then verify:
 | Audience overlap | Are ad sets competing? | Same audience in multiple ad sets |
 | Budget distribution | Where is spend concentrated? | > 80% in one campaign |
 | Learning phase | Are ad sets exiting learning? | Majority stuck in learning |
-| Creative volume | How many active ads? | < 3 per ad set (insufficient testing) |
+| Creative diversity | How many genuinely different concepts are active? | One concept per ad set, or only look-alike variations |
 | Naming convention | Is there a system? | Random names = no system |
 
 **Google Ads — Use `google_ads_run_gaql`:**

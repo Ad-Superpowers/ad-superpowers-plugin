@@ -16,21 +16,31 @@ This skill helps check and implement privacy-compliant Meta Ads setups, includin
 ┌─────────────────────────────────────────────────────────────────┐
 │  PRIVACY TIMELINE                                               │
 │                                                                 │
-│  2021: iOS 14 ATT - App Tracking Transparency                   │
-│  2022: Meta Conversions API mainstream                          │
-│  2023: Google delays 3rd party cookie deprecation               │
-│  2024: DSA (Digital Services Act) enforcement EU                │
-│  2025: Chrome 3rd party cookie phase-out begins                 │
-│  Jan 2026: Meta removes 7d_view and 28d_view attribution        │
-│  2026: Fully cookieless advertising era / Andromeda engine      │
+│  2021: iOS 14.5 ATT - App Tracking Transparency (Apple)         │
+│  2022: Google delays Chrome 3rd party cookie phase-out to 2024  │
+│  Feb 2024: EU Digital Services Act applies to all platforms     │
+│  Jul 2024: Google drops its plan to phase out 3rd party cookies │
+│  Apr 2025: Chrome keeps 3rd party cookie choice, no new prompt  │
+│  Jan 2026: Meta API stops returning 7d_view and 28d_view        │
 │                                                                 │
 │  IMPACT ON META ADS:                                            │
-│  ├── Signal loss: ~50% less tracking data                       │
+│  ├── Signal loss: less tracking data (size differs per account) │
 │  ├── Attribution gaps: Conversions harder to measure            │
 │  ├── Audience shrinkage: Retargeting pools smaller              │
 │  └── Modeling: More reliant on AI/statistical modeling          │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+Sources (checked 2026-10-10): Apple Newsroom, iOS 14.5 release, 26 Apr 2021,
+https://www.apple.com/newsroom/2021/04/ios-14-5-offers-unlock-iphone-with-apple-watch-diverse-siri-voices-and-more/;
+Google, "Expanding testing for the Privacy Sandbox for the Web", 27 Jul 2022,
+https://blog.google/products/chrome/update-testing-privacy-sandbox-web/; European Commission, "Digital Services Act
+starts applying to all online platforms in the EU", 16 Feb 2024 (in force for all online intermediaries from
+17 February 2024), https://digital-strategy.ec.europa.eu/en/news/digital-services-act-starts-applying-all-online-platforms-eu;
+Google, "A new path for Privacy Sandbox on the web", 22 Jul 2024,
+https://privacysandbox.google.com/blog/privacy-sandbox-update; Google, "Next steps for Privacy Sandbox and tracking
+protections in Chrome", 22 Apr 2025, https://privacysandbox.google.com/blog/privacy-sandbox-next-steps; Meta for
+Developers blog, "Ads Insights API Metric Availability Updates", 16 Oct 2025
 
 ## GDPR Compliance Checklist
 
@@ -64,10 +74,15 @@ GDPR COMPLIANCE CHECKLIST
 □ COOKIE CONSENT MANAGEMENT
 ├── CMP (Consent Management Platform) active?
 ├── Pixel fires only AFTER consent?
-├── Consent signal sent to Meta?
+├── Server events (CAPI) follow the same consent choice?
 ├── Audit trail of consent?
 └── Status: [OK / Fix needed]
 ```
+
+Meta's Business Tools Terms (effective 3 November 2025) say that where the law requires consent for cookies (the EU
+is one example), you must ensure "in a verifiable manner" that people consent before you use Meta Business Tools to
+store or access Meta cookies or other information on their device: https://www.facebook.com/legal/businesstech
+(checked 2026-10-10).
 
 ### Consent Mode Implementation
 
@@ -75,7 +90,7 @@ GDPR COMPLIANCE CHECKLIST
 CONSENT-BASED TRACKING SETUP
 ============================
 
-OPTION 1: Meta Pixel with Consent Mode
+OPTION 1: Load the Meta Pixel only after consent
 
 // Only load pixel after consent
 if (userHasConsented()) {
@@ -86,9 +101,22 @@ if (userHasConsented()) {
   // Don't load pixel - no tracking
 }
 
-OPTION 2: Meta with Google Consent Mode v2
+OPTION 2: Meta's own consent API (pauses Pixel fires until granted)
 
-// Consent Mode v2 integration
+// Call revoke on every page, before init
+fbq('consent', 'revoke');
+fbq('init', 'YOUR_PIXEL_ID');
+fbq('track', 'PageView');
+
+// Once the visitor gives consent:
+fbq('consent', 'grant');
+
+OPTION 3: Google Consent Mode v2 (Google tags only)
+
+// Consent Mode tells Google tags the consent state. It does not stop
+// the Meta Pixel: gate the Meta Pixel tag in Google Tag Manager with
+// Consent Settings > "Require additional consent for tag to fire"
+// (for example ad_storage), or use option 1 or 2.
 gtag('consent', 'default', {
   'analytics_storage': 'denied',
   'ad_storage': 'denied',
@@ -105,6 +133,11 @@ gtag('consent', 'update', {
 });
 ```
 
+Sources (checked 2026-10-10): Meta for Developers, Meta Pixel, "General Data Protection Regulation"; Google Ads Help, "About consent mode" ("Consent
+mode lets you communicate your users' cookie or app identifier consent status to Google"),
+https://support.google.com/google-ads/answer/10000067; Google for Developers, "Set up consent mode on websites"; Tag Manager Help, "Tag Manager consent mode
+support", https://support.google.com/tagmanager/answer/10718549
+
 ## ATT & Signal Loss (Baseline Since 2021)
 
 ### Current State
@@ -113,61 +146,61 @@ gtag('consent', 'update', {
 ATT IMPACT (standard operating conditions since iOS 14.5)
 =========================================================
 
-ATTRIBUTION CHANGES (updated Jan 2026):
-├── Default attribution window: 7d click + 1d view
-├── 7d view attribution: REMOVED (was available, now gone)
-├── 28d view attribution: REMOVED
-├── 28d click attribution: REMOVED
-├── IMPORTANT: Historical data using old windows cannot be
-│   compared with data from Jan 2026 onwards
-├── Real-time reporting: Delayed (up to 72 hours)
-└── Breakdown: Less granular
+ATTRIBUTION CHANGES (checked 2026-10-10):
+├── Ad set settings: 1-day or 7-day click, 1-day view,
+│   1-day engage-through (no 7d view, 28d view or 28d click)
+├── Click-through counts only link clicks for website and
+│   in-store conversions (rollout from March 2026)
+├── Ads Insights API: 7d_view and 28d_view no longer returned
+│   since 12 January 2026 (28d_click is still returned)
+├── IMPORTANT: Data built on the old definitions or windows is
+│   not like for like with newer data
+├── SKAdNetwork app reporting: delays of at least 24 hours
+└── API breakdowns of unique counts: 13 months of history
 
-OPT-IN RATES (average):
-├── Worldwide: ~25-35% opt-in
-├── EU: ~20-30% opt-in
-├── US: ~30-40% opt-in
-└── App vs Web: Apps harder hit
+OPT-IN RATES:
+└── No reliable average here: measure consent and ATT opt-in
+    rates in your own CMP and app data
 
 SIGNAL RECOVERY STRATEGIES:
 ├── Conversions API implementation
-├── Aggregated Event Measurement (AEM)
+├── Aggregated Event Measurement (automatic for web events)
 ├── Value optimization (for high-value events)
 └── Modeling (Meta's AI for gaps)
 ```
 
+Sources (checked 2026-10-10): Meta Business Help Center, "About attribution models and attribution settings"; Meta for Business, "Simplifying Ad Measurement for a
+Social-First World", 3 Mar 2026, https://www.facebook.com/business/news/click-attribution; Meta for Developers blog,
+"Ads Insights API Metric Availability Updates", 16 Oct 2025; Meta Business
+Help Center, "About Meta Ads Manager reporting for Apple's SKAdNetwork"
+
 ### Aggregated Event Measurement (AEM)
 
 ```
-AEM SETUP CHECKLIST
-===================
+AEM CHECKLIST (web events)
+==========================
 
-□ DOMAIN VERIFICATION
-├── Domain verified in Business Settings?
+AEM TODAY:
+├── Events go through AEM automatically: no setup steps
+├── The 8-event priority list per domain is gone, and so is
+│   the AEM tab in Events Manager
+└── No conversion domain to pick when you create a campaign
+
+□ DOMAIN VERIFICATION (no longer needed for event configuration)
+├── Still needed for other reasons, such as ad link editing
+│   permissions or business verification?
 ├── DNS TXT record correct?
 └── Status: [OK / Fix needed]
 
-□ EVENT PRIORITIZATION (Max 8 events)
-├── Top 8 events selected?
-├── Priority order determined?
-├── Highest priority = most important conversion?
-└── Status: [OK / Fix needed]
-
-RECOMMENDED PRIORITIZATION (E-commerce):
-1. Purchase (highest)
-2. InitiateCheckout
-3. AddToCart
-4. AddPaymentInfo
-5. ViewContent
-6. Lead
-7. CompleteRegistration
-8. PageView (lowest)
-
 □ VALUE OPTIMIZATION
-├── Value enabled for Purchase event?
-├── Value ranges configured (4 buckets)?
+├── Value and currency sent with Purchase events?
+├── No value sets needed any more
 └── Status: [OK / Fix needed]
 ```
+
+Sources (checked 2026-10-10, the AEM page carries no date for this change): Meta Business Help Center, "About Meta's
+Aggregated Event Measurement"; "When to use domain
+verification to verify your business"
 
 ## Conversions API Compliance
 
@@ -180,24 +213,32 @@ CAPI PRIVACY SETUP
 □ DATA MINIMIZATION
 ├── Only send necessary parameters
 ├── No unnecessary PII
-├── Hash all identifiable data
+├── Hash every field Meta marks "hashing required"
 └── Document which data you send
 
 □ HASHING REQUIREMENTS
 ├── Email: SHA256, lowercase, trimmed
-├── Phone: SHA256, E.164 format
-├── Names: SHA256, lowercase
-├── Use Meta's hashing libraries
+├── Phone: SHA256, digits only with country code
+│   (no symbols, letters or leading zeros)
+├── Names: SHA256, lowercase, no punctuation
+├── The Meta Business SDK hashes these fields automatically
+├── Do not hash client_ip_address, client_user_agent, fbc, fbp
 └── Status: [OK / Fix needed]
 
-□ CONSENT FORWARDING
-├── Send consent status with CAPI
-├── Use opt_out parameter
-├── Respect user preferences
+□ CONSENT IN SERVER EVENTS
+├── CAPI has no consent field: apply the visitor's consent
+│   choice before you send an event
+├── opt_out: true only keeps an event out of ads delivery
+│   optimization; it is not a consent signal
+├── data_processing_options ["LDU"] is Limited Data Use for
+│   US state privacy laws, not GDPR consent
 └── Status: [OK / Fix needed]
 
-□ DATA PROCESSING AGREEMENT
-├── DPA with Meta signed?
+□ DATA PROCESSING TERMS
+├── Meta Business Tools Terms accepted? Under GDPR they make
+│   Meta Ireland your processor for matching, measurement and
+│   analytics (Data Processing Terms) and a joint controller for
+│   collecting event data (Controller Addendum)
 ├── DPA with CAPI partner (if applicable)?
 └── Status: [OK / Fix needed]
 
@@ -206,6 +247,8 @@ CAPI EVENT EXAMPLE (Privacy-compliant):
 {
   "event_name": "Purchase",
   "event_time": 1704067200,
+  "action_source": "website",
+  "event_source_url": "https://www.example.com/checkout/thank-you",
   "user_data": {
     "em": ["SHA256_HASH_EMAIL"],
     "ph": ["SHA256_HASH_PHONE"],
@@ -224,6 +267,13 @@ CAPI EVENT EXAMPLE (Privacy-compliant):
   "data_processing_options_state": 0
 }
 ```
+
+`action_source` is required for every event; `event_source_url` and `client_user_agent` are required for website
+events. An empty `data_processing_options` list means Limited Data Use is off. Sources (checked 2026-10-10): Meta for
+Developers, Conversions API, "Server Event Parameters"; "Customer Information
+Parameters";
+"Data Processing Options for US Users";
+Meta Business Tools Terms (effective 3 November 2025), https://www.facebook.com/legal/businesstech
 
 ## Cookieless Future Preparation
 
@@ -262,12 +312,18 @@ Touchpoint          │ Data to Collect        │ Consent
 ────────────────────┼────────────────────────┼──────────
 Newsletter popup    │ Email, name            │ Explicit
 Account creation    │ Email, phone, address  │ Explicit
-Purchase            │ Full contact + purchase│ Implicit*
+Purchase            │ Full contact + purchase│ Contract*
 Quiz/Survey         │ Preferences, interests │ Explicit
 Loyalty program     │ Purchase history       │ Explicit
 
-*Check local regulations for legitimate interest
+*Not consent: GDPR has no implicit consent. Order data rests on the
+ contract (Art. 6(1)(b)); for ad use, check consent or legitimate
+ interest (Art. 6(1)(f)) against local regulations
 ```
+
+GDPR (Regulation (EU) 2016/679), Art. 4(11) (consent is an "unambiguous indication"), Art. 6(1) and Recital 32
+("Silence, pre-ticked boxes or inactivity should not therefore constitute consent"):
+https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng (checked 2026-10-10).
 
 ### Audience Building Without Cookies
 
@@ -277,8 +333,8 @@ COOKIELESS AUDIENCE STRATEGIES
 
 1. CUSTOMER LIST UPLOADS
 ├── Upload hashed email/phone lists
-├── Match rate: 50-70% typical
-├── Refresh regularly (monthly)
+├── Match rate: compare with the account's earlier uploads
+├── Refresh regularly (for example monthly)
 └── Use for: Retargeting, Exclusions, LAL seed
 
 2. ENGAGEMENT-BASED AUDIENCES
@@ -296,16 +352,18 @@ COOKIELESS AUDIENCE STRATEGIES
 
 4. BROAD TARGETING + AI
 ├── Let Meta's algorithm work
-├── Advantage+ audiences
+├── Advantage+ audience
 ├── Less specific = more scale
 └── Trust machine learning
 
-RECOMMENDED AUDIENCE MIX 2025+:
-├── 40% - First-party data (uploads, engagement)
-├── 30% - Broad/Advantage+ (AI-optimized)
-├── 20% - Website audiences (consent-based)
-└── 10% - Interest targeting (declining utility)
+AUDIENCE MIX (set the split from the account's own results):
+├── First-party data (uploads, engagement)
+├── Broad/Advantage+ audience (AI-optimized)
+├── Website audiences (consent-based)
+└── Interest targeting
 ```
+
+Meta's name for the product is "Advantage+ audience" (Meta Business Help Center, "About Advantage+ audience", checked 2026-10-10).
 
 ## Compliance Audit Template
 
@@ -331,7 +389,7 @@ Score: ___/5
 SECTION 2: PIXEL IMPLEMENTATION
 ──────────────────────────────
 □ Pixel loads after consent
-□ Consent signal correct
+□ Consent choice applied (fbq consent API, CMP or GTM check)
 □ No pre-consent tracking
 □ Deduplication with CAPI
 Score: ___/4
@@ -340,18 +398,18 @@ SECTION 3: CAPI COMPLIANCE
 ─────────────────────────
 □ Data hashing correct
 □ Minimal data principle
-□ Consent forwarding
-□ DPA in place
+□ Consent choice applied to server events
+□ Meta Business Tools Terms in place
 Score: ___/4
 
 SECTION 4: iOS 14+ SETUP & ATTRIBUTION
 ──────────────────────────────────────
-□ Domain verified
-□ AEM configured
-□ Event prioritization
-□ Value optimization
-□ Attribution window updated to 7d_click + 1d_view (28d/7d view removed Jan 2026)
-□ Historical reports using old windows flagged/replaced
+□ Domain verified where still needed (link editing, business verification)
+□ No leftover AEM setup relied on (the 8-event list is gone)
+□ Value and currency sent with purchase events
+□ Modeled results understood (statistical modeling for missing data)
+□ Attribution setting per ad set known (1d/7d click, 1d view, 1d engage-through)
+□ Reports and connectors no longer request 7d_view or 28d_view (API stopped returning them 12 Jan 2026)
 Score: ___/6
 
 SECTION 5: AUDIENCE COMPLIANCE
@@ -364,7 +422,7 @@ Score: ___/4
 
 TOTAL SCORE: ___/21
 
-INTERPRETATION:
+INTERPRETATION (rules of thumb, not Meta figures or a legal standard):
 ├── 19-21: Excellent compliance
 ├── 15-18: Good, minor fixes needed
 ├── 10-14: Fair, significant gaps
@@ -381,13 +439,18 @@ ACTION ITEMS:
 ### Checking Signal Quality with Live Data
 
 ```
-1. Verify CAPI event volumes and EMQ:
+1. Attributed conversions (not CAPI event volumes: check those in Events Manager;
+   EMQ per event comes from meta_query(account_id, "dataset_quality", entity_id=<pixel_id>)):
 → meta_get_insights(account_id="...", fields=["action_values","actions","cost_per_action_type"], date_preset="last_7d", level="account")
 
-2. Check for attribution window configuration issues:
-→ meta_get_insights(account_id="...", fields=["spend","purchase_roas","cost_per_action_type"], date_preset="last_7d", level="campaign")
-   Note: Confirm results align with 7d_click + 1d_view default.
-   Any reports showing anomalies vs history may reflect the Jan 2026 attribution change.
+2. Pixel status (last_fired_time, automatic matching, first_party_cookie_status):
+→ meta_query(account_id="...", entity_type="adspixels")
+
+3. Attribution setting per ad set:
+→ meta_query(account_id="...", entity_type="adsets", fields=["id","name","attribution_spec"])
+   Note: meta_get_insights has no attribution-window parameter; results follow each
+   ad set's own setting. A break against history can come from the March 2026
+   click-through change (link clicks only) or from reports that used 7d_view or 28d_view.
 ```
 
 ## Example Interaction
@@ -400,7 +463,7 @@ ACTION ITEMS:
 
 ---
 
-**QUICK GDPR CHECK (5 minutes):**
+**QUICK GDPR CHECK:**
 
 **1. Cookie Consent Banner:**
 - [ ] Banner appears for ALL cookies?
@@ -415,7 +478,7 @@ ACTION ITEMS:
 
 **3. Technical Implementation:**
 - [ ] Pixel conditional on consent?
-- [ ] CAPI sends consent signal?
+- [ ] CAPI sends events only for visitors who consented?
 
 ---
 
@@ -445,6 +508,6 @@ ACTION ITEMS:
 **RECOMMENDED TOOLS:**
 
 - **CMP**: Cookiebot, OneTrust, Usercentrics
-- **Testing**: Facebook Pixel Helper, Ghostery
+- **Testing**: Meta Ads Data Advisor (formerly Meta Pixel Helper), Ghostery
 
 Would you like me to dive deeper into a specific area?"

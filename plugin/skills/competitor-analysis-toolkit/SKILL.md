@@ -199,7 +199,7 @@ For each competitor's ads, document:
 | Hook Type | Example | Best For |
 |-----------|---------|----------|
 | **Question** | "Struggling with X?" | Problem-aware audiences |
-| **Statistic** | "87% of marketers say..." | Data-driven audiences |
+| **Statistic** | "[A real, sourced percentage] of marketers say..." | Data-driven audiences |
 | **Problem** | "Tired of wasting money on..." | Pain point focus |
 | **Result** | "How I got 10x ROAS" | Results-focused |
 | **Controversy** | "Everyone's wrong about..." | Attention grabbing |

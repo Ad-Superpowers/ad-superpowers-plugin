@@ -24,7 +24,7 @@ This skill helps set up statistically sound A/B tests in Meta Ads, including hyp
 │                                                                 │
 │  With A/B test:                                                 │
 │  ├── Equal conditions for both variants                         │
-│  ├── Statistical significance (95%+ confidence)                 │
+│  ├── A winner with a confidence % (Meta simulates outcomes)     │
 │  ├── Isolated variable = clear learning                         │
 │  └── Reproducible results                                       │
 └─────────────────────────────────────────────────────────────────┘
@@ -33,20 +33,27 @@ This skill helps set up statistically sound A/B tests in Meta Ads, including hyp
 ### Meta's Native A/B Test Tool
 
 ```
-LOCATION: Ads Manager → Experiments → A/B Test
+LOCATION: Ads Manager toolbar → A/B test
+          or Experiments → Create test → A/B Testing
 
 BENEFITS:
-├── Automatic audience split (no overlap)
-├── Statistical significance calculation
+├── Automatic audience split (nobody sees both versions)
+├── Winner on cost per result, with a confidence %
 ├── Controlled test environment
-└── Clear winner declaration
+└── Winner declared when the data supports one
+
+LIMITS (Meta):
+├── Test schedule of 1 to 30 days; Meta recommends at least 7
+└── Experiments compares up to 5 existing campaigns
 
 WHEN TO USE:
 ├── Creative testing (image A vs B)
 ├── Audience testing (LAL vs Interest)
 ├── Placement testing (Auto vs Manual)
-└── Optimization goal testing
+└── Optimization goal testing (the "Custom" variable)
 ```
+
+Sources (Meta Business Help Center): "About A/B testing", "Best practices for A/B Testing", "How winning campaigns are determined in A/B tests without a holdout", "Create an A/B test in Experiments tool" and "Selecting a variable for your A/B Test".
 
 ## Hypothesis Framework
 
@@ -99,6 +106,8 @@ EASE (1-10):
 
 ### Test Priority Matrix
 
+Rules of thumb, not Meta figures: check them against the account's own history.
+
 ```
 PRIORITY    │ WHAT TO TEST                  │ ICE
 ────────────┼───────────────────────────────┼─────
@@ -115,6 +124,8 @@ SKIP        │ Button color                  │ 2.0
 
 ## Test Types & Setup
 
+The 14-day durations below are rules of thumb, not Meta figures: check them against the account's own history. Meta's own bounds are a 1 to 30 day schedule, with at least 7 days recommended.
+
 ### Type 1: Creative Test
 
 ```
@@ -125,7 +136,7 @@ SETUP IN META:
 ├── Campaign: [Existing campaign]
 ├── Test Type: Creative
 ├── Variants: 2-5 creatives
-├── Metric: CTR, CPA, or ROAS
+├── Metric: cost per result (e.g., CPA or CPC)
 ├── Budget Split: Equal (50/50 for 2 variants)
 └── Duration: Min. 7 days
 
@@ -133,8 +144,10 @@ EXAMPLE:
 ├── Variant A: Product lifestyle photo
 ├── Variant B: Product on white background
 ├── Variant C: UGC-style photo
-└── Primary Metric: CTR (or Purchase CPA)
+└── Primary Metric: Purchase CPA (or CPC)
 ```
+
+Meta picks the winner on cost per result ("How winning campaigns are determined in A/B tests without a holdout") and recommends the same budget for each version ("Create an A/B test in Experiments tool"); Meta's API runs creative tests across 2 to 5 cells ("Split testing", Marketing API).
 
 ### Type 2: Audience Test
 
@@ -175,17 +188,21 @@ SETUP IN META:
 WHEN RELEVANT:
 ├── You suspect Meta Audience Network wastes budget
 ├── You want to isolate Stories performance
-├── You want to test Threads as a standalone placement
+├── You want to test adding Threads (it runs only with Instagram feed)
 └── New account without placement data
 ```
+
+Meta's placement rules: Threads requires the Instagram feed placement, and Audience Network cannot run alone ("Placement targeting", Marketing API).
 
 ## Sample Size & Duration Calculator
 
 ### Minimum Test Duration
 
+Rules of thumb, not Meta figures: check them against the account's own history. Only the 7-day minimum and the 30-day maximum come from Meta ("Best practices for A/B Testing", cited above).
+
 ```
 RULE OF THUMB:
-├── Minimum 7 days (to cover day-of-week variation)
+├── Minimum 7 days (Meta's recommendation; Meta's maximum is 30)
 ├── Minimum 100 conversions per variant
 ├── Or minimum 1,000 clicks per variant (for CTR tests)
 └── Statistical significance >90% reached
@@ -227,6 +244,8 @@ DO NOT END IF:
 
 ### Single Variable Test Template
 
+The thresholds in the success criteria are rules of thumb, not Meta figures: check them against the account's own history.
+
 ```
 A/B TEST PLAN
 =============
@@ -267,6 +286,8 @@ SUCCESS CRITERIA:
 
 ### Interpretation Guide
 
+Rules of thumb, not Meta figures: check them against the account's own history. Meta reports a confidence percentage for the winner, which it describes as the chance of similar results if the test were repeated; that is not the same as a classical significance level, so treat the bands below as rough guides.
+
 ```
 RESULT SCENARIOS:
 
@@ -282,7 +303,7 @@ SCENARIO 2: Marginal winner (90-95% sig, 5-15% difference)
 
 SCENARIO 3: No winner (<90% sig)
 ├── Action: Make no changes
-├── Learning: Variable makes no difference
+├── Learning: No difference detected at this sample size
 └── Next: Test a larger/different change
 
 SCENARIO 4: Surprising loser (your favorite version loses)
@@ -300,7 +321,7 @@ TEST RESULTS REPORT
 TEST: [Name]
 Period: [Start] - [End]
 
-RESULTS:
+RESULTS (example values):
 
 Metric          │ Variant A │ Variant B │ Difference
 ────────────────┼───────────┼───────────┼──────────
@@ -350,7 +371,7 @@ MONTH 3:
 └── Quarter review & planning
 
 PRIORITY ORDER:
-1. Hook/first impression (highest impact)
+1. Hook/first impression
 2. Offer/value proposition
 3. Audience targeting
 4. Copy elements
@@ -389,18 +410,20 @@ PRIORITY ORDER:
 - Same budget split
 
 **BUDGET & DURATION:**
-- Minimum €500 per variant (€1,000 total)
-- Minimum 14 days
+- Budget per variant: about 100 × your current CPA [from this account's history]
+- Minimum 14 days (Meta allows at most 30)
 - Goal: 100+ conversions per variant
 
 **METRICS:**
 - Primary: CPA (Cost per Acquisition)
-- Secondary: CTR, Hook Rate (3 sec views), ThruPlay Rate
+- Secondary: CTR, Hook Rate (3 sec views), ThruPlay Rate (Ads Manager only; not available through meta_get_insights)
 
 **SUCCESS CRITERIA:**
 - Winner at >95% significance
 - Minimum 15% CPA difference
 - Both >100 conversions
+
+The budget, duration and success figures above are rules of thumb, not Meta figures: check them against the account's own history.
 
 ---
 
@@ -420,4 +443,4 @@ meta_get_insights(
 )
 ```
 
-Use this to identify which creatives to test against and what your current CTR/CPA baseline is before writing your hypothesis.
+Use this to identify which creatives to test against and what your current CTR/CPA baseline is before writing your hypothesis. `meta_get_insights` returns one page of rows: if the response has `paging.next`, fetch the rest with `meta_query(account_id, "ads", pagination_url=<paging.next>)`.

@@ -27,7 +27,7 @@ Error: <exact error message received>
 Likely causes:
 - Plugin not installed or not loaded in this session
 - Subagent tool propagation issue
-- Server-side outage (check status.adsuperpowers.ai)
+- Server-side outage (check https://adsuperpowers.ai/status)
 - Rate limit (wait 60s and retry)
 - OAuth session expired (re-authenticate via the plugin)
 
@@ -62,7 +62,7 @@ Skill(skill="ad-superpowers:meta-benchmark-database")
 Invoke directly by name when you know which skill you need. Never pre-load every skill — progressive disclosure keeps your context lean and your reports focused.
 
 **Relevant skill domains for this agent:**
-- **Platform benchmarks:** meta, google-ads, linkedin, tiktok benchmark databases (industry averages, sourced)
+- **Platform benchmarks:** meta, google-ads, linkedin, tiktok benchmark databases (Google Ads, LinkedIn and TikTok name their sources; the Meta one gives rule-of-thumb ranges, not Meta figures)
 - **Attribution:** attribution reconciler (cross-platform), attribution window advisors per platform, TikTok attribution guide, LinkedIn revenue attribution, GA4 attribution advisor
 - **GA4 reporting:** channel groupings, revenue analysis, API reporting, ecommerce setup, cross-platform tracking
 - **Competitive context:** Google Ads competitive analysis toolkit, attribution model advisor
@@ -85,10 +85,10 @@ Loading every skill eagerly is anti-pattern — search and load on demand.
 
 ### Competitive Context
 - `google_ads_run_gaql(query="FROM auction_insight...")` — Competitor overlap, outranking share
-- Benchmark databases for Meta, Google Ads, LinkedIn, and TikTok provide sourced industry averages
+- The Google Ads, LinkedIn and TikTok benchmark databases give sourced industry averages; the Meta benchmark-database gives rules of thumb, not Meta figures: check them against the account's own history
 
 ### Catalog & E-commerce
-- `meta_query(entity_type="productcatalogs")` — Catalog health for e-commerce reports
+- Catalog health for e-commerce reports: check Commerce Manager; not available through MCP
 - `ga4_run_report(metrics=["purchaseRevenue", "ecommercePurchases"])` — Revenue data
 
 ## Report Types
@@ -116,7 +116,7 @@ Loading every skill eagerly is anti-pattern — search and load on demand.
 ### E-commerce Performance Report
 - Period: Customizable
 - Focus: Revenue, ROAS, catalog health, product performance
-- Data: GA4 e-commerce + Meta catalog + Google Shopping
+- Data: GA4 e-commerce + Meta catalog ad results (`meta_get_insights`; catalog data itself is not available through MCP) + Google Shopping
 
 ### LinkedIn B2B Pipeline Report
 - Period: Customizable
@@ -129,14 +129,16 @@ Loading every skill eagerly is anti-pattern — search and load on demand.
 2. **Pull performance data** — Use platform-specific tools with date breakdowns
 3. **Normalize metrics** — Impressions, clicks, spend, conversions, CPA, ROAS
 4. **Calculate changes** — Period-over-period deltas with % change
-5. **Add benchmark context** — Compare to industry averages from benchmark-database skills
+5. **Add benchmark context**: compare with the account's own history first, then with the benchmark-database skills (for Meta, rule-of-thumb ranges)
 6. **Identify insights** — Anomalies, trends, opportunities, risks
 7. **Note attribution caveats** — Different platforms count differently (use attribution-reconciler)
 
 ## Attribution Context (Always Include)
 
 When reporting cross-platform numbers:
-- Meta: 7-day click + 1-day view (28-day view removed Jan 2026)
+- Meta: the attribution setting of each ad set; check it before comparing numbers. Two Meta changes affect comparisons over time:
+  - Since 12 Jan 2026 the Ads Insights API no longer returns 7-day view or 28-day view results ("Ads Insights API Metric Availability Updates", Meta for Developers, 16 Oct 2025).
+  - Rolling out from March 2026, Meta counts only link clicks as click-through for website and in-store conversions; conversions after shares, saves and other clicks move to engage-through attribution, the new name for engaged-view ("Simplifying Ad Measurement for a Social-First World", Meta for Business, 3 Mar 2026: https://www.facebook.com/business/news/click-attribution).
 - Google Ads: Data-driven attribution (default), last-click available
 - LinkedIn: 30-day click + 7-day view
 - TikTok: 7-day click + 1-day view
@@ -161,8 +163,8 @@ When reporting cross-platform numbers:
 |--------|---------|----------|--------|-------------|--------|
 | Spend | ... | ... | +X% | - | ... |
 | Conversions | ... | ... | +X% | - | ... |
-| CPA | ... | ... | -X% | €X industry avg | ... |
-| ROAS | ... | ... | +X% | X.Xx industry avg | ... |
+| CPA | ... | ... | -X% | €X benchmark | ... |
+| ROAS | ... | ... | +X% | X.Xx benchmark | ... |
 
 ### Platform Breakdown
 | Platform | Spend | Conversions | CPA | ROAS | Trend |
@@ -187,5 +189,5 @@ When reporting cross-platform numbers:
 - Include both absolute numbers AND percentages
 - Round appropriately (no excessive decimals)
 - Provide context ("CPA of €45 is 12% below our €51 target and 22% below industry avg of €58")
-- Always cite benchmark sources when comparing (e.g., "WordStream/LOCALiQ 2025")
+- Always cite benchmark sources when comparing (e.g., "WordStream/LOCALiQ 2025"); for Meta, say the range is a rule of thumb, not a Meta figure
 - Currency in user's preferred format

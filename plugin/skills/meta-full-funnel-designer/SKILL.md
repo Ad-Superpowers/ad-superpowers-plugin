@@ -10,11 +10,11 @@ This skill helps design complete full-funnel advertising strategies for Meta Ads
 
 ## 2026 Context: ASC and Andromeda
 
-> **Advantage+ Sales Campaigns (ASC):** For e-commerce advertisers, ASC (the new unified structure replacing "Advantage+ Shopping Campaigns") manages budget, audience, and placement automatically. For accounts spending >€5k/month on conversions, consider running ASC alongside or instead of manual TOFU/MOFU/BOFU segmentation — ASC often outperforms manual funnels at scale.
+> **Advantage+ Sales Campaigns (ASC):** For e-commerce advertisers, a sales campaign with Advantage+ audience, placements and budget on is what Meta calls an Advantage+ sales campaign; Meta then manages budget, audience and placement ("About Advantage+ sales campaigns", Meta Business Help Center). Since 19 May 2026 the Marketing API no longer allows creating, duplicating or updating legacy "Advantage+ shopping campaigns" (Marketing API changelog v25.0, 18 Feb 2026). For accounts spending >€5k/month on conversions, consider running ASC alongside or instead of manual TOFU/MOFU/BOFU segmentation. Rules of thumb, not Meta figures: check them against the account's own history (the €5k threshold is ours).
 
-> **Andromeda Engine:** Meta's rebuilt ad retrieval system means creative quality is now the primary delivery signal. A full-funnel strategy with 15+ distinct creatives across stages outperforms one with only 4-6.
+> **Andromeda Engine:** Andromeda is Meta's ad retrieval system: the first stage of delivery, which narrows tens of millions of candidate ads to a few thousand before ranking (Meta Engineering, 2 Dec 2024, https://engineering.fb.com/2024/12/02/production-engineering/meta-andromeda-advantage-automation-next-gen-personalized-ads-retrieval-engine/).
 
-> **Attribution (Jan 2026 change):** 7-day view and 28-day view attribution windows have been removed. Default attribution is now 7-day click + 1-day view. Adjust BOFU ROAS targets accordingly — numbers will appear lower than historical comparisons.
+> **Attribution (Jan 2026 change):** Since 12 January 2026 the Ads Insights API no longer returns the 7-day view and 28-day view attribution windows; 1-day click, 7-day click, 28-day click, 1-day engaged view and 1-day view remain ("Ads Insights API Metric Availability Updates", Meta for Developers, 16 Oct 2025). In Ads Manager, the standard attribution setting offers click-through of 1 or 7 days, view-through of 1 day and engage-through of 1 day ("About attribution models and attribution settings", Meta Business Help Center). If older reports or BOFU ROAS targets used 7-day or 28-day view, compare like with like: the same sales counted over shorter windows give lower totals.
 
 ## Funnel Framework
 
@@ -26,15 +26,15 @@ This skill helps design complete full-funnel advertising strategies for Meta Ads
 │  ├── Goal: Reach & brand awareness                              │
 │  ├── Budget: 20-30% of total                                    │
 │  ├── Audiences: Broad, Lookalikes 3-10%, Interest-based         │
-│  ├── Objectives: Reach, Video Views, Brand Awareness            │
+│  ├── Objectives: Awareness; Engagement for video views          │
 │  ├── Creatives: Educational, entertaining, brand story          │
-│  └── KPIs: CPM, Reach, Video ThruPlay, Frequency                │
+│  └── KPIs: CPM, Reach, Video ThruPlay (Ads Manager), Frequency  │
 ├─────────────────────────────────────────────────────────────────┤
 │  MOFU (Middle of Funnel) - CONSIDERATION                        │
 │  ├── Goal: Engagement & interest building                       │
 │  ├── Budget: 30-40% of total                                    │
 │  ├── Audiences: Engagers, Video viewers, Website visitors       │
-│  ├── Objectives: Traffic, Engagement, Lead Generation           │
+│  ├── Objectives: Traffic, Engagement, Leads                     │
 │  ├── Creatives: Product demos, testimonials, comparisons        │
 │  └── KPIs: CTR, CPC, Landing page views, Time on site           │
 ├─────────────────────────────────────────────────────────────────┤
@@ -42,11 +42,13 @@ This skill helps design complete full-funnel advertising strategies for Meta Ads
 │  ├── Goal: Conversions & sales                                  │
 │  ├── Budget: 30-50% of total                                    │
 │  ├── Audiences: Add to cart, High-intent visitors, Customers    │
-│  ├── Objectives: Conversions, Sales (Advantage+ Catalog Ads)    │
+│  ├── Objective: Sales (incl. Advantage+ catalog ads)            │
 │  ├── Creatives: Urgency, offers, social proof, retargeting      │
 │  └── KPIs: CPA, ROAS, Conversion rate, AOV                      │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+The budget shares and lookalike ranges in this framework are rules of thumb, not Meta figures: check them against the account's own history. The objective names are Meta's: Awareness, Traffic, Engagement, Leads, App promotion and Sales replaced the older objectives (Reach, Video Views, Brand Awareness, Conversions), and since Marketing API v21.0 (2 Oct 2024) new ad sets and ads can no longer use the older ones (Marketing API changelog v21.0). Meta's API guides create video-view campaigns with the Engagement objective (OUTCOME_ENGAGEMENT), and our meta_create tool accepts only the six OUTCOME_* objectives.
 
 ## Budget Allocation Calculator
 
@@ -59,6 +61,8 @@ This skill helps design complete full-funnel advertising strategies for Meta Ads
    - Growing brand (balance needed) → Balanced distribution
 
 ### Budget Distribution Models
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 #### Model A: New Brand / Awareness Focus
 ```
@@ -83,14 +87,16 @@ BOFU: 60% │██████████████████████�
 
 ## Audience Mapping per Stage
 
+The windows and ranges below are rules of thumb, not Meta figures: check them against the account's own history.
+
 ### TOFU Audiences (Cold)
 
 | Audience Type | Description | Expected CPM |
 |---------------|-------------|--------------|
-| Broad | Demographics + geo only | $3-8 |
-| Interest Stacking | 3-5 related interests | $5-10 |
-| Lookalike 6-10% | Broad lookalike of purchasers | $4-8 |
-| Video Viewers LAL | Lookalike of 95% video viewers | $5-9 |
+| Broad | Demographics + geo only | [from account history] |
+| Interest Stacking | 3-5 related interests | [from account history] |
+| Lookalike 6-10% | Broad lookalike of purchasers | [from account history] |
+| Video Viewers LAL | Lookalike of 95% video viewers | [from account history] |
 
 ### MOFU Audiences (Warm)
 
@@ -113,6 +119,8 @@ BOFU: 60% │██████████████████████�
 | High-Value Customers | Top 20% LTV | 180-365 days |
 
 ## Creative Strategy per Stage
+
+Video lengths and the 3-second hook are rules of thumb, not Meta figures: check them against the account's own history.
 
 ### TOFU Creative Formats
 
@@ -176,7 +184,7 @@ Budget: [TOTAL BUDGET]
 
 TOFU CAMPAIGN - Awareness
    ├── Name: [BRAND]_TOFU_Awareness_[MONTH]
-   ├── Objective: Reach / Video Views
+   ├── Objective: Awareness / Engagement (video views)
    ├── Budget: [X]% = $[AMOUNT]
    ├── Audiences:
    │   ├── Ad Set 1: Broad (18-65, [COUNTRY])
@@ -202,7 +210,7 @@ MOFU CAMPAIGN - Consideration
 
 BOFU CAMPAIGN - Conversion
    ├── Name: [BRAND]_BOFU_Conversion_[MONTH]
-   ├── Objective: Conversions / Sales
+   ├── Objective: Sales
    ├── Budget: [X]% = $[AMOUNT]
    ├── Audiences:
    │   ├── Ad Set 1: Add to Cart (14d)
@@ -217,6 +225,8 @@ BOFU CAMPAIGN - Conversion
 ## Frequency & Overlap Management
 
 ### Frequency Guidelines per Stage
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 | Stage | Max Frequency/Week | Action When Exceeded |
 |-------|---------------------|----------------------|
@@ -241,6 +251,8 @@ BOFU exclusions:
 ## Funnel Diagnosis Framework
 
 ### When the funnel is underperforming:
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ```
 PROBLEM: Low awareness/reach
@@ -292,7 +304,7 @@ Would you like me to build out the complete campaign structure with audiences an
 ### Audit an existing funnel before designing a new one:
 
 ```python
-# Get campaign-level performance split by objective to map current funnel state
+# Get campaign-level performance to map current funnel state
 meta_get_insights(
     account_id="act_XXXXXXXXX",
     level="campaign",
@@ -301,4 +313,4 @@ meta_get_insights(
 )
 ```
 
-This shows budget distribution across objectives (Awareness / Traffic / Conversions) and helps identify which funnel stage is underfunded or over-invested before recommending changes.
+This shows spend and results per campaign. `meta_get_insights` returns one page of rows: if the response has `paging.next`, fetch the rest with `meta_query(account_id, "campaigns", pagination_url=<paging.next>)`. Map each campaign to a funnel stage by its objective (read it with `meta_query(account_id, "campaigns", fields=["name", "objective"])`) to see which stage is underfunded or over-invested before recommending changes.

@@ -387,7 +387,8 @@ ga4_run_report(
     metrics=["keyEvents", "sessionKeyEventRate"],
     dimensions=["eventName", "date"]
 )
-# Note: filter by eventName in your analysis — ga4_run_report returns all events
+# Note: filter by eventName in your analysis. If the response has partial=true,
+# call again with offset=next_offset until partial is false to get every row.
 ```
 
 ## Google Ads Conversion Import Preparation

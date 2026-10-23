@@ -2,6 +2,49 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.5.0] - 2026-10-23
+
+Minor bump for the creative strategy hub, one new MCP tool and five weeks of
+skill corrections. This release ships 59 MCP tools; the skill, command and
+agent counts are unchanged.
+
+### Added
+
+- **Creative strategy hub** in `meta-creative-diversification-generator`. The
+  skill now ships `scripts/creative_map.py` and its references. It builds an
+  x-ray of a Meta account's creative mix (spend concentration, effective
+  creatives, freshness, formats per ad set), maps the creatives on a
+  motivator × angle grid with a gap quadrant, plans the next batch as one-line
+  briefs, and reads each cell back after a new wave has run.
+- **A fixed report outline** in the same skill: header, integrity, x-ray,
+  grid, per angle, three opportunities, next batch and briefs, warnings and
+  sources, in that order. Confirmed creative labels can be carried to the next
+  audit through the client profile snapshot.
+- **`spend_overview`**: spend per account per platform in one call.
+
+### Changed
+
+- **Unsourced claims removed** from the Meta skills and agents, among them a
+  fixed minimum number of creative variations attributed to Meta, which Meta's
+  own guidance does not give. Rules of thumb are marked as rules of thumb, and
+  tool instructions follow the current server, for example the fields Meta
+  requires when a campaign is created.
+- **Meta measurement checks through `meta_query`**: six Meta skills read Event
+  Match Quality, match keys, deduplication and freshness per web event with
+  `entity_type="dataset_quality"`, and the catalog skill reads Meta's
+  content-id match check with `pixel_da_checks`, where they used to send the
+  reader to Events Manager. The ad launch playbook now says what
+  `facebook_only=true` does: it sends no Instagram identity, but only the ad
+  set's placements keep an ad off Instagram.
+- **The README describes the write controls as the server applies them**: new
+  Meta and TikTok campaigns and ads start paused, new LinkedIn campaigns and
+  ads start as drafts, and a workspace owner can make the workspace or a single
+  member read-only. ChatGPT setup points to the published plugin.
+- **GA4 reporting**: the default report limit is 2,500 rows, and an oversized
+  report is cut at a row boundary.
+- **Client context onboarding**: attention points can hold up to 10,000
+  characters.
+
 ## [2.4.1] - 2026-09-17
 
 ### Changed

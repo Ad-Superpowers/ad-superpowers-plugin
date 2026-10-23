@@ -20,6 +20,8 @@ Invoke when user mentions:
 
 ## Key Questions This Skill Answers
 
+Rules of thumb, not Meta figures: check them against the account's own history.
+
 ### Q1: Is my CTR dropping due to high frequency?
 
 **Analysis Framework:**
@@ -79,7 +81,7 @@ REFRESH CREATIVE            TEST NEW AUDIENCE          EXPAND AUDIENCE
 ```
 → meta_get_creatives(account_id="act_XXXXXXXXX", scope="account", date_preset="last_14d", sort_by="spend")
 ```
-This returns creative-level performance with text content. Identify ads with highest spend + longest runtime.
+This returns up to 10 ads by default (at most 25), ranked by spend, taken from the first 100 ad rows of the period, with their copy and their impressions, clicks, spend, CTR and CPC. It returns no dates: for an ad's age, take its `created_time` from `meta_query(account_id, "ads")`; for its first delivery in the window, take its first day with impressions in the Step 2 rows.
 
 ### Step 2: Pull Daily Frequency & CTR Trends
 
@@ -88,7 +90,11 @@ This returns creative-level performance with text content. Identify ads with hig
 ```
 Daily `time_increment="1"` is essential — plot CTR over time and correlate with frequency curve. This is the core fatigue detection signal.
 
+Each daily row's `frequency` covers that day only (Meta: the average number of times each person saw the ad in the row's period). For the weekly frequency in Step 3, run the same call with `date_preset="last_7d"` and `time_increment="all_days"`.
+
 ### Step 3: Score Against Thresholds
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 | Signal | Warning | Critical |
 |--------|---------|----------|
@@ -98,22 +104,23 @@ Daily `time_increment="1"` is essential — plot CTR over time and correlate wit
 | **Days active** | >10 days | >14 days |
 | **Platform alert** | "Creative Limited" | "Creative Fatigue" warning |
 
-### Step 4: Check Creative Depth (Andromeda Threshold)
+### Step 4: Check Creative Diversity
 
-From the Step 1 results, count active creatives per campaign:
+Count genuinely different concepts, not ad objects: ads that share a concept with cosmetic changes count as one. Meta's guidance ('Demystifying creative diversification', Meta for Business, 16 Dec 2025, https://www.facebook.com/business/news/demystifying-creative-diversification) says ads that look or feel alike are treated as variations of the same creative and share learnings. It recommends ads that are truly different in look, feel, storyline and message, and ads that speak to different audience motivations or use cases. It gives no number.
 
 ```
-Count distinct ads with status=ACTIVE from meta_get_creatives output.
-Group by campaign_id to get creatives-per-campaign.
+Group the Step 2 rows by adset_id (level="ad" rows include ad_id, adset_id and campaign_id).
+Use every row: while a response has paging.next, fetch the next page with
+  meta_query(account_id, "ads", pagination_url=<paging.next>) and add its rows.
+  Then sum each ad's daily rows before counting ads or ranking them by spend.
+Ads with delivery: ads with impressions in the window (this includes ads paused since).
+Distinct concepts: group those ads by concept, using the copy and creative details from
+  meta_get_creatives (Step 1 covers the top-spend ads; scope="campaign" with the
+  campaign_id and limit=50 returns up to 50 ads of one campaign; match on ad_id).
+Top-3 spend share: spend of the 3 highest-spend ads divided by the ad set's spend.
 ```
 
-| Creative Depth | Status | Action |
-|---------------|--------|--------|
-| **15+ active** | Healthy | Andromeda has enough material to rotate |
-| **8-14 active** | Warning | Schedule 3-5 new creatives this week |
-| **<8 active** | Critical | Fatigue will hit fast — add creatives immediately |
-
-Low creative depth is the #1 predictor of premature fatigue under Andromeda. More variations = slower fatigue onset.
+Report per ad set: ads with delivery, distinct concepts, and the spend share of the top 3 ads. These are descriptive, not targets.
 
 ### Combined Signal (Critical)
 
@@ -126,6 +133,8 @@ When you see ALL THREE:
 
 ### Fatigue Timeline (Meta)
 
+Rules of thumb, not Meta figures: check them against the account's own history. Only the learning phase is Meta's own term: Meta says an ad set usually leaves it after about 50 results in the week after its last significant edit, and advises waiting to edit until then ('About the learning phase', Meta Business Help Center).
+
 | Phase | Days | What's Happening | Action |
 |-------|------|------------------|--------|
 | **Learning** | 1-7 | Algorithm optimizing | Don't touch |
@@ -135,22 +144,24 @@ When you see ALL THREE:
 
 ### CTR & CPM Patterns
 
+Rules of thumb, not Meta figures: check them against the account's own history.
+
 ```
 META ADS FATIGUE PATTERNS
 ──────────────────────────
 
 CTR Pattern: Linear, gradual descent
-├─ Daily decline after day 7: ~2%
 ├─ Predictable curve
 └─ Watch for acceleration
 
 CPM Pattern: Gradual incline
-├─ Daily increase over days 10-14: +1-3%
-├─ Slower than TikTok
+├─ Read it together with the CTR trend
 └─ May spike suddenly at fatigue point
 ```
 
 ## Fatigue Detection Decision Tree
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -167,8 +178,8 @@ CPM Pattern: Gradual incline
            or "CREATIVE FATIGUE"                    │
                     │                               │
                     ▼                               ▼
-           FATIGUE CONFIRMED              Check Frequency by Campaign Type
-           Refresh immediately                      │
+           WARNING / CRITICAL             Check Frequency by Campaign Type
+           Add a new, different ad                  │
                                     ┌───────────────┼───────────────┐
                                     ▼               ▼               ▼
                                CONVERSION       CONSIDER.       AWARENESS
@@ -186,9 +197,13 @@ CPM Pattern: Gradual incline
 
 ## Refresh vs Kill Decision Framework
 
+Rules of thumb, not Meta figures: check them against the account's own history.
+
 ### Refresh Actions (Minor Tweaks)
 
-When CTR declines 10-15% or CPM rises 15-20%:
+These tweaks make variations of the same creative (Meta treats look-alike ads as one creative), so they do not add diversity. If the concept itself is fatigued, replace it with a genuinely different concept (Step 4).
+
+When CTR or CPM reaches the Step 3 warning level:
 
 1. **Change headline or primary text** - quick win
 2. **Swap CTA button** - Learn More vs Shop Now
@@ -200,70 +215,55 @@ When CTR declines 10-15% or CPM rises 15-20%:
 
 - CTR falls >30% below campaign average
 - CPA >2x baseline for 48 hours
-- "Creative Limited" status in Ads Manager
-- Negative feedback score increasing
+
+A "Creative limited" or "Creative fatigue" status alone is not a reason to pause: Meta recommends adding a new, materially different ad and notes that keeping the original ad active may maximize results (see Platform Signals). For negative feedback, watch quality ranking: Meta replaced the relevance score with ad relevance diagnostics, and quality ranking reflects feedback such as people hiding the ad (see Quality Ranking Components).
 
 ## Prevention Strategies
 
+Rules of thumb, not Meta figures: check them against the account's own history.
+
 ### Creative Rotation Schedule
 
-| Scenario | Refresh Every | Creatives Needed |
-|----------|--------------|------------------|
-| Standard budget, broad audience | 10-14 days | 4-6 per ad set |
-| High budget, small audience | 5-7 days | 6-8 per ad set |
-| High budget, large audience | 14-21 days | 4-6 per ad set |
-| Low budget | 14-21 days | 3-4 per ad set |
+| Scenario | Refresh Every |
+|----------|--------------|
+| Standard budget, broad audience | 10-14 days |
+| High budget, small audience | 5-7 days |
+| High budget, large audience | 14-21 days |
+| Low budget | 14-21 days |
 
 ### Content Mix for Longevity
 
 ```
-META CREATIVE MIX (RECOMMENDED)
+META CREATIVE MIX (RULE OF THUMB)
 ──────────────────────────────────
 
 UGC Content: 40%
-├─ Fatigues 10-15% slower than polished
-├─ +3-4 days extended lifespan
-├─ 17-18 day average lifespan
 └─ Best for: Authenticity, social proof
 
 Polished Content: 40%
-├─ 10-12 day typical lifespan
 ├─ Brand consistency
 ├─ Professional look
 └─ Best for: Brand campaigns, premium products
 
 Dynamic Creative: 20%
-├─ Auto-rotates elements (images, headlines, CTAs)
-├─ Extends total lifespan
-├─ Best when you have 3+ images/headlines/CTAs
-└─ Use for testing and optimization
+├─ Combines the images and headlines you upload into variations
+├─ Not a split test: Meta reports the variations in aggregate
+└─ Meta says it may be unavailable for new sales or app promotion
+   ad sets in Ads Manager since June 2024
 ```
 
-### Andromeda Engine & Minimum Creative Depth (2026)
+Dynamic creative facts: 'About dynamic creative in Meta Ads Manager', Meta Business Help Center.
 
-Meta's Andromeda ad retrieval engine (rolled out 2025-2026) fundamentally changed how ads are matched to users. Creative quality is now the primary ranking signal — not audience targeting.
+### Andromeda (Meta's Ad Retrieval System)
 
-```
-ANDROMEDA IMPLICATIONS FOR FATIGUE MANAGEMENT:
-├── Creative quality drives matching — weak creative = less delivery
-├── Minimum 15+ DISTINCT creative variations recommended per campaign
-├── Fewer variations = faster fatigue and higher CPMs
-├── Advantage+ Audience + high creative volume = best results
-└── Andromeda rewards variety: different angles, formats, hooks
+Andromeda is Meta's ad retrieval system: the first stage of delivery, which narrows tens of millions of candidate ads to a few thousand before ranking (Meta Engineering, 2 Dec 2024, https://engineering.fb.com/2024/12/02/production-engineering/meta-andromeda-advantage-automation-next-gen-personalized-ads-retrieval-engine/). For creative diversity, use the Step 4 check rather than an ad count.
 
-CREATIVE DEPTH TARGET:
-├── Minimum: 8-10 active creatives per ad set
-├── Recommended: 15+ distinct variations
-├── Include: Different hooks, formats (video/static/carousel), angles
-└── Refresh: Rotate 2-3 new creatives weekly on high-spend campaigns
-```
-
-### Variation Types to Prepare (4-6 per ad set)
+### Variation Types to Prepare
 
 1. **Different headline angles** (benefit, feature, social proof)
 2. **Different imagery** (lifestyle, product, UGC)
 3. **Different formats** (single image, carousel, video)
-4. **Different CTAs** (Learn More, Shop Now, Get Started)
+4. **Different CTAs** (Learn More, Shop Now, Sign Up)
 
 ## Platform Signals (Meta-Specific)
 
@@ -271,18 +271,24 @@ CREATIVE DEPTH TARGET:
 
 | Signal | What It Means | Action |
 |--------|--------------|--------|
-| **Creative Limited** | Meta has flagged potential fatigue | Refresh immediately |
-| **Creative Fatigue** | Cost per result doubled past benchmarks | Refresh or pause within 24-48h |
-| **Learning Limited** | Not enough data to optimize | Different issue - consolidate or raise budget |
+| **Creative Limited** | Delivery column status: people have seen the ad many times and its cost per result is above your past ads, but less than twice as much | Add a new, materially different ad; consider a wider audience |
+| **Creative Fatigue** | Delivery column status: the same, with cost per result at twice your past ads or more | Add a new, materially different ad; consider a wider audience |
+| **Learning Limited** | The ad set is unlikely to get about 50 optimization events in the week after its last significant edit | Different issue: combine ad sets, widen the audience, raise budget or bid, or choose a more frequent optimization event |
+
+Definitions and actions are Meta's ('About creative fatigue recommendations in Meta Ads Manager'; 'About learning limited'; both Meta Business Help Center). Meta notes that keeping the original ad active instead of pausing it may maximize results. It offers the creative fatigue feature only for ad sets with one creative, and not with Advantage+ catalog ads, dynamic creative or Advantage+ app campaigns, so a missing status does not rule out fatigue.
 
 ### Quality Ranking Components
 
-Monitor these for early fatigue signals:
-- **Quality Ranking:** Below/Average/Above average
-- **Engagement Rate Ranking:** User interaction vs competitors
-- **Conversion Rate Ranking:** Conversion performance vs competitors
+Monitor these for early fatigue signals (Meta's ad relevance diagnostics; each ranks as Above average, Average or Below average):
+- **Quality Ranking:** perceived quality compared with ads competing for the same audience; Meta measures it with signals such as feedback from people viewing or hiding the ad
+- **Engagement Rate Ranking:** expected engagement rate compared with ads competing for the same audience
+- **Conversion Rate Ranking:** expected conversion rate compared with ads that have the same optimization goal and compete for the same audience
+
+Meta does not show them for ads with fewer than 500 impressions, and says to use them to diagnose ads that miss their goals, not to optimize ads that already meet them ('About ad relevance diagnostics'; 'How to use ad relevance diagnostics'; 'About quality ranking'; all Meta Business Help Center). Read them per ad with `meta_get_insights(account_id="act_XXXXXXXXX", level="ad", fields=["quality_ranking", "engagement_rate_ranking", "conversion_rate_ranking"])`.
 
 ## Recovery Playbook
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ### When Creative is Fatigued
 
@@ -293,12 +299,11 @@ Monitor these for early fatigue signals:
                                     │
                                     ▼
                 First: Try NEW CREATIVE
-                (Most effective lever - 15-25% CTR lift)
                                     │
                     ┌───────────────┴───────────────┐
                     │                               │
                     ▼                               ▼
-            WORKS (+15-25% CTR)           DOESN'T WORK
+            WORKS                         DOESN'T WORK
                     │                               │
                     ▼                               ▼
              Continue with                Second: AUDIENCE EXPANSION
@@ -308,7 +313,7 @@ Monitor these for early fatigue signals:
                                     │                               │
                                     ▼                               ▼
                             WORKS                           STILL STRUGGLING
-                            (Extends 7-14 days)                    │
+                                                                   │
                                     │                               ▼
                                     ▼                  Third: COMBINED APPROACH
                              Scale up               New creative + 10-20% audience
@@ -317,12 +322,13 @@ Monitor these for early fatigue signals:
 
 ### Budget Reallocation Strategy
 
-**Meta-Specific Approach:**
 - When creative ages >14 days: Shift 20-30% to new ad sets
 - Reserve 20% for evergreen performers
 - Test 10% on new creative concepts weekly
 
 ## Benchmarks
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ### Frequency Thresholds by Campaign Type
 
@@ -341,14 +347,11 @@ Monitor these for early fatigue signals:
 
 ### Creative Lifespan by Type
 
-| Creative Type | Average Lifespan |
-|--------------|------------------|
-| Standard (polished) | 10-12 days |
-| UGC | 17-18 days |
-| High budget, small audience | 5-7 days |
-| Low budget | 14-21 days |
+Measure lifespan in the account instead of assuming a typical figure: per creative type (for example UGC and polished), count the days from launch until the Step 3 CTR or CPM warning is reached.
 
 ## Differentiating Fatigue from Other Issues
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ### Not Fatigue - Different Problems
 
@@ -425,7 +428,7 @@ When diagnosing Meta creative fatigue, provide:
 ### Weekly Checks
 - [ ] Calculate fatigue score per creative
 - [ ] Identify refresh candidates
-- [ ] Review creative library depth (need 4-6)
+- [ ] Review creative diversity per ad set (Step 4)
 - [ ] Plan next week's refreshes
 - [ ] Compare UGC vs polished performance
 
@@ -437,4 +440,4 @@ When diagnosing Meta creative fatigue, provide:
 
 ---
 
-*Sources: Alison.ai "Creative Fatigue Report Q3 2025" (Sep 2025), Sovran Meta Ads benchmarks (Q1 2026), Meta Business Help Center. Meta creative fatigue is more gradual than TikTok — plan for 2-week refresh cycles with monitoring. With Andromeda, maintaining 15+ creative variations is the most effective fatigue prevention strategy.*
+*Sources: Meta for Business, 'Demystifying creative diversification' (16 Dec 2025), Meta Engineering on Andromeda (2 Dec 2024), and the Meta Business Help Center pages on creative fatigue, the learning phase, learning limited, ad relevance diagnostics and dynamic creative (checked 10 Oct 2026), each cited by title above. The frequency, CTR, CPM, CPA, budget and timing thresholds in this skill are rules of thumb, not Meta guidance: check them against the account's own history. Plan for 2-week refresh cycles with monitoring.*

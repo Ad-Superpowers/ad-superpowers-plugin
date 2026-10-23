@@ -14,7 +14,7 @@ This skill helps set up streamlined workflows for Meta Ads management, including
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  IDEAL TIME ALLOCATION FOR META ADS MANAGER                     │
+│  EXAMPLE TIME ALLOCATION FOR A META ADS MANAGER                 │
 │                                                                 │
 │  DAILY (30-60 min)                                              │
 │  ├── Performance check: 15 min                                  │
@@ -34,6 +34,8 @@ This skill helps set up streamlined workflows for Meta Ads management, including
 │  └── Competitor analysis: 1 hour                                │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+Rules of thumb, not Meta figures: check them against the account's own history. This covers the time budgets and thresholds throughout this skill.
 
 ## Daily Workflow
 
@@ -84,7 +86,8 @@ IF CPA < Target - 20%:
 
 IF Ad Set in Learning:
 ├── Check: Make no changes
-├── Check: On track for 50 conv/week?
+├── Check: On track for about 50 results in the week after the last
+│   significant edit?
 └── Action: Monitor, do not adjust
 
 IF Rejected Ad:
@@ -92,6 +95,8 @@ IF Rejected Ad:
 ├── Action: Fix and resubmit
 └── Escalate: If incorrect, appeal
 ```
+
+Rules of thumb, not Meta figures: check them against the account's own history. The learning phase figure is Meta's: an ad set usually exits learning after about 50 results in the week after its last significant edit ("About the learning phase", Meta Business Help Center).
 
 ## Weekly Workflow
 
@@ -159,7 +164,7 @@ CTR             │ X%     │           │           │
 Conversions     │ X      │           │           │
 CPA             │ $X     │           │           │
 ROAS            │ Xx     │           │           │
-Frequency       │ <3     │           │           │
+Frequency       │ X      │           │           │
 
 TOP PERFORMERS:
 1. [Campaign/Ad Set] - [Metric]
@@ -201,7 +206,7 @@ MONTHLY ACCOUNT AUDIT
 
 □ AUDIENCE AUDIT (30 min)
 ├── Custom audiences up-to-date?
-├── Lookalike audiences still active? (Note: Lookalikes deprioritized in 2026 — Advantage+ Audience preferred)
+├── Lookalike audiences still active? (With Advantage+ audience, a lookalike works as an audience suggestion)
 ├── Advantage+ Audience enabled on prospecting ad sets?
 ├── Audience overlap check
 ├── Exclusions correct?
@@ -227,6 +232,8 @@ MONTHLY ACCOUNT AUDIT
 ├── Creative trends in market
 └── Identify opportunities
 ```
+
+Sources for the audience lines: "Meta Advantage+ features" describes Advantage+ lookalike as using a lookalike audience as a suggestion; "About Advantage+ audience" does not recommend Advantage+ audience for retargeting.
 
 ### Monthly Strategy Review
 
@@ -282,7 +289,7 @@ SETUP CHECKLIST
 ───────────────
 □ Campaign level:
   ├── Correct objective
-  ├── Budget type (Advantage Campaign Budget vs Ad Set Budget)
+  ├── Budget strategy (Campaign budget vs Ad set budget)
   ├── A/B test setup if needed
   └── Campaign budget set
 
@@ -408,7 +415,7 @@ CREATIVE REQUEST TEMPLATE
 AUTOMATION PRIORITY
 ====================
 
-HIGH PRIORITY (Immediate time savings):
+HIGH PRIORITY:
 ├── Automated rules for budget protection
 ├── Performance alerts (Slack/Email)
 ├── Automated reporting
@@ -459,19 +466,27 @@ ADVANCED (Scale):
 Replace manual Ads Manager browsing with direct data pulls:
 
 ```
-DAILY CHECK (2 minutes with MCP):
+DAILY CHECK (with MCP):
 
-1. Performance snapshot (all active ad sets):
+1. Performance snapshot (ad sets with delivery today):
 → meta_get_insights(account_id="...", fields=["spend","cost_per_action_type","purchase_roas","impressions","frequency"], date_preset="today", level="adset")
 
 2. Weekly trend (top/bottom performers):
 → meta_get_insights(account_id="...", fields=["spend","cost_per_action_type","purchase_roas"], date_preset="last_7d", level="campaign")
 
-3. Creative health check:
+3. Creative health check (by default: up to 10 ads ranked by spend over
+   the last 30 days, taken from the first 100 ad rows):
 → meta_get_creatives(account_id="...", scope="account")
+
+4. Delivery check (what is not running, and why):
+→ meta_query(account_id="...", entity_type="ads", effective_status=["WITH_ISSUES","DISAPPROVED"], fields=["name","effective_status","issues_info","ad_review_feedback"])
+→ meta_query(account_id="...", entity_type="adsets", effective_status=["ACTIVE"], fields=["name","effective_status","learning_stage_info","issues_info"])
+→ meta_query(account_id="...", entity_type="account", fields=["account_status","disable_reason","spend_cap","amount_spent"])
 ```
 
-Paste the `meta_query` output directly into any analysis prompt from Category 3 above for instant AI-powered interpretation.
+How to read the delivery check: `ad_review_feedback` names the policy behind a rejected ad, and `issues_info` gives the delivery error. In `learning_stage_info`, `LEARNING` means wait, and `FAIL` (Ads Manager shows "Learning limited") means the ad set gets too few results for its budget and audience. For the account, read `account_status` first: 1 is active, 2 is disabled, and a disabled account carries a non-zero `disable_reason`. A `spend_cap` of `"0"` means no limit. A positive `spend_cap` stops all delivery once `amount_spent` reaches it, so when the two are close, raise or reset the cap before it runs out. Meta leaves an empty field out, so a missing `issues_info` means no issues.
+
+`meta_get_insights` returns one page: while a response has `paging.next`, fetch the next page with `meta_query(account_id, "adsets", pagination_url=<paging.next>)` and add its rows. Then compare the results with the targets in the Morning Check Routine above.
 
 ## Example Interaction
 
@@ -483,14 +498,15 @@ Paste the `meta_query` output directly into any analysis prompt from Category 3 
 
 ---
 
-**QUICK WINS (Implement immediately):**
+**FIRST STEPS:**
 
-1. **Set up Automated Rules** (30 min, saves hours)
+1. **Set up Automated Rules** (about 30 min to set up)
 ```
 - CPA > Target x 1.3 → Pause ad set
 - CPA < Target x 0.8 → Notification to scale
 - Frequency > 3.5 → Creative refresh alert
 ```
+Rules of thumb, not Meta figures: check them against the account's own history. Under a campaign budget, Meta does not allow cost-based rules that pause ad sets or only notify, so put the CPA rules on the campaign (see automated-rules-builder).
 
 2. **Fixed Time Blocks** (Structure)
 ```
@@ -517,7 +533,7 @@ Which of these do you currently do manually?
 - [ ] Copy performance data to sheets
 - [ ] Create the same report weekly
 
-For each one you check off, I have an automation!
+For each one you check off, I'll suggest a way to automate or shorten it.
 
 ---
 

@@ -36,14 +36,19 @@ WHAT IS THE PRIMARY SYMPTOM?
 
 ```
 FUNDAMENTALS CHECKLIST:
-□ Pixel firing correctly? (⚠️ UI-only — no API for pixel diagnostics; check Events Manager)
+□ Pixel firing? (meta_query(account_id, "adspixels") shows last_fired_time; event diagnostics are in Events Manager)
 □ CAPI active? (Server events visible?)
-□ Event Match Quality? (⚠️ UI-only — EMQ score not available via API; check Events Manager)
+□ Event Match Quality? (meta_query(account_id, "dataset_quality", entity_id=<pixel_id>): composite_score per web event)
 □ Attribution window correct? (Match buying cycle)
-□ Budget sufficient? (Min €50/day for learning)
-□ Audience size adequate? (Min 1M+ for prospecting)
-□ Creative variety? (Min 3-5 ads per ad set)
+□ Budget sufficient? (Enough for about 50 results a week per ad set: daily budget of about 50 x CPA / 7)
+□ Audience size adequate? (Rule of thumb, not a Meta figure: 1M+ for prospecting)
+□ Creative variety? (Count distinct concepts, not ad objects: Meta treats look-alike ads as variations of the same creative)
 ```
+
+The 50 is Meta's learning phase figure: an ad set usually exits learning after about 50 results in the week after
+its last significant edit, and a budget too low for that keeps it learning limited (Meta Business Help Center,
+"About the learning phase", and "About learning limited", checked 2026-10-10). Meta scores EMQ out of 10 for
+website events sent through the Conversions API ("About event match quality").
 
 ### Step 2: Ad Relevance Diagnostics
 
@@ -55,11 +60,16 @@ Meta's 3 ranking metrics at ad level:
 | **Engagement Rate Ranking** | Expected engagement vs competitors | Better hooks, more compelling creative |
 | **Conversion Rate Ranking** | Expected CVR vs competitors | Landing page issues, audience mismatch |
 
+Meta does not show these rankings for ads with fewer than 500 impressions, and they are not inputs into the
+auction (Meta Business Help Center, "About ad relevance diagnostics", checked 2026-10-10).
+
 ### Step 3: Identify Root Cause
 
 Use diagnostic matrix below per symptom.
 
 ## Delivery Issues
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ### Symptom: No or Very Low Impressions
 
@@ -97,12 +107,18 @@ DIAGNOSE: Why no delivery?
 
 | Issue | Diagnose Via | Solution |
 |-------|--------------|----------|
-| Budget too low | Spend vs budget | Increase to €50+/day |
-| Bid cap too low | Delivery insights | Increase 20-30% or switch to Lowest Cost |
+| Budget too low | Results per week vs about 50 (Meta's learning phase figure) | Raise the budget or combine ad sets |
+| Bid cap too low | "Learning limited" tooltip names a low bid or cost control | Raise the cap (rule of thumb: 20-30%) or switch to LOWEST_COST_WITHOUT_CAP |
 | Audience too small | Audience size estimate | Broader targeting, remove restrictions |
 | Ads rejected | Ad status | Fix policy issues, appeal if incorrect |
 | Low quality | Quality Ranking | Improve creative, landing page |
-| Outbid | Auction overlap | Increase bid or switch strategy |
+| Outbid by competitors | Rising CPM, spend below budget | Increase bid or switch strategy |
+| Auction overlap (own ad sets) | Overlapping audiences across your ad sets | Combine similar ad sets or turn off overlapping ones |
+
+When two or more of your ads enter the same auction, Meta lets only the one with the highest total value
+compete, so your ads do not bid against each other; overlap can stop an ad set from spending its budget or leaving learning
+(Meta Business Help Center, "Understand auction overlap",
+checked 2026-10-10).
 
 ## Efficiency Problems
 
@@ -117,7 +133,7 @@ DIAGNOSE: Why high CPA?
 │   ├── CPM high, CTR normal → Audience/competition issue
 │   └── All metrics degraded → Multiple issues
 │
-├─► Funnel Metrics Checklist
+├─► Funnel Metrics Checklist (benchmarks: rules of thumb, not Meta figures; compare with the account's history)
 │   ├── CPM: €[X] (Benchmark: €15-25)
 │   ├── CTR: [X]% (Benchmark: 1-2%)
 │   ├── CPC: €[X] (Benchmark: €0.50-1.00)
@@ -145,17 +161,10 @@ DIAGNOSE: Why high CPA?
 ```
 PRIORITY ORDER:
 1. Fix tracking first (no data = optimizing blind)
-2. Landing page (often 2-3x lift possible)
-3. Creative (highest ongoing impact)
+2. Landing page
+3. Creative
 4. Targeting (let AI help)
 5. Bid strategy (fine-tuning)
-
-ROI PER FIX:
-├── Tracking: 50-200% improvement possible
-├── Landing page: 20-100% CVR lift
-├── Creative: 20-50% CTR lift
-├── Targeting: 10-30% efficiency gain
-└── Bid strategy: 5-15% fine-tuning
 ```
 
 ## Engagement Issues
@@ -163,7 +172,7 @@ ROI PER FIX:
 ### Symptom: Low CTR
 
 ```
-CTR BENCHMARK:
+CTR BENCHMARK (rules of thumb, not Meta figures: check them against the account's own history):
 ├── Poor: <0.8%
 ├── Average: 0.8-1.5%
 ├── Good: 1.5-2.5%
@@ -193,7 +202,7 @@ LOW CTR CAUSES:
 
 ```
 CREATIVE FIXES:
-├── Test 5+ new hook variations
+├── Test several new hook variations
 ├── A/B test headlines
 ├── Try different formats (video vs static)
 ├── Update visuals/thumbnails
@@ -217,7 +226,7 @@ COPY FIXES:
 ### Symptom: High CPM
 
 ```
-CPM BENCHMARK:
+CPM BENCHMARK (rules of thumb, not Meta figures: check them against the account's own history):
 ├── Low: <€10
 ├── Average: €15-25
 ├── High: €25-40
@@ -236,19 +245,23 @@ HIGH CPM CAUSES:
 │   └── Overlapping with own campaigns
 │
 └─► Quality Factors
-    ├── Low relevance score
+    ├── Below-average ad relevance diagnostics
     ├── Poor engagement history
     └── New ad account (no history)
 ```
+
+Ad quality and estimated action rates are part of the auction's total value, next to the bid, so a more relevant
+ad could win against higher bids (Meta Business Help Center, "About ad auctions", checked 2026-10-10). The old relevance score was
+replaced by ad relevance diagnostics.
 
 ### Solutions: High CPM
 
 ```
 IMMEDIATE ACTIONS:
-├── Expand audience (larger = cheaper)
+├── Expand audience
 ├── Remove restrictive targeting
-├── Test different placements (including Threads — new March 2026, lower CPM early stage)
-├── Check audience overlap tool
+├── Test different placements (including Threads)
+├── Check audience overlap with Meta's overlap tool in Ads Manager (the MCP audienceoverlap route returned a Meta error in our tests; see audience-overlap-detector)
 
 STRATEGIC ACTIONS:
 ├── Improve ad quality (better auction position)
@@ -267,7 +280,7 @@ SEASONAL STRATEGY:
 ### Symptom: Metrics Declining Over Time
 
 ```
-DECAY DIAGNOSIS:
+DECAY DIAGNOSIS (thresholds are rules of thumb, not Meta figures: check them against the account's own history):
 │
 ├─► Creative Fatigue
 │   ├── Symptoms: Rising frequency, falling CTR
@@ -295,19 +308,28 @@ DECAY DIAGNOSIS:
 ### Creative Fatigue Detection
 
 ```
-FATIGUE INDICATORS:
+META'S OWN SIGNAL:
+□ Delivery column shows "Creative limited" or "Creative fatigue"
+
+FATIGUE INDICATORS (rules of thumb, not Meta figures: check them against the account's own history):
 □ CTR dropping week-over-week
 □ Frequency >4 in past 7 days
 □ Same creative running >14-21 days
 □ Engagement Rate Ranking declining
 □ CPM increasing without market shift
 
-REFRESH CADENCE:
+REFRESH CADENCE (rules of thumb, not Meta figures: check them against the account's own history):
 ├── High-spend campaigns: Every 7-14 days
 ├── Medium-spend: Every 14-21 days
 ├── Low-spend: Every 21-30 days
 └── Evergreen/testimonials: Can run longer
 ```
+
+Meta shows "Creative limited" when an ad's cost per result is above that of ads you ran in the past but less than
+twice as much, and "Creative fatigue" at twice as much or more. Meta offers this only for ad sets with one creative,
+and not for Advantage+ catalog ads, dynamic creative or Advantage+ app campaigns (Meta Business Help Center, "About
+creative fatigue recommendations in Meta Ads Manager",
+checked 2026-10-10). Check the status in Ads Manager.
 
 ## Tracking Issues
 
@@ -344,16 +366,16 @@ TRACKING DIAGNOSTIC:
 
 ```
 QUICK FIXES:
-□ Test Pixel with Meta Pixel Helper (⚠️ UI-only — browser extension)
-□ Check Events Manager for recent events (⚠️ UI-only — event diagnostics not in API)
-□ Verify domain is verified
+□ Test Pixel with Meta Ads Data Advisor (formerly Meta Pixel Helper; a Chrome extension)
+□ Check Events Manager for recent events (meta_query(account_id, "adspixels") only gives last_fired_time)
+□ Skip domain verification and AEM event ranking: Meta no longer requires either for web event setup
 □ Confirm event parameters (value, currency)
 □ Check for duplicate events
 
-CAPI VERIFICATION (⚠️ all UI-only — Events Manager required):
+CAPI VERIFICATION (check these in Events Manager):
 □ Server events visible in Events Manager?
 □ Deduplication working? (Same event from 2 sources)
-□ Event Match Quality >7?
+□ Event Match Quality 6.0 or higher where possible? (Meta's recommendation, "Verifying Your Setup", Conversions API docs)
 □ Customer parameters hashed correctly?
 
 ATTRIBUTION CHECK:
@@ -362,7 +384,14 @@ ATTRIBUTION CHECK:
 □ Post-purchase survey attribution
 ```
 
+Meta's Aggregated Event Measurement page says web events need no AEM setup any more, the 8-event prioritization
+is gone, and domain verification is no longer required for event configuration, though a business may still need
+it for other reasons (Meta Business Help Center, "About Meta's Aggregated Event Measurement", checked 2026-10-10). Meta renamed the Pixel Helper
+extension to Meta Ads Data Advisor (Meta for Developers, "Meta Ads Data Advisor", checked 2026-10-10).
+
 ## Kill vs Scale Decision
+
+Rules of thumb, not Meta figures: check them against the account's own history.
 
 ### Decision Framework
 
@@ -417,6 +446,9 @@ meta_get_insights(account_id="act_XXXXX", level="campaign", date_preset="last_7d
 
 # Get ad-level breakdown to isolate creative issues
 meta_get_insights(account_id="act_XXXXX", level="ad", date_preset="last_7d", fields=["spend","impressions","clicks","ctr","frequency","actions","quality_ranking","engagement_rate_ranking","conversion_rate_ranking"])
+
+# meta_get_insights returns one page of rows: while a response has paging.next, fetch the next page
+meta_query(account_id="act_XXXXX", entity_type="ads", pagination_url="<paging.next>")
 ```
 
 ## Troubleshooting Output Template
@@ -448,10 +480,10 @@ meta_get_insights(account_id="act_XXXXX", level="ad", date_preset="last_7d", fie
 ### Key Metrics
 | Metric | Current | Benchmark | Status |
 |--------|---------|-----------|--------|
-| CPM | €[X] | €15-25 | [OK/High/Low] |
-| CTR | [X]% | 1-2% | [OK/High/Low] |
-| CPC | €[X] | €0.50-1 | [OK/High/Low] |
-| CVR | [X]% | 2-5% | [OK/High/Low] |
+| CPM | €[X] | [from this account's history] | [OK/High/Low] |
+| CTR | [X]% | [from this account's history] | [OK/High/Low] |
+| CPC | €[X] | [from this account's history] | [OK/High/Low] |
+| CVR | [X]% | [from this account's history] | [OK/High/Low] |
 | CPA | €[X] | €[target] | [OK/High] |
 | ROAS | [X]x | [target]x | [OK/Low] |
 
@@ -473,5 +505,5 @@ meta_get_insights(account_id="act_XXXXX", level="ad", date_preset="last_7d", fie
 - [Metric 2]: Watch for [threshold]
 
 ## Prognosis
-[Expected outcome if recommendations followed]
+[Metrics to re-check after the actions, with today's values as the baseline. Estimate an outcome only from this account's own data, with the assumptions stated; otherwise write "not estimated".]
 ```

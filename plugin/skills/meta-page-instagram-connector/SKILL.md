@@ -4,13 +4,13 @@ description: "This skill should be used when the user wants to set up a client's
 ---
 # Meta Page & Instagram Connector
 
-Wire a client's **Facebook Page** and **Instagram account** onto their profile so their Meta ads post from the right Page and run on the right Instagram identity. Once set, `meta_create_ad` resolves these automatically — you never pass `page_id` / `instagram_user_id` per ad. Because you pick the Instagram account from the ones the ad account is actually linked to, this heads off most `1815199` ("no access to this Instagram account") failures — though a wrong or later-revoked IG can still surface at ad-creation time.
+Wire a client's **Facebook Page** and **Instagram account** onto their profile so their Meta ads post from the right Page and run on the right Instagram identity. Once set, `meta_create_ad` resolves these automatically as long as this is the only client profile that links the ad account, so you do not pass `page_id` / `instagram_user_id` per ad. Because you pick the Instagram account from the ones linked to the ad account, you avoid saving an id the account cannot access, which is what produces `1815199` ("no access to this Instagram account"); a wrong or later-revoked IG can still surface at ad-creation time.
 
 This skill orchestrates existing tools (`meta_wire_pages`, `clients`, `meta_query`, `clients_update`); it changes nothing until you save.
 
 ## Fast path (recommended): `meta_wire_pages`
 
-For most clients there is exactly one promotable Page and one connected Instagram account per ad account — `meta_wire_pages` discovers and (optionally) wires them in one call:
+When an ad account has exactly one promotable Page and one connected Instagram account, `meta_wire_pages` discovers and (optionally) wires them in one call:
 
 ```python
 # 1. Preview — discovers Pages + IG per Meta-linked account, proposes the
@@ -25,6 +25,7 @@ Each result row reports `proposed_facebook_page_id` / `proposed_instagram_user_i
 - `would_wire` / `wired` — a single Page and/or IG was the obvious choice.
 - `needs_manual_choice` — 0 or >1 options; fall back to the manual flow below to pick.
 - `already_wired` — both ids already set (nothing to do).
+- `not_connected` / `discovery_failed`: the ad account is on the profile but not connected for you, or Meta refused the Page/Instagram lookup (the row carries the error).
 
 Use the manual flow below when `status` is `needs_manual_choice`, for **Facebook-only** clients (no Instagram), or to override an auto-wired choice.
 
@@ -43,7 +44,7 @@ clients(action="get", client="acme-corp")     # by slug/UUID
 clients(action="get", account_id="act_1234567890")
 ```
 
-Prefer identifying the client by slug/UUID (`client=`). If you only have the ad account, run `clients(action="list")` first and check how many clients carry that `account_id` in their `linked_accounts`: if more than one, confirm with the user which client this is for before saving — do not let a `get`-by-`account_id` silently pick one. Then read the chosen client's `linked_accounts` for the `platform == "meta"` entries — each has `account_id`, and (once set) `facebook_page_id` / `instagram_user_id`.
+Prefer identifying the client by slug/UUID (`client=`). If you only have the ad account, note that `clients(action="get", account_id=...)` returns the first client that links it. `clients(action="list")` shows only a linked-accounts count per client, so open the candidates with `clients(action="get", client=...)` and check their `linked_accounts`: if more than one client carries that `account_id`, confirm with the user which client this is for before saving. Do not let a `get`-by-`account_id` silently pick one. Then read the chosen client's `linked_accounts` for the `platform == "meta"` entries: each has `account_id`, and (once set) `facebook_page_id` / `instagram_user_id`.
 
 ### 2. Discover the Pages and Instagram accounts
 
@@ -52,7 +53,7 @@ meta_query(account_id="act_1234567890", entity_type="promotepages")
 # Pages this account can advertise: each item has an id + name.
 
 meta_query(account_id="act_1234567890", entity_type="connected_instagram_accounts")
-# Instagram accounts linked to the page/account: id + username (+ follower_count, etc).
+# Instagram accounts connected to this ad account: id + username (+ follower_count, etc).
 ```
 
 ### 3. Let the user choose
@@ -86,7 +87,7 @@ clients_update(
 clients(action="get", client="acme-corp")   # confirm facebook_page_id / instagram_user_id are set
 ```
 
-From now on, `meta_create_ad` for this client resolves the Page/IG automatically. To launch, `use ad-launch-playbook`.
+From now on, `meta_create_ad` for this client resolves the Page/IG automatically, while no other client profile links the same ad account. To launch, `use ad-launch-playbook`.
 
 ## Edge cases
 
@@ -97,6 +98,7 @@ From now on, `meta_create_ad` for this client resolves the Page/IG automatically
 
 ## Tools used
 
+- `meta_wire_pages(client=..., apply=...)`: preview, and with `apply=True` save, the unambiguous Page/IG ids for the client's Meta ad accounts.
 - `clients(action="get")` — read the client profile + its Meta `linked_accounts`.
 - `meta_query(entity_type="promotepages")` — discover promotable Pages (id + name).
 - `meta_query(entity_type="connected_instagram_accounts")` — discover linked Instagram accounts (id + username).

@@ -54,17 +54,17 @@ Loading every skill eagerly is anti-pattern — search and load on demand.
 - `meta_get_insights` / `linkedin_get_analytics` / `tiktok_get_report` — Performance data
 - `meta_get_creatives` / `linkedin_get_creatives_with_images` / `tiktok_get_ads_with_creatives` — Creative data
 - `meta_query(entity_type="customaudiences")` — List custom audiences (name, size, subtype)
-- `meta_query(entity_type="audienceoverlap", entity_id="ID1,ID2")` — Compare audience overlap
-- `meta_query(entity_type="productcatalogs")` — List product catalogs + diagnostics
+- Audience overlap: use Meta's audience overlap tool in Ads Manager (Audiences, select the audiences, then Actions, Show audience overlap; "About overlapping audiences", Meta Business Help Center). `meta_query(entity_type="audienceoverlap", entity_id="ID1,ID2")` returned Meta error #100 for valid audience IDs when tested (July 2026), so do not rely on it.
 - `tiktok_get_audiences` — TikTok audience segments
 - `google_ads_run_keyword_planner` — Keyword research
 - `google_ads_run_gaql(query="FROM auction_insight...")` — Competitor overlap and positioning
 
 ### Write Operations (Execution)
-- `meta_create` — Create campaigns and ad sets (with targeting, budgets, objectives)
+- `meta_create`: create campaigns and ad sets (PAUSED by default). A campaign needs `objective`, `special_ad_categories` (pass `[]` when none applies; Meta rejects the call without it) and either a campaign budget (`daily_budget` or `lifetime_budget` in cents; CBO, the default) or `budget_mode="ABO"` (no campaign budget; each ad set sets its own). EU/EEA ad sets also need `dsa_payor` and `dsa_beneficiary`.
+- ROAS goal: on the ad set pass `bid_strategy="LOWEST_COST_WITH_MIN_ROAS"`, a `roas_floor` and `optimization_goal="VALUE"`; under CBO also create the campaign with that strategy (Meta's Advantage campaign budget guide puts the strategy on the campaign and the ROAS floor on the ad set). Meta can refuse a ROAS goal for an ad account owned by a new business until the business has followed Meta's policies for several weeks or has been verified.
 - `meta_create_ad` — Create ads (image upload + creative + ad in one step)
 - `meta_duplicate` — Duplicate ads with creative overrides (A/B testing)
-- `meta_update` — Update status, budgets, names
+- `meta_update`: update status (`ACTIVE`, `PAUSED` or `ARCHIVED`), budgets and names. A budget change of more than 20%, or an ad set change to targeting, optimization goal, bidding or promoted object, needs `acknowledge_learning_reset=True`.
 - `google_ads_mutate` — Create/update/remove campaigns, ad groups, ads, keywords
 
 ### LinkedIn Lead Gen Form Metrics
@@ -90,31 +90,35 @@ Loading every skill eagerly is anti-pattern — search and load on demand.
 6. Verify by pulling back created entities
 
 ### Budget & Bidding Optimization
+Rules of thumb, not Meta figures: check them against the account's own history.
+
 - Analyze current spend vs performance across platforms
 - Detect pacing issues (under/over-spending)
 - Recommend bid strategy changes based on data volume
-- Calculate scaling recommendations (max 20-30% increase at a time)
+- Calculate scaling recommendations (raise a budget by about 20% or less at a time)
 - Consider learning phase impact on all changes
 
 ### Automated Budget Rules
-Use automated-rules-builder skills to set up guardrails:
-- **Weekend budget reduction**: Lower budgets Friday evening, restore Monday
+Rules of thumb, not Meta figures: check them against the account's own history.
+
+Use automated-rules-builder skills to set up guardrails (create Meta rules in Ads Manager; no Ad Superpowers tool creates them):
+- **Weekend budget schedule**: lower or raise budgets for the weekend, based on the account's own day-of-week results
 - **CPA caps**: Pause ad sets when CPA exceeds 2x target for 48h
 - **Fatigue auto-pause**: Pause when frequency > 4/week AND CTR < 50% of average
 - **Budget scaling**: Auto-increase budget 20% when CPA < target for 3 days
 
 ### Audience Management
 - List custom audiences: `meta_query(entity_type="customaudiences")`
-- Detect overlap: `meta_query(entity_type="audienceoverlap", entity_id="ID1,ID2")`
+- Detect overlap with Meta's audience overlap tool in Ads Manager (see Read Operations above)
 - Design lookalike strategies (platform-specific sizing)
 - Manage exclusions per funnel stage
 - LinkedIn ABM: company list targeting, account-based strategies
 
 ### Shopping & Catalog Campaigns
-- **Meta**: Advantage+ Catalog Ads setup, product set strategy, feed optimization
+- **Meta**: catalog ads (Meta now calls Advantage+ catalog ads "Products from your catalog"), product set strategy, feed optimization. With a product set ID from Commerce Manager, create the ad with `meta_create_ad(product_set_id=...)` in an ad set whose `promoted_object` binds that product set
 - **Google**: Shopping campaigns, PMax retail, feed optimization
 - **TikTok**: TikTok Shop ads, product catalog integration
-- Check catalog health: `meta_query(entity_type="productcatalogs")`
+- Check catalog health and diagnostics in Commerce Manager; not available through MCP
 
 ### PMax Management (Google Ads)
 - Asset group optimization (use pmax-asset-group-optimizer)
