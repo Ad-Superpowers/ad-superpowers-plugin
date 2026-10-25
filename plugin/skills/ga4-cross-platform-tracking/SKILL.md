@@ -339,7 +339,9 @@ WHAT IT IS:
 ├── A budget planning tool inside GA4 that combines data from multiple ad platforms
 ├── Supported platforms: Google Ads (native), Meta, LinkedIn, TikTok, Snapchat (import)
 ├── Location: GA4 → Advertising → Cross-channel budgeting
-└── Uses GA4's data-driven attribution as the single source of truth
+└── Attributes all platforms with GA4's data-driven model. GA4 counts no
+    view-through conversions, so show its figures beside each platform's
+    own numbers, not in their place
 
 WHY IT MATTERS FOR TRACKING SETUP:
 ├── Consistent UTMs are critical for this feature to work correctly

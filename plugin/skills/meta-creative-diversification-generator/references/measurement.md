@@ -18,20 +18,21 @@ same id. Quote the `warnings` array: the user can act on a warning, not on silen
 | Top-3 share | Percentage of resolved spend held by the three biggest distinct creatives | `top3_spend_share_pct` |
 | Even split for the top 3 | min(3, distinct) / distinct x 100: what the top 3 would hold if spend were even | `even_split_top3_pct` |
 | Freshness | Age in days at `as_of` of the newest creative that still carries at least 10% of resolved spend. A creative is as old as its first launch. Needs `as_of`; the script never uses the clock | `freshness` |
-| Hook rate | 3-second video plays (`actions[video_view]`) / impressions of all video ads; null when no video ad reports the action | `hook_rate` |
+| Hook rate | 3-second video plays (`actions[video_view]`) / impressions of video-only ads: a plain video, or a flexible or carousel ad whose assets are all videos. Null when no such ad reports the action. Flexible and carousel ads that mix images and video also deliver as images, so views over their impressions would understate the hook: they are left out and counted in `hook_rate_basis.mixed_media_ads_left_out`, with a warning | `hook_rate` |
 | KPI | Conversions, revenue, ROAS and cost per result (CPA or CPL) for the KPI action (`purchase` or `lead`): from the account row when `account_totals` carries `spend` plus an `actions` or `action_values` list (`basis: "account"`, divided by that spend), else summed over the ads (`basis: "ads"`). `spend` in the block is the spend it divides by. The grid's results stay ad-based and need not add up to an account-based KPI line | `incremental` |
 | Incremental | Meta's incremental attribution: the `incrementality` value for the KPI action, on the same basis; iROAS = incremental revenue / spend. Each figure is null when its own key is absent (lead gen has no incremental revenue) | `incremental` |
 | Media mix | Percentage of total spend per media kind (image, video, carousel, flexible, none), unresolved spend apart | `media_mix_pct` |
 | Formats per ad set | Ads grouped by `adset_id` (the insights row's when the ad itself was not read; `unknown`, with a warning, when neither has one), biggest spend first, until 95% of total spend is covered, capped at 30 rows (`adsets_omitted`, `adsets_omitted_spend`). Per set: spend, share of total spend, the media kind mix, and `missing`: image or video when no ad in the set shows it. A video's thumbnail is not an image; a carousel counts by its cards, a flexible ad by its assets. `has_image`, `has_video` and `missing` are null when no ad in the set shows a media kind the script can read (an ad whose creative was not read, a post with copy only). This is the media kind, not the aspect ratio: vertical or square is not in the data | `adsets` |
 
 **The inventory.** The X-ray also lists distinct creatives by spend in `creatives`, until 95% of the
-resolved spend is covered, capped at 60 rows; `creatives_omitted` and `omitted_spend` give the rest.
+resolved spend is covered, capped at 60 rows; `creatives_omitted`, `omitted_spend` and `omitted_share_pct`
+(of resolved spend, like each row's share) give the rest.
 Each row has a stable `key`, spend and share, ad count, media kind, first launch, impressions, hook rate,
 Meta's relevance rankings of its biggest ad, up to three `ad_ids` (biggest first), the `creative_id`
 when the read included it, any launch `tag`, and the first copy line. Label creatives from these rows,
 then pass `labels_by_creative` (key to codes) to `analyze`.
 
-**Hook band.** Among the listed video and flexible creatives with a hook rate and at least 2,000
+**Hook band.** Among the listed video-only creatives with a hook rate and at least 2,000
 impressions, and only when there are four or more, the script marks the lowest and the highest quarter
 (`hook_band`: `bottom_quarter`, `top_quarter`, otherwise `middle`). A quarter is the count divided by
 four, rounded down; ties break on the creative key. That is a comparison inside this account, not a
@@ -59,6 +60,7 @@ missing motivator both count as unlabelled.
 | Seen executions | Percentage of labelled spend whose execution is set and not `NV` | `execution_seen_pct` |
 | Sharpening set | The fewest creatives, biggest unseen spend first, that carry 80% of the spend without a seen execution | `sharpen` |
 | M0 share | Percentage of spend with no motivator | `m0_share_pct` |
+| M0 split | The M0 share by where it sits: `listed` (on the X-ray list, left without a motivator), `below_the_list` (under the list's cut, so never offered for labelling), `unresolved` (creative not read). Percent of total spend, in tenths that add up to `m0_share_pct`. `below_the_list` holds only the unlabelled part of the creatives under the cut, so it can be smaller than the X-ray's `omitted_share_pct`, which counts all of them on resolved spend | `m0_breakdown_pct` |
 | Label sources | Ads labelled by their own labels, a creative label, a tag, or not at all | `label_sources` |
 | Motivator and execution mix | Percentage per motivator over all spend (M0 included), and per execution over labelled spend (`NV` when no execution label) | `motivator_mix_pct`, `execution_mix_pct` |
 | Angles in use | The angle codes that have at least one labelled cell | `angles_used` |

@@ -18,13 +18,13 @@ Analyze e-commerce ad performance for last 30 days
 ## OUTPUT FORMAT (CRITICAL - follow this EXACT structure)
 
 ### REVENUE OVERVIEW
-| Metric | Value | vs Prior Period | vs Target |
-|--------|-------|-----------------|-----------|
-| Ad Revenue | | | |
-| Ad Spend | | | |
-| Blended ROAS | | | |
-| Orders from Ads | | | |
-| AOV | | | |
+| Platform | Ad Revenue | Ad Spend | ROAS | Orders from Ads | AOV | vs Prior Period | vs Target |
+|----------|------------|----------|------|-----------------|-----|-----------------|-----------|
+| Meta | | | | | | | |
+| Google Ads | | | | | | | |
+| **Total ad spend (per currency)** | | | | | | | |
+
+Revenue, ROAS and orders are each platform's own reported numbers; never sum them across platforms. If GA4 or the shop gives one common revenue figure, add one blended ROAS from it under the table, labelled with the source.
 
 ### PRODUCT PERFORMANCE - WINNERS
 | Product/Category | Revenue | ROAS | Orders | Platform | Action |
@@ -94,8 +94,10 @@ For product-level:
 
 **ROAS Calculation:**
 ```
-Product ROAS = Revenue attributed to ads / Ad spend on product
-Blended ROAS = Total ad revenue / Total ad spend
+Product ROAS = Revenue attributed to ads / Ad spend on product   (per platform)
+Platform ROAS = That platform's reported revenue / That platform's spend
+Blended ROAS = Revenue from ONE common source (GA4 or the shop) / Total ad spend in that currency
+               (never the sum of each platform's reported revenue)
 Efficiency Score = ROAS * Volume Factor (orders > 10 = 1.0, 5-10 = 0.8, <5 = 0.5)
 ```
 

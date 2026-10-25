@@ -131,9 +131,10 @@ iROAS formula: Reported ROAS x Incrementality% = True incremental ROAS
 ## EXECUTION STEPS
 
 ### Step 1: Gather Baseline Data
-- **Meta:** `meta_get_insights(account_id, date_preset="last_90d", level="campaign")`
-- **Google Ads:** `google_ads_run_gaql(customer_id=customer_id, query="SELECT campaign.id, campaign.name, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM campaign WHERE segments.date DURING LAST_90_DAYS ORDER BY metrics.cost_micros DESC")`
-- **GA4:** `ga4_run_report(property_id, start_date="90daysAgo", end_date="today", metrics=["conversions","totalRevenue"], dimensions=["source","medium"])`
+One date window for every platform: START_DATE = 90 days before today, END_DATE = today (YYYY-MM-DD). Pass the same two dates to every call below.
+- **Meta:** `meta_get_insights(account_id, time_range={"since": "START_DATE", "until": "END_DATE"}, level="campaign")`
+- **Google Ads:** `google_ads_run_gaql(customer_id=customer_id, query="SELECT campaign.id, campaign.name, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM campaign WHERE segments.date BETWEEN 'START_DATE' AND 'END_DATE' ORDER BY metrics.cost_micros DESC")`
+- **GA4:** `ga4_run_report(property_id, start_date="START_DATE", end_date="END_DATE", metrics=["conversions","totalRevenue"], dimensions=["source","medium"])`
 
 ### Step 2: Determine Test Type
 Based on platform, spend level, geography, and conversion volume, select from the test type table. If <200 monthly conversions, prefer platform-native lift studies.

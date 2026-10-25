@@ -19,6 +19,8 @@ Compare performance across all connected ad platforms for last 30 days, rank by 
 | Platform | Spend | % Budget | Convs | CPA | ROAS | Rank |
 |----------|-------|----------|-------|-----|------|------|
 
+Each row uses that platform's own reported numbers and its own conversion definition. Never sum conversions or revenue across platforms; a total row shows spend only, per currency.
+
 ### ATTRIBUTION RECONCILIATION
 | Platform | Platform Convs | GA4 Convs | Variance | Status |
 |----------|----------------|-----------|----------|--------|
@@ -28,8 +30,8 @@ Compare performance across all connected ad platforms for last 30 days, rank by 
 | Use Case | Source | Why |
 |----------|--------|-----|
 | Single platform optimization | Platform data | Algorithm optimizes on its own signals |
-| Cross-channel budget moves | GA4 (adjust +25-35%) | Consistent attribution model |
-| Stakeholder reporting | GA4 | Consistency builds trust |
+| Cross-channel budget moves | Platform data and GA4, side by side, unadjusted | Platforms and GA4 count conversions differently; neither is the whole truth |
+| Stakeholder reporting | Platform data per platform, with GA4 beside it | GA4 is one common yardstick, not a source of truth |
 
 ### BUDGET REALLOCATION
 | Platform | Current | Recommended | Change | Confidence |
@@ -52,17 +54,19 @@ Confidence: HIGH (1000+ convs, >25% diff) | MEDIUM (100-999 convs) | LOW (<100 c
 
 ### Step 2: Gather Data
 
-**Meta:** `meta_get_insights(account_id="FROM_STEP_1", date_preset="last_30d", level="account", fields=["spend","impressions","reach","frequency","clicks","actions","action_values","cpm","cpc","ctr","purchase_roas"])`
+**One date window for every platform:** START_DATE and END_DATE (YYYY-MM-DD) span last 30 days, ending today: the same window the workflow's next_actions use. Pass the same two dates to every call below; never compare platforms over different windows.
 
-**Google Ads:** `google_ads_run_gaql(customer_id="FROM_STEP_1", query="SELECT campaign.name, metrics.impressions, metrics.clicks, metrics.ctr, metrics.average_cpc, metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM campaign WHERE segments.date DURING LAST_30_DAYS ORDER BY metrics.cost_micros DESC")`
+**Meta:** `meta_get_insights(account_id="FROM_STEP_1", time_range={"since": "START_DATE", "until": "END_DATE"}, level="account", fields=["spend","impressions","reach","frequency","clicks","actions","action_values","cpm","cpc","ctr","purchase_roas"])`
 
-**TikTok:** `tiktok_get_report(start_date="YYYY-MM-DD", end_date="YYYY-MM-DD", level="campaign", metrics=["spend","impressions","reach","frequency","clicks","conversions"])`
+**Google Ads:** `google_ads_run_gaql(customer_id="FROM_STEP_1", query="SELECT campaign.name, metrics.impressions, metrics.clicks, metrics.ctr, metrics.average_cpc, metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM campaign WHERE segments.date BETWEEN 'START_DATE' AND 'END_DATE' ORDER BY metrics.cost_micros DESC")`
 
-**LinkedIn:** `linkedin_get_analytics(account_id="FROM_STEP_1", start_date="YYYY-MM-DD", end_date="YYYY-MM-DD", fields=["impressions","clicks","costInLocalCurrency","externalWebsiteConversions"])`
+**TikTok:** `tiktok_get_report(start_date="START_DATE", end_date="END_DATE", level="campaign", metrics=["spend","impressions","reach","frequency","clicks","conversions"])`
 
-**GA4:** `ga4_run_report(property_id="FROM_STEP_1", start_date="30daysAgo", end_date="yesterday", metrics=["conversions","totalRevenue"], dimensions=["sessionDefaultChannelGroup"])`
+**LinkedIn:** `linkedin_get_analytics(account_id="FROM_STEP_1", start_date="START_DATE", end_date="END_DATE", fields=["impressions","clicks","costInLocalCurrency","externalWebsiteConversions"])`
 
-**Auction Insights (optional):** `google_ads_run_gaql(customer_id="...", query="SELECT campaign.name, segments.auction_insight_domain, metrics.auction_insight_search_impression_share, metrics.auction_insight_search_outranking_share FROM auction_insight WHERE segments.date DURING LAST_30_DAYS LIMIT 15")`
+**GA4:** `ga4_run_report(property_id="FROM_STEP_1", start_date="START_DATE", end_date="END_DATE", metrics=["conversions","totalRevenue"], dimensions=["sessionDefaultChannelGroup"])`
+
+**Auction Insights (optional):** `google_ads_run_gaql(customer_id="...", query="SELECT campaign.name, segments.auction_insight_domain, metrics.auction_insight_search_impression_share, metrics.auction_insight_search_outranking_share FROM auction_insight WHERE segments.date BETWEEN 'START_DATE' AND 'END_DATE' LIMIT 15")`
 
 ### Step 3: Analyze
 
@@ -90,9 +94,10 @@ If variance exceeds ranges: investigate pixel firing, CAPI, event dedup, UTMs, C
 | LinkedIn | 2-4x | 75-90% | 1.5-3.6x |
 
 Key: Retargeting/brand search = HIGH ROAS but LOW incrementality.
+These are industry estimates, not measurements of this account. Show an estimated iROAS as a separate, labelled column beside the reported ROAS, never in its place.
 
 **Reallocation caveats:**
-- Meta ROAS appears lower in GA4 (VTA undercount) - adjust +20%
+- Meta ROAS often appears lower in GA4 because GA4 counts no view-through conversions. Show the platform-reported and GA4 figures side by side, unadjusted and labelled; never apply an uplift to one platform.
 - LinkedIn ROI undervalued (long B2B cycles, 30d attribution)
 - TikTok upper-funnel contribution often uncredited
 

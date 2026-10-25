@@ -371,7 +371,8 @@ GA4 will show 30-50% FEWER conversions than TikTok because:
 
 This is NORMAL. Use both:
 ├─ TikTok data: Platform optimization
-└─ GA4 data: Cross-channel comparison
+└─ GA4 data: A common yardstick for cross-channel comparison,
+   shown beside TikTok's own numbers, never in their place
 ```
 
 ## Cross-Platform Attribution Comparison

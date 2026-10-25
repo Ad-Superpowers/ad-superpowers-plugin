@@ -94,6 +94,8 @@ This is where ad platform data becomes critical. Different channels attract diff
 | Google Shopping | 80-110 | Price-comparison shoppers, variable loyalty |
 | Google Display | 50-70 | Lowest intent, highest churn |
 
+These indices are illustrative industry patterns, not measurements. Calculate each channel's index from the client's own cohorts (above) before you use it for a CPA target or a budget decision.
+
 **Action:** Don't apply one CPA target across all channels. Willingness to pay for acquisition should scale with expected LTV.
 
 ---
@@ -235,6 +237,8 @@ Example:
 
 ### Max CPA by Channel (Using LTV Index)
 
+Illustrative, with the example indices above. Replace them with the client's own cohort indices.
+
 | Channel | LTV Index | Base Max CPA €95 | Adjusted Max CPA |
 |---------|----------|------------------|------------------|
 | Google Brand Search | 130% | €95 | €123.50 |
@@ -371,16 +375,16 @@ Step 1: Establish truth
   → Shopify/Stripe total revenue for the period
 
 Step 2: Compare platform claims
-  → Sum of all platform-reported revenue
+  → Sum of all platform-reported revenue (a diagnostic only; never report this sum as a result)
   → This WILL exceed Shopify revenue (20-80% inflation is normal)
 
 Step 3: Calculate attribution inflation factor
   → Inflation = Sum of platform revenue / Actual revenue
   → Typical: 1.3x to 1.8x (30-80% overcounting)
 
-Step 4: Apply deflator to per-channel ROAS
-  → Adjusted ROAS = Reported ROAS / Inflation Factor
-  → This gives more realistic per-channel contribution
+Step 4: Show a deflated ROAS beside each channel's reported ROAS
+  → Deflated ROAS = Reported ROAS / Inflation Factor (the same factor for every channel)
+  → Label it as an estimate; keep the reported ROAS in its own column
 
 Step 5: Use MER as the check
   → If MER is healthy (>5x), channel allocation matters less than total efficiency
@@ -438,7 +442,7 @@ Cut priority (first to cut):
 
 Never cut last (even if ROAS looks bad):
   - Top-of-funnel that feeds retargeting audiences
-  - Brand search (defensive, competitors will bid on your terms)
+  - Brand search where competitors actively bid on your brand terms (check Auction Insights first)
 ```
 
 ---

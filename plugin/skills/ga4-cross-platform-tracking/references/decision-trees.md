@@ -147,7 +147,7 @@ Expected discrepancies:
 
 Solution:
 ├── Document expected differences
-├── Use GA4 as source of truth for cross-platform
+├── Use GA4 as a common yardstick for cross-platform, beside each platform's own numbers
 ├── Use platform data for platform-specific optimization
 └── Report both metrics, explain difference
 

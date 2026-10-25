@@ -135,7 +135,7 @@ Each fed run reads the account again, so run the X-ray, analyze and plan on the 
 
 1. **Scope.** Confirm the account, the window (default last 30 days), the business model and the KPI.
    State the call cost. If the organisation uses client profiles, read the client's `## Creative`
-   section: the goal, the last audits and the `LABELS` line.
+   section: the goal, the last audits, the `LABELS` line and the `CODES` line.
 2. **X-ray.** Run it and give the quick read:
    - one line: "Top 3 took {top3_spend_share_pct}%; an even split would give them
      {even_split_top3_pct}%", plus effective and distinct creatives and duplicate stacks;
@@ -147,14 +147,16 @@ Each fed run reads the account again, so run the X-ray, analyze and plan on the 
 3. **Label.** Work from the `creatives` rows, biggest spend first:
    - labels on the snapshot's `LABELS` line were confirmed in an earlier audit: pass them on in
      `labels_by_creative`, mark them as carried over with the snapshot date, and do not propose them
-     again. A carried label beats a tag in the ad name, so ask where a row's `tag` now says otherwise;
+     again. Their motivators keep the names on the `CODES` line. A carried label beats a tag in the ad
+     name, so ask where a row's `tag` now says otherwise;
    - motivators from customer evidence the user supplies; propose, then confirm (U);
    - angles from the copy (C);
    - executions only from seen visuals (P, I), a tag (N) or the user (U); otherwise `NV`.
    Show the proposed labels as a table with evidence codes and get the user's confirmation. The list
    stops at 95% of the resolved spend or 60 creatives (`creatives_omitted`, `omitted_spend`): that tail stays unlabelled unless
    tagged or carried on the `LABELS` line, and counts as M0. Say so.
-4. **Map.** Run analyze. Show effective messages, the M0 share, label sources, and the grid (motivators
+4. **Map.** Run analyze. Show effective messages, the M0 share with its split (`m0_breakdown_pct`: on the
+   list but unlabelled, below the list, creative not read), label sources, and the grid (motivators
    as rows, angles as columns; each filled cell with its share of spend, its `read` and its `quadrant`).
    - If `execution_seen_pct` is 60 or more, also show effective concepts and the execution mix.
    - If it is below 60, show the media mix instead of executions, and ask for visuals of the creatives in
@@ -168,8 +170,8 @@ Each fed run reads the account again, so run the X-ray, analyze and plan on the 
 7. **Briefs**, when a plan ran. One per chosen cell (format below). Copy goes to
    meta-ad-copy-generator, scripts to meta-video-script-writer; launching, with the tag in the ad name,
    goes through meta-ad-launch-playbook: paused, confirmed per batch.
-8. **Remember.** Offer the snapshot, with its `LABELS` line, and give the handoff block at decision
-   points.
+8. **Remember.** Offer the snapshot, with its `LABELS` and `CODES` lines, and give the handoff block at
+   decision points.
 
 ## The report
 
@@ -183,10 +185,12 @@ data is missing, say what is missing (for example the labels) instead of leaving
    here which of the numbers below describe only part of the account.
 3. **X-ray.** The picture from `measurement.md` where the host can draw it, then these tiles: the top-3
    share against the even split, effective and distinct creatives, duplicate stacks, freshness, hook rate
-   and the media mix, then the ad sets that miss a format (`adsets`).
+   (video-only ads; say how many ads that mix images and video it leaves out,
+   `mixed_media_ads_left_out`) and the media mix, then the ad sets that miss a format (`adsets`).
 4. **Grid.** Motivators as rows, angles as columns; each filled cell with its share of spend, `read`,
-   `quadrant`, results, cost per result and `index_vs_layer`. Under it: effective messages, the M0 share and
-   `label_sources`, plus effective concepts and the execution mix when `execution_seen_pct` is 60 or more.
+   `quadrant`, results, cost per result and `index_vs_layer`. Under it: effective messages, the M0 share with
+   its split (`m0_breakdown_pct`) and `label_sources`, plus effective concepts and the execution mix when
+   `execution_seen_pct` is 60 or more.
 5. **Per angle.** For each angle in use, its creatives biggest first: labels, share of spend and the first
    copy line (`copy`); then the unlabelled creatives, apart.
 6. **Three opportunities.** In gap-ranking order, each as "opportunity supported by <data>".
@@ -198,7 +202,9 @@ data is missing, say what is missing (for example the labels) instead of leaving
 
 **Codes with names.** Show a code with its plain name the first time it appears in a section: "M1 wants
 weekends back from garden work", "PRB Problem and fix". A motivator's name is the customer wording the
-user confirmed. Angles and executions use the starter-set names unless the user renamed them:
+user confirmed; a later audit takes it from the snapshot's `CODES` line. A motivator without a `CODES`
+entry (an older snapshot, or a tag in an ad name) has no name on file: show the code alone, say that its
+name is missing, and ask the user; never make one up. Angles and executions use the starter-set names unless the user renamed them:
 - Angles: EMO Emotional appeal · FEA Product features · PRB Problem and fix · RES Result · PRF Proof ·
   CMP Comparison · DBT Doubt answered · HOW How it works · VAL Value and offer · STO Story.
 - Executions: CRT Person to camera · DEM Hands-on demo · PRD Product shot · SCN Scene · TXT Text-led ·
@@ -277,7 +283,8 @@ The skill does not run on its own: each step is a run the user starts. What carr
    script reads them back.
 2. **A snapshot in the client profile**: opt-in, in the client's `attention_points` field (10,000
    characters, shared with the onboarding digest and other skills), under its own `## Creative` heading,
-   at most 2,500 characters: one goal line, one `LABELS` line and the last three audits. Write it only
+   at most 2,500 characters: one goal line, one `LABELS` line, one `CODES` line and the last three
+   audits. Write it only
    after an explicit yes. Read the field with `clients(action="get", client="<slug or id>")`, replace
    only the `## Creative` section, keep everything else as it was, and write the whole field back with
    `clients_update(action="update", client="<same slug or id>", attention_points=...)`. Keep the whole
@@ -289,6 +296,7 @@ The skill does not run on its own: each step is a run the user starts. What carr
    ## Creative (asp-creative/1)
    GOAL 2026-10-09: eff >= 8 · vertical video in every ad set · open M3 row · iROAS >= 1.3
    LABELS c8a1b21f M1-RES-PRD · c34511bc M1-EMO-SCN · cea2ff93 M2-CMP-PRD · cd7abe90 M1-HOW-DEM · c218a6f6 M1-VAL-PRD · c445ac20 M1-PRF-TXT · cc4fab3b M1-STO-CRT · cf7a3983 M1-EMO-PRD
+   CODES M1 wants weekends back from garden work · M2 tired of cords, hoses and petrol fumes · M3 buying a gift for a keen gardener
    @2026-10-09 30d ecom r-cf7ededa
    KPI spend 7520 · rev 22860 · ROAS 3.04 · iROAS 1.13 · purch 198 · CPA 37.98
    ADS 16 · distinct 14 · eff 5.9 · top3 63.8% · newest >=10% spend 37d
@@ -314,9 +322,15 @@ The skill does not run on its own: each step is a run the user starts. What carr
    spend up. The next audit passes it on as `labels_by_creative`: a creative below the listed rows is
    still labelled, a key whose creative had no delivery in the window matches nothing, and a creative
    with new copy or media has a new key and is labelled again.
+
+   `CODES` names every confirmed motivator the section mentions (on `LABELS`, in `MOTIV`, in the goal or
+   as a gap) in the customer wording the user confirmed, at most 40 characters per name; angles and
+   executions keep their starter-set names and are not listed. Without it a new chat knows M1 but not
+   what M1 means. When `LABELS` loses entries to the size limit, a motivator the section no longer
+   mentions also leaves `CODES`.
 3. **The handoff block**, to continue in a new chat. Ids, codes and short labels only: no copy, no
-   personal data, no demographic labels. Without a client profile, add the `LABELS` line when the user
-   wants the labels kept.
+   personal data, no demographic labels. Without a client profile, add the `LABELS` and `CODES` lines
+   when the user wants the labels kept.
 
    ```
    asp_handoff · creative-strategy · run r-xxxxxxxx · act_<id> · 2026-09-10..2026-10-09
@@ -342,6 +356,12 @@ When no `meta_*` tools are visible, show the demo instead of an empty audit:
   whatever the write mode. Its only write is the opt-in snapshot in the client profile, after an explicit
   yes.
 - **No invented numbers.** Every number comes from the script, Meta, or the user (with source and date).
+  Do no arithmetic of your own on them: no sums, differences or new shares. Counting the entries of a
+  list the output returns is fine (`ANGLES`, `NEXT`), and a chart may plot the rows' `share_pct` as a
+  running total, labelled only with numbers from the output. When the report needs a number the output
+  does not hold, say it is not available. To say what sits in M0 (catalogue ads, offers, traffic), name
+  those creatives with their own `share_pct` from the X-ray (a share of resolved spend, while the M0
+  share is of total spend), without a subtotal.
 - **Wording.** "Opportunity supported by <data>". No promised results, no verdict words; see the
   never-say list in `evidence-and-compliance.md`.
 - **Claims.** Run each brief past the EU claims register (not legal advice).

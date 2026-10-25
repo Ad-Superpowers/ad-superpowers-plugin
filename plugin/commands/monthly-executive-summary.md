@@ -18,14 +18,14 @@ Generate an executive-level report for the previous month, ranked by ROAS.
 ### EXECUTIVE DASHBOARD
 | Metric | This Month | Last Month | Change | Target | Status |
 |--------|------------|------------|--------|--------|--------|
-| Total Ad Spend | | | | | |
-| Attributed Revenue | | | | | |
-| Blended ROAS | | | | | |
-| Total Conversions | | | | | |
-| Avg CPA | | | | | |
+| Total Ad Spend (per currency) | | | | | |
+| Revenue from one common source (GA4 or the shop; name it) | | | | | |
+| Blended ROAS (that revenue / total ad spend, same currency) | | | | | |
+
+Conversions, revenue, ROAS and CPA as each platform reports them stay per channel (CHANNEL PERFORMANCE). Never sum them across platforms: each platform counts conversions its own way. Never add amounts in different currencies. Without a common revenue source, show the spend row only.
 
 ### CHANNEL PERFORMANCE
-| Channel | Spend | ROAS | Conversions | % of Total | MoM Change | Verdict |
+| Channel | Spend | ROAS | Conversions | % of Spend | MoM Change | Verdict |
 |---------|-------|------|-------------|------------|------------|---------|
 | Meta | | | | | | |
 | Google | | | | | | |
@@ -98,7 +98,7 @@ Then campaign-level for top 5: `meta_get_insights(account_id="FROM_STEP_1", date
 
 **TikTok:** `tiktok_get_report(start_date="FIRST_OF_LAST_MONTH", end_date="LAST_OF_LAST_MONTH", level="campaign", metrics=["spend","impressions","clicks","conversions","cost_per_conversion"])`
 
-**GA4 (cross-channel truth):** `ga4_run_report(property_id="FROM_STEP_1", start_date="FIRST_OF_LAST_MONTH", end_date="LAST_OF_LAST_MONTH", metrics=["totalRevenue","conversions","sessions"], dimensions=["sessionDefaultChannelGroup"])`
+**GA4 (common yardstick, shown beside each platform's own numbers):** `ga4_run_report(property_id="FROM_STEP_1", start_date="FIRST_OF_LAST_MONTH", end_date="LAST_OF_LAST_MONTH", metrics=["totalRevenue","conversions","sessions"], dimensions=["sessionDefaultChannelGroup"])`
 
 ### Step 3: Pull Prior Month for MoM Comparison
 
@@ -118,7 +118,7 @@ Repeat Step 2 queries with the month before last month date ranges to calculate 
 - ROAS < target + MoM improving = "Recovering - Monitor"
 - ROAS < target + MoM declining = "Underperforming - Review"
 
-**Top campaigns:** Rank all campaigns across all platforms by ROAS, take top 5.
+**Top campaigns:** Rank all campaigns across all platforms by ROAS, take top 5. Each value is its own platform's reported number; say so under the table, because the platforms count conversions differently.
 
 ### Step 5: Present Results
 Follow OUTPUT FORMAT above EXACTLY. Fill all tables with real data. Write executive narrative in a professional, stakeholder-friendly tone.

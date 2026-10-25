@@ -67,11 +67,12 @@ Develop a budget allocation plan for [specify company_name] ([specify industry])
 ## EXECUTION STEPS
 
 ### Step 1: Discover Accounts & Current Performance
-- `meta_list_ad_accounts()` then `meta_get_insights(account_id="...", date_preset="last_30d", level="account")`
-- `google_ads_list_accounts()` then `google_ads_run_gaql(customer_id="...", query="SELECT metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM customer WHERE segments.date DURING LAST_30_DAYS")`
-- `linkedin_list_ad_accounts()` then `linkedin_get_analytics(account_id="...", start_date="30_DAYS_AGO", end_date="TODAY")`
-- `tiktok_get_advertiser_info()` then `tiktok_get_report(start_date="30_DAYS_AGO", end_date="TODAY", level="account")`
-- `ga4_list_properties()` then `ga4_run_report(property_id="...", start_date="30daysAgo", end_date="yesterday", metrics=["sessions","conversions","totalRevenue"], dimensions=["sessionDefaultChannelGroup"])`
+One date window for every platform: START_DATE = 30 days before today, END_DATE = today (YYYY-MM-DD), the window the workflow's next_actions use for "last 30 days". Pass the same two dates to every call below.
+- `meta_list_ad_accounts()` then `meta_get_insights(account_id="...", time_range={"since": "START_DATE", "until": "END_DATE"}, level="account")`
+- `google_ads_list_accounts()` then `google_ads_run_gaql(customer_id="...", query="SELECT metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM customer WHERE segments.date BETWEEN 'START_DATE' AND 'END_DATE'")`
+- `linkedin_list_ad_accounts()` then `linkedin_get_analytics(account_id="...", start_date="START_DATE", end_date="END_DATE")`
+- `tiktok_get_advertiser_info()` then `tiktok_get_report(start_date="START_DATE", end_date="END_DATE", level="account")`
+- `ga4_list_properties()` then `ga4_run_report(property_id="...", start_date="START_DATE", end_date="END_DATE", metrics=["sessions","conversions","totalRevenue"], dimensions=["sessionDefaultChannelGroup"])`
 
 ### Step 2: Budget Classification & Constraints
 
@@ -93,6 +94,8 @@ Develop a budget allocation plan for [specify company_name] ([specify industry])
 
 ### Step 3: Build Three Scenarios
 
+The splits below are illustrative starting points, not platform rankings. Base the recommendation on the client's own results per platform from Step 1; use the splits only where a platform has no history yet.
+
 **Conservative (70% budget):** Bottom-funnel only. Google Search (50%) + Meta retargeting (30%) + brand protection (20%). No new channel testing.
 
 **Realistic (100% budget):** Balanced prospecting/retargeting (70/30). Core channels + selective testing. For growth/conversion: Google Search 35% + Meta 30% + Shopping/PMax 20% + testing 15%. For awareness: Meta 40% + TikTok 25% + YouTube 20% + Search 15%.
@@ -106,7 +109,7 @@ Develop a budget allocation plan for [specify company_name] ([specify industry])
 - Grow share: SOV should exceed SOM by 5-15pp
 - Each 10pp ESOV = ~0.5% market share growth/year
 
-**Expected KPIs by channel:**
+**Expected KPIs by channel** (illustrative industry ranges, not targets; compare each platform on the client's own results):
 | Channel | CPM | CPC | CTR | CVR | CPL (B2B) | ROAS (E-com) |
 |---------|-----|-----|-----|-----|-----------|-------------|
 | Meta | 8-15 | 0.50-2 | 1-2% | 2-5% | 30-80 | 3-6x |

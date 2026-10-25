@@ -43,7 +43,7 @@ GA4 ATTRIBUTION MODEL SELECTION
     │   └─► Sync with GA4 for consistency
     │
     ├─► Google + Meta/LinkedIn/TikTok
-    │   └─► GA4 DDA as single source of truth
+    │   └─► GA4 DDA as a common yardstick, beside each platform's own numbers
     │   └─► Cross-channel comparison reports
     │
     └─► Complex multi-touch journey
@@ -350,7 +350,7 @@ Causes:
 
 Solution:
 ├── Document expected differences (10-30% is normal)
-├── Choose one source of truth (usually GA4)
+├── Pick one common yardstick (GA4 or your CRM) and show it beside each platform's own numbers
 ├── Align lookback windows where possible
 └── Accept that platforms over-attribute to themselves
 

@@ -254,6 +254,16 @@ def media_kind(creative: Any) -> str:
     return "none"
 
 
+def is_hook_video(creative: Any) -> bool:
+    """Every impression shows a video: a plain video, or a flexible or carousel creative
+    whose assets are all videos (one video per placement, a carousel of video cards).
+
+    A creative that mixes in images also delivers as images, so its 3-second views over
+    all impressions would understate the hook (AD-783).
+    """
+    return ad_formats(creative) == {"video"}
+
+
 def ad_formats(creative: Any) -> set[str]:
     """The image and video formats an ad shows.
 
@@ -550,17 +560,17 @@ def freshness_block(
 
 
 def hook_rate_block(ads: list[dict], warnings: list[str]) -> dict[str, Any]:
-    """3-second plays / impressions over video ads; uses actions[video_view]."""
+    """3-second plays / impressions over video-only ads; uses actions[video_view]."""
     views = 0.0
     impressions = 0.0
     video_ads = 0
     with_view = 0
+    mixed = 0
     for ad in ads:
         creative = ad.get("creative")
-        media: set[str] = set()
-        if isinstance(creative, dict):
-            _collect_media_keys(creative, media)
-        if not any(k.startswith("video_id:") for k in media):
+        if not is_hook_video(creative):
+            if "video" in ad_formats(creative):
+                mixed += 1
             continue
         video_ads += 1
         insights = ad.get("insights")
@@ -577,7 +587,12 @@ def hook_rate_block(ads: list[dict], warnings: list[str]) -> dict[str, Any]:
     rate = round(views / impressions, 4) if impressions > 0 and with_view > 0 else None
     if video_ads and not with_view:
         warnings.append("Video ads present but no video_view actions; hook rate unavailable.")
-    return {"rate": rate, "video_ads": video_ads, "with_video_view": with_view}
+    if mixed:
+        warnings.append(
+            f"{mixed} flexible or carousel ad(s) that mix images and video left out of the hook rate: "
+            "their impressions include image delivery."
+        )
+    return {"rate": rate, "video_ads": video_ads, "with_video_view": with_view, "mixed": mixed}
 
 
 def _labels_from_value(value: Any) -> dict[str, str]:
@@ -683,7 +698,8 @@ def xray(data: dict, ads: list[dict], warnings: list[str]) -> dict[str, Any]:
         "media_mix_pct": _mix_pct(media_spend, total_spend),
         "integrity": integrity_block(data, total_spend, warnings),
         "hook_rate": hook["rate"],
-        "hook_rate_basis": {"video_ads": hook["video_ads"], "with_video_view": hook["with_video_view"]},
+        "hook_rate_basis": {"video_ads": hook["video_ads"], "with_video_view": hook["with_video_view"],
+                            "mixed_media_ads_left_out": hook["mixed"]},
         "freshness": freshness_block(groups, resolved_spend, data.get("as_of"), warnings),
         "incremental": incremental_block(data, ads, total_spend, warnings),
         **inventory,
@@ -718,20 +734,35 @@ def integrity_block(data: dict, ads_spend: float, warnings: list[str]) -> dict[s
     }
 
 
-def inventory_block(groups: dict[str, dict], resolved_spend: float) -> dict[str, Any]:
-    """One row per distinct creative, by spend, until the coverage share or row cap."""
+def inventory_cut(
+    groups: dict[str, dict], resolved_spend: float
+) -> tuple[list[tuple[str, dict]], list[tuple[str, dict]]]:
+    """The listed creatives (by spend, until the coverage share or row cap) and the rest.
+
+    The x-ray lists these rows and analyze splits M0 by them, so both use this one cut.
+    """
     ordered = sorted(groups.items(), key=lambda kv: (-kv[1]["spend"], creative_key(kv[0])))
-    rows: list[dict[str, Any]] = []
+    listed: list[tuple[str, dict]] = []
     covered = 0.0
     for fp, g in ordered:
-        if len(rows) >= INVENTORY_MAX_ROWS:
+        if len(listed) >= INVENTORY_MAX_ROWS:
             break
-        if rows and resolved_spend > 0 and covered / resolved_spend >= INVENTORY_SPEND_COVERAGE:
+        if listed and resolved_spend > 0 and covered / resolved_spend >= INVENTORY_SPEND_COVERAGE:
             break
+        listed.append((fp, g))
+        covered += g["spend"]
+    return listed, ordered[len(listed):]
+
+
+def inventory_block(groups: dict[str, dict], resolved_spend: float) -> dict[str, Any]:
+    """One row per listed creative; the rest is counted (``inventory_cut``)."""
+    listed, omitted = inventory_cut(groups, resolved_spend)
+    rows: list[dict[str, Any]] = []
+    for fp, g in listed:
         created = [d for d in (parse_day(c) for c in g["created"]) if d is not None]
         media = media_kind(g["creative"])
         hook = None
-        if media in ("video", "flexible") and g["with_view"] and g["impressions"] > 0:
+        if is_hook_video(g["creative"]) and g["with_view"] and g["impressions"] > 0:
             hook = round(g["video_views"] / g["impressions"], 4)
         rows.append({
             "key": creative_key(fp),
@@ -750,13 +781,14 @@ def inventory_block(groups: dict[str, dict], resolved_spend: float) -> dict[str,
             "tag": g["tag"],
             "copy": copy_excerpt(g["creative"]),
         })
-        covered += g["spend"]
     _assign_hook_bands(rows)
-    omitted = ordered[len(rows):]
+    omitted_spend = sum(g["spend"] for _, g in omitted)
     return {
         "creatives": rows,
         "creatives_omitted": len(omitted),
-        "omitted_spend": round(sum(g["spend"] for _, g in omitted), 2),
+        "omitted_spend": round(omitted_spend, 2),
+        # On resolved spend, the same basis as the rows' share_pct.
+        "omitted_share_pct": round(omitted_spend / resolved_spend * 100, 1) if resolved_spend > 0 else 0.0,
     }
 
 
@@ -822,6 +854,22 @@ def _mix_pct(spend_by: dict[str, float], total: float) -> dict[str, float]:
         return {}
     ordered = sorted(spend_by.items(), key=lambda kv: (-kv[1], kv[0]))
     return {k: round(v / total * 100, 1) for k, v in ordered}
+
+
+def _parts_pct(parts: dict[str, float], total: float, whole_pct: float) -> dict[str, float]:
+    """Each part as a percentage of total, in tenths that add up to whole_pct exactly.
+
+    Rounded one by one the parts can miss the share they split by a tenth, and a
+    reader who sees that recomputes; the largest remainders take the missing tenths.
+    """
+    if total <= 0:
+        return dict.fromkeys(parts, 0.0)
+    exact = {k: v / total * 1000 for k, v in parts.items()}
+    tenths = {k: math.floor(x) for k, x in exact.items()}
+    short = round(whole_pct * 10) - sum(tenths.values())
+    for k in sorted(exact, key=lambda k: (-(exact[k] - tenths[k]), k))[:max(short, 0)]:
+        tenths[k] += 1
+    return {k: tenths[k] / 10 for k in parts}
 
 
 def _assign_hook_bands(rows: list[dict[str, Any]]) -> None:
@@ -902,6 +950,10 @@ def analyze(data: dict, ads: list[dict]) -> dict[str, Any]:
     total_spend = sum(ad_spend(a) for a in ads)
     kpi = kpi_action_type(data)
     m0_spend = 0.0
+    # Where the unlabelled spend sits, as far as the script can tell (AD-783).
+    groups, _unresolved, _processed = group_creatives(ads, [])
+    listed = {fp for fp, _g in inventory_cut(groups, sum(g["spend"] for g in groups.values()))[0]}
+    m0_parts = {"listed": 0.0, "below_the_list": 0.0, "unresolved": 0.0}
     # Per cell and per motivator layer: [spend, impressions, results].
     cells: dict[tuple[str, str], list[float]] = {}
     layers: dict[str, list[float]] = {}
@@ -915,6 +967,8 @@ def analyze(data: dict, ads: list[dict]) -> dict[str, Any]:
         # Only a missing/empty motivator is "unlabeled"; the code itself is opaque.
         if not motivator:
             m0_spend += spend
+            fp = fingerprint(ad)
+            m0_parts["unresolved" if fp is None else "listed" if fp in listed else "below_the_list"] += spend
             continue
         insights = ad.get("insights") if isinstance(ad.get("insights"), dict) else {}
         stats = (spend, as_float(insights.get("impressions")), _action_value(insights, kpi) or 0.0)
@@ -928,6 +982,7 @@ def analyze(data: dict, ads: list[dict]) -> dict[str, Any]:
         exec_spend[execution] = exec_spend.get(execution, 0.0) + spend
 
     labeled_spend = sum(c[0] for c in cells.values())
+    m0_share = round(m0_spend / total_spend * 100, 1) if total_spend > 0 else 0.0
     seen_spend = sum(v for k, v in exec_spend.items() if k != "NV")
     motivator_spend = {m: layer[0] for m, layer in layers.items()}
     if m0_spend > 0:
@@ -960,7 +1015,9 @@ def analyze(data: dict, ads: list[dict]) -> dict[str, Any]:
         "distinct_concepts": len(concepts),
         "effective_messages": round(effective_count(msg_shares), 1) if msg_shares else None,
         "effective_concepts": round(effective_count(con_shares), 1) if con_shares else None,
-        "m0_share_pct": round(m0_spend / total_spend * 100, 1) if total_spend > 0 else 0.0,
+        "m0_share_pct": m0_share,
+        # The M0 share by where it sits: on the x-ray list, below it, or with an unread creative.
+        "m0_breakdown_pct": _parts_pct(m0_parts, total_spend, m0_share),
         "label_sources": sources,
         # Motivators over all spend (M0 included); executions over labelled spend.
         "motivator_mix_pct": _mix_pct(motivator_spend, total_spend),

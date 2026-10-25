@@ -39,6 +39,8 @@ Invoke when user mentions:
 
 ### The Local Business Ad Budget Reality
 
+The splits below are illustrative starting points for a business without ad history, not a ranking of platforms. Once there is data, base the split on the business's own cost per call, lead or booking per platform.
+
 ```
 Budget: €500/month
 ├── Google Ads: €350/month (70%)
@@ -68,7 +70,7 @@ Budget: €2,000/month
 
 Note: Google deprecated standalone "Local campaigns" in 2022. Local inventory ads, Maps promotions, and local objectives are now managed through Performance Max campaigns with store goals enabled.
 
-### Why 70/30 Google/Meta for Most Local Businesses
+### Why Many Local Businesses Start Around 70/30 Google/Meta
 
 | Channel | Why It Works for Local |
 |---------|-----------------------|
@@ -80,6 +82,8 @@ Note: Google deprecated standalone "Local campaigns" in 2022. Local inventory ad
 - Beauty salons, wellness (visual, aspirational)
 - New businesses needing awareness (nobody knows you exist yet)
 - Businesses with strong visual content (before/after photos)
+
+After 4-8 weeks, move budget on the business's own results per platform, not on this starting split.
 
 ---
 

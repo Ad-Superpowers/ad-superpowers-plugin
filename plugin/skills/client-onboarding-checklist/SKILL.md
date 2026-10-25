@@ -472,13 +472,14 @@ QUESTIONS/NEEDS:
 Period: [Month Year]
 
 EXECUTIVE SUMMARY
-- Total spend: €X (+X% vs last month)
-- Total conversions: X (+X% vs last month)
-- Blended CPA: €X (target: €X)
-- Blended ROAS: Xx (target: Xx)
+- Total spend: €X (+X% vs last month), per currency
+- Revenue from one common source, if the client has one (GA4 or the shop; name it): €X
+- Blended ROAS from that source: Xx (target: Xx)
 
 PLATFORM BREAKDOWN
-[Table with per-platform metrics]
+[Table with per-platform metrics: spend, conversions, CPA, ROAS,
+ each as that platform reports it. Conversions and revenue are never
+ summed across platforms; each platform counts them its own way.]
 
 CAMPAIGN HIGHLIGHTS
 - Best performing: [details]

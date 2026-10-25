@@ -464,7 +464,9 @@ CROSS-CHANNEL BUDGETING (Beta, 2026):
 ├── Location: GA4 → Advertising → Cross-channel budgeting
 ├── Compares attributed conversions across platforms in one view
 ├── Requires platform integrations (Meta, LinkedIn, TikTok data imports)
-└── Uses GA4's data-driven attribution as the single source of truth
+└── Attributes all platforms with GA4's data-driven model. GA4 counts no
+    view-through conversions, so show its figures beside each platform's
+    own numbers, not in their place
 
 PER-CONVERSION ATTRIBUTION SETTINGS (Beta, 2026):
 ├── Override the property-level model for individual key events

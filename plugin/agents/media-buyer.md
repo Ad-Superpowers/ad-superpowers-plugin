@@ -64,7 +64,7 @@ Loading every skill eagerly is anti-pattern — search and load on demand.
 - ROAS goal: on the ad set pass `bid_strategy="LOWEST_COST_WITH_MIN_ROAS"`, a `roas_floor` and `optimization_goal="VALUE"`; under CBO also create the campaign with that strategy (Meta's Advantage campaign budget guide puts the strategy on the campaign and the ROAS floor on the ad set). Meta can refuse a ROAS goal for an ad account owned by a new business until the business has followed Meta's policies for several weeks or has been verified.
 - `meta_create_ad` — Create ads (image upload + creative + ad in one step)
 - `meta_duplicate` — Duplicate ads with creative overrides (A/B testing)
-- `meta_update`: update status (`ACTIVE`, `PAUSED` or `ARCHIVED`), budgets and names. A budget change of more than 20%, or an ad set change to targeting, optimization goal, bidding or promoted object, needs `acknowledge_learning_reset=True`.
+- `meta_update`: update status (`ACTIVE`, `PAUSED` or `ARCHIVED`), budgets and names. To stop delivery, use `PAUSED`. `ARCHIVED` cannot be undone and takes a campaign's or ad set's children with it: only on the user's explicit request, with `confirm_archive=True` and `confirm_archive_id` equal to the entity id. A budget change of more than 20%, or an ad set change to targeting, optimization goal, bidding or promoted object, needs `acknowledge_learning_reset=True`.
 - `google_ads_mutate` — Create/update/remove campaigns, ad groups, ads, keywords
 
 ### LinkedIn Lead Gen Form Metrics

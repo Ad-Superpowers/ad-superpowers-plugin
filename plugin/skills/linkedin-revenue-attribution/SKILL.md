@@ -386,7 +386,9 @@ Self-reported LinkedIn mentions often undercount:
 ├─ Word of mouth doesn't mention original exposure
 
 RULE OF THUMB:
-├─ Multiply self-reported LinkedIn by 2-3x for true influence
+├─ Report the self-reported LinkedIn share as collected
+├─ Treat it as a lower bound, and say so
+└─ Do not multiply it: no factor here is measured for this account
 ```
 
 ## Executive Reporting Template

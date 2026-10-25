@@ -156,23 +156,23 @@ Identify [specify company_name]'s competitors:
 ### Step 4: Gather Platform Data (if connected)
 
 > Conditional: if research_depth in ["standard", "comprehensive"]
-For each connected platform, gather 90-day performance:
+For each connected platform, gather 90-day performance. Use one date window for every platform: START_DATE = 90 days before today, END_DATE = today (YYYY-MM-DD), the same two dates in every call below.
 
 **Meta Ads:**
-- `meta_get_insights(account_id=account_id, date_preset="last_90d", level="account", fields=["spend", "impressions", "clicks", "actions", "action_values", "purchase_roas"])`
+- `meta_get_insights(account_id=account_id, time_range={"since": "START_DATE", "until": "END_DATE"}, level="account", fields=["spend", "impressions", "clicks", "actions", "action_values", "purchase_roas"])`
 - `meta_query(account_id=account_id, entity_type="campaigns", effective_status=["ACTIVE", "PAUSED"])`
 
 **Google Ads:**
-- `google_ads_run_gaql(customer_id=customer_id, query="SELECT campaign.id, campaign.name, campaign.status, metrics.impressions, metrics.clicks, metrics.ctr, metrics.average_cpc, metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM campaign WHERE segments.date DURING LAST_90_DAYS ORDER BY metrics.cost_micros DESC")`
+- `google_ads_run_gaql(customer_id=customer_id, query="SELECT campaign.id, campaign.name, campaign.status, metrics.impressions, metrics.clicks, metrics.ctr, metrics.average_cpc, metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM campaign WHERE segments.date BETWEEN 'START_DATE' AND 'END_DATE' ORDER BY metrics.cost_micros DESC")`
 
 **LinkedIn Ads:**
-- `linkedin_get_analytics(account_id=account_id, date_range="last 90 days", time_granularity="MONTHLY")`
+- `linkedin_get_analytics(account_id=account_id, start_date="START_DATE", end_date="END_DATE", time_granularity="MONTHLY")`
 
 **TikTok Ads:**
-- `tiktok_get_report(date_range="last 90 days", level="campaign")`
+- `tiktok_get_report(start_date="START_DATE", end_date="END_DATE", level="campaign")`
 
 **GA4 (traffic context):**
-- `ga4_run_report(property_id=property_id, metrics=["sessions", "totalUsers", "newUsers"], dimensions=["sessionDefaultChannelGrouping"], start_date="90daysAgo", end_date="today")`
+- `ga4_run_report(property_id=property_id, metrics=["sessions", "totalUsers", "newUsers"], dimensions=["sessionDefaultChannelGrouping"], start_date="START_DATE", end_date="END_DATE")`
 
 ### Step 5: Synthesize Findings
 

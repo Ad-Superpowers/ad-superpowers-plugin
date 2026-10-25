@@ -29,11 +29,11 @@ Use these MCP tools to pull live data when diagnosing attribution discrepancies:
 | `tiktok_get_report` | Pull TikTok conversion data |
 | `linkedin_get_analytics` | Pull LinkedIn conversion data |
 
-**Recommended diagnostic sequence:**
+**Recommended diagnostic sequence** (the same dates on every platform):
 ```
 1. ga4_run_report(property_id="...", start_date="2026-03-08", end_date="2026-04-05", metrics=["keyEvents"], dimensions=["date"])
-2. meta_get_insights(account_id="act_...", level="campaign", date_preset="last_28d", fields=["spend","actions","impressions"])
-3. google_ads_run_gaql(customer_id="...", query="SELECT campaign.name, metrics.conversions, metrics.cost_micros FROM campaign WHERE segments.date DURING LAST_28_DAYS")
+2. meta_get_insights(account_id="act_...", level="campaign", time_range={"since": "2026-03-08", "until": "2026-04-05"}, fields=["spend","actions","impressions"])
+3. google_ads_run_gaql(customer_id="...", query="SELECT campaign.name, metrics.conversions, metrics.cost_micros FROM campaign WHERE segments.date BETWEEN '2026-03-08' AND '2026-04-05'")
 ```
 
 ---
@@ -109,9 +109,9 @@ SINGLE          BUDGET           TO             PLANNING        INCREMENTAL
 PLATFORM        ALLOCATION       STAKEHOLDERS                   VALUE
     |               |               |               |               |
     v               v               v               v               v
-Use             Use unified      Use GA4 as     Use MMM         Run
-platform's      BI dashboard     source of      outputs         incrementality
-own data        or GA4           truth                          tests
+Use             Use unified      Platform data  Use MMM         Run
+platform's      BI dashboard     with GA4       outputs         incrementality
+own data        or GA4           beside it                      tests
 ```
 
 ### Detailed Guidance by Use Case
@@ -124,23 +124,23 @@ The platform's algorithm optimizes based on its own signals. Optimizing Meta cam
 *Example: Meta reports 100 conversions, GA4 shows 70. Optimize within Meta Ads Manager using Meta's 100.*
 
 #### 2. Cross-Channel Budget Allocation
-**Use: Unified BI or GA4 Key Events (with caveats)**
+**Use: each platform's own data, with unified BI or GA4 Key Events beside it (with caveats)**
 
-Need apples-to-apples comparison. GA4 uses consistent attribution across channels.
+Need apples-to-apples comparison. GA4 uses one attribution model across channels, which makes it a useful common yardstick. It is not neutral: it counts no view-through conversions, so it credits search and other click-heavy channels more than video and social. Show it beside each platform's own number, never in its place.
 
 > **Terminology note:** GA4 renamed "Conversions" to **Key Events** in 2024. In GA4 reports, look for "Key events" (formerly conversions). Google Ads still shows "Conversions" — those are imported from GA4 Key Events or set up via Google Ads conversion tracking. Don't confuse the two.
 
 **Caveats:**
 - GA4 underreports by 18-35%
-- Add modeling factor: multiply GA4 by 1.2-1.4
+- Do not rescale GA4 or any platform with a modelling factor. If you estimate the undercount, show it as a separate, labelled note beside the reported numbers
 - Or use MMM for strategic allocation
 
 #### 3. Reporting to Stakeholders
-**Use: GA4 Key Events as single source of truth + context**
+**Use: each platform's own numbers, with GA4 Key Events beside them as a common yardstick**
 
 Consistency matters for trust. Explain discrepancies upfront.
 
-*Script: "We use GA4 Key Events as our source of truth for cross-channel comparison. Note that GA4 captures ~70-80% of true conversions due to cookie restrictions. Platform dashboards show higher numbers due to view-through attribution and modeling."*
+*Script: "We show each platform's own numbers and, beside them, GA4 Key Events as one common yardstick for cross-channel comparison. GA4 captures ~70-80% of conversions due to cookie restrictions and counts no view-through conversions. Platform dashboards show higher numbers due to view-through attribution and modeling. Neither number is the whole truth."*
 
 #### 4. Strategic Planning
 **Use: Marketing Mix Modeling (MMM)**
@@ -340,12 +340,13 @@ Example:
 - GA4: 60 conversions
 - CRM: 85 actual deals
 
-Then:
-- Meta overcounts by ~18%
-- Google undercounts by ~6%
-- GA4 undercounts by ~29%
+Then the estimated gaps against the CRM are:
+- Meta ~18% above
+- Google ~6% below
+- GA4 ~29% below
 
-Apply these factors to future reporting.
+Report these as a separate, labelled estimate beside the reported numbers.
+Never apply them to the platform figures themselves.
 ```
 
 ## Practical Recommendations by Budget
@@ -353,15 +354,15 @@ Apply these factors to future reporting.
 ### For Small Advertisers ($10K-50K/month)
 
 1. **Accept discrepancies exist** - don't chase perfect attribution
-2. **Use GA4 for unified reporting** - explain undercount to stakeholders
+2. **Report each platform's own numbers with GA4 beside them** - explain the undercount to stakeholders
 3. **Optimize within each platform** - use platform data for platform optimization
 4. **Run simple holdout test** - turn off one channel for 2 weeks quarterly
 
 ### For Mid-Market ($50K-200K/month)
 
 1. **Implement server-side tracking** - CAPI, Enhanced Conversions
-2. **Build unified dashboard** - BigQuery/Looker with blended data
-3. **Apply platform accuracy factors** - adjust based on CRM validation
+2. **Build unified dashboard** - BigQuery/Looker, with each platform kept in its own column
+3. **Show platform accuracy factors** - as a labelled estimate beside the reported numbers, based on CRM validation
 4. **Consider lightweight MMM** - tools like Adinton, Marketing Evolution
 
 ### For Enterprise ($200K+/month)

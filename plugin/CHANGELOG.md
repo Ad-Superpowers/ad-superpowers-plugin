@@ -2,6 +2,52 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.5.1] - 2026-10-25
+
+Patch release: measurement guidance that treats every ad platform the same
+way, plus two fixes that landed after 2.5.0. This release ships 59 MCP tools;
+the skill, command and agent counts are unchanged.
+
+### Changed
+
+- **One date window for every platform.** The commands that compare platforms
+  (performance forecaster, cross-platform comparison, budget allocation
+  planner, incrementality test designer, client discovery) now pass the same
+  start and end date to every platform. Three of them asked Google Ads for
+  `LAST_90_DAYS`, a date range Google Ads rejects, and the cross-platform
+  comparison fixed Meta and Google at 30 days whatever period was chosen.
+- **No platform-specific multipliers on reported numbers.** The performance
+  forecaster no longer lowers expected ROAS per platform; platform uncertainty
+  now widens the range only. The cross-platform comparison no longer adds 20 %
+  to Meta alone, and the LinkedIn revenue attribution skill no longer
+  multiplies self-reported LinkedIn by 2 to 3. Modelled factors in the
+  attribution reconciler and the LTV/CAC framework are shown as labelled
+  estimates beside the reported numbers, never in their place.
+- **Totals cover spend only.** The forecaster, the monthly executive summary,
+  the e-commerce ROAS optimizer and the onboarding report template keep
+  conversions, revenue, ROAS and CPA per platform, because each platform
+  counts them its own way. A blended ROAS comes only from one common revenue
+  source (GA4 or the shop) and is labelled as such.
+- **GA4 is a common yardstick, not the source of truth,** for cross-platform
+  comparisons: in the cross-platform comparison and monthly summary commands,
+  the attribution reconciler, the TikTok attribution guide and four GA4
+  skills.
+- **Fixed budget splits are starting points.** The 70/30 Google/Meta split,
+  the scenario splits in the budget planner and the per-channel LTV indices
+  are labelled illustrative; recommendations rest on the client's own results
+  per platform.
+
+### Fixed
+
+- **Creative strategy hub** (`meta-creative-diversification-generator`): the
+  hook rate counts video-only ads and says how many ads that mix images and
+  video it leaves out; the M0 share is split into listed but unlabelled,
+  below the list, and creative not read; and the snapshot keeps each
+  motivator's name on a `CODES` line, so the next audit knows what M1 means.
+- **`media-buyer` agent:** `ARCHIVED` cannot be undone at Meta, so the agent
+  pauses to stop delivery and archives only on an explicit request, with
+  `confirm_archive=True` and `confirm_archive_id` set to the entity id.
+
 ## [2.5.0] - 2026-10-23
 
 Minor bump for the creative strategy hub, one new MCP tool and five weeks of

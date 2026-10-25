@@ -27,31 +27,32 @@ Generate performance forecasts with confidence intervals for [specify company_na
 
 ## OUTPUT FORMAT (CRITICAL - follow this EXACT structure)
 
+**Measurement rule:** forecast each platform on its own history and its own conversion definition. Totals cover spend only, per currency. Conversions, revenue, ROAS and CPA stay per platform and are never summed across platforms, because each platform counts them differently.
+
 ### EXECUTIVE SUMMARY
-| Metric | Projection | 70% Confidence Range |
-|--------|------------|---------------------|
-| Total Spend | [planned amount] | Fixed |
-| Conversions | [expected] | [low] - [high] |
-| Revenue | [expected] | [low] - [high] |
-| Blended ROAS | [expected]x | [low]x - [high]x |
-| Avg CPA | [expected] | [low] - [high] |
+| Platform | Planned Spend | Conversions (70% range) | Revenue (70% range) | ROAS (70% range) | CPA (70% range) |
+|----------|---------------|-------------------------|---------------------|------------------|-----------------|
+| [platform] | [amount] | [exp] ([low]-[high]) | [exp] ([low]-[high]) | [exp]x ([low]x-[high]x) | [exp] ([low]-[high]) |
+| **Total spend** | [amount per currency] | | | | |
+
+If the client has one common revenue source (GA4 or their shop), you may add one blended ROAS from that source under the table, labelled with the source and shown beside the platform rows, never in their place.
 
 **Forecast Confidence:** [High/Medium/Low]
 
 ### MONTHLY BREAKDOWN
-| Month | Budget | Conversions (P/E/O) | ROAS (P/E/O) | Seasonality |
-|-------|--------|--------------------|--------------| ------------|
-| M1 | [amount] | [low]/[exp]/[high] | [low]/[exp]/[high]x | [index] |
-| M2 | [amount] | [low]/[exp]/[high] | [low]/[exp]/[high]x | [index] |
-| M3 | [amount] | [low]/[exp]/[high] | [low]/[exp]/[high]x | [index] |
+| Month | Platform | Budget | Conversions (P/E/O) | ROAS (P/E/O) | Seasonality |
+|-------|----------|--------|--------------------|--------------| ------------|
+| M1 | [platform] | [amount] | [low]/[exp]/[high] | [low]/[exp]/[high]x | [index] |
+| M2 | [platform] | [amount] | [low]/[exp]/[high] | [low]/[exp]/[high]x | [index] |
+| M3 | [platform] | [amount] | [low]/[exp]/[high] | [low]/[exp]/[high]x | [index] |
 P=Pessimistic (10th %ile), E=Expected (50th), O=Optimistic (90th)
 
 ### SCENARIO SUMMARY
-| Scenario | Probability | Conversions | Revenue | ROAS |
-|----------|------------|-------------|---------|------|
-| Downside | 15% | [low] | [low] | [low]x |
-| Base Case | 60% | [expected] | [expected] | [exp]x |
-| Upside | 25% | [high] | [high] | [high]x |
+| Scenario | Probability | Platform | Conversions | Revenue | ROAS |
+|----------|------------|----------|-------------|---------|------|
+| Downside | 15% | [platform] | [low] | [low] | [low]x |
+| Base Case | 60% | [platform] | [expected] | [expected] | [exp]x |
+| Upside | 25% | [platform] | [high] | [high] | [high]x |
 
 **Expected Value:** EV = (0.15 x Low) + (0.60 x Expected) + (0.25 x High)
 
@@ -69,15 +70,17 @@ P=Pessimistic (10th %ile), E=Expected (50th), O=Optimistic (90th)
 
 ### Step 1: Collect Historical Data (last 90 days)
 
-**Meta:** `meta_get_insights(account_id="FROM_DISCOVERY", date_preset="last_90d", level="account", time_increment="1", fields=["spend","impressions","clicks","conversions","purchase_roas"])`
+**One date window for every platform:** START_DATE = 90 days before today, END_DATE = today (YYYY-MM-DD). Pass the same two dates to every call below.
 
-**Google Ads:** `google_ads_run_gaql(customer_id="FROM_DISCOVERY", query="SELECT segments.date, metrics.cost_micros, metrics.impressions, metrics.clicks, metrics.conversions, metrics.conversions_value FROM customer WHERE segments.date DURING LAST_90_DAYS ORDER BY segments.date")`
+**Meta:** `meta_get_insights(account_id="FROM_DISCOVERY", time_range={"since": "START_DATE", "until": "END_DATE"}, level="account", time_increment="1", fields=["spend","impressions","clicks","conversions","purchase_roas"])`
 
-**GA4:** `ga4_run_report(property_id="FROM_DISCOVERY", start_date="90daysAgo", end_date="yesterday", metrics=["sessions","conversions","totalRevenue"], dimensions=["date","sessionDefaultChannelGroup"])`
+**Google Ads:** `google_ads_run_gaql(customer_id="FROM_DISCOVERY", query="SELECT segments.date, metrics.cost_micros, metrics.impressions, metrics.clicks, metrics.conversions, metrics.conversions_value FROM customer WHERE segments.date BETWEEN 'START_DATE' AND 'END_DATE' ORDER BY segments.date")`
 
-**TikTok:** `tiktok_get_report(start_date="90_DAYS_AGO", end_date="TODAY", level="campaign", metrics=["spend","impressions","clicks","conversions"])`
+**GA4:** `ga4_run_report(property_id="FROM_DISCOVERY", start_date="START_DATE", end_date="END_DATE", metrics=["sessions","conversions","totalRevenue"], dimensions=["date","sessionDefaultChannelGroup"])`
 
-**LinkedIn:** `linkedin_get_analytics(account_id="FROM_DISCOVERY", start_date="90_DAYS_AGO", end_date="TODAY")`
+**TikTok:** `tiktok_get_report(start_date="START_DATE", end_date="END_DATE", level="campaign", metrics=["spend","impressions","clicks","conversions"])`
+
+**LinkedIn:** `linkedin_get_analytics(account_id="FROM_DISCOVERY", start_date="START_DATE", end_date="END_DATE")`
 
 If accounts not connected, request manual historical data (spend, conversions, revenue, ROAS for last 30/60/90 days).
 
@@ -127,17 +130,19 @@ Index: 1.00 = baseline, 0.90 = 10% below, 1.20 = 20% above.
 | CPA | Base x 0.75 | Historical avg | Base x 1.50 |
 | ROAS | Base x 0.60 | Historical avg | Base x 1.50 |
 
-**Platform forecast uncertainty:**
-Google Search: Low (+/-15%, stable intent-based) | Meta: Medium (+/-25%, algorithm + creative) | LinkedIn: Medium (+/-20%, B2B volatility) | TikTok: High (+/-35%, creative fatigue + trends)
+**Platform forecast uncertainty** (widens the range only, never moves the expected value):
+Base each platform's range on the variability of its own daily history in the window. Only when a platform has less than 30 days of history, start from these bands: Google Search +/-15% | Meta +/-25% | LinkedIn +/-20% | TikTok +/-35%.
 
 ### Step 5: Build Forecast
 
 **Base formula:**
 ```
 Conversions = (Historical Daily Avg x Days) x Seasonality x Trend Factor
-ROAS = Historical ROAS x Trend Factor x (1 - Platform Uncertainty)
+Expected ROAS = Historical ROAS x Trend Factor   (the same formula for every platform)
+ROAS range = Expected ROAS x (1 - Platform Uncertainty) to Expected ROAS x (1 + Platform Uncertainty)
 Revenue = Budget x ROAS
 ```
+Apply the formulas per platform, on that platform's own numbers.
 
 **Three scenarios:**
 - **Base Case (60%):** Current trends continue, consistent budget, normal seasonality
