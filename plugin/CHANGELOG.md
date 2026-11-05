@@ -2,6 +2,16 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.7.1] - 2026-11-05
+
+Patch release: skill metadata within the Agent Skills limit.
+
+### Fixed
+
+- **connection-troubleshooter** has a shorter description (892 characters).
+  2.7.0 shipped it at 1137, over the 1024-character limit of the Agent Skills
+  format, so a client that enforces the limit could skip the skill.
+
 ## [2.7.0] - 2026-11-03
 
 Minor release: getting started in the chat. This release ships 61 MCP tools
