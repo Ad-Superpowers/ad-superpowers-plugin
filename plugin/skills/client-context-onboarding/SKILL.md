@@ -48,7 +48,7 @@ translate each into a clear explanation instead of looping on a raw error:
 | `clients`/`clients_update` not available | The clients feature is not turned on for this connector yet | Tell the user the feature is not active yet, and stop. Do not promise it. |
 | `permission_denied:` | The organization is read-only (`can_write` is off) | Reads and grouping still work. Explain that writing client profiles needs write access; offer to show the proposed profiles and have them enable write or do it in the dashboard. |
 | `no_active_organization` | No active org on the request | Ask the user to switch to an organization they belong to, then retry. |
-| inactive subscription / trial ended | The plan is not active | Explain the subscription is not active; the write phase cannot run until it is. |
+| the workspace is not active | This workspace cannot save changes right now | Explain that saving client profiles is not possible in this workspace right now and that the workspace owner can check it in the dashboard; the write phase cannot run until then. |
 | `limit_exceeded` / `service_degraded` | Tool-call quota or a degraded backend | Stop the bulk cleanly, report progress so far, and suggest resuming later. |
 | `limit_reached` | The plan's client cap is hit | Handle per client during the write phase (see Idempotency). |
 
@@ -140,10 +140,10 @@ report it and skip.
 
 For each write, read the returned `changed` map and `version` to confirm exactly
 what landed. Then tell the user to review and activate in `/dashboard/clients`, and
-point out the now-unlocked client-aware workflows (reports, budget pacing,
+point out the client-aware workflows that now have context (reports, budget pacing,
 media-buying). That payoff is the reason to onboard.
 
-**Meta accounts — finish the wiring.** Importing a Meta account does not set which
+**Meta accounts: finish the wiring.** Importing a Meta account does not set which
 Facebook Page its ads post from or which Instagram account they run on. For each
 linked Meta account, `use page-instagram-connector` to discover the promotable Pages /
 connected Instagram accounts and save the right `facebook_page_id` / `instagram_user_id`
@@ -190,7 +190,7 @@ targets so the KPIs are machine-readable, not only prose in `attention_points`:
   `landing_page_view`, `link_click`) to name which Meta action counts. It is invalid
   on any other platform or metric.
 
-Example — a Google Ads channel chasing both efficiency and volume:
+Example: a Google Ads channel chasing both efficiency and volume:
 `targets=[{"metric": "roas", "value": 6.0}, {"metric": "conversions", "value": 60}]`
 with `primary_metric="roas"`.
 

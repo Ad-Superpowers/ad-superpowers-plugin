@@ -2,6 +2,46 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.7.0] - 2026-11-03
+
+Minor release: getting started in the chat. This release ships 61 MCP tools
+and 124 skills; the command and agent counts are unchanged.
+`meta_create_lead_form` and `spend_overview` are counted but listed only
+once they are switched on; lead forms wait for Meta's approval.
+
+### Added
+
+- **`get_started`.** A read-only tool for a new workspace: it returns which
+  platforms are connected, the one next step with its link, and a first
+  question to ask once an account is connected.
+- **`getting-started` skill.** The same steps and first questions as a skill,
+  for any client.
+
+### Changed
+
+- **Every platform tool is listed.** Tools no longer disappear while a
+  platform is not connected. A tool for a platform that cannot be used yet
+  answers `platform_not_connected` with what to do: connect, reconnect or
+  enable an account, and the link to the integrations page.
+- **connection-troubleshooter** now explains that answer instead of missing
+  tools.
+
+## [2.6.0] - 2026-10-26
+
+Minor release: Meta lead forms. This release ships 60 MCP tools; the skill,
+command and agent counts are unchanged.
+
+### Added
+
+- **Meta lead forms (Instant Forms).** `meta_create_lead_form` creates a lead
+  form on a Facebook Page: questions, intro screen, privacy policy, consent
+  checkboxes and a thank-you screen. `meta_query` lists a Page's forms with
+  `entity_type="lead_forms"`, and `meta_create_ad` attaches a form to an image
+  or video ad with `lead_gen_form_id`. Lead forms need Meta's
+  `pages_manage_ads` permission and are switched on once Meta has approved it
+  for Ad Superpowers; until then the tool is not listed and `meta_query`
+  answers `feature_unavailable`.
+
 ## [2.5.1] - 2026-10-25
 
 Patch release: measurement guidance that treats every ad platform the same

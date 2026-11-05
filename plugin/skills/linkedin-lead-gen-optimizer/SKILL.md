@@ -95,6 +95,10 @@ Invoke when user mentions:
 
 ## Quality Improvement Tactics
 
+Read lead_forms first. Ad Superpowers can create a DRAFT form and edit it while it is
+DRAFT; changes to a published form and warm-audience setup happen in Campaign Manager.
+No retargeting segment tool is available.
+
 ### 1. Add Qualifying Questions
 
 **Impact:** +40% SQL rate, +5-15% CPL
@@ -154,7 +158,7 @@ Audiences to retarget:
 |--------|-----------------|
 | Rotate creatives every 2 weeks | Maintains performance |
 | Test video vs image | Video often 20% lower CPM |
-| Use carousel for multi-product/service | Higher engagement |
+| Test a single-image variant for each offer | Compare qualified lead cost |
 
 ## Industry Benchmarks
 
@@ -270,19 +274,12 @@ Reason: [Based on goals, audience, and current performance]
 
 ## New Format Opportunities for Lead Gen
 
-Beyond classic Sponsored Content with Lead Gen Forms, test these 2025-2026 formats:
-
-| Format | Lead Gen Application | Expected Outcome |
-|--------|---------------------|------------------|
-| **Document Ads** | Gate a whitepaper/case study — reader views in-feed, then form appears | 8-12% CVR, higher quality than cold form submits |
-| **Thought Leader Ads** | Boost a founder/expert post with a lead gen CTA | Lower CPM, higher trust, better for niche B2B audiences |
-| **Conversation Ads** | Multi-path message ad with CTA branches | Good for event registrations and qualification flows |
-
-**Thought Leader Ads for lead gen:** Works best when boosting a post that already has a relevant CTA link (e.g., "Read the full report → [form URL]"). Lower cost per reach than brand ads.
+Use a single-image or video creative with an attachable published Lead Gen Form.
+Test the offer, copy and image while keeping the form stable. Lead gen document ads are not available; lead gen carousels are not available.
 
 ## Predictive Audiences for Lead Quality
 
-**Predictive Audiences** are LinkedIn's AI-powered lookalikes — significantly outperform standard demographic targeting for lead gen:
+**Predictive Audiences** are an audience option in Campaign Manager; evaluate them against your existing targeting:
 
 - Require a seed of 300+ contacts or conversion events
 - Deliver ~21% lower CPL vs standard targeting (LinkedIn internal data)
@@ -293,44 +290,132 @@ To enable: Campaign Manager → Audiences → Predictive Audiences. Requires Mat
 
 ## MCP Tool Usage
 
-Pull lead gen performance data to analyze CPL and form completion:
+Ad Superpowers can draft a form with linkedin_manage (object_type="lead_form",
+create or update while the form is DRAFT; ask the advertiser for their privacy
+policy URL). Publish it in Campaign Manager, then attach it. Ad Superpowers reads
+forms and creates supported lead gen creatives; it cannot publish or archive forms,
+edit a published form, export submitted leads, or create retargeting segments.
+Make changes to published forms and audience setup in Campaign Manager. Obtain lead quality data from the advertiser's CRM.
 
+### Step 1: Inspect the campaign and form
+
+**Data you need:** Campaign ID, form ID, account ownership, form state and review.
+
+```python
+linkedin_query(account_id="<account_id>", entity_type="campaigns",
+               entity_id="<campaign_id>", format="full")
+linkedin_query(account_id="<account_id>", entity_type="lead_forms", start=0, count=100)
+linkedin_query(account_id="<account_id>", entity_type="lead_forms",
+               entity_id="urn:li:adForm:<form_id>")
 ```
-# Step 1: List campaigns to find IDs and objectives
-linkedin_query(
-  account_id="YOUR_ACCOUNT_ID",
-  entity_type="campaigns",
-  status=["ACTIVE"]
-)
 
-# Step 2: Get account-level lead gen performance (incl. Lead Gen Form metrics)
-linkedin_get_analytics(
-  account_id="YOUR_ACCOUNT_ID",
-  start_date="YYYY-MM-DD",
-  end_date="YYYY-MM-DD",
-  fields=["costInLocalCurrency", "clicks", "impressions", "externalWebsiteConversions", "oneClickLeads", "oneClickLeadFormOpens"]
-)
-# Form completion rate = oneClickLeads / oneClickLeadFormOpens
+Paginate form lists using start/count. Do not pass campaign_id or status to
+lead_forms. Inspect state, reviewInfo and content; this reads forms, not leads.
+For attachment the form must be PUBLISHED, belong to the same account and have
+reviewInfo.reviewStatus other than REJECTED or AUTO_REJECTED. Unreadable forms
+cannot be used. Publish or correct the form in Campaign Manager first.
+The campaign must have objectiveType LEAD_GENERATION and offsiteDeliveryEnabled
+must not be true. Inline creation requires type SPONSORED_UPDATES with format
+STANDARD_UPDATE for image or SINGLE_VIDEO for video.
 
-# Step 3: Get performance for a specific campaign
+### Step 2: Measure volume and form friction
+
+**Data you need:** Inclusive dates, spend, form opens, native form leads and
+website conversions, with CRM qualification data kept separate.
+
+```python
 linkedin_get_analytics(
-  account_id="YOUR_ACCOUNT_ID",
-  start_date="YYYY-MM-DD",
-  end_date="YYYY-MM-DD",
-  level="campaign",
-  entity_id="CAMPAIGN_ID",
-  fields=["costInLocalCurrency", "clicks", "impressions", "externalWebsiteConversions", "oneClickLeads", "oneClickLeadFormOpens"]
-)
+    account_id="<account_id>", level="campaign", entity_id="<campaign_id>",
+    start_date="<start_date>", end_date="<end_date>", time_granularity="ALL",
+    fields=["costInLocalCurrency", "clicks", "impressions",
+            "externalWebsiteConversions", "oneClickLeads", "oneClickLeadFormOpens"])
 ```
+
+Form completion = oneClickLeads / oneClickLeadFormOpens. Native form CPL = spend /
+oneClickLeads. Keep missing values and zero denominators unknown. Repeat for an
+equal previous window. Use the existing forms-versus-landing-pages framework,
+but compare SQL rates using CRM outcomes rather than inferring quality from CPL.
+
+### Step 3: Attach a published form to a draft creative
+
+**Data you need:** Advertiser-approved copy, campaign and form URNs, and an
+AVAILABLE image or video owned by the account's organization and associated with
+the account. Replace every placeholder before executing this write.
+
+```python
+linkedin_manage(
+    ad_account_id="<account_id>", object_type="creative", action="create_inline",
+    payload={"campaign": "urn:li:sponsoredCampaign:<campaign_id>",
+             "name": "<approved_creative_name>", "commentary": "<approved_copy>",
+             "content": {"media": {"id": "urn:li:image:<image_id>",
+                                    "title": "<approved_media_title>"}},
+             "leadgenCallToAction": {"destination": "urn:li:adForm:<form_id>",
+                                     "label": "LEARN_MORE"}})
+```
+
+Use exactly one click target. Do not combine leadgenCallToAction with
+contentLandingPage or contentCallToActionLabel. Do not pass entity_id or
+confirm_launch to create_inline, or override author, account, status or distribution
+inside the payload. The creative lands DRAFT, but its post is PUBLIC/PUBLISHED
+with feedDistribution=NONE. No feed distribution does not mean a private post.
+The form is read uncached before submission. Record form_state,
+form_review_status and leadgen_call_to_action from the result.
+
+If using an existing staged upload, confirm readiness separately:
+
+```python
+linkedin_upload(ad_account_id="<account_id>", stage_id="<stage_id>",
+                asset_name="<exact_staged_filename>", action="status")
+```
+
+Use the asset only when ready_for_use is true. An accepted upload alone does not
+establish readiness. This status call cannot stage, upload or repair a missing asset.
+Do not retry an ambiguous create or upload; inspect existing results first.
+
+### Step 4: Review, then activate deliberately
+
+**Data you need:** Full creative URN, current review and serving reasons, form
+readiness and explicit advertiser approval to start serving.
+
+```python
+linkedin_query(account_id="<account_id>", entity_type="creatives",
+               campaign_id="<campaign_id>", format="full")
+linkedin_query(account_id="<account_id>", entity_type="serving_diagnosis",
+               campaign_id="<campaign_id>", entity_id="urn:li:sponsoredCreative:<creative_id>")
+```
+
+Inspect the form and creative in Campaign Manager. In our testing, LinkedIn's preview returned UNSUPPORTED_CREATIVE_TYPE for a lead gen creative, and LinkedIn documents no preview for lead gen.
+If ad_preview fails, use Campaign Manager's preview.
+A DRAFT without review may report review_pending_activation; DRAFT is not approval.
+Activate only when ready to serve and approved by the advertiser:
+
+```python
+linkedin_manage(
+    ad_account_id="<account_id>", object_type="creative", action="status",
+    entity_id="urn:li:sponsoredCreative:<creative_id>", target_status="ACTIVE",
+    confirm_launch=True, payload={})
+```
+
+Leaving DRAFT for ACTIVE, PAUSED or ARCHIVED freezes the form destination and
+rechecks form eligibility. Reactivation rechecks it too; pausing or archiving an
+already live creative is not blocked by that form check. A creative under review
+cannot be paused: LinkedIn returns 400 until review is APPROVED. Do not activate
+a draft merely to test it. Use the creative URN for status, update and delete.
+Read serving_diagnosis again after a confirmed status change; success is not proof
+of serving. If the parent campaign group is DRAFT, resolve its state before the
+campaign can change status.
 
 ## Hybrid Strategy Playbook
+
+This framework requires audience setup in Campaign Manager and advertiser-supplied
+CRM outcomes. Ad Superpowers does not export leads or create retargeting segments.
 
 ### When to Use Hybrid
 
 Use hybrid when:
 - Volume and quality are both needed
 - Budget allows for two campaign tracks
-- Retargeting capability is available
+- Retargeting audiences can be built in Campaign Manager
 - Time horizon is 30+ days
 
 ### Implementation Steps
@@ -338,9 +423,9 @@ Use hybrid when:
 1. **Phase 1: Form Capture (Week 1-2)**
    - Run Lead Gen Form campaigns
    - Capture high volume leads
-   - Build retargeting audiences
+   - Build retargeting audiences in Campaign Manager
 
-2. **Phase 2: Build Audiences (Week 2-3)**
+2. **Phase 2: Build Audiences in Campaign Manager (Week 2-3)**
    - Form openers (non-submitters)
    - Form submitters (for exclusion or upsell)
    - Website visitors from form traffic

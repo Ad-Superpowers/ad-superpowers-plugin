@@ -2,21 +2,23 @@
 
 Analyze your advertising and analytics accounts across 8 platforms in Claude Code and Claude Desktop, make changes in Meta, Google Ads, TikTok and Tag Manager, and submit or delete Search Console sitemaps.
 
-**120 expert skills** · **35 slash commands** (29 workflow, 6 utility) · **5 specialized agents** · **59 MCP tools**
+**124 expert skills** · **35 slash commands** (29 workflow, 6 utility) · **5 specialized agents** · **61 MCP tools**
+
+`meta_create_lead_form` and `spend_overview` are listed once they are switched on for Ad Superpowers; lead forms wait for Meta's approval of the `pages_manage_ads` permission.
 
 ## Platforms
 
 | Platform | Skills | MCP Tools | What you can do |
 |----------|-------:|----------:|------------------|
-| **Meta Ads** | 26 | 14 | Campaign management, creative fatigue analysis, audience targeting, ad creation, budget optimization |
+| **Meta Ads** | 26 | 15 | Campaign management, creative fatigue analysis, audience targeting, ad creation, budget optimization |
 | **Google Ads** | 32 | 5 | GAQL queries, Performance Max, keyword strategy, bid optimization, campaign creation |
 | **Google Analytics 4** | 18 | 2 | Event tracking, attribution models, audience building, ecommerce analysis |
 | **Google Search Console** | 2 | 3 | SEO performance, keyword rankings, indexing diagnostics, sitemap management |
 | **Google Tag Manager** | 4 | 4 | Container auditing, consent mode, server-side tagging, conversion setup |
 | **Google Merchant Center** | 0 | 6 | Feed and Shopping reads; separate operator-enabled, guided customLabel4 pilot for one registered product, with a preview and explicit token confirmation for each apply and revert |
-| **LinkedIn Ads** | 11 | 6 | B2B lead gen, ABM targeting, revenue attribution, Thought Leader Ads, CTV |
+| **LinkedIn Ads** | 14 | 6 | B2B lead gen, ABM targeting, revenue attribution, Thought Leader Ads, CTV |
 | **TikTok Ads** | 10 | 9 | Creative fatigue, video performance, Smart+ campaigns, Search Ads, Shop |
-| **Cross-platform** | 17 | 8 | Unified `workflow`, `workspace_info`, `skill`, `skill_update`, `workflow_update`, `clients`, `clients_update`, and the pilot-only `change_history_query` tools; client profiles, attribution reconciliation, SEO vs SEA gaps, budget allocation, competitive analysis |
+| **Cross-platform** | 18 | 9 | Unified `get_started`, `workflow`, `workspace_info`, `skill`, `skill_update`, `workflow_update`, `clients`, `clients_update`, and the pilot-only `change_history_query` tools; client profiles, attribution reconciliation, SEO vs SEA gaps, budget allocation, competitive analysis |
 
 The total also includes `assets_stage`, the private image/video staging tool outside these platform rows. When your workspace has upload access, you can upload images up to 20 MB and videos up to 500 MB through Ad Superpowers to Meta, TikTok, LinkedIn and Google Ads, using a connected account your workspace is allowed to change. Seeing the upload tool does not mean your workspace has upload access. The client needs local file access and HTTP upload; installing this plugin does not grant account permissions. Upload acceptance, processing readiness and ad approval are separate. See [media upload availability](https://adsuperpowers.ai/docs/media-upload).
 
@@ -37,7 +39,7 @@ Add the marketplace once, then install the plugin:
 /plugin install ad-superpowers@ad-superpowers
 ```
 
-That's it. The MCP server, all 120 skills, 35 slash commands and 5 agents are bundled.
+That's it. The MCP server, all 124 skills, 35 slash commands and 5 agents are bundled.
 
 ### Cowork (Claude Desktop's agentic coding mode)
 
@@ -145,7 +147,7 @@ This is consistent with other known Cowork plugin-loading issues tracked upstrea
 
 **What works in Cowork today:** Everything except `Agent()` dispatch.
 
-* All 120 skills load and auto-invoke on relevant questions
+* All 124 skills load and auto-invoke on relevant questions
 * All 35 slash commands are discoverable and runnable
 * MCP tools are callable from the main conversation, exactly as in any other client
 * All write operations (create campaign, duplicate ad, update budget) work
@@ -161,9 +163,9 @@ No known limitations on 2.1.74+. All skills, commands, MCP tools, and subagents 
 
 | Component | Claude Code CLI / VSCode | Cowork (Claude Desktop) | Claude Desktop (chat, via Connector) | ChatGPT (via Connector) |
 |-----------|:---:|:---:|:---:|:---:|
-| 120 skills | ✅ | ✅ | ❌ | ❌ |
+| 124 skills | ✅ | ✅ | ❌ | ❌ |
 | 35 commands | ✅ | ✅ | ❌ | ❌ |
-| 59 MCP tools | ✅ | ✅ | ✅ | ✅ |
+| 61 MCP tools | ✅ | ✅ | ✅ | ✅ |
 | 5 subagents | ✅ | ❌ (use skills instead) | ❌ | ❌ |
 
 ## Paid early access

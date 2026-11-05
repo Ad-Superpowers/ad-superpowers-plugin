@@ -72,15 +72,17 @@ meta_create_ad(
 meta_upload_video(account_id="act_...", video_url="https://...", title="Spring Launch v3")
 # → returns {video_id: "12345...", status: "processing"}
 # Then poll until it is ready:
-meta_get_video_status(video_id="12345...")
+meta_get_video_status(account_id="act_...", video_id="12345...")
 # → status: "ready" → now usable in meta_create_ad(video_id="12345...")
 ```
 
 If the video is still processing when `meta_create_ad`'s own wait ends, it
 returns `error="video_still_processing"` with the `video_id` (if the call itself
 times out first, there is no such response: use the `video_id` from the upload). Poll
-`meta_get_video_status` until the status is `ready`, then retry with
+`meta_get_video_status(account_id="act_...", video_id="12345...")` until the status is `ready`, then retry with
 `video_id` instead of `video_url`.
+The status tool verifies account access and video-library membership first.
+A new upload may take 1–5 minutes to appear in that inventory; retry after that delay.
 
 ## PATH B — Reuse an existing library asset
 
@@ -483,7 +485,7 @@ URL, or manual Ads Manager upload. Local video remains on PATH D.
 
 ### "I uploaded a video 2 minutes ago but `meta_query(advideos)` doesn't show it"
 
-- A new upload may not appear in this list right away. Wait and retry, or fetch the specific video directly via `meta_get_video_status(video_id=...)`.
+- A new upload may not appear in this list right away. Wait and retry, then check it via `meta_get_video_status(account_id=..., video_id=...)`.
 
 ## Quick Workflow Recipes
 
@@ -669,7 +671,7 @@ Dynamic Creative is a different thing: an ad set created with `is_dynamic_creati
 - `meta_upload_image` — finalize stage_id (preferred for local files), legacy base64 or public URL; returns image_hash
 - `meta_create_ad` — build image or video ads with hash or URL; supports `placement_assets` for multi-aspect-ratio bundling (one ad serves different variants per placement via Meta's asset_customization_rules)
 - `meta_upload_video` — finalize a private video stage and explicitly check it with `action="status"`; also supports the existing URL route
-- `meta_get_video_status` — inspect a video ID from the existing URL/manual route
+- `meta_get_video_status(account_id=..., video_id=...)` — inspect a video in that account's library from the existing URL/manual route
 - `meta_query(adimages)` — discover existing image library with `aspect_ratio_bucket` enrichment
 - `meta_query(advideos)` — discover existing video library with dimension derivation
 

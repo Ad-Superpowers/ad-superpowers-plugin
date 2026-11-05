@@ -370,28 +370,13 @@ Total Monthly Budget: $[X]
 
 ### Pacing Options
 
-```
-PACING STRATEGY
-===============
-
-Standard Pacing (Recommended):
-+-- Budget spread evenly across day
-+-- Benefit: Consistent delivery
-+-- Best for: Lead gen, conversions
-+-- Use when: You want steady performance
-
-Accelerated Pacing:
-+-- Spend budget as fast as possible
-+-- Benefit: Quick results, testing
-+-- Risk: May exhaust budget early
-+-- Use when: Time-sensitive campaigns
-
-Budget Flight Recommendations:
-+-- Short campaigns (<7 days): Accelerated
-+-- Standard campaigns (7-30 days): Standard
-+-- Always-on: Standard
-+-- Peak periods: Increase budget, keep standard pacing
-```
+Use linkedin_get_analytics(account_id="<account_id>", level="campaign",
+entity_id="<campaign_id>", analysis="pacing") to inspect daily spend and budget
+ratios. It defaults to the last 14 complete UTC days. Daily spend above the daily
+budget can be normal LinkedIn pacing. Check LinkedIn Help, "Daily budgets", for
+current guidance; do not infer a fixed allowed percentage from a forecast.
+Pacing strategy can be absent, including for smart budget groups. Do not invent
+a pacing mode or promise even spending across hours.
 
 ### Scaling Protocols
 
@@ -544,10 +529,10 @@ Setup:
 
 Bid Strategy:
 +-- Start: $12-15 CPC (Finance)
-+-- Week 1: Evaluate win rate
-+-- Adjust: If <60% impression share, increase bid
++-- Week 1: Evaluate observed delivery and cost per result
++-- Adjust: Compare observed delivery with the planning estimates
 +-- Optimize: Test bid levels +/-20%
-+-- Target: 70%+ impression share on target audience
++-- Target: Agreed delivery and cost per qualified lead
 
 Cost Management:
 +-- Accept higher CPC for better audience
@@ -564,40 +549,112 @@ Different ad formats have distinct bidding dynamics. New formats available in 20
 |--------|-------------------|-------|
 | Single Image (Sponsored Content) | Cost Cap or Max Delivery | Standard workhorse |
 | Video Ads | Max Delivery (CPV) | Optimize for view rate |
-| Carousel Ads | Cost Cap | Higher engagement, worth bidding for |
-| Document Ads | Cost Cap | Strong engagement for content offers; content is viewed in-feed |
 | Thought Leader Ads | Max Delivery | Boost employee posts; lower CPM than brand ads, no CPC control |
 | Message Ads / Conversation Ads | Manual CPC | Limited volume; bid on open rate |
 | CTV / Connected TV Ads | CPM only | Awareness only, no direct response bidding |
 | Dynamic Ads | Manual CPC | Personalized but smaller scale |
 | Lead Gen Forms (any format) | Cost Cap | Target CPL-based cap recommended |
 
-**Thought Leader Ads note:** These are boosted employee posts. Bidding works via Max Delivery only — you cannot set manual CPC. They typically achieve 20-40% lower CPM than standard brand Sponsored Content.
+**Thought Leader Ads note:** These are boosted employee posts. Bidding works via Max Delivery only; you cannot set manual CPC. They typically achieve 20-40% lower CPM than standard brand Sponsored Content.
 
-**Document Ads note:** Users swipe through the document in-feed without leaving LinkedIn. Very high dwell time. Use Cost Cap with a CPL target; document downloads typically convert at 8-12%.
+Carousel ads (2-10 image cards in a CAROUSEL campaign) and, where the server has document ads enabled, document ads (a PDF uploaded with `linkedin_upload`, in a BRAND_AWARENESS or ENGAGEMENT campaign with format SPONSORED_UPDATE_NATIVE_DOCUMENT) can be created as a DRAFT through `linkedin_manage(action="create_inline")`. Other format guidance is for Campaign Manager; verify the options available to the selected objective.
 
 ## MCP Tool Usage
 
-To pull current bid and cost data for analysis:
+Use the strategy framework above after collecting these inputs. These calls read
+planning estimates; they do not set bids, enforce a cost target or change budgets.
 
-```
-# Get campaign performance including cost and delivery metrics
+### Step 1: Read the campaign and measure results
+
+**Data you need:** Campaign type, costType, objectiveType, optimizationTargetType,
+targetingCriteria, audienceExpansionEnabled, budget and currency.
+
+```python
+linkedin_query(account_id="<account_id>", entity_type="campaigns",
+               entity_id="<campaign_id>", format="full")
 linkedin_get_analytics(
-  account_id="YOUR_ACCOUNT_ID",
-  start_date="YYYY-MM-DD",
-  end_date="YYYY-MM-DD",
-  level="campaign",
-  fields=["costInLocalCurrency", "clicks", "impressions", "leads"]
-)
-
-# Get campaign details including bid strategy settings
-linkedin_query(
-  account_id="YOUR_ACCOUNT_ID",
-  entity_type="campaigns"
-)
+    account_id="<account_id>", level="campaign", entity_id="<campaign_id>",
+    start_date="<start_date>", end_date="<end_date>", time_granularity="ALL",
+    fields=["costInLocalCurrency", "clicks", "impressions", "oneClickLeads"])
 ```
 
-Use these to compare actual CPL vs bid caps, identify under-delivery (budget not spent), and spot bid strategy mismatches.
+Use native form leads for form CPL. Missing or zero denominators make rates
+unavailable. A high CPC alone does not identify the best bidding strategy.
+
+### Step 2: Size the proposed audience
+
+**Data you need:** The complete campaign targetingCriteria object, assigned to
+`criteria`, including inclusions and exclusions.
+
+```python
+linkedin_query(account_id="<account_id>", entity_type="audience_count",
+               targeting_criteria=criteria)
+```
+
+This is rounded audience size, not reach. Zero may mean fewer than 300 members.
+Recalculate after a proposed targeting change instead of adding facet counts.
+
+### Step 3: Request bid suggestions
+
+**Data you need:** The same criteria plus explicit campaign type, bid type,
+match type and account currency. This example assumes a EUR Sponsored Content
+campaign billed on CPM with audience expansion disabled; substitute actual values.
+
+```python
+linkedin_query(
+    account_id="<account_id>", entity_type="bid_suggestions",
+    targeting_criteria=criteria,
+    planning={"campaignType": "SPONSORED_UPDATES", "bidType": "CPM",
+              "matchType": "EXACT", "currency": "EUR"})
+```
+
+Map `type` to campaignType and `costType` to bidType. Use AUDIENCE_EXPANDED when
+audienceExpansionEnabled is true, otherwise EXACT. Currency comes from
+dailyBudget.currencyCode, unitCost.currencyCode or the account currency.
+Optional objectiveType, optimizationTargetType and dailyBudget come from the
+campaign; the tool does not map these for you. Keep Money amounts as strings.
+Supported types are TEXT_AD, SPONSORED_UPDATES and SPONSORED_INMAILS.
+DYNAMIC campaigns have no bid suggestions; do not substitute a different type.
+
+### Step 4: Forecast a candidate budget and bid
+
+**Data you need:** Future UTC start/end dates, the same criteria, a daily or total
+budget, and the proposed bid. Replace dates at call time; start must be in the
+future and end after start. This is an illustrative EUR CPM scenario.
+
+```python
+linkedin_query(
+    account_id="<account_id>", entity_type="supply_forecast",
+    targeting_criteria=criteria,
+    planning={"campaignType": "SPONSORED_UPDATES",
+              "start": "<future_start_date>", "end": "<future_end_date>",
+              "dailyBudget": {"amount": "100", "currencyCode": "EUR"},
+              "competingBid": {"bidType": "CPM",
+                               "bidPrice": {"amount": "10", "currencyCode": "EUR"}},
+              "enableAudienceNetwork": False})
+```
+
+Forecast types are SPONSORED_UPDATES, SPONSORED_INMAILS and DYNAMIC; TEXT_AD is
+not accepted. Supply competingBid when optimizationTarget is absent or NONE.
+The forecast key is optimizationTarget, not optimizationTargetType. If scoping
+the forecast to a campaign, put its ID in planning.campaign, not campaign_id.
+Do not add entity_id, status or pagination inputs to either planning read.
+Forecasts are estimates, not spend guarantees or evidence of a daily spending rule.
+
+### Step 5: Make the recommendation
+
+**Data you need:** Actual cost per result, audience estimate, suggested bid range,
+forecast, advertiser margin and lead quality data.
+
+| Evidence | Recommendation |
+|----------|----------------|
+| Small audience and low forecast delivery | Test broader relevant criteria before raising bids |
+| Bid below suggestions, no serving holds | Propose a measured bid test within the agreed budget |
+| Good delivery, poor lead quality | Review the offer and qualification before increasing spend |
+| Unsupported campaign type for a planning read | State the limitation and inspect Campaign Manager |
+| Forecast differs from observed results | Prefer measured results and review assumptions |
+
+Cost Cap is a target, not a hard CPL limit. Ad Superpowers checks budget and bid changes for large steps, high amounts and LinkedIn pricing, requiring explicit confirmation where needed. It refuses budgets above its currency limits unless strictly decreasing, and refuses malformed or unverifiable budget inputs. Obtain approval for any proposed campaign changes.
 
 ## Output: Strategy Recommendation Template
 
@@ -654,7 +711,7 @@ Use these to compare actual CPL vs bid caps, identify under-delivery (budget not
 
 1. **Budget is sufficient** - $100/day gives LinkedIn enough room to optimize
 2. **SaaS has benchmark data** - We can determine a realistic target CPL
-3. **Balance volume & efficiency** - Cost Cap prevents runaway costs
+3. **Balance volume & efficiency** - Cost Cap targets an average cost; it does not guarantee a ceiling
 
 ### Implementation
 

@@ -36,11 +36,19 @@ gsc_search_analytics(
     site_url="<property>",
     dimensions=["query"],
     days=28,
-    row_limit=5000
+    row_limit=1000,
+    start_row=0
 )
 ```
 
 Key fields: `query`, `clicks`, `impressions`, `ctr`, `position`
+
+**Read every page.** If the response has `partial=true`, call again with the same
+arguments and `start_row` set to the response's `next_start_row`. Repeat until
+`partial=false`, then combine the pages. A large site has more queries than fit in
+one response: analysing only the first page gives a gap analysis on an incomplete
+keyword set. Keep `row_limit` around 1000; a larger value is cut to what fits in
+one response anyway.
 
 ### Step 2: Paid Data (Google Ads)
 

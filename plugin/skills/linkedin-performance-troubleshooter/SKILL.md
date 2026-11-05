@@ -89,6 +89,9 @@ Invoke when user mentions:
 
 ## Section B: Low Delivery Troubleshooting
 
+Start with Step 1 under MCP Tool Usage: read serving_diagnosis before applying
+the audience, budget, bid and overlap checks below.
+
 ### Diagnostic Checklist
 
 ```
@@ -103,10 +106,10 @@ Invoke when user mentions:
             │                                                   │
             ▼                                                   ▼
     AUDIENCE < 300,000                                 AUDIENCE > 300,000
-    (minimum for Sponsored Content)                            │
+    (planning guideline, not a minimum)                            │
             │                                                   │
             ▼                                                   ▼
-    Too small for format!                             Check 2: BUDGET
+    Check actual audience count.                             Check 2: BUDGET
     Action: Use Message Ads                                    │
     for <50K audiences, or                    ┌───────────────┴───────────────┐
     expand targeting                          │                               │
@@ -137,7 +140,7 @@ Invoke when user mentions:
 
 | Check | Issue | Action | Notes |
 |-------|-------|--------|-------|
-| Audience size | <300K for Sponsored Content | Use Message Ads for <50K, or expand targeting | Minimum 300K recommended |
+| Audience size | Low estimated audience | Check audience_count before proposing broader targeting | Rounded count; zero may mean fewer than 300 members |
 | Budget | <$50/day | Increase to $100+/day for consistent delivery | $25 minimum, $100 recommended |
 | Bid caps | Below competitive threshold | Remove cap or increase by 20-30% | Benchmark CPC: $5-8 for most B2B |
 | Targeting overlap | Overlapping audiences competing | Consolidate or use exclusions | Prevents self-competition |
@@ -166,7 +169,7 @@ Invoke when user mentions:
     function/industry                         ┌───────────────┴───────────────┐
     Impact: +50-100% CTR                      │               │               │
                                               ▼               ▼               ▼
-                                          SINGLE          VIDEO          CAROUSEL
+                                          SINGLE          VIDEO          NEW IMAGE
                                           IMAGE              │               │
                                               │               ▼               │
                                               │    Good engagement,          │
@@ -225,6 +228,9 @@ Invoke when user mentions:
 
 ### Frequency Thresholds
 
+Use these only with advertiser-supplied frequency from Campaign Manager. The
+creative analytics tools do not provide frequency.
+
 | Status | Frequency/Week |
 |--------|----------------|
 | Good | <3x |
@@ -252,7 +258,7 @@ Invoke when user mentions:
 ### This Week
 
 - [ ] A/B test headline variations
-- [ ] Create retargeting audience
+- [ ] Plan a warm-audience test in Campaign Manager; segment creation is unavailable here
 - [ ] Review form field count (optimal: 5-7)
 - [ ] Analyze best performing demographics
 
@@ -260,7 +266,7 @@ Invoke when user mentions:
 
 - [ ] Implement lead scoring
 - [ ] Set up conversion tracking refinement
-- [ ] Build matched audience from CRM
+- [ ] Build the company list in Campaign Manager, then read matched audience readiness
 - [ ] Create funnel-stage segmented campaigns
 
 ## Industry Benchmarks
@@ -285,7 +291,6 @@ $30-50 across most B2B industries
 |--------|-------------|
 | Sponsored Content | 0.50-0.60% |
 | Video | 0.40% |
-| Carousel | 0.45-0.55% |
 | Message Ads (InMail) | 3%+ |
 
 ### Form Completion Rate
@@ -297,22 +302,12 @@ $30-50 across most B2B industries
 
 ## New Format Opportunities for Performance Recovery
 
-When standard Sponsored Content is underperforming, test these formats before restructuring campaigns:
-
-| Format | When to Test | Expected Benefit |
-|--------|-------------|------------------|
-| **Document Ads** | Low CTR on image ads, content-heavy audience | In-feed reading = higher dwell time, 8-12% download CVR |
-| **Thought Leader Ads** | Brand ads feel impersonal, trust gap | Employee voice = 20-40% lower CPM, higher engagement |
-| **CTV Ads** | Need awareness reach beyond feed inventory | Lean-back viewing, household-level B2B reach |
-| **Carousel Ads** | Single-image CTR declining | Multi-frame storytelling, +20-30% engagement vs single image |
-
-**Thought Leader Ads troubleshooting note:** These are boosted organic employee posts. If a Thought Leader campaign has low delivery, check that the employee post has some existing organic engagement — LinkedIn favors posts with initial signals.
-
-**Document Ads troubleshooting note:** If form completion is low on standard Lead Gen Forms, test Document Ads as a gated-content replacement. The in-feed reading experience reduces friction vs external landing pages.
+Test a new single-image or video variant against the current creative. Match the
+offer and CTA to the audience before restructuring campaigns. Carousel ads (2-10 image cards in a CAROUSEL campaign) and, where the server has document ads enabled, document ads (a PDF uploaded with `linkedin_upload`, in a BRAND_AWARENESS or ENGAGEMENT campaign with format SPONSORED_UPDATE_NATIVE_DOCUMENT) can be created as a DRAFT through `linkedin_manage(action="create_inline")`.
 
 ## Predictive Audiences for CPL Improvement
 
-If high CPL persists after audience broadening, test **Predictive Audiences** (LinkedIn's AI lookalikes):
+If high CPL persists after audience broadening, test **Predictive Audiences** in Campaign Manager:
 
 - **Requirement:** 300+ conversions or contacts as seed audience
 - **Expected impact:** ~21% lower CPL vs standard interest/attribute targeting
@@ -321,31 +316,86 @@ If high CPL persists after audience broadening, test **Predictive Audiences** (L
 
 ## MCP Tool Usage
 
-Pull diagnostics data to pinpoint the performance issue:
+Use these steps with the cost, delivery and engagement frameworks above. Replace
+placeholders with the selected account, campaign and inclusive reporting dates.
+Benchmark ranges are planning context, not automatic reasons to change campaigns.
 
+### Step 1: Delivery holds before bids
+
+**Data you need:** Account and campaign IDs, raw serving statuses, creative review
+status, diagnosis codes and their levels.
+
+```python
+linkedin_query(account_id="<account_id>", entity_type="serving_diagnosis",
+               campaign_id="<campaign_id>")
+linkedin_query(account_id="<account_id>", entity_type="campaigns",
+               entity_id="<campaign_id>", format="full")
 ```
-# Get key performance metrics across campaigns
+
+Start here whenever delivery is low. Follow each returned reason and remedy before
+changing bids or targeting. Narrow to a campaign if the summary is truncated.
+A future start date calls for waiting; a stopped parent calls for a status review.
+A creative under review cannot be paused: LinkedIn returns 400 until its review is
+APPROVED. Activate only when ready to serve and the advertiser approves launch.
+
+### Step 2: Audience and campaign settings
+
+**Data you need:** The campaign's complete targetingCriteria, budget, currency,
+bid settings and schedule. Assign the returned targetingCriteria to `criteria`.
+
+```python
+linkedin_query(account_id="<account_id>", entity_type="audience_count",
+               targeting_criteria=criteria)
+```
+
+Audience count is a rounded estimate, not reach. Zero can mean fewer than 300
+members. The planning audience sizes above are not platform minimums. Use the bid
+strategy skill for bid_suggestions and supply_forecast after holds are understood.
+
+### Step 3: Cost and engagement breakdowns
+
+**Data you need:** Equal current and previous date windows, impressions, clicks,
+spend, native form leads and website conversions for the affected campaign.
+
+```python
 linkedin_get_analytics(
-  account_id="YOUR_ACCOUNT_ID",
-  start_date="YYYY-MM-DD",
-  end_date="YYYY-MM-DD",
-  level="campaign",
-  fields=["costInLocalCurrency", "clicks", "impressions", "leads", "totalEngagements"]
-)
-
-# Get campaign settings to check bid strategy and audience size
-linkedin_query(
-  account_id="YOUR_ACCOUNT_ID",
-  entity_type="campaigns"
-)
-
-# Get creative-level performance
-linkedin_get_creatives_with_images(
-  account_id="YOUR_ACCOUNT_ID",
-  start_date="YYYY-MM-DD",
-  end_date="YYYY-MM-DD"
-)
+    account_id="<account_id>", level="campaign", entity_id="<campaign_id>",
+    start_date="<start_date>", end_date="<end_date>", time_granularity="ALL",
+    pivots=["CAMPAIGN", "CREATIVE"],
+    fields=["impressions", "clicks", "costInLocalCurrency", "oneClickLeads",
+            "externalWebsiteConversions", "totalEngagements"])
+linkedin_get_analytics(
+    account_id="<account_id>", level="campaign", entity_id="<campaign_id>",
+    start_date="<start_date>", end_date="<end_date>", time_granularity="ALL",
+    pivot="MEMBER_JOB_FUNCTION", fields=["impressions", "clicks", "costInLocalCurrency"])
 ```
+
+Repeat for the preceding equal window. Calculate rates from summed counts;
+keep missing values unknown. Demographics are approximate and delayed. Use one
+`pivot` for demographics or `pivots` for statistics, never both. Report native
+form CPL separately from website conversion cost.
+
+### Step 4: Inspect the ad and assess fatigue
+
+**Data you need:** Creative URN, desktop/mobile presentation, two comparable
+periods and the creative's impression counts in each.
+
+```python
+linkedin_query(account_id="<account_id>", entity_type="ad_preview",
+               entity_id="urn:li:sponsoredCreative:<creative_id>")
+linkedin_get_creatives_with_images(
+    account_id="<account_id>", campaign_id="<campaign_id>",
+    start_date="<start_date>", end_date="<end_date>",
+    compare_previous_period=True, include_images=True, limit=20)
+```
+
+Check both desktop and mobile previews; preview links expire after about three
+hours. In our testing, LinkedIn's preview returned UNSUPPORTED_CREATIVE_TYPE for a lead gen creative, and LinkedIn documents no preview for lead gen.
+If ad_preview fails for one, use a preview in Campaign Manager. A preview does not establish approval or delivery.
+Fatigue requires a relative CTR drop of at least 25%, at least 1,000 impressions
+in each period, and no account-wide CTR drop of at least 25%. It is a heuristic.
+If comparison periods are not exact, or previous data is unavailable, report the
+comparison as inconclusive. This tool does not measure frequency.
 
 ## Platform-Specific Troubleshooting
 
@@ -355,11 +405,14 @@ linkedin_get_creatives_with_images(
 |---------|-------|----------|
 | High CPL | Audience size | Broaden targeting, test automated bidding |
 | Low engagement | Creative relevance | Test video, improve personalization |
-| Delivery issues | Budget/bid caps | Increase audience size, raise bids |
-| Form completion low | Field count | Reduce to 5-7 fields |
-| Sudden performance drop | Frequency | Check for audience saturation |
+| Delivery issues | serving_diagnosis | Resolve the returned hold before evaluating bids |
+| Form completion low | Read lead_forms | Test field changes in Campaign Manager |
+| Sudden performance drop | Period comparison and fatigue | Separate creative decline from account-wide change |
 
 ### LinkedIn-Specific Optimization Levers
+
+Audience creation and edits to published forms below require Campaign Manager. These are
+strategy options, not additional Ad Superpowers write capabilities.
 
 | Lever | When to Use | Impact |
 |-------|-------------|--------|
@@ -413,11 +466,15 @@ Based on the data, the most likely cause is: [specific cause]
 
 ### Step 1: Check External Factors
 
+**Data you need:** serving_diagnosis from MCP Step 1 and account notices in Campaign Manager.
+
 - [ ] LinkedIn platform outage? (check status.linkedin.com)
 - [ ] Tracking broken? (verify LinkedIn Insight Tag)
 - [ ] Payment issue? (check billing)
 
 ### Step 2: Check for Changes
+
+**Data you need:** The campaign read from MCP Step 1 and advertiser change history; the read is a current snapshot, not an edit log.
 
 - [ ] Did anyone edit the campaign?
 - [ ] Did a scheduled change take effect?
@@ -425,11 +482,15 @@ Based on the data, the most likely cause is: [specific cause]
 
 ### Step 3: Compare to Previous Period
 
+**Data you need:** The two analytics windows and fatigue comparison from MCP Steps 3 and 4.
+
 - [ ] Is this across all campaigns or just one?
 - [ ] All audiences or specific segments?
 - [ ] Gradual decline or sudden drop?
 
 ### Step 4: Don't Panic-Edit
+
+**Data you need:** Confirmed holds, reporting completeness and the advertiser's approved remedy.
 
 - Wait 24-48 hours before major changes
 - Verify data is correct before reacting

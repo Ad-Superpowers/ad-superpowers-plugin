@@ -290,6 +290,9 @@ TOTAL SCORE INTERPRETATION:
 
 ## Cost Reduction Tactics
 
+Treat the impact ranges below as hypotheses. Form changes and retargeting segment
+setup require Campaign Manager; they are not Ad Superpowers capabilities.
+
 ### Quick Wins (1-2 weeks to impact)
 
 ```
@@ -309,7 +312,7 @@ TIER 1: QUICK WINS
 3. AD FORMAT TESTING
    ├─ Impact: -10-30% CPM
    ├─ Test: Video ads (often 20% lower CPM than single image)
-   └─ Test: Document ads (high engagement, competitive CPM)
+   └─ Test: A new single-image offer variant against the current ad
 
 4. SCHEDULING OPTIMIZATION
    ├─ Impact: -5-15% cost
@@ -482,35 +485,93 @@ When analyzing LinkedIn costs, provide:
 
 ## MCP Tool Usage
 
-Use MCP tools to pull cost data for analysis and trend detection:
+Use these checks before applying the cost trend and efficiency frameworks above.
+Benchmark bands are context, not evidence of a billing error or permission to edit.
 
-```
-# Get weekly cost trends across all campaigns
+### Step 1: Separate cost efficiency from spend pacing
+
+**Data you need:** Account, campaign, inclusive dates, impressions, clicks, native
+form leads and website conversions. Compare equal current and previous windows.
+
+```python
 linkedin_get_analytics(
-  account_id="YOUR_ACCOUNT_ID",
-  start_date="YYYY-MM-DD",
-  end_date="YYYY-MM-DD",
-  level="campaign",
-  fields=["costInLocalCurrency", "clicks", "impressions", "leads"]
-)
-
-# Get account-level totals for efficiency score calculation
-linkedin_get_analytics(
-  account_id="YOUR_ACCOUNT_ID",
-  start_date="YYYY-MM-DD",
-  end_date="YYYY-MM-DD",
-  level="account",
-  fields=["costInLocalCurrency", "clicks", "impressions", "totalEngagements"]
-)
-
-# Get campaign details to check for bid strategy changes that may explain spikes
-linkedin_query(
-  account_id="YOUR_ACCOUNT_ID",
-  entity_type="campaigns"
-)
+    account_id="<account_id>", level="account", start_date="<start_date>",
+    end_date="<end_date>", time_granularity="ALL", pivots=["CAMPAIGN"],
+    fields=["costInLocalCurrency", "impressions", "clicks", "oneClickLeads",
+            "externalWebsiteConversions"])
+linkedin_query(account_id="<account_id>", entity_type="campaigns",
+               entity_id="<campaign_id>", format="full")
 ```
 
-Tip: Compare CPC/CPM/CPL week-over-week across multiple campaigns. Spike in one campaign = creative/audience issue. Spike across all campaigns = seasonality or market-wide trend (check DDMA data).
+Calculate CPC, CPM and CPL from summed counts. Keep form leads separate from
+website conversions. A campaign snapshot shows current settings, not historical
+bid changes. Missing data is unknown, not zero. Frequency and SQL rates in the
+framework need Campaign Manager or advertiser CRM evidence; these calls do not
+supply them. Leave scores incomplete when those inputs are unavailable.
+
+### Step 2: Read pacing against budgets
+
+**Data you need:** Daily spend, daily/total budgets, currency, schedule, pacing flags
+and the projection note. The default window is the last 14 complete UTC days.
+
+```python
+linkedin_get_analytics(account_id="<account_id>", level="account", analysis="pacing")
+linkedin_get_analytics(account_id="<account_id>", level="campaign",
+                       entity_id="<campaign_id>", analysis="pacing",
+                       start_date="<start_date>", end_date="<end_date>")
+```
+
+Use at most 92 inclusive days. Omit pivot, pivots, fields and target_companies;
+pacing fixes DAILY campaign rows and its metrics. Account pacing reads the first
+100 ACTIVE campaigns, and analytics is bounded at 15,000 rows without pagination.
+Daily spend above the daily budget can be normal LinkedIn pacing. Check LinkedIn
+Help, "Daily budgets", for current guidance. Do not present a measured percentage
+or the tool's OVER_150_PERCENT_DAY flag as a universal LinkedIn spending rule.
+Missing days stay null. Projection uses total budget minus window spend as an
+upper bound on remaining budget; earlier spend is not read. A null exhaustion
+projection does not mean the campaign is safe through its end date.
+
+### Step 3: Check tracking before diagnosing conversion cost
+
+**Data you need:** Insight Tag, latest domain callback, conversion definitions and
+the affected campaign's conversion associations.
+
+```python
+linkedin_query(account_id="<account_id>", entity_type="insight_tags")
+linkedin_query(account_id="<account_id>", entity_type="insight_tag_domains",
+               start=0, count=100)
+linkedin_query(account_id="<account_id>", entity_type="conversions")
+linkedin_query(account_id="<account_id>", entity_type="campaign_conversions",
+               campaign_id="<campaign_id>")
+```
+
+A tag's existence does not prove it is firing. lastCallbackAt may lag by 20 minutes;
+absence means the tag has never fired for that domain. Check actual test activity
+and consent configuration with the advertiser. Conversion reads include owned and
+shared rules; enabled=false means deleted. Compare attribution windows, URL rules
+and association records before attributing a CPL spike to the auction.
+These are inspection reads; do not promise tracking installation or conversion writes.
+
+### Step 4: Assign the next action
+
+**Data you need:** Period cost changes, pacing completeness, tracking findings and
+serving holds for campaigns with little observed spend.
+
+```python
+linkedin_query(account_id="<account_id>", entity_type="serving_diagnosis",
+               campaign_id="<campaign_id>")
+```
+
+| Finding | Next action |
+|---------|-------------|
+| Higher daily spend, stable cost per result | Check pacing and the full schedule before changing budgets |
+| Missing callbacks or conversion association | Resolve tracking in Campaign Manager or on the website |
+| Low delivery with a hold | Follow the hold remedy before changing bids |
+| Rising CPC with falling CTR | Inspect creative performance and comparable periods |
+| Missing data or currency mismatch | Report the limitation; do not invent spend ratios |
+
+Ad Superpowers checks budget and bid changes for large steps, high amounts and LinkedIn pricing, requiring explicit confirmation where needed. It refuses budgets above its currency limits unless strictly decreasing, and refuses malformed or unverifiable budget inputs. Recommendations require an
+advertiser decision before any budget, status or bid change.
 
 ## New Ad Format Cost Benchmarks
 
@@ -518,12 +579,11 @@ Cost profiles for 2025-2026 formats vs. standard Sponsored Content:
 
 | Format | CPM vs Single Image | CPC vs Single Image | Notes |
 |--------|--------------------|--------------------|-------|
-| Document Ads | -5 to -15% | -10 to -20% | In-feed reading drives higher engagement at similar cost |
 | Thought Leader Ads | -20 to -40% | -15 to -30% | Employee posts get organic distribution boost |
 | CTV Ads | CPM only ($40-80) | N/A (awareness) | Household-level B2B reach; no click-based pricing |
 | Conversation Ads | N/A (open rate) | Per-open: ~$0.80-2 | Charged per message open, not click |
 
-**Strategic implication:** If Sponsored Content CPM is trending up (as per DDMA +20% YoY), rotating budget to Thought Leader Ads and Document Ads can offset cost increases while maintaining or improving engagement.
+**Strategic implication:** Compare measured cost per qualified result before reallocating budget. Carousel ads (2-10 image cards in a CAROUSEL campaign) and, where the server has document ads enabled, document ads (a PDF uploaded with `linkedin_upload`, in a BRAND_AWARENESS or ENGAGEMENT campaign with format SPONSORED_UPDATE_NATIVE_DOCUMENT) can be created as a DRAFT through `linkedin_manage(action="create_inline")`. Format options outside the supported image, video, carousel and document workflows require Campaign Manager.
 
 ## Monitoring Checklist
 

@@ -62,8 +62,11 @@ TIER 3: Market Accounts (200-1,000 accounts)
 
 ### Company List Upload Requirements
 
-LinkedIn Matched Audiences company list specs:
-- **Minimum:** 300 companies per list (LinkedIn requires this for delivery)
+Create and upload company lists in Campaign Manager. Ad Superpowers reads existing
+segments; it does not upload lists or create retargeting segments.
+
+Company list planning guidance:
+- **Delivery readiness:** At least 300 matched members; this is not a minimum of 300 companies.
 - **Recommended:** 1,000+ companies for stable delivery and optimization
 - **Format:** CSV with company name + domain (both required for best match)
 - **Match rate benchmark:** 60-80% typical; below 50% indicates data quality issues
@@ -182,28 +185,55 @@ Tertiary:  Information Technology + Director/VP + company list
 
 ### Layered Targeting Setup
 
-For each ABM campaign, layer targeting in this order:
+Keep company list, job function/seniority, optional skills and exclusions as the
+four layers. Check each layer against returned data before proposing a change.
 
-**Layer 1 (Required): Company List**
+#### Step 1: Confirm company list readiness
+
+**Data you need:** Selected account, existing matched audience IDs, status and
+approximateMemberCount.
+
+```python
+linkedin_query(account_id="<account_id>", entity_type="matched_audiences",
+               status=["READY", "BUILDING", "UPDATING"], start=0, count=100)
+linkedin_query(account_id="<account_id>", entity_type="matched_audiences",
+               entity_id="urn:li:adSegment:<segment_id>")
 ```
-linkedin_query(
-    account_id="<account>",
-    entity_type="campaigns",
-    status=["ACTIVE"]
-)
+
+Paginate the list when needed; omit status and pagination on the keyed read.
+Wait for readiness and enough matched members before expecting delivery.
+Segment member count is not the final campaign audience size.
+
+#### Step 2: Resolve the buying committee attributes
+
+**Data you need:** Advertiser-approved titles or other attributes and their exact
+facet URNs. Select returned entities; do not invent targeting URNs.
+
+```python
+linkedin_query(account_id="<account_id>", entity_type="targeting_entities",
+               targeting_facet="urn:li:adTargetingFacet:titles",
+               targeting_query="marketing director")
+linkedin_query(account_id="<account_id>", entity_type="campaigns",
+               entity_id="<campaign_id>", format="full")
 ```
-Upload matched audience list as base targeting.
 
-**Layer 2 (Required): Job Function + Seniority**
-Narrow to relevant decision makers within target accounts.
+Use the campaign read to inspect the current company, job function and seniority
+layers. Resolve any proposed attributes with their full targeting facet URN.
 
-**Layer 3 (Optional): Skills or Groups**
-Add skill-based targeting for technical roles (e.g., "Salesforce" skill for CRM buyers).
+#### Step 3: Check the combined audience
 
-**Layer 4 (Optional): Exclusions**
-- Exclude current customers (upload customer list)
-- Exclude competitors (upload competitor company list)
-- Exclude disqualified leads from CRM
+**Data you need:** Complete targetingCriteria with the selected company list,
+role layers and exclusions. Assign that object to `criteria`.
+
+```python
+linkedin_query(account_id="<account_id>", entity_type="audience_count",
+               targeting_criteria=criteria)
+```
+
+Zero may mean fewer than 300 members; the estimate is rounded and is not reach.
+Do not sum segment counts or assume a READY segment guarantees campaign delivery.
+Create customer and competitor exclusion lists in Campaign Manager before using
+existing segment IDs in a targeting proposal.
 
 ### Audience Size Guidelines for ABM
 
@@ -228,10 +258,10 @@ Track how deeply you're reaching into each target account:
 Account Penetration Score = (Unique Contacts Engaged / Total Buying Committee Size) x 100
 
 Benchmarks:
-- <10%: Low penetration — not enough contacts seeing your ads
-- 10-25%: Developing — early-stage awareness building
-- 25-50%: Strong — multiple decision makers engaged
-- >50%: High penetration — ready for sales activation
+- <10%: Low penetration; not enough contacts seeing your ads
+- 10-25%: Developing; early-stage awareness building
+- 25-50%: Strong; multiple decision makers engaged
+- >50%: High penetration; ready for sales activation
 ```
 
 ### Engagement Depth Scoring
@@ -251,25 +281,42 @@ Weight different engagement types:
 
 ### Measuring with MCP Tools
 
-```
+#### Step 4: Compare delivery with the target company list
+
+**Data you need:** Up to 500 target organization IDs or organization URNs, the
+campaign ID, and an inclusive date window. Use verified target companies, not
+segment IDs, in target_companies.
+
+```python
 linkedin_get_analytics(
-    account_id="<account>",
-    start_date="YYYY-MM-DD",
-    end_date="YYYY-MM-DD",
-    level="campaign",
-    entity_id="<tier1_campaign>",
-    fields=["impressions", "clicks", "costInLocalCurrency"]
-)
-# Note: per-company breakdown is not available via API — check Campaign Manager
-# Demographics tab for company-level engagement data.
+    account_id="<account_id>", level="campaign", entity_id="<campaign_id>",
+    start_date="<start_date>", end_date="<end_date>", time_granularity="ALL",
+    pivot="MEMBER_COMPANY", target_companies=["urn:li:organization:<company_id>"],
+    fields=["impressions", "clicks", "costInLocalCurrency"], limit=100)
 ```
 
-Key ABM metrics to track:
-- **Account reach:** Unique companies reached / total target accounts
-- **Multi-contact reach:** Accounts with 2+ unique contacts engaged
-- **Engagement rate by tier:** Should increase from Tier 3 → Tier 1
-- **Pipeline influence:** Accounts that entered pipeline after ad exposure
-- **Sales cycle acceleration:** Days to close for ABM-touched vs non-ABM accounts
+Use abm.reached_count and target_count for observed company coverage. The ABM
+comparison includes returned rows beyond the display limit. Missing metrics stay
+absent. not_in_results means absent from LinkedIn's returned rows, not proven zero
+reach: privacy suppression, low activity and provider truncation can hide delivery.
+Demographics are approximate and delayed; use ALL rather than summing daily noise.
+LinkedIn caps analytics at 15,000 rows without pagination.
+
+#### Step 5: Separate company delivery from contact penetration
+
+**Data you need:** The company pivot above, advertiser-provided CRM contacts,
+meetings and pipeline data for the same company list and reporting dates.
+
+| Evidence | Interpretation | Next step |
+|----------|----------------|-----------|
+| Target company appears in abm.reached | Observed delivery to that company | Compare clicks and spend with its tier |
+| Company is in not_in_results | Delivery is unproven | Check targeting and privacy limits |
+| Segment is BUILDING | List is not ready for a delivery conclusion | Recheck readiness later |
+| Strong company engagement, weak pipeline | Ads alone do not establish qualification | Review CRM outcomes with sales |
+
+The penetration score and multi-contact measures above require CRM evidence.
+Company impressions do not identify individual contacts or the buying committee.
+Do not infer SQLs, pipeline influence or shorter sales cycles from this pivot.
 
 ---
 
@@ -315,8 +362,8 @@ Once accounts show engagement, expand strategically:
 - Add Blocker personas (Legal, Procurement) for late-stage accounts
 
 **Vertical expansion** (similar companies to engaged accounts):
-- LinkedIn Lookalike from engaged company list (1% size)
-- LinkedIn Predictive Audiences — AI-generated audiences built from your CRM data or intent signals (available in Campaign Manager under Audiences > Create Audience > Predictive)
+- Test similar company attributes resolved through targeting_entities
+- LinkedIn Predictive Audiences built from your CRM data or intent signals (available in Campaign Manager under Audiences > Create Audience > Predictive)
 - Industry + company size mirroring of Tier 1 engaged accounts
 - Promote engaged Tier 2 accounts to Tier 1 treatment
 
@@ -378,7 +425,7 @@ Minimum viable ABM budget:
 
 1. Define ICP and build tiered account list (Tier 1/2/3)
 2. Map buying committee roles per tier (Champion, Decision Maker, Influencer, Blocker, End User)
-3. Upload company lists to LinkedIn Matched Audiences (min 300 per list)
+3. Upload company lists in Campaign Manager; check readiness and at least 300 matched members
 4. Layer job function + seniority targeting on each list
 5. Create tier-appropriate creative (custom → segment → template)
 6. Set budget allocation by tier (40/30/25 split)
