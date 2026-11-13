@@ -2,6 +2,22 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.7.2] - 2026-11-13
+
+Patch release: the plugin manifest meets the Claude plugin directory checks.
+
+### Fixed
+
+- **`repository`** in `plugin.json` is now the repository URL as a string.
+  The directory refused 2.5.1 because it was an object.
+- **The plugin folder has its own README**, so the directory can read the
+  plugin from `plugin/`.
+
+### Added
+
+- **`privacyPolicyUrl`** in `plugin.json`, a marketplace description, and a
+  plugin icon at `.claude-plugin/icon.png`.
+
 ## [2.7.1] - 2026-11-05
 
 Patch release: skill metadata within the Agent Skills limit.

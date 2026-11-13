@@ -82,7 +82,8 @@ times out first, there is no such response: use the `video_id` from the upload).
 `meta_get_video_status(account_id="act_...", video_id="12345...")` until the status is `ready`, then retry with
 `video_id` instead of `video_url`.
 The status tool verifies account access and video-library membership first.
-A new upload may take 1–5 minutes to appear in that inventory; retry after that delay.
+A new upload is usually listed in that inventory within 30 seconds; on `video_account_mismatch`, retry once
+after `retry_after_s` with the same `video_id` (never upload it again).
 
 ## PATH B — Reuse an existing library asset
 

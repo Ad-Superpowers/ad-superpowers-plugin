@@ -98,7 +98,7 @@ No API keys to configure, no manual MCP setup. Authentication happens via OAuth 
 | `/ad-superpowers:anomaly-detective` | Detect performance anomalies across campaigns |
 | `/ad-superpowers:competitive-landscape-analyzer` | Competitive positioning analysis |
 
-[See all 35 commands](plugin/commands/)
+[See all 35 commands](https://github.com/Ad-Superpowers/ad-superpowers-plugin/tree/main/plugin/commands)
 
 ### Specialized agents
 
@@ -183,7 +183,7 @@ Free trial: 14 days from workspace creation, 50 tool calls per month. No credit 
 * All API communication over HTTPS
 * Users can revoke platform access at any time
 * Per-user authentication in team environments
-* See [SECURITY.md](SECURITY.md) for our responsible disclosure policy
+* See [SECURITY.md](https://github.com/Ad-Superpowers/ad-superpowers-plugin/blob/main/plugin/SECURITY.md) for our responsible disclosure policy
 
 ## Support
 
@@ -193,4 +193,4 @@ Free trial: 14 days from workspace creation, 50 tool calls per month. No credit 
 
 ## License
 
-MIT, see [LICENSE](LICENSE)
+MIT, see [LICENSE](https://github.com/Ad-Superpowers/ad-superpowers-plugin/blob/main/LICENSE)
