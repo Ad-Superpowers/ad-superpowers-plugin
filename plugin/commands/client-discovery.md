@@ -172,7 +172,7 @@ For each connected platform, gather 90-day performance. Use one date window for 
 - `tiktok_get_report(start_date="START_DATE", end_date="END_DATE", level="campaign")`
 
 **GA4 (traffic context):**
-- `ga4_run_report(property_id=property_id, metrics=["sessions", "totalUsers", "newUsers"], dimensions=["sessionDefaultChannelGrouping"], start_date="START_DATE", end_date="END_DATE")`
+- `ga4_run_report(property_id=property_id, metrics=["sessions", "totalUsers", "newUsers"], dimensions=["sessionDefaultChannelGroup"], start_date="START_DATE", end_date="END_DATE")`
 
 ### Step 5: Synthesize Findings
 

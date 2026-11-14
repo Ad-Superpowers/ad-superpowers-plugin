@@ -62,11 +62,11 @@ Recommendation: Use non-overlapping bands (0-1%, 1-2%, 2-3%) or keep only the 1%
 
 ### Step 2: Pull All Active Ad Sets with Targeting
 
-`meta_query(account_id="FROM_STEP_1", edge="adsets", params={"fields":"name,targeting,status,daily_budget,lifetime_budget,optimization_goal,campaign_id", "filtering":[{"field":"status","operator":"IN","value":["ACTIVE"]}], "limit":100})`
+`meta_query(account_id="FROM_STEP_1", entity_type="adsets", effective_status=["ACTIVE"], fields=["name","targeting","status","daily_budget","lifetime_budget","optimization_goal","campaign_id"], limit=100)` (follow `paging.next` with `meta_query(account_id="FROM_STEP_1", entity_type="adsets", pagination_url=...)` until every active ad set is in)
 
 ### Step 3: Pull Campaign Names for Context
 
-`meta_query(account_id="FROM_STEP_1", edge="campaigns", params={"fields":"name,objective,status,buying_type", "filtering":[{"field":"status","operator":"IN","value":["ACTIVE"]}], "limit":50})`
+`meta_query(account_id="FROM_STEP_1", entity_type="campaigns", effective_status=["ACTIVE"], fields=["name","objective","status","buying_type"], limit=50)`
 
 ### Step 4: Pull Ad Set Performance (to quantify waste)
 
@@ -74,7 +74,7 @@ Recommendation: Use non-overlapping bands (0-1%, 1-2%, 2-3%) or keep only the 1%
 
 ### Step 5: Pull Custom Audiences List
 
-`meta_query(account_id="FROM_STEP_1", edge="customaudiences", params={"fields":"name,subtype,approximate_count,data_source,lookalike_spec", "limit":100})`
+`meta_query(account_id="FROM_STEP_1", entity_type="customaudiences", fields=["name","subtype","approximate_count_lower_bound","approximate_count_upper_bound","data_source","lookalike_spec"], limit=100)`
 
 ### Step 6: Analyze Overlap
 

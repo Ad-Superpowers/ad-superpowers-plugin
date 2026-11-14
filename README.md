@@ -1,174 +1,67 @@
 # Ad Superpowers for Claude
 
-Analyze your advertising and analytics accounts across 8 platforms in Claude Code and Claude Desktop, make changes in Meta, Google Ads, TikTok and Tag Manager, and submit or delete Search Console sitemaps.
+Ad Superpowers sits between you and your ad platforms. One connection gives Claude Meta, Google Ads, GA4, Search Console, Tag Manager, Merchant Center, LinkedIn and TikTok, with client context, workflows and expert skills for agencies and PPC specialists.
 
 **124 expert skills** · **35 slash commands** (29 workflow, 6 utility) · **5 specialized agents** · **61 MCP tools**
 
-`meta_create_lead_form` and `spend_overview` are listed once they are switched on for Ad Superpowers; lead forms wait for Meta's approval of the `pages_manage_ads` permission.
+## What you can do
+
+- **Audit an account** across channels and get the three changes that matter most.
+- **Report across clients**: weekly pulses, monthly reports and cross-platform comparisons from live data.
+- **Launch campaigns from a media plan** in minutes: Claude prepares each campaign, you check it, and new campaigns start paused.
 
 ## Platforms
 
 | Platform | Skills | MCP Tools | What you can do |
 |----------|-------:|----------:|------------------|
-| **Meta Ads** | 26 | 15 | Campaign management, creative fatigue analysis, audience targeting, ad creation, budget optimization |
-| **Google Ads** | 32 | 5 | GAQL queries, Performance Max, keyword strategy, bid optimization, campaign creation |
-| **Google Analytics 4** | 18 | 2 | Event tracking, attribution models, audience building, ecommerce analysis |
-| **Google Search Console** | 2 | 3 | SEO performance, keyword rankings, indexing diagnostics, sitemap management |
-| **Google Tag Manager** | 4 | 4 | Container auditing, consent mode, server-side tagging, conversion setup |
-| **Google Merchant Center** | 0 | 6 | Feed and Shopping reads; separate operator-enabled, guided customLabel4 pilot for one registered product, with a preview and explicit token confirmation for each apply and revert |
-| **LinkedIn Ads** | 14 | 6 | B2B lead gen, ABM targeting, revenue attribution, Thought Leader Ads, CTV |
-| **TikTok Ads** | 10 | 9 | Creative fatigue, video performance, Smart+ campaigns, Search Ads, Shop |
-| **Cross-platform** | 18 | 9 | Unified `get_started`, `workflow`, `workspace_info`, `skill`, `skill_update`, `workflow_update`, `clients`, `clients_update`, and the pilot-only `change_history_query` tools; client profiles, attribution reconciliation, SEO vs SEA gaps, budget allocation, competitive analysis |
-
-The total also includes `assets_stage`, the private image/video staging tool outside these platform rows. When your workspace has upload access, you can upload images up to 20 MB and videos up to 500 MB through Ad Superpowers to Meta, TikTok, LinkedIn and Google Ads, using a connected account your workspace is allowed to change. Seeing the upload tool does not mean your workspace has upload access. The client needs local file access and HTTP upload; installing this plugin does not grant account permissions. Upload acceptance, processing readiness and ad approval are separate. See [media upload availability](https://adsuperpowers.ai/docs/media-upload).
-
-Merchant Center reads are generally available. The label pilot is enabled by an operator on request, not by installing this plugin. Its guided acceptance route uses Claude Desktop; this is not a claim of acceptance in Claude Code or Cowork. It does not support general product corrections, batch updates, prices, stock, primary feeds, or feed rules. Pending is not processed; UNKNOWN stops all further changes. When the pilot's Google authorization expires, its owner must reauthorize in the same workspace with the same Google identity. Revert removes only our own single-label input. See the [pilot guide](https://adsuperpowers.ai/docs/merchant-label-pilot).
+| **Meta Ads** | 26 | 15 | Campaigns, ads and budgets, creative strategy and fatigue, audiences, catalog ads |
+| **Google Ads** | 32 | 5 | GAQL reporting, Performance Max, keywords, bidding, campaign changes |
+| **Google Analytics 4** | 18 | 2 | Traffic and conversion reports, attribution, audiences, ecommerce |
+| **Google Search Console** | 2 | 3 | Search performance, keyword rankings, indexing, sitemaps |
+| **Google Tag Manager** | 4 | 4 | Container audits, consent mode, server-side tagging, supervised changes |
+| **Google Merchant Center** | 0 | 6 | Feed and Shopping reads, product issues and performance |
+| **LinkedIn Ads** | 14 | 6 | B2B lead gen, ABM, analytics, campaign changes |
+| **TikTok Ads** | 10 | 9 | Reporting, creatives, audiences, campaign changes |
+| **Cross-platform** | 18 | 9 | Getting started, client context, workflows, skills and the workspace |
 
 ## Install
 
-Pick the path that matches how you use Claude. All four give you the MCP tools; only Claude Code and Cowork give you the bundled skills, commands, and agents.
+1. In Claude, open **Customize → Plugins → Discover**, find **Ad Superpowers** and select **Add**. The plugin is saved to your account and also appears in Cowork and Claude Code.
+2. Open the plugin's **Connectors** tab and connect **Ad Superpowers**: sign in, choose your workspace and allow access. Adding the plugin does not connect anything by itself.
+3. Connect your ad platforms once in the dashboard at [app.adsuperpowers.ai](https://app.adsuperpowers.ai/dashboard/integrations).
 
-### Claude Code (terminal or VSCode extension)
+Skills, commands and the connector work in chat, Cowork and Claude Code. The five agents run in Cowork and Claude Code.
 
-**Requires Claude Code `2.1.74` or newer.** Earlier versions had an upstream bug ([anthropics/claude-code#21560](https://github.com/anthropics/claude-code/issues/21560)) that prevented plugin-defined subagents from accessing MCP tools; it is fixed in 2.1.74+. Upgrade with `npm i -g @anthropic-ai/claude-code@latest` (terminal) or via the VSCode extension marketplace, then `Developer: Reload Window`.
-
-Add the marketplace once, then install the plugin:
+Claude Code from the command line:
 
 ```bash
 /plugin marketplace add Ad-Superpowers/ad-superpowers-plugin
 /plugin install ad-superpowers@ad-superpowers
 ```
 
-That's it. The MCP server, all 124 skills, 35 slash commands and 5 agents are bundled.
+ChatGPT and other MCP clients get the same tools through the connector: [setup guides](https://adsuperpowers.ai/docs).
 
-### Cowork (Claude Desktop's agentic coding mode)
+## You stay in control
 
-Cowork supports plugins through an admin UI, not through a slash command. This path is available on **Team** and **Enterprise** plans, and only Owners or Primary Owners can add plugins for the organization.
+- Reads run on the accounts your workspace can access; a member can be read-only.
+- Tools that change something are marked as write tools; how often your client asks before using them depends on its settings.
+- On Meta, new campaigns and ad sets are created paused, and archiving, budget changes over 20% and changes that reset learning need an explicit extra confirmation in the call.
+- The workspace activity trail records each supported action with who, when, what and the outcome.
 
-1. In Claude Desktop, go to **Organization settings → Plugins**
-2. Click **Add plugin** and choose **Sync from GitHub**
-3. Enter the repository: `Ad-Superpowers/ad-superpowers-plugin`
-4. Set distribution: **Available for install** (members can opt in) or **Installed by default**
-5. Members then open **Browse plugins** inside Cowork to install it
+## What the plugin sends, and where
 
-Once installed, members get the skills, commands, and MCP tools inside Cowork. The 5 bundled subagents do not currently launch in Cowork — see [Known limitations](#known-limitations) below for details and the Skill-based workarounds.
+| What | Where it goes |
+|---|---|
+| Your requests to Ad Superpowers tools | `mcp.adsuperpowers.ai/v1` over HTTPS, signed in with OAuth |
+| Platform reads and changes | The ad platform APIs you connected, through Ad Superpowers |
+| Analysis scripts, such as the creative X-ray | Run on the Ad Superpowers server, not on your computer |
+| Media you upload to an ad platform | Through Ad Superpowers to temporary private storage (Supabase), then to the platform; the source file is deleted after the upload |
+| Competitor and market research steps in some commands | Your Claude client's own web search, when you allow it |
+| Tool results | Back to your Claude client; Anthropic's policies apply there |
 
-### Claude Desktop (chat mode, via Connectors)
+Nothing runs on your computer when you install the plugin: it has no hooks, local scripts or local servers. Platform credentials are encrypted on our server, API responses are cached for one minute to six hours, and Ad Superpowers does not run its own AI model. Details: [Data privacy](https://adsuperpowers.ai/docs/data-privacy) · [Privacy policy](https://adsuperpowers.ai/privacy-policy) · [Terms](https://adsuperpowers.ai/terms-of-service).
 
-The regular Claude Desktop chat interface doesn't have a plugin system. You can still get the MCP tools by adding Ad Superpowers as a Connector, but you won't get the bundled skills, commands, or agents (those need Claude Code or Cowork).
-
-1. Open Claude Desktop
-2. Go to **Settings → Connectors → Add Custom Connector**
-3. Enter the URL: `https://mcp.adsuperpowers.ai/v1`
-4. Complete the OAuth flow in your browser
-
-If you want the full experience, use Claude Code or Cowork instead.
-
-### ChatGPT
-
-Install the published Ad Superpowers plugin in ChatGPT and sign in with your own Ad Superpowers account. You get the MCP tools but not the bundled skills, commands or agents. See the [ChatGPT setup guide](https://adsuperpowers.ai/docs/setup/chatgpt).
-
-## Setup
-
-1. Create an account at [app.adsuperpowers.ai](https://app.adsuperpowers.ai)
-2. Connect your ad platforms through OAuth in the dashboard
-3. Start asking Claude about your campaigns
-
-No API keys to configure, no manual MCP setup. Authentication happens via OAuth through the Ad Superpowers dashboard.
-
-## What you can do
-
-### Ask questions in natural language
-
-* "How are my Meta campaigns performing this week?"
-* "Which Google Ads keywords have the highest CPA?"
-* "Compare my LinkedIn and Meta lead gen performance"
-* "Is my TikTok creative showing signs of fatigue?"
-* "What's my organic vs paid keyword overlap?"
-
-### Run workflow commands
-
-| Command | What it does |
-|---------|--------------|
-| `/ad-superpowers:weekly-performance-pulse` | Cross-platform weekly health check |
-| `/ad-superpowers:creative-fatigue-scanner` | Detect fatigued creatives across platforms |
-| `/ad-superpowers:budget-allocation-planner` | Data-driven budget reallocation recommendations |
-| `/ad-superpowers:keyword-opportunities` | SEO vs paid keyword gap analysis |
-| `/ad-superpowers:monthly-executive-summary` | Executive-ready monthly performance report |
-| `/ad-superpowers:anomaly-detective` | Detect performance anomalies across campaigns |
-| `/ad-superpowers:competitive-landscape-analyzer` | Competitive positioning analysis |
-
-[See all 35 commands](https://github.com/Ad-Superpowers/ad-superpowers-plugin/tree/main/plugin/commands)
-
-### Specialized agents
-
-Claude automatically delegates to the right agent based on your task:
-
-| Agent | Focus | Triggers |
-|-------|-------|----------|
-| **marketing-strategist** | Strategy, competitive analysis, channel selection, personas | "analyze competition", "which channels?", "new client onboarding" |
-| **media-buyer** | Campaign execution, budgets, bidding, audiences, scaling | "create campaign", "optimize budget", "scale winners" |
-| **creative-analyst** | Creative fatigue detection, A/B tests, refresh strategy | "check creative fatigue", "which ads are tired" |
-| **reporting-agent** | Structured performance reports and comparisons | "weekly report", "monthly summary" |
-| **tracking-specialist** | GTM audits, conversion tracking, SEO vs SEA analysis | "audit my GTM", "keyword overlap", "missing conversions" |
-
-### Expert skills (auto-invoked)
-
-Claude automatically uses the right skill based on your question. Skills provide decision frameworks, benchmarks, and actionable recommendations for:
-
-* Campaign optimization (bid strategies, budget scaling, learning phase management)
-* Creative analysis (fatigue detection, A/B testing, diversification)
-* Audience strategy (lookalike planning, overlap detection, remarketing)
-* Measurement (attribution models, conversion tracking, CAPI setup)
-* Technical work (GAQL queries, GTM auditing, GA4 event tracking)
-
-### Write operations (with safety)
-
-* Create Meta ads (image upload, creative, and ad in one step)
-* Duplicate ads with creative overrides
-* Pause or resume campaigns and update budgets
-* Create Google Ads campaigns (budget, campaign, ad group, ads, keywords)
-
-Write controls:
-
-* Write access is on by default. The workspace owner can set the whole workspace, or a single team member, to read-only; write tools are then hidden and blocked
-* New Meta and TikTok campaigns and ads start paused, and new LinkedIn campaigns and ads start as drafts, unless you ask for them to go live
-* Destructive operations are clearly flagged
-
-## Known limitations
-
-### Bundled subagents do not launch in Cowork (Claude Desktop agentic mode)
-
-The 5 bundled agents (`marketing-strategist`, `media-buyer`, `creative-analyst`, `reporting-agent`, `tracking-specialist`) launch correctly in **Claude Code** (terminal and VSCode extension, 2.1.74+). They do **not** currently launch in **Cowork**, the agentic coding mode inside Claude Desktop.
-
-**What's happening:** When the plugin is installed in a Cowork session, Cowork's plugin loader reads the plugin's skills, commands, and MCP server correctly, but it does not register the markdown files in `agents/` with the Agent tool's `subagent_type` registry. The Agent tool in Cowork still only exposes its five built-in subagents (`general-purpose`, `Explore`, `Plan`, `statusline-setup`, `claude-code-guide`). Attempting `Agent(subagent_type="creative-analyst", ...)` returns "agent type not found." Our agent files validate cleanly against the [plugin spec](https://code.claude.com/docs/en/plugins-reference#agents), so this is a Cowork harness limitation, not a plugin defect.
-
-This is consistent with other known Cowork plugin-loading issues tracked upstream ([#39274](https://github.com/anthropics/claude-code/issues/39274), [#40774](https://github.com/anthropics/claude-code/issues/40774)), and there is currently no plugin-author-side opt-in, whitelist, or setting that changes this behavior. We have filed a request with Anthropic to expose plugin-bundled agents through Cowork's Agent tool.
-
-**What works in Cowork today:** Everything except `Agent()` dispatch.
-
-* All 124 skills load and auto-invoke on relevant questions
-* All 35 slash commands are discoverable and runnable
-* MCP tools are callable from the main conversation, exactly as in any other client
-* All write operations (create campaign, duplicate ad, update budget) work
-* The agents' **prompts and logic** are also available as slash commands and skills — you get the same analysis, it just runs in the main context window instead of a separate subagent
-
-So in practice, asking Claude directly in Cowork — *"run a creative fatigue scan on my Meta account"* or *"write a weekly performance report"* — gives you the same deliverable the subagent would have produced. It loads the relevant skill (`meta-creative-fatigue-analyzer`, `weekly-performance-pulse`, etc.) and calls the MCP tools directly in the main thread.
-
-### Claude Code (terminal and VSCode)
-
-No known limitations on 2.1.74+. All skills, commands, MCP tools, and subagents work as documented. Earlier versions had [#21560](https://github.com/anthropics/claude-code/issues/21560) (subagents couldn't access plugin MCP tools); that is fixed.
-
-### Host compatibility matrix
-
-| Component | Claude Code CLI / VSCode | Cowork (Claude Desktop) | Claude Desktop (chat, via Connector) | ChatGPT (via Connector) |
-|-----------|:---:|:---:|:---:|:---:|
-| 124 skills | ✅ | ✅ | ❌ | ❌ |
-| 35 commands | ✅ | ✅ | ❌ | ❌ |
-| 61 MCP tools | ✅ | ✅ | ✅ | ✅ |
-| 5 subagents | ✅ | ❌ (use skills instead) | ❌ | ❌ |
-
-## Paid early access
+## Pricing
 
 | Tier | Monthly | Annual | Tool calls/mo | Account slots per platform | Users | Platforms |
 |------|--------:|-------:|--------------:|---------:|------:|-----------|
@@ -177,20 +70,8 @@ No known limitations on 2.1.74+. All skills, commands, MCP tools, and subagents 
 
 Free trial: 14 days from workspace creation, 50 tool calls per month. No credit card. The trial includes 25 account slots per platform, 1 user and all 8 platforms. To continue after the trial, choose a paid plan. Annual plans get a 20% discount. A "tool call" is one MCP tool invocation; workflows that fan out to multiple tools count each invocation. Enterprise enquiries use custom usage and volume pricing. Start at [adsuperpowers.ai](https://adsuperpowers.ai).
 
-## Security
-
-* OAuth authentication; platform credentials are held encrypted on our server, not on your machine
-* All API communication over HTTPS
-* Users can revoke platform access at any time
-* Per-user authentication in team environments
-* See [SECURITY.md](https://github.com/Ad-Superpowers/ad-superpowers-plugin/blob/main/plugin/SECURITY.md) for our responsible disclosure policy
-
 ## Support
 
-* Website: [adsuperpowers.ai](https://adsuperpowers.ai)
-* Dashboard: [app.adsuperpowers.ai](https://app.adsuperpowers.ai)
-* Email: contact@adsuperpowers.ai
-
-## License
+[adsuperpowers.ai/contact](https://adsuperpowers.ai/contact) · contact@adsuperpowers.ai · [Security policy](https://github.com/Ad-Superpowers/ad-superpowers-plugin/blob/main/plugin/SECURITY.md)
 
 MIT, see [LICENSE](https://github.com/Ad-Superpowers/ad-superpowers-plugin/blob/main/LICENSE)

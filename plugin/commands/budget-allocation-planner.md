@@ -71,7 +71,7 @@ One date window for every platform: START_DATE = 30 days before today, END_DATE 
 - `meta_list_ad_accounts()` then `meta_get_insights(account_id="...", time_range={"since": "START_DATE", "until": "END_DATE"}, level="account")`
 - `google_ads_list_accounts()` then `google_ads_run_gaql(customer_id="...", query="SELECT metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM customer WHERE segments.date BETWEEN 'START_DATE' AND 'END_DATE'")`
 - `linkedin_list_ad_accounts()` then `linkedin_get_analytics(account_id="...", start_date="START_DATE", end_date="END_DATE")`
-- `tiktok_get_advertiser_info()` then `tiktok_get_report(start_date="START_DATE", end_date="END_DATE", level="account")`
+- `tiktok_get_advertiser_info()` then `tiktok_get_report(start_date="START_DATE", end_date="END_DATE", level="campaign")` (TikTok reports have no account level: request campaign rows, fetch every page (`page=2`, `3`, … until a page returns fewer than `page_size` rows), sum spend, impressions, clicks and conversions across campaigns, and recompute CTR, CPC and CPA from those totals)
 - `ga4_list_properties()` then `ga4_run_report(property_id="...", start_date="START_DATE", end_date="END_DATE", metrics=["sessions","conversions","totalRevenue"], dimensions=["sessionDefaultChannelGroup"])`
 
 ### Step 2: Budget Classification & Constraints

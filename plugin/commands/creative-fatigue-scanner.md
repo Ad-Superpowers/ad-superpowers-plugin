@@ -18,9 +18,9 @@ Scan for creative fatigue across all ad platforms. Each platform fatigues at dra
 | TikTok | 3-7 days | 3-5 days | 8-12 | Frequency + CTR | Cliff (-20%/day) |
 | Meta | ~14 days | 7-14 days | 4-6 | Frequency + CTR | Gradual (~2%/day) |
 | LinkedIn | 4-6 weeks | 4-6 weeks | 3-4 | Frequency + CTR | Slow (~1%/day) |
-| Google Ads | 4-8 weeks | Monthly | 15+ per asset group | Asset Ratings | Very slow (~0.5%/wk) |
+| Google Ads | 4-8 weeks | Monthly | 15+ per asset group | Asset ratings (Display); trends (PMax) | Very slow (~0.5%/wk) |
 
-Fatigue speed: TikTok (4x) > Meta (1x) > LinkedIn (0.25x) > Google Ads (0.125x). Google Ads uses Asset Ratings (Best/Good/Low/Pending) instead of frequency.
+Fatigue speed: TikTok (4x) > Meta (1x) > LinkedIn (0.25x) > Google Ads (0.125x). Google Ads uses asset ratings (Best/Good/Low/Pending) for Display and performance trends for PMax instead of frequency.
 
 ## OUTPUT FORMAT (CRITICAL - follow this EXACT structure)
 
@@ -32,7 +32,7 @@ Fatigue speed: TikTok (4x) > Meta (1x) > LinkedIn (0.25x) > Google Ads (0.125x).
 | Google Ads | X assets | Y | Z | W | D days |
 | LinkedIn | X | Y | Z | W | D days |
 
-Note: TikTok ads fatigue 4x faster — check these first. Google Ads uses Asset Ratings instead of frequency.
+Note: TikTok ads fatigue 4x faster — check these first. Google Ads uses asset ratings (Display) and performance trends (PMax) instead of frequency.
 
 ### HIGH FATIGUE - TIKTOK (Refresh within 24-48h)
 | Ad Name | Freq | CTR Change (3d) | CPM Change | Days Active | Score |
@@ -110,15 +110,15 @@ For Display/YouTube: `google_ads_run_gaql(customer_id="FROM_STEP_1", query="SELE
 | CPM Increase (2-week) | >25% | >30% | >30% | >50% |
 | Days Active | >30 days | >45 days | >35 days | >45 days |
 
-**Google Ads thresholds (Asset Ratings based — different method!):**
+**Google Ads thresholds (different method!):** Google removed asset performance labels for Performance Max in API v22, so PMax is scored on performance trends only. Display still has asset ratings.
 | Indicator | PMax | Display | YouTube | Warning | Critical |
 |-----------|------|---------|---------|---------|----------|
-| "Low" Assets | >20% | >25% | N/A | >30% | >40% |
+| "Low" Assets | n/a (no labels) | >25% | N/A | >30% | >40% |
 | CTR Decline (month) | >10% | >15% | >15% VTR | >15% | >25% |
 | CPA Increase (month) | >15% | >20% | >25% CPV | >20% | >35% |
 | Days Active | >45 days | >30 days | >60 days | >45d | >60d |
 
-Google Ads key differences: No frequency metric at creative level — use Asset Ratings. "Low" rated assets for 30+ days = fatigue. PMax: check asset group performance, not ad-level.
+Google Ads key differences: No frequency metric at creative level. Display: "Low" rated assets for 30+ days = fatigue. PMax: no asset labels; check asset group CTR and CPA trends, and report the rating input as unavailable rather than estimating it.
 
 ### Step 4: Calculate Fatigue Scores
 
@@ -130,11 +130,16 @@ Scoring (100-point scale):
 - CPM increase above threshold: +25 points
 - Creative age above threshold: +20 points
 
-**Google Ads (asset-rating based):**
+**Google Ads, Display (asset-rating based):**
 - % "Low" assets above threshold: +35 points
 - CTR decline above threshold: +20 points
 - CPA increase above threshold: +25 points
 - Days since last refresh above threshold: +20 points
+
+**Google Ads, PMax (trend based, no asset labels):**
+- CTR decline above threshold: +35 points
+- CPA increase above threshold: +40 points
+- Days since last refresh above threshold: +25 points
 
 Score interpretation: >=50 = HIGH FATIGUE | 30-49 = WARNING | <30 = HEALTHY
 

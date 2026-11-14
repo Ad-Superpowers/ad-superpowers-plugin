@@ -65,7 +65,7 @@ Bullet list: [Account]: [metric] [change]% - [context]
 
 **Google Ads:** `google_ads_run_gaql(customer_id="FROM_STEP_1", query="SELECT segments.date, metrics.impressions, metrics.clicks, metrics.ctr, metrics.average_cpc, metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM customer WHERE segments.date DURING LAST_14_DAYS ORDER BY segments.date DESC")`
 
-**TikTok:** `tiktok_get_report(start_date="14_DAYS_AGO", end_date="YESTERDAY", level="campaign", metrics=["spend","impressions","clicks","conversions","conversion_rate","cpc","cpm"], group_by="stat_time_day")`
+**TikTok:** `tiktok_get_report(start_date="14_DAYS_AGO", end_date="YESTERDAY", metrics=["spend","impressions","clicks","conversion"], dimensions=["stat_time_day"])`, with both placeholders written as YYYY-MM-DD dates: the 14 complete days that end yesterday, as on the other platforms (today is incomplete). One row per day; recompute CTR, CPC, CPM and conversion rate from the daily totals
 
 **LinkedIn:** `linkedin_get_analytics(account_id="FROM_STEP_1", start_date="14_DAYS_AGO", end_date="YESTERDAY", fields=["impressions","clicks","costInLocalCurrency","externalWebsiteConversions"])`
 

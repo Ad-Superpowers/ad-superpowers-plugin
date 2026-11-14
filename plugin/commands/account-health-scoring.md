@@ -49,7 +49,7 @@ For each:
 
 **Google Ads:** `google_ads_run_gaql(customer_id="...", query="SELECT metrics.cost_micros, metrics.impressions, metrics.clicks, metrics.conversions, metrics.conversions_value, metrics.search_impression_share FROM customer WHERE segments.date DURING LAST_30_DAYS")`
 
-**TikTok:** `tiktok_get_report(start_date="30_DAYS_AGO", end_date="TODAY", level="account")`
+**TikTok:** `tiktok_get_report(date_range="last 30 days", level="campaign")` (TikTok reports have no account level: request campaign rows, fetch every page (`page=2`, `3`, … until a page returns fewer than `page_size` rows), sum spend, impressions, clicks and conversions across campaigns, and recompute CTR, CPC and CPA from those totals)
 
 **LinkedIn:** `linkedin_get_analytics(account_id="...", start_date="30_DAYS_AGO", end_date="TODAY")`
 

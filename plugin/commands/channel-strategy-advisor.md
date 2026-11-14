@@ -55,7 +55,7 @@ Pull last 30 days from each connected platform to understand current channel per
 **Meta:** `meta_get_insights(account_id="FROM_STEP_1", date_preset="last_30d", level="account")`
 **Google Ads:** `google_ads_run_gaql(customer_id="FROM_STEP_1", query="SELECT metrics.cost_micros, metrics.conversions, metrics.conversions_value, metrics.impressions, metrics.clicks FROM customer WHERE segments.date DURING LAST_30_DAYS")`
 **LinkedIn:** `linkedin_get_analytics(account_id="FROM_STEP_1", start_date="30_DAYS_AGO", end_date="TODAY")`
-**TikTok:** `tiktok_get_report(start_date="30_DAYS_AGO", end_date="TODAY", level="account")`
+**TikTok:** `tiktok_get_report(date_range="last 30 days", level="campaign")` (TikTok reports have no account level: request campaign rows, fetch every page (`page=2`, `3`, … until a page returns fewer than `page_size` rows), sum spend, impressions, clicks and conversions across campaigns, and recompute CTR, CPC and CPA from those totals)
 
 ### Step 3: Analyze and Recommend
 

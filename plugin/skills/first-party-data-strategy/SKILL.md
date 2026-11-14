@@ -29,11 +29,11 @@ Invoke when user mentions:
 |--------|--------|--------|
 | iOS App Tracking Transparency | Active (since 2021) | 40-60% signal loss on mobile |
 | GDPR Consent Requirements | Active | ~50% opt-in rates in EU |
-| Chrome 3rd Party Cookie Deprecation | Active (phasing out 2025-2026) | Major ongoing impact — not a future risk |
-| Meta Aggregated Event Measurement | Active | Limited to 8 priority events |
-| Google Privacy Sandbox | Deployed | Topics API, Protected Audiences replacing cookie-based targeting |
+| Chrome 3rd party cookies | Not phased out: Google dropped the plan in July 2024 and kept the user choice in April 2025 | Safari and Firefox block them; consent and ad blockers still cut signal |
+| Meta Aggregated Event Measurement | Web events need no AEM setup; the 8-event prioritization is gone (Meta Business Help Center, checked 2026-10-10) | Plan events around consent and CAPI, not an event cap |
+| Google Privacy Sandbox | Exists alongside third-party cookies, which Chrome keeps | Check the current status of Topics and Protected Audience before relying on them |
 
-> **Cookie deprecation is happening now, not in the future.** Chrome began restricting third-party cookies in 2024 and is continuing the phase-out through 2025-2026. Safari and Firefox have blocked third-party cookies for years. The practical impact on tracking is already visible in attribution gaps. First-party data strategy is not preparation for a future change — it is the fix for a current problem.
+> **Chrome is not phasing out third-party cookies.** Google dropped that plan (July 2024) and kept the existing user choice without a new prompt (April 2025). Safari and Firefox have blocked them for years. Consent rates and iOS App Tracking Transparency still remove signal, which is why first-party data and server-side measurement pay off.
 
 ### Signal Loss by Region
 

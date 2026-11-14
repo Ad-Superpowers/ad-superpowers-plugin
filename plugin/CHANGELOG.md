@@ -2,6 +2,49 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.7.7] - 2026-11-14
+
+Patch release: a shorter README.
+
+### Changed
+
+- **README** leads with what the plugin does, installs through
+  Customize → Plugins (the connector is connected separately), says what
+  you control, and lists everything the plugin sends and where it goes.
+  The outdated Cowork admin route, host matrix and known limitations are
+  gone.
+
+## [2.7.6] - 2026-11-14
+
+Patch release: fixes from a review of the agents, commands and skills.
+
+### Fixed
+
+- **Seven commands called tools the wrong way** and stopped before any
+  analysis: TikTok reports at an account level that does not exist
+  (channel strategy, account health, budget allocation), audience overlap
+  with an old Meta query form, anomaly detection with a TikTok grouping
+  parameter that does not exist, and buyer personas with a LinkedIn
+  demographic parameter that does not exist. Two commands misspelt the GA4
+  channel dimension.
+- **Creative fatigue scanner** no longer scores Performance Max on asset
+  ratings Google removed in API v22; PMax is scored on trends.
+- **Auction Insights**: agents no longer prescribe a GAQL query Google does
+  not support; they use impression share and ask for a UI export.
+- **Five skill descriptions** pointed at skills that do not exist.
+- **first-party-data-strategy** matched the cookie and AEM facts elsewhere.
+
+### Changed
+
+- **creative-analyst** runs the creative strategy X-ray instead of grouping
+  ads by hand.
+- **media-buyer** can act on LinkedIn and TikTok, and plan Meta video ads,
+  with your approval before every change.
+- **tracking-specialist** asks before changing Tag Manager and asks again
+  before publishing.
+- **All agents** read your workspace and client context, and can still plan
+  from data you give them when an account is not connected.
+
 ## [2.7.5] - 2026-11-14
 
 Patch release: listing description and keywords.

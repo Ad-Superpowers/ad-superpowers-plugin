@@ -136,11 +136,11 @@ For B2B: identify decision makers, influencers, end users, budget holders, buyin
 
 **GA4:** `ga4_run_report(property_id="[specify ga4_property_id]", start_date="90daysAgo", end_date="today", metrics=["activeUsers","sessions","conversions"], dimensions=["userAgeBracket","userGender","country","deviceCategory"])`
 
-Also run: `ga4_run_report(property_id="[specify ga4_property_id]", metrics=["sessions","totalUsers","newUsers"], dimensions=["sessionDefaultChannelGrouping"], start_date="90daysAgo", end_date="today")`
+Also run: `ga4_run_report(property_id="[specify ga4_property_id]", metrics=["sessions","totalUsers","newUsers"], dimensions=["sessionDefaultChannelGroup"], start_date="90daysAgo", end_date="today")`
 
 **Meta:** `meta_get_insights(account_id=account_id, date_preset="last_90d", level="account", breakdowns=["age","gender","country"])`
 
-**LinkedIn:** `linkedin_get_analytics(account_id=account_id, fields=["impressions","clicks"], demographic_breakdowns=["JOB_FUNCTION","SENIORITY","INDUSTRY","COMPANY_SIZE"])`
+**LinkedIn:** one demographic pivot per call: `linkedin_get_analytics(account_id=account_id, date_range="last 90 days", time_granularity="ALL", fields=["impressions","clicks"], pivot="MEMBER_JOB_FUNCTION")`, then the same with `pivot="MEMBER_SENIORITY"`, `pivot="MEMBER_INDUSTRY"` and `pivot="MEMBER_COMPANY_SIZE"`. LinkedIn withholds small demographic segments, so treat missing rows as unknown, not zero.
 
 ### Step 3: Generate Personas
 Combine research + platform data. For each persona, fill in all sections from the per-persona template: Identity, Demographics, Goals & Pain Points, Buying Behavior, Platform Behavior, Targeting Recommendations, Messaging.
