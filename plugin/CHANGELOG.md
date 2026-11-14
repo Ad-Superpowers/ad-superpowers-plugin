@@ -2,6 +2,16 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.7.5] - 2026-11-14
+
+Patch release: listing description and keywords.
+
+### Changed
+
+- **Description** says what the plugin does for agencies and PPC
+  specialists, and names every platform it connects.
+- **Keywords** cover every channel, advertising and agency terms.
+
 ## [2.7.4] - 2026-11-14
 
 Patch release: listing links.
