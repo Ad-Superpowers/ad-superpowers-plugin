@@ -1,7 +1,6 @@
 ---
 name: getting-started
 description: "This skill should be used when a user is new to Ad Superpowers or has not connected an ad platform yet: \"how do I start\", \"what can I do with this\", \"get started\", \"nothing is connected\", \"how do I connect my ad account\", \"the tools say not connected\", or when a platform tool answers platform_not_connected. It gives the three steps from zero to a first answer about the user's own data, one first question per platform, and what becomes possible once an account is connected. Call get_started for the live status of this workspace. Do NOT use for: a connection that used to work and stopped (use connection-troubleshooter), campaign performance questions, or client profiles (use client-context-onboarding)."
-allowed-tools: get_started, skill, workspace_info, workflow, clients
 ---
 
 # Getting Started

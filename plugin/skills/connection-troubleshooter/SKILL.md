@@ -1,7 +1,6 @@
 ---
 name: connection-troubleshooter
 description: "This skill should be used when a user says the Ad Superpowers connector looks broken or half-empty: \"I only see a few tools\", \"my platform tools are missing\", \"the connector isn't working\", \"I connected my account but nothing shows up\", \"the tool says not connected\", or asks how to \"reconnect\" a platform. It explains what a platform_not_connected answer means (not connected, needs reconnecting, or no account selected), walks through the fix on the dashboard, and how to get the tools into the chat when a client still shows an old tool list. Google Ads, Analytics, Search Console, Tag Manager and Merchant Center are connected individually, so each may need its own reconnect. Do NOT use for: a workspace that never connected anything (use getting-started), campaign performance (use the per-platform performance-troubleshooter skills), or client profiles (use client-context-onboarding)."
-allowed-tools: skill, workflow, clients, clients_update, get_started
 ---
 
 # Connection Troubleshooter

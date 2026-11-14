@@ -61,7 +61,7 @@ Solution:
 ├── Verify service account email in GA4 Admin
 ├── Check property ID (numeric only)
 ├── Enable Analytics Data API in GCP
-└── Verify GOOGLE_APPLICATION_CREDENTIALS path
+└── Check which account Application Default Credentials resolves to
 
 
 PROBLEM: Quota exceeded

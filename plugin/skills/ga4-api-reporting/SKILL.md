@@ -186,6 +186,9 @@ on:
 jobs:
   report:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # required by google-github-actions/auth for keyless sign-in
     steps:
       - uses: actions/checkout@v3
 
@@ -197,12 +200,14 @@ jobs:
       - name: Install dependencies
         run: pip install google-analytics-data pandas
 
-      - name: Create credentials file
-        run: echo '${{ secrets.GA4_CREDENTIALS }}' > credentials.json
+      # Keyless: Workload Identity Federation instead of a stored key file.
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GA4_SERVICE_ACCOUNT }}
 
       - name: Run report
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: credentials.json
         run: python scripts/generate_report.py
 
       - name: Upload artifact

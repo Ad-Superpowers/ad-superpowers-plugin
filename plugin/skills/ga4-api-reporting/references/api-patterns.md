@@ -19,10 +19,12 @@ STEP 2: CREATE SERVICE ACCOUNT
    ├── Name: ga4-reporting-service
    └── Description: GA4 Data API access
 
-3. Create Key:
-   ├── Keys tab → Add Key → Create new key
-   ├── Key type: JSON
-   └── Download and store securely!
+3. Sign in without a key file (preferred):
+   ├── Local: let your own Google account impersonate the service account
+   │   (role "Service Account Token Creator" on it), then set up
+   │   Application Default Credentials with the analytics.readonly scope
+   └── CI: Workload Identity Federation (see the GitHub Actions example)
+   A downloaded JSON key is the last resort; many organizations block it.
 
 STEP 3: GRANT GA4 ACCESS
 ─────────────────────────
@@ -35,7 +37,7 @@ AUTHENTICATION OPTIONS:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Method                  │ Use Case                                 │
 ├─────────────────────────┼──────────────────────────────────────────┤
-│ Service Account (JSON)  │ Server-to-server, automated scripts     │
+│ Keyless service account │ Server-to-server, automated scripts     │
 ├─────────────────────────┼──────────────────────────────────────────┤
 │ OAuth 2.0               │ User-facing apps, interactive access    │
 ├─────────────────────────┼──────────────────────────────────────────┤
@@ -64,16 +66,10 @@ from google.analytics.data_v1beta.types import (
     FilterExpression,
     Filter,
 )
-import os
 
-# Authentication via environment variable
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "path/to/service-account.json"
-
-# Or via explicit credentials
-# from google.oauth2 import service_account
-# credentials = service_account.Credentials.from_service_account_file('key.json')
-# client = BetaAnalyticsDataClient(credentials=credentials)
-
+# Authentication: the client finds Application Default Credentials (ADC) on
+# its own. Set ADC up once per machine with the analytics.readonly scope, as
+# Google's GA4 Data API quickstart describes; no key file in the code.
 client = BetaAnalyticsDataClient()
 property_id = "YOUR_PROPERTY_ID"  # Numeric ID only, no "properties/" prefix
 
@@ -220,8 +216,8 @@ def export_to_dataframe():
 
 const { BetaAnalyticsDataClient } = require('@google-analytics/data');
 
-// Authentication via environment variable
-// GOOGLE_APPLICATION_CREDENTIALS=path/to/key.json
+// Authentication: the client finds Application Default Credentials (ADC)
+// on its own; set ADC up as Google Cloud's guide describes.
 
 const analyticsDataClient = new BetaAnalyticsDataClient();
 const propertyId = 'YOUR_PROPERTY_ID';

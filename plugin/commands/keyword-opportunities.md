@@ -1,9 +1,5 @@
 ---
-name: keyword-opportunities
 description: Compare organic keywords (GSC) with paid keywords (Google Ads) to find savings and content gaps
-user_invocable: true
-tier: pro
-platforms: [gsc, google_ads]
 disable-model-invocation: true
 ---
 

@@ -2,6 +2,23 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.7.3] - 2026-11-13
+
+Patch release: the package follows the Claude plugin directory's rules for
+organizations that are not Verified.
+
+### Changed
+
+- **Skills ship with only `name` and `description`** in their frontmatter.
+  Three skills listed MCP tools under `allowed-tools` by their bare names,
+  which Claude Code does not match to plugin tools, so nothing changes in use.
+- **Commands ship with the standard frontmatter keys only.**
+- **Skill scripts are no longer in the package.** They run on the Ad
+  Superpowers server when a skill calls them, never from the plugin folder.
+- **ga4-api-reporting** examples sign in with Application Default
+  Credentials, and the CI example uses keyless Workload Identity Federation
+  instead of a stored key file.
+
 ## [2.7.2] - 2026-11-13
 
 Patch release: the plugin manifest meets the Claude plugin directory checks.
@@ -16,7 +33,7 @@ Patch release: the plugin manifest meets the Claude plugin directory checks.
 ### Added
 
 - **`privacyPolicyUrl`** in `plugin.json`, a marketplace description, and a
-  plugin icon at `.claude-plugin/icon.png`.
+  plugin icon.
 
 ## [2.7.1] - 2026-11-05
 
