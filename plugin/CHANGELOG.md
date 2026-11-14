@@ -2,6 +2,16 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.7.4] - 2026-11-14
+
+Patch release: listing links.
+
+### Added
+
+- **Terms of service, support and documentation links** in `plugin.json`.
+  The directory took support and documentation links from the README
+  before, which pointed at pages about single features.
+
 ## [2.7.3] - 2026-11-13
 
 Patch release: the package follows the Claude plugin directory's rules for
