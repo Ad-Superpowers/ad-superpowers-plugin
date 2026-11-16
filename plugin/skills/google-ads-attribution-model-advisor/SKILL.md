@@ -1,6 +1,6 @@
 ---
 name: google-ads-attribution-model-advisor
-description: "This skill should be used when the user asks to \"choose an attribution model\", \"set up Data-Driven Attribution\", \"compare attribution models\", \"analyze conversion paths\", or mentions \"DDA\", \"cross-channel attribution\", or \"lookback window optimization\". Do NOT use for: bid strategy selection (use bid-strategy-selector), conversion tracking setup (use conversion-tracking-setup), or campaign performance diagnosis (use performance-troubleshooter)."
+description: "This skill should be used when the user asks to \"choose a Google Ads attribution model\", \"set up Data-Driven Attribution in Google Ads\", \"compare Google Ads attribution models\", \"analyze conversion paths\", or mentions \"DDA\", \"cross-channel attribution\", or \"lookback window optimization\". Do NOT use for: bid strategy selection (use google-ads-bid-strategy-selector), conversion tracking setup (use google-ads-conversion-tracking-setup), or campaign performance diagnosis (use google-ads-performance-troubleshooter)."
 ---
 # Attribution Model Advisor
 
@@ -26,10 +26,12 @@ MEASUREMENT HEALTH CHECKLIST (2026)
    ├── Setup: Google Ads → Tools → Conversions → Enhanced Conversions
    └── Requires privacy policy update
 
-3. ATTRIBUTION MODEL ORDER OF PREFERENCE (2026):
-   Data-Driven (DDA) > Linear > Position-Based > Time Decay > Last Click
-   ├── First Click: Only for pure awareness measurement
-   └── Last Click: Legacy only — avoid for Smart Bidding campaigns
+3. ATTRIBUTION MODEL:
+   Google Ads supports two models: Data-driven (DDA) and Last click.
+   ├── Data-driven: the default for new conversion actions
+   └── Last click: all credit to the last ad click
+   The rules-based models (first click, linear, time decay, position-based)
+   were removed in 2023; conversion actions on them moved to data-driven.
 ```
 
 ## Pull Conversion Action Settings via MCP
@@ -38,6 +40,7 @@ MEASUREMENT HEALTH CHECKLIST (2026)
 google_ads_run_gaql(query="
   SELECT conversion_action.name,
          conversion_action.attribution_model_settings.attribution_model,
+         conversion_action.attribution_model_settings.data_driven_model_status,
          conversion_action.counting_type,
          conversion_action.include_in_conversions_metric,
          conversion_action.click_through_lookback_window_days,
@@ -64,65 +67,38 @@ See [decision-trees.md](references/decision-trees.md) for details.
 ATTRIBUTION MODEL COMPARISON
 ═════════════════════════════
 
-┌─────────────────────┬────────────┬────────────────────────────────────────┐
-│ MODEL               │ DATA REQ   │ HOW IT WORKS                           │
-├─────────────────────┼────────────┼────────────────────────────────────────┤
-│ Last Click          │ None       │ 100% credit to the last click          │
-│                     │            │ (default, simple, but limited)         │
-├─────────────────────┼────────────┼────────────────────────────────────────┤
-│ First Click         │ None       │ 100% credit to the first click         │
-│                     │            │ (good for measuring awareness)         │
-├─────────────────────┼────────────┼────────────────────────────────────────┤
-│ Linear              │ Low        │ Equal distribution across all          │
-│                     │            │ touchpoints (democratic, but no nuance)│
-├─────────────────────┼────────────┼────────────────────────────────────────┤
-│ Time Decay          │ Low        │ More credit to recent touchpoints      │
-│                     │            │ (7-day half-life)                      │
-├─────────────────────┼────────────┼────────────────────────────────────────┤
-│ Position Based      │ Medium     │ 40% first, 40% last, 20% middle       │
-│                     │            │ (balanced awareness + conversion)      │
-├─────────────────────┼────────────┼────────────────────────────────────────┤
-│ Data-Driven (DDA)   │ High       │ ML-based on your data                  │
-│                     │ (600+/mo)  │ (most accurate, Google recommended)    │
-└─────────────────────┴────────────┴────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────┐
+│ MODEL               │ HOW IT WORKS                                   │
+├─────────────────────┼────────────────────────────────────────────────┤
+│ Data-Driven (DDA)   │ Credit per touchpoint from your account's      │
+│                     │ conversion paths; default for new actions      │
+├─────────────────────┼────────────────────────────────────────────────┤
+│ Last Click          │ 100% credit to the last ad click               │
+└─────────────────────┴────────────────────────────────────────────────┘
+
+API values: GOOGLE_SEARCH_ATTRIBUTION_DATA_DRIVEN and GOOGLE_ADS_LAST_CLICK.
+Setting any other model fails with CANNOT_SET_RULE_BASED_ATTRIBUTION_MODELS.
+Reports can still show the old enum values on historical rows; they cannot
+be selected.
 ```
 
 ### Visual: How Credits Are Distributed
 
 ```
-EXAMPLE: 4 TOUCHPOINTS BEFORE CONVERSION
+EXAMPLE: 3 TOUCHPOINTS BEFORE CONVERSION
 ═════════════════════════════════════════
 
 Customer Journey:
 Display Ad → Search (generic) → Search (brand) → Conversion
    [1]            [2]              [3]           [€100]
 
-CREDIT DISTRIBUTION PER MODEL:
-
 Last Click:
 [1] €0 ────► [2] €0 ────► [3] €100 ────► Conversion
                               100%
 
-First Click:
-[1] €100 ───► [2] €0 ────► [3] €0 ────► Conversion
-    100%
-
-Linear:
-[1] €33.33 ─► [2] €33.33 ─► [3] €33.33 ─► Conversion
-    33.3%        33.3%         33.3%
-
-Time Decay:
-[1] €10.50 ─► [2] €24.50 ─► [3] €65 ────► Conversion
-    10.5%        24.5%         65%
-
-Position Based:
-[1] €40 ────► [2] €20 ────► [3] €40 ────► Conversion
-    40%          20%           40%
-
-Data-Driven (example):
+Data-Driven (illustration; the real split comes from your account):
 [1] €28 ────► [2] €35 ────► [3] €37 ────► Conversion
     28%          35%           37%
-    (based on your account data)
 ```
 
 ## Data-Driven Attribution (DDA)
@@ -154,24 +130,19 @@ WHEN CREDITS ARE DISTRIBUTED:
 └── Cross-channel when linked (GA4)
 ```
 
-### DDA Requirements & Setup
+### DDA Setup
 
 ```
-DDA REQUIREMENTS CHECKLIST
-══════════════════════════
+DDA CHECKLIST
+═════════════
 
-MINIMUM REQUIREMENTS:
-□ 600+ conversions per month (per conversion action)
-□ 15,000+ clicks per month
-□ 30 days of history at these volumes
-□ Conversion tracking correctly implemented
-
-RECOMMENDED FOR OPTIMAL DDA:
-□ 1000+ conversions per month
-□ Consistent tracking (no gaps)
-□ Cross-device tracking enabled
+DATA:
+□ Google Ads sets no minimum conversion or click volume for DDA
+□ Check conversion_action.attribution_model_settings.data_driven_model_status
+  per action (GAQL above) to see whether the model is available
+□ Conversion tracking correctly implemented, without gaps
 □ Enhanced Conversions active (recovers consent-rejected data)
-□ Consent Mode v2 correctly configured (required EEA, Mar 2024+)
+□ Consent Mode v2 correctly configured (required in the EEA since March 2024)
 
 ACTIVATING DDA:
 1. Tools & Settings → Measurement → Conversions
@@ -179,11 +150,12 @@ ACTIVATING DDA:
 3. Attribution model → "Data-driven"
 4. Save
 
-⚠️ IMPORTANT:
+IMPORTANT:
 ├── DDA is set per conversion action
 ├── Not all actions need to use DDA
 ├── Evaluate after 2-4 weeks whether data is stable
-└── Fall back to Linear if data is insufficient
+└── If an action has too few conversions for a stable split, keep DDA and
+    widen the conversion definition, or switch that action to Last click
 ```
 
 ### Analyzing DDA Impact

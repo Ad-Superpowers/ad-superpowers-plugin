@@ -1,6 +1,6 @@
 ---
 name: meta-catalog-optimizer
-description: "This skill should be used when the user asks to \"optimize product catalog\", \"improve catalog ad performance\", \"fix catalog feed issues\", or mentions \"Advantage+ Catalog Ads\", \"product set strategy\", or \"catalog feed optimization\". Do NOT use for: campaign structure (use campaign-structure-advisor), creative diversification (use creative-diversification-generator), full-funnel design (use full-funnel-designer)."
+description: "This skill should be used when the user asks to \"optimize product catalog\", \"improve catalog ad performance\", \"fix catalog feed issues\", or mentions \"Advantage+ Catalog Ads\", \"product set strategy\", or \"catalog feed optimization\". Do NOT use for: campaign structure (use meta-campaign-structure-advisor), creative diversification (use meta-creative-diversification-generator), full-funnel design (use meta-full-funnel-designer)."
 ---
 # Catalog Optimizer
 
@@ -8,7 +8,7 @@ description: "This skill should be used when the user asks to \"optimize product
 
 This skill helps optimize Meta product catalogs for Advantage+ catalog ads and Advantage+ sales campaigns, including feed optimization, product set strategies, and troubleshooting of common issues.
 
-> **Heads-up: catalog data is not reachable through MCP yet.** This release ships no catalog tool, so catalogs, product sets, and product-set items can be neither read nor created through Ad Superpowers. Use this skill for feed and product-set **strategy and diagnosis**, and inspect catalogs in Commerce Manager. With a product set ID from Commerce Manager, the catalog ad itself can still be created through MCP: an ad set whose `promoted_object` binds that product set, then `meta_create_ad(product_set_id=...)`. For the full ad creation sequence, `use ad-launch-playbook`.
+> **Heads-up: catalog data is not reachable through MCP yet.** This release ships no catalog tool, so catalogs, product sets, and product-set items can be neither read nor created through Ad Superpowers. Use this skill for feed and product-set **strategy and diagnosis**, and inspect catalogs in Commerce Manager. With a product set ID from Commerce Manager, the catalog ad itself can still be created through MCP: an ad set whose `promoted_object` binds that product set, then `meta_create_ad(product_set_id=...)`. For the full ad creation sequence, `use meta-ad-launch-playbook`.
 
 ## Catalog Fundamentals
 

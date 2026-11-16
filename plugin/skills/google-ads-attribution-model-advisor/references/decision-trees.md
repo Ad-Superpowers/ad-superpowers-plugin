@@ -1,31 +1,27 @@
 ## Quick Decision Guide
 
+Google Ads offers two attribution models: Data-driven (DDA, the default for new
+conversion actions) and Last click. First click, linear, time decay and
+position-based were removed in 2023, and there is no minimum conversion volume
+for DDA.
+
 ```
 WHICH ATTRIBUTION MODEL FITS YOUR CASE?
 │
-├─► SUFFICIENT DATA (600+ conversions/month)
-│   └─► DATA-DRIVEN ATTRIBUTION (DDA)
-│       ├── Google's ML-based model
-│       ├── Account-specific weighting
-│       └── Most accurate for your situation
+├─► DEFAULT → DATA-DRIVEN ATTRIBUTION (DDA)
+│   ├── Credit per touchpoint from your account's conversion paths
+│   ├── Gives upper-funnel and generic campaigns credit that Last click misses
+│   └── Check data_driven_model_status per conversion action
 │
-├─► MODERATE DATA (300-600 conversions/month)
-│   └─► TIME DECAY or POSITION BASED
-│       ├── Time Decay: Focus on touchpoints close to conversion
-│       ├── Position Based: First/last touch + middle credits
-│       └── Re-evaluate regularly for DDA switch
+├─► LAST CLICK, when:
+│   ├── Stakeholders need a simple, explainable number
+│   ├── An action has too few conversions for a stable DDA split
+│   │   (or keep DDA and widen the conversion definition)
+│   └── You compare against a system that also reports last click
 │
-├─► LIMITED DATA (<300 conversions/month)
-│   └─► LAST CLICK (default) or TIME DECAY
-│       ├── Last Click: Simple, but undervalues awareness
-│       ├── Consider first click for brand-focus
-│       └── Build toward DDA
-│
-└─► SPECIFIC USE CASES
-    ├─► Pure brand awareness → FIRST CLICK
-    ├─► Direct response/e-com → LAST CLICK or TIME DECAY
-    ├─► Complex B2B journey → POSITION BASED or DDA
-    └─► Multi-channel mix → DATA-DRIVEN ATTRIBUTION
+└─► AWARENESS MEASUREMENT
+    └── Neither model measures awareness well; use assisted conversions,
+        conversion paths and lift or incrementality tests instead
 ```
 
 ## Attribution Model Selection
@@ -36,31 +32,31 @@ WHICH ATTRIBUTION MODEL FITS YOUR CASE?
 ATTRIBUTION MODEL SELECTION FRAMEWORK
 ══════════════════════════════════════
 
-STEP 1: CHECK DATA VOLUMES
-──────────────────────────
-Conversions per month:
-├── <300 → Start with Last Click or Time Decay
-├── 300-600 → Time Decay or Position Based
-└── >600 → Data-Driven Attribution
+STEP 1: CHECK THE CURRENT SETTING
+─────────────────────────────────
+Per conversion action (GAQL on conversion_action):
+├── attribution_model_settings.attribution_model
+├── attribution_model_settings.data_driven_model_status
+└── Old rules-based values on historical rows cannot be selected again
 
 STEP 2: ANALYZE BUSINESS MODEL
 ───────────────────────────────
 ┌─────────────────────────┬──────────────────────────────────┐
 │ Business Type           │ Recommended Model                │
 ├─────────────────────────┼──────────────────────────────────┤
-│ Impulse e-commerce      │ Last Click or Time Decay         │
-│ (<7 days decision)      │                                  │
+│ Impulse e-commerce      │ DDA (Last click differs little   │
+│ (<7 days decision)      │ on short paths)                  │
 ├─────────────────────────┼──────────────────────────────────┤
-│ Considered e-commerce   │ Position Based or DDA            │
+│ Considered e-commerce   │ DDA                              │
 │ (7-30 days decision)    │                                  │
 ├─────────────────────────┼──────────────────────────────────┤
-│ B2B Lead Gen            │ Position Based or DDA            │
-│ (long sales cycle)      │                                  │
+│ B2B Lead Gen            │ DDA on the primary lead action;  │
+│ (long sales cycle)      │ Last click if volume is very low │
 ├─────────────────────────┼──────────────────────────────────┤
-│ Brand-focused           │ First Click or Position Based    │
-│ (awareness priority)    │                                  │
+│ Brand-focused           │ DDA, plus assisted conversions   │
+│ (awareness priority)    │ and lift tests for awareness     │
 ├─────────────────────────┼──────────────────────────────────┤
-│ Multi-channel mature    │ Data-Driven Attribution          │
+│ Multi-channel mature    │ DDA                              │
 │ (many active channels)  │                                  │
 └─────────────────────────┴──────────────────────────────────┘
 
@@ -72,7 +68,7 @@ Questions to answer:
 □ Is there a disconnect between ad spend and revenue?
 □ Are certain channels "invisible"?
 
-If YES to multiple: Consider DDA or Position Based.
+If YES to multiple while on Last click: consider switching to DDA.
 ```
 
 ### Model Transition Strategy
@@ -122,49 +118,4 @@ STEP 5: EVALUATION (Week 4)
 ├── Smart Bidding adjusts automatically
 ├── Reporting will look different, not better/worse
 └── Give it at least 4 weeks
-```
-
-### Decision Framework
-
-```
-ATTRIBUTION MODEL SELECTION FRAMEWORK
-══════════════════════════════════════
-
-STEP 1: CHECK DATA VOLUMES
-──────────────────────────
-Conversions per month:
-├── <300 → Start with Last Click or Time Decay
-├── 300-600 → Time Decay or Position Based
-└── >600 → Data-Driven Attribution
-
-STEP 2: ANALYZE BUSINESS MODEL
-───────────────────────────────
-┌─────────────────────────┬──────────────────────────────────┐
-│ Business Type           │ Recommended Model                │
-├─────────────────────────┼──────────────────────────────────┤
-│ Impulse e-commerce      │ Last Click or Time Decay         │
-│ (<7 days decision)      │                                  │
-├─────────────────────────┼──────────────────────────────────┤
-│ Considered e-commerce   │ Position Based or DDA            │
-│ (7-30 days decision)    │                                  │
-├─────────────────────────┼──────────────────────────────────┤
-│ B2B Lead Gen            │ Position Based or DDA            │
-│ (long sales cycle)      │                                  │
-├─────────────────────────┼──────────────────────────────────┤
-│ Brand-focused           │ First Click or Position Based    │
-│ (awareness priority)    │                                  │
-├─────────────────────────┼──────────────────────────────────┤
-│ Multi-channel mature    │ Data-Driven Attribution          │
-│ (many active channels)  │                                  │
-└─────────────────────────┴──────────────────────────────────┘
-
-STEP 3: EVALUATE CURRENT PERFORMANCE GAPS
-──────────────────────────────────────────
-Questions to answer:
-□ Are awareness campaigns undervalued?
-□ Is brand search getting too much credit?
-□ Is there a disconnect between ad spend and revenue?
-□ Are certain channels "invisible"?
-
-If YES to multiple: Consider DDA or Position Based.
 ```

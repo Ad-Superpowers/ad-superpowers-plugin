@@ -1,6 +1,6 @@
 ---
 name: meta-full-funnel-designer
-description: "This skill should be used when the user asks to \"design a full funnel\", \"allocate budget across funnel stages\", \"optimize TOFU/MOFU/BOFU\", or mentions \"full-funnel strategy\", \"customer journey campaigns\", or \"funnel budget split\". Do NOT use for: campaign structure details (use campaign-structure-advisor), audience overlap issues (use audience-overlap-detector), bid strategy selection (use bid-strategy-selector)."
+description: "This skill should be used when the user asks to \"design a full funnel on Meta\", \"allocate Meta budget across funnel stages\", \"optimize TOFU/MOFU/BOFU on Meta\", or mentions \"full-funnel strategy\", \"customer journey campaigns\", or \"funnel budget split\". Do NOT use for: campaign structure details (use meta-campaign-structure-advisor), audience overlap issues (use meta-audience-overlap-detector), bid strategy selection (use meta-bid-strategy-selector)."
 ---
 # Full-Funnel Designer
 

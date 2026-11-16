@@ -1,6 +1,6 @@
 ---
 name: google-ads-creative-fatigue-tracker
-description: "This skill should be used when the user asks to \"detect Google Ads creative fatigue\", \"check asset performance decay\", \"find when to refresh Google Ads creatives\", or mentions \"PMax asset group fatigue\", \"Display ad burnout\", \"YouTube creative fatigue\", or \"asset rating decline\"."
+description: "This skill should be used when the user asks to \"detect Google Ads creative fatigue\", \"check asset performance decay\", \"find when to refresh Google Ads creatives\", or mentions \"PMax asset group fatigue\", \"Display ad burnout\", \"YouTube creative fatigue\", or \"asset rating decline\". Do NOT use for: Meta creative fatigue (use meta-creative-fatigue-analyzer), PMax asset group structure (use google-ads-pmax-asset-group-optimizer), or account-wide performance drops (use google-ads-performance-troubleshooter)."
 ---
 # Google Ads Creative Fatigue Tracker
 

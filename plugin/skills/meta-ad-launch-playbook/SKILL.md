@@ -1,6 +1,6 @@
 ---
 name: meta-ad-launch-playbook
-description: "This skill should be used when the user wants to launch a Meta campaign end to end, create a batch of Meta ads, turn a folder of creatives into ads, go \"from creatives to live ads\", \"set up a campaign, ad set and ads\", or \"make ads with a different ratio per placement\". It is the single guided runbook from zero to live ads using the Ad Superpowers MCP write tools (meta_create, meta_create_ad), and it routes to the specialist skills for depth. Do NOT use for: getting a file into Meta / image_hash / hosting (use media-upload-guide), choosing a bid strategy in depth (use bid-strategy-selector), CBO vs ABO theory (use campaign-structure-advisor), writing the copy (use ad-copy-generator), creative testing matrices (use creative-diversification-generator), catalog / DPA strategy (use catalog-optimizer)."
+description: "This skill should be used when the user wants to launch a Meta campaign end to end, create a batch of Meta ads, turn a folder of creatives into ads, go \"from creatives to live ads\", \"set up a campaign, ad set and ads\", or \"make ads with a different ratio per placement\". It is the single guided runbook from zero to live ads using the Ad Superpowers MCP write tools (meta_create, meta_create_ad), and it routes to the specialist skills for depth. Do NOT use for: getting a file into Meta / image_hash / hosting (use meta-media-upload-guide), choosing a bid strategy in depth (use meta-bid-strategy-selector), CBO vs ABO theory (use meta-campaign-structure-advisor), writing the copy (use meta-ad-copy-generator), creative testing matrices (use meta-creative-diversification-generator), catalog / DPA strategy (use meta-catalog-optimizer)."
 ---
 # Meta Ad Launch Playbook
 
@@ -59,7 +59,7 @@ Three things to internalize:
   - `LOWEST_COST_WITH_BID_CAP` or `COST_CAP` → require a `bid_amount` (set on the ad set).
   - `LOWEST_COST_WITH_MIN_ROAS` (ROAS goal in Ads Manager) → on the ad set pass `bid_strategy="LOWEST_COST_WITH_MIN_ROAS"`, a `roas_floor` (the target ROAS as a multiplier), `optimization_goal="VALUE"` and a `promoted_object` with the pixel and conversion event (for example `{"pixel_id": "<id>", "custom_event_type": "PURCHASE"}`); `bid_amount` is not used. Under CBO the ad sets inherit the campaign's bid strategy, so also create the campaign with `bid_strategy="LOWEST_COST_WITH_MIN_ROAS"` (or use `budget_mode="ABO"`). Sources: Meta Business Help Center, "About ROAS goal", and the Marketing API "Advantage campaign budget" guide.
   - MIN_ROAS is not open to every account. Meta refused it on a test account with: "Ad accounts owned by a new business can use minimum ROAS for ad delivery after several weeks of following our policies. If you don't want to wait, verify your business." For a new or unverified business, plan for that wait or for business verification.
-  - For the "which strategy and what number" decision, `use bid-strategy-selector`. For CBO vs ABO and budget-split theory, `use campaign-structure-advisor`.
+  - For the "which strategy and what number" decision, `use meta-bid-strategy-selector`. For CBO vs ABO and budget-split theory, `use meta-campaign-structure-advisor`.
 
 ## §2 Create the ad set
 
@@ -98,7 +98,7 @@ Two things people get wrong:
 
 ## §3 Creatives → ads
 
-This is where the playbook earns its keep: **orchestration**. The file-handling mechanics (how to upload, URL vs hash, filename→ratio matching, the full placement list) live in `media-upload-guide` — `use media-upload-guide` for those and do not re-derive them here.
+This is where the playbook earns its keep: **orchestration**. The file-handling mechanics (how to upload, URL vs hash, filename→ratio matching, the full placement list) live in `media-upload-guide` — `use meta-media-upload-guide` for those and do not re-derive them here.
 
 ### Group, then build
 
@@ -173,17 +173,17 @@ Common stumbles and the fix:
 - Mixed image + video rejected → split into separate ads.
 
 **Honest limits (today):**
-- **Catalog / Advantage+ catalog ads:** `meta_create_ad(product_set_id=...)` creates a media-less catalog ad, but only in an ad set that binds a product set in `promoted_object.product_set_id` (the tool checks this before it creates anything). This release ships no catalog tool, so catalog data itself is not reachable through MCP; `use catalog-optimizer` for the strategy.
+- **Catalog / Advantage+ catalog ads:** `meta_create_ad(product_set_id=...)` creates a media-less catalog ad, but only in an ad set that binds a product set in `promoted_object.product_set_id` (the tool checks this before it creates anything). This release ships no catalog tool, so catalog data itself is not reachable through MCP; `use meta-catalog-optimizer` for the strategy.
 - **No bulk-create tool** — batch = sequential `meta_create_ad` calls (see §3).
 
 ## Complementary skills
 
-- `use media-upload-guide` — get files into Meta (URL vs hash, hosting, filename→ratio, the full placement list).
-- `use bid-strategy-selector` — pick the bid strategy and the number when you override the default.
-- `use campaign-structure-advisor` — CBO vs ABO, budget splits, account structure.
-- `use ad-copy-generator` / `use video-script-writer` — produce the copy/script before you build.
-- `use creative-diversification-generator` — plan the creative matrix (concepts × angles) feeding §3.
-- `use catalog-optimizer` — catalog / DPA strategy.
+- `use meta-media-upload-guide` — get files into Meta (URL vs hash, hosting, filename→ratio, the full placement list).
+- `use meta-bid-strategy-selector` — pick the bid strategy and the number when you override the default.
+- `use meta-campaign-structure-advisor` — CBO vs ABO, budget splits, account structure.
+- `use meta-ad-copy-generator` / `use meta-video-script-writer` — produce the copy/script before you build.
+- `use meta-creative-diversification-generator` — plan the creative matrix (concepts × angles) feeding §3.
+- `use meta-catalog-optimizer` — catalog / DPA strategy.
 
 ## Account integrity reminder
 

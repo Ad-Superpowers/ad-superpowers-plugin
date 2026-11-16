@@ -144,7 +144,7 @@ media-buying). That payoff is the reason to onboard.
 
 **Meta accounts: finish the wiring.** Importing a Meta account does not set which
 Facebook Page its ads post from or which Instagram account they run on. For each
-linked Meta account, `use page-instagram-connector` to discover the promotable Pages /
+linked Meta account, `use meta-page-instagram-connector` to discover the promotable Pages /
 connected Instagram accounts and save the right `facebook_page_id` / `instagram_user_id`
 onto the client, so `meta_create_ad` resolves them automatically on every ad.
 

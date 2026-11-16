@@ -1,6 +1,6 @@
 ---
 name: google-ads-search-campaign-builder
-description: "This skill should be used when the user asks to \"build a Search campaign\", \"write RSA ad copy\", \"improve Ad Strength\", \"set up sitelinks and callouts\", or mentions \"lead generation campaign\", \"call extensions\", \"lead forms\", or \"search campaign structure\". Do NOT use for: Performance Max campaigns (use performance-max-optimizer), Shopping campaigns (use shopping-campaign-structure-advisor), bid strategy selection (use bid-strategy-selector)."
+description: "This skill should be used when the user asks to \"build a Search campaign\", \"write RSA ad copy\", \"improve Ad Strength\", \"set up sitelinks and callouts\", or mentions \"lead generation campaign\", \"call extensions\", \"lead forms\", or \"search campaign structure\". Do NOT use for: Performance Max campaigns (use google-ads-performance-max-optimizer), Shopping campaigns (use google-ads-shopping-campaign-structure-advisor), bid strategy selection (use google-ads-bid-strategy-selector)."
 ---
 # Search Campaign Builder
 
@@ -8,23 +8,35 @@ Complete guide for setting up high-performance Google Ads Search campaigns speci
 
 
 
-## 2026 Updates: AI Max + Broad Match + Smart Bidding
+## AI Max, broad match and Smart Bidding
 
-### AI Max Search Campaign Type (2026)
-AI Max is a new Search campaign subtype that combines RSA ad serving with expanded keyword matching powered by Google AI. Key differences from standard Search:
+### AI Max for Search campaigns
+AI Max is a setting on a standard Search campaign (`advertising_channel_type = SEARCH`), not a separate
+campaign type or subtype (Google Ads API docs, "AI Max for Search campaigns: Get started"):
 
-- Automatically matches to relevant queries beyond your keyword list
-- Uses landing page and asset content to find additional traffic
-- Requires: Smart Bidding (tCPA or Max Conversions), RSA with 8+ headlines
-- URL expansion: Google may direct to most relevant landing page
-- Best for: advertisers with strong conversion data who want to scale Search
+- Enable it with `campaign.ai_max_setting.enable_ai_max = true`. On its own that turns on search term
+  matching: keywords act as broad match unless an ad group sets
+  `ad_group.ai_max_ad_group_setting.disable_search_term_matching = true`.
+- Text customization and final URL expansion are opt-ins in `campaign.asset_automation_settings`
+  (`TEXT_ASSET_AUTOMATION`, `FINAL_URL_EXPANSION_TEXT_ASSET_AUTOMATION`). Both default to `OPTED_OUT`, and
+  opting in without AI Max fails with `CampaignError.AI_MAX_MUST_BE_ENABLED`. URL expansion needs text
+  customization opted in too.
+- `campaign.keyword_match_type` is deprecated; setting it fails with `CANNOT_SET_CAMPAIGN_KEYWORD_MATCH_TYPE`.
+- Since v25, `campaign.aca_migration_date_time` and `campaign.broad_match_migration_date_time` show when an
+  existing campaign was migrated to AI Max.
+- To test it on one campaign, Google offers an `ADOPT_AI_MAX` experiment (control and treatment arm on the
+  same campaign).
 
-To create an AI Max campaign, set `advertising_channel_sub_type = 'SEARCH_EXPRESS'` in API v23+. Note: `url_expansion_opt_out` was removed in v22; URL expansion control is now via `final_url_expansion_opt_out` at the campaign level.
+Bidding: search term matching does not work with Manual CPC. Google recommends a conversion or
+conversion value strategy (Maximize Conversions or Maximize Conversion Value, with or without a target),
+because AI Max relies on its signals (Google Ads Help, "About AI Max for Search campaigns", FAQ). Google
+sets no headline minimum. Check the campaign's own conversion volume before recommending it (see the
+guide below).
 
-### Broad Match + Smart Bidding (Google's 2026 Recommendation)
-Google's official recommendation: use **broad match keywords paired with Smart Bidding** (tCPA or Max Conversions) rather than exact+phrase-heavy structures. Smart Bidding's signals prevent broad match from serving on irrelevant queries.
+### Broad match + Smart Bidding
+Google recommends **broad match keywords paired with Smart Bidding** (tCPA, tROAS, Maximize Conversions or Maximize Conversion Value): bidding then values each auction by its expected conversion value. That does not make every matched query relevant: keep reviewing the search terms report and add negative keywords.
 
-Decision guide:
+Decision guide (our rule of thumb, not a Google threshold):
 - Account has <30 conversions/month: Start with exact+phrase, add broad later
 - Account has 30-100 conversions/month: Mix phrase + broad with tCPA
 - Account has >100 conversions/month: Broad match + tCPA is recommended, fewer ad groups needed

@@ -1,6 +1,6 @@
 ---
 name: first-party-data-strategy
-description: "This skill should be used when the user asks to \"set up server-side tracking\", \"implement CAPI\", \"build a first-party data strategy\", mentions \"Consent Mode V2\", \"cookieless advertising\", or \"GDPR-compliant tracking setup\". Do NOT use for: attribution discrepancy diagnosis (use attribution-reconciler), GTM container auditing (use gtm-container-auditor), or incrementality measurement (use incrementality-testing-guide)."
+description: "This skill should be used when the user asks to \"build a first-party data strategy\", \"plan tracking that survives cookie loss\", mentions \"Consent Mode V2\", \"cookieless advertising\", or \"GDPR-compliant tracking setup\". Do NOT use for: attribution discrepancy diagnosis (use attribution-reconciler), GTM container auditing (use gtm-container-auditor), incrementality measurement (use incrementality-testing-guide), or implementing server-side GTM or CAPI (use gtm-server-side-tagging-guide)."
 ---
 # First-Party Data Strategy Guide
 

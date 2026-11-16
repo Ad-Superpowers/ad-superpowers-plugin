@@ -1,6 +1,6 @@
 ---
 name: experiment-design-framework
-description: "This skill should be used when the user asks to \"design an A/B test for ads\", \"calculate sample size for an experiment\", \"measure incrementality\", \"run a geo lift study\", or mentions \"statistical significance\", \"holdout test\", or \"test duration\". Do NOT use for: creative fatigue analysis (use creative-fatigue-analyzer), general campaign performance review (use platform-specific troubleshooters), or audience strategy (use buyer-persona-framework)."
+description: "This skill should be used when the user asks to \"design an A/B test for ads\", \"calculate sample size for an experiment\", or mentions \"statistical significance\", \"split test\", or \"test duration\". Do NOT use for: incrementality, geo lift or holdout tests (use incrementality-testing-guide), creative fatigue analysis (use meta-creative-fatigue-analyzer), general campaign performance review (use meta-performance-troubleshooter or google-ads-performance-troubleshooter), or audience strategy (use buyer-persona-framework)."
 ---
 
 # Advertising Experiment Design Framework

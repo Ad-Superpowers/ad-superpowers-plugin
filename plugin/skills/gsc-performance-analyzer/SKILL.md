@@ -25,7 +25,7 @@ Invoke when user mentions:
 |------|---------|
 | `gsc_search_analytics` | All organic search data queries |
 | `gsc_list_sites` | Property discovery |
-| `gsc_manage_url(action="inspect")` | Page-level indexing diagnostics |
+| `gsc_inspect_url` | Page-level indexing diagnostics |
 | `gsc_search_analytics(dimensions=["page"])` | Page-level performance overview |
 
 ---
@@ -104,9 +104,9 @@ To detect seasonality, query with `dimensions=["date"]` over 90+ days:
 | Impressions stable, clicks drop, position stable | AI Overviews absorbing clicks | Check if query type is informational; AI Overview is answering the question in SERP |
 | Impressions up, clicks down | Position dropped below fold OR AI Overview | CTR decline with impression growth; check query types |
 | Impressions down, CTR stable | Lost rankings broadly | Compare positions period-over-period |
-| Single-day cliff | Technical issue | Check `gsc_manage_url(action="inspect")` for crawl errors |
+| Single-day cliff | Technical issue | Check `gsc_inspect_url` for crawl errors |
 | Gradual decline over weeks | Content freshness decay or AI Overview rollout | Content needs updating; check if informational queries are affected |
-| Mobile-only drop | Mobile usability issue | Check mobile-specific metrics |
+| Mobile-only drop | Mobile page experience or mobile rankings | Compare `dimensions=["device"]` period-over-period; run Lighthouse on the affected pages |
 
 ---
 

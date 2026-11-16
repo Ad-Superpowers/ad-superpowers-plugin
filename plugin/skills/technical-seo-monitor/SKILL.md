@@ -6,7 +6,7 @@ description: "This skill should be used when the user asks to \"fix indexing pro
 
 ## Purpose
 
-Diagnose and resolve technical SEO issues using Google Search Console data. This skill covers indexing status, sitemap health, crawl diagnostics, canonical issues, and mobile usability — the foundational technical elements that determine whether Google can find, crawl, and index your pages.
+Diagnose and resolve technical SEO issues using Google Search Console data. This skill covers indexing status, sitemap health, crawl diagnostics, canonical issues and rich results — the foundational technical elements that determine whether Google can find, crawl, and index your pages.
 
 ## When to Use This Skill
 
@@ -15,7 +15,6 @@ Invoke when user mentions:
 - **Sitemaps:** "Is my sitemap working correctly?"
 - **Crawl issues:** "Google can't access my pages"
 - **Canonical problems:** "Google is indexing the wrong URL"
-- **Mobile issues:** "Mobile usability errors in Search Console"
 - **Rich results:** "My structured data isn't showing"
 - **Technical audit:** "Check my site's technical SEO health"
 - **Deindexing:** "Pages were removed from Google's index"
@@ -24,7 +23,7 @@ Invoke when user mentions:
 
 | Tool | Purpose |
 |------|---------|
-| `gsc_manage_url(action="inspect")` | Per-page indexing status and crawl diagnostics |
+| `gsc_inspect_url` | Per-page indexing status and crawl diagnostics |
 | `gsc_list_sites(include_sitemaps=true)` | Property overview with sitemap health and status |
 | `gsc_manage_url(action="submit_sitemap")` | Submit new or updated sitemaps |
 | `gsc_search_analytics` | Identify pages with impressions but no clicks (indexed but poor) |
@@ -66,7 +65,7 @@ Invoke when user mentions:
 ```
 Page not appearing in Google?
 │
-├─► Run gsc_manage_url(site_url, action="inspect", url=page_url)
+├─► Run gsc_inspect_url(site_url, url=page_url)
 │   │
 │   ├─► Verdict: PASS → Page IS indexed
 │   │   └─► Check: Is it ranking for the right queries?
@@ -131,7 +130,7 @@ Page not appearing in Google?
 
 ### Canonical Conflicts
 
-When `gsc_manage_url(action="inspect")` returns different `google_canonical` vs `user_canonical`:
+When `gsc_inspect_url` returns different `google_canonical` vs `user_canonical`:
 
 | Scenario | Cause | Fix |
 |----------|-------|-----|
@@ -151,9 +150,15 @@ When `gsc_manage_url(action="inspect")` returns different `google_canonical` vs 
 
 ---
 
-## Part 4: Core Web Vitals & Mobile Usability
+## Part 4: Core Web Vitals and mobile pages
 
-### Core Web Vitals (as of 2024-2026)
+The Search Console API that the `gsc_*` tools read returns no Core Web Vitals and no mobile verdict. Google
+retired the Mobile Usability report, the Mobile-Friendly Test and its API on 1 December 2023 and points to
+Lighthouse instead. Use this part as reference when the user brings Core Web Vitals or Lighthouse figures,
+from the Search Console web interface, PageSpeed Insights or the Chrome UX Report; do not present them as
+data from Ad Superpowers.
+
+### Core Web Vitals
 
 Google uses Core Web Vitals as a ranking signal. The three active metrics are:
 
@@ -171,12 +176,15 @@ Google uses Core Web Vitals as a ranking signal. The three active metrics are:
 - React/Vue re-renders triggered by click handlers
 - Third-party scripts (chat widgets, analytics) delaying response
 
-### Mobile Verdicts from URL Inspection
+### Mobile pages
 
-| Issue | Impact | Fix |
+URL Inspection no longer reports mobile usability. For a mobile check, run a Lighthouse audit (Chrome
+DevTools or PageSpeed Insights) on the page; its common findings:
+
+| Finding | Impact | Fix |
 |-------|--------|-----|
 | Text too small to read | Poor mobile UX | Use min 16px font, responsive typography |
-| Clickable elements too close | Accidental taps | Min 48px touch targets, 8px spacing |
+| Tap targets too close | Accidental taps | Min 48px touch targets, 8px spacing |
 | Content wider than screen | Horizontal scrolling | Set viewport meta, use responsive CSS |
 | Viewport not set | Page not mobile-optimized | Add `<meta name="viewport" content="width=device-width, initial-scale=1">` |
 
@@ -239,10 +247,10 @@ RECOMMENDATIONS
 | Check | Frequency | Tool |
 |-------|-----------|------|
 | Sitemap status | Weekly | `gsc_list_sites(include_sitemaps=true)` |
-| Key page indexing | Weekly | `gsc_manage_url(action="inspect")` (sample 10-20 pages) |
+| Key page indexing | Weekly | `gsc_inspect_url` (sample 10-20 pages) |
 | Overall impressions trend | Weekly | `gsc_search_analytics` with `dimensions=["date"]` |
-| New page indexing | Within 48h of publish | `gsc_manage_url(action="inspect")` |
-| After technical changes | Immediately | `gsc_manage_url(action="inspect")` + `gsc_list_sites(include_sitemaps=true)` |
+| New page indexing | Within 48h of publish | `gsc_inspect_url` |
+| After technical changes | Immediately | `gsc_inspect_url` + `gsc_list_sites(include_sitemaps=true)` |
 | Full technical audit | Monthly | All GSC tools combined |
 
 ### AI Overviews: Technical SEO Implications

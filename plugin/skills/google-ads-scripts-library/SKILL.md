@@ -1,6 +1,6 @@
 ---
 name: google-ads-scripts-library
-description: "This skill should be used when the user asks to \"set up Google Ads Scripts\", \"automate bid adjustments with scripts\", \"create budget pacing alerts\", \"detect performance anomalies\", or mentions \"N-gram analysis script\", \"broken URL checker\", or \"Google Ads automation scripts\". Do NOT use for: manual campaign optimization (use performance-troubleshooter), keyword strategy planning (use keyword-strategy-planner), or Quality Score improvement (use quality-score-optimizer)."
+description: "This skill should be used when the user asks to \"set up Google Ads Scripts\", \"automate bid adjustments with scripts\", \"create budget pacing alerts\", \"detect performance anomalies\", or mentions \"N-gram analysis script\", \"broken URL checker\", or \"Google Ads automation scripts\". Do NOT use for: manual campaign optimization (use google-ads-performance-troubleshooter), keyword strategy planning (use google-ads-keyword-strategy-planner), or Quality Score improvement (use google-ads-quality-score-optimizer)."
 ---
 # Google Ads Scripts Library
 

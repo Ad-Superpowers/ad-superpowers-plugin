@@ -1,6 +1,6 @@
 ---
 name: meta-prompt-engineering-library
-description: "This skill should be used when the user asks to \"get AI prompts for Meta Ads\", \"optimize prompts for ad analysis\", \"find prompt templates\", or mentions \"prompt engineering for ads\", \"AI workflow prompts\", or \"Meta Ads prompt library\". Do NOT use for: ad copy writing directly (use ad-copy-generator), video scripts (use video-script-writer), campaign diagnostics (use performance-troubleshooter)."
+description: "This skill should be used when the user asks to \"get AI prompts for Meta Ads\", \"optimize prompts for ad analysis\", \"find prompt templates\", or mentions \"prompt engineering for ads\", \"AI workflow prompts\", or \"Meta Ads prompt library\". Do NOT use for: ad copy writing directly (use meta-ad-copy-generator), video scripts (use meta-video-script-writer), campaign diagnostics (use meta-performance-troubleshooter)."
 ---
 # Prompt Engineering Library
 

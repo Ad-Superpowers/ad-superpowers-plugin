@@ -1,6 +1,6 @@
 ---
 name: meta-campaign-structure-advisor
-description: "This skill should be used when the user asks to \"set up campaign structure\", \"audit account structure\", \"organize ad sets\", or mentions \"Meta account structure\", \"creative testing framework\", or \"4-tier funnel\". Do NOT use for: bid strategy selection (use bid-strategy-selector), creative brainstorming (use creative-diversification-generator), full-funnel design across platforms (use full-funnel-designer)."
+description: "This skill should be used when the user asks to \"set up campaign structure\", \"audit account structure\", \"organize ad sets\", or mentions \"Meta account structure\", \"creative testing framework\", or \"4-tier funnel\". Do NOT use for: bid strategy selection (use meta-bid-strategy-selector), creative brainstorming (use meta-creative-diversification-generator), full-funnel design across platforms (use meta-full-funnel-designer)."
 ---
 # Meta Ads Campaign Structure Advisor
 
@@ -21,7 +21,7 @@ Before applying the structures below, know what `meta_create` actually does toda
 - **Choose the budget mode when you create the campaign.** `meta_create(entity_type="campaign")` takes `budget_mode`: `"CBO"` (the default) needs `daily_budget` or `lifetime_budget` (in cents) on the campaign; `"ABO"` takes no campaign budget, and each ad set then sets its own `daily_budget` or `lifetime_budget`. The TEST tier below uses ABO.
 - **Pass `special_ad_categories` on every campaign create.** Meta rejects the call without it ("(#100) The parameter special_ad_categories is required"); pass `[]` when no special ad category applies.
 - **Under CBO, ad sets must not carry their own budget** — omit it; they share the campaign budget.
-- The funnel below is the strategy; for the click-by-click create sequence (campaign → ad set → ads), `use ad-launch-playbook`.
+- The funnel below is the strategy; for the click-by-click create sequence (campaign → ad set → ads), `use meta-ad-launch-playbook`.
 
 ## 4-Tier Funnel Structure
 

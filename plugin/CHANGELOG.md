@@ -2,6 +2,29 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.7.8] - 2026-11-16
+
+Agents work in Cowork, skills point at the right skills, and the advice matches what the platforms offer today.
+
+### Changed
+
+- **Agents** no longer limit themselves to a tool list. In Cowork that list left them without any
+  Ad Superpowers tool; they now use the tools of the session. The reporting, creative and strategy
+  agents say they only read; media-buyer and tracking-specialist confirm every change first.
+- **Agents route by outcome**: decide the strategy, decide the creatives, make changes, get the
+  measurement right, report what happened. Each says which agent handles the neighbouring requests.
+- **Skill references** use the names the plugin publishes (`meta-campaign-structure-advisor`).
+- **Skill triggers** name their platform, and each procedure has one owner.
+
+### Fixed
+
+- AI Max for Search is described as the campaign setting it is, including that search term matching
+  does not work with Manual CPC.
+- Attribution skills offer only the models Google Ads and GA4 still have (data-driven and last click).
+- Search Console skills no longer refer to the Mobile Usability report Google retired in 2023.
+- URL inspection uses `gsc_inspect_url`.
+- The `cross-platform-comparison` command description fits the 500-character limit.
+
 ## [2.7.7] - 2026-11-14
 
 Patch release: a shorter README.

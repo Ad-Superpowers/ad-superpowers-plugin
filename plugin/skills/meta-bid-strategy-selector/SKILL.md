@@ -1,6 +1,6 @@
 ---
 name: meta-bid-strategy-selector
-description: "This skill should be used when the user asks to \"choose a bid strategy\", \"compare cost cap vs bid cap\", \"set up value rules\", or mentions \"Meta bid strategy\", \"ROAS goal bidding\", or \"scaling bid approach\". Do NOT use for: Google Ads bidding (use google-ads-bid-strategy-selector), campaign structure decisions (use campaign-structure-advisor), creative testing (use creative-diversification-generator)."
+description: "This skill should be used when the user asks to \"choose a bid strategy\", \"compare cost cap vs bid cap\", \"set up value rules\", or mentions \"Meta bid strategy\", \"ROAS goal bidding\", or \"scaling bid approach\". Do NOT use for: Google Ads bidding (use google-ads-bid-strategy-selector), campaign structure decisions (use meta-campaign-structure-advisor), creative testing (use meta-creative-diversification-generator)."
 ---
 # Bid Strategy Selector
 
@@ -373,7 +373,7 @@ The strategy names above map to these API values, and `meta_create` has defaults
 - **`meta_create` defaults a new campaign to `LOWEST_COST_WITHOUT_CAP`.** You only pass `bid_strategy` to override it, and that default is why ad sets do not need a `bid_amount`.
 - **`meta_create` takes `budget_mode`:** `"CBO"` (the default) puts the budget on the campaign; `"ABO"` leaves the campaign without a budget and each ad set sets its own. The cap/target strategies put their `bid_amount` (or `roas_floor`) on the **ad set**. Under CBO the ad sets inherit the campaign's bid strategy, so set a non-default strategy on the campaign as well.
 - **Minimum ROAS can be refused for a new business.** On a test account Meta rejected `LOWEST_COST_WITH_MIN_ROAS` with: "Ad accounts owned by a new business can use minimum ROAS for ad delivery after several weeks of following our policies. If you don't want to wait, verify your business." (Meta API error, seen 2026-10-10). Until then, use another strategy or verify the business.
-- For the full launch sequence (campaign → ad set → ads), `use ad-launch-playbook`.
+- For the full launch sequence (campaign → ad set → ads), `use meta-ad-launch-playbook`.
 
 ## MCP: Check Current Bid Strategy & Performance
 

@@ -1,6 +1,6 @@
 ---
 name: meta-creative-fatigue-analyzer
-description: "This skill should be used when the user asks to \"detect creative fatigue\", \"analyze frequency vs CTR\", \"plan a creative refresh\", or mentions \"Meta ad fatigue\", \"declining CTR on Facebook\", or \"frequency thresholds\"."
+description: "This skill should be used when the user asks to \"detect Meta creative fatigue\", \"analyze frequency vs CTR on Meta\", \"plan a Meta creative refresh\", or mentions \"Meta ad fatigue\", \"declining CTR on Facebook\", or \"Meta frequency thresholds\". Do NOT use for: deciding which new creatives to make (use meta-creative-diversification-generator), Google Ads or TikTok fatigue (use google-ads-creative-fatigue-tracker or tiktok-creative-fatigue-tracker)."
 ---
 # Meta Ads Creative Fatigue Analyzer
 

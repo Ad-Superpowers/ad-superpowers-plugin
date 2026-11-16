@@ -69,8 +69,7 @@ function main() {
 
   report.summary = {
     totalCampaigns: campaignData.length,
-    totalConversions: totalConversions,
-    ddaEligible: totalConversions >= 600
+    totalConversions: totalConversions
   };
 
   // Identify opportunities
@@ -109,20 +108,13 @@ function estimateAssistedRatio(campaign) {
 function generateRecommendations(report) {
   var recs = [];
 
-  // Check DDA eligibility
-  if (!report.summary.ddaEligible) {
-    recs.push({
-      priority: 'INFO',
-      action: 'Account has < 600 conversions/month. DDA not yet available.',
-      detail: 'Consider Time Decay or Position Based as an alternative.'
-    });
-  } else {
-    recs.push({
-      priority: 'HIGH',
-      action: 'Account qualifies for Data-Driven Attribution.',
-      detail: 'Activate DDA for more accurate budget allocation.'
-    });
-  }
+  // DDA has no minimum conversion volume; its availability is reported per
+  // conversion action (attribution_model_settings.data_driven_model_status).
+  recs.push({
+    priority: 'INFO',
+    action: 'Check that each primary conversion action uses Data-driven attribution.',
+    detail: 'Google Ads supports Data-driven and Last click; see data_driven_model_status per action.'
+  });
 
   // Check for high assisted ratio campaigns
   var highAssisted = report.campaigns.filter(function(c) {
@@ -149,7 +141,7 @@ function sendReport(report) {
   body += 'SUMMARY:\n';
   body += '• Total campaigns analyzed: ' + report.summary.totalCampaigns + '\n';
   body += '• Total conversions: ' + report.summary.totalConversions + '\n';
-  body += '• DDA eligible: ' + (report.summary.ddaEligible ? 'Yes' : 'No (need 600+)') + '\n\n';
+  body += '\n';
 
   body += 'CAMPAIGN ANALYSIS (by estimated assisted value):\n';
   body += '────────────────────────────────────────────────\n';

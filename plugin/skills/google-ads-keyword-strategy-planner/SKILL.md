@@ -1,6 +1,6 @@
 ---
 name: google-ads-keyword-strategy-planner
-description: "This skill should be used when the user asks to \"plan keyword strategy\", \"choose match types\", \"build negative keyword lists\", \"analyze search terms report\", or mentions \"query sculpting\", \"keyword clustering\", or \"Broad vs Phrase vs Exact match\". Do NOT use for: bid strategy selection (use bid-strategy-selector), campaign structure decisions (use campaign-structure-advisor), or Quality Score optimization (use quality-score-optimizer)."
+description: "This skill should be used when the user asks to \"plan keyword strategy\", \"choose match types\", \"build negative keyword lists\", \"analyze search terms report\", or mentions \"query sculpting\", \"keyword clustering\", or \"Broad vs Phrase vs Exact match\". Do NOT use for: bid strategy selection (use google-ads-bid-strategy-selector), campaign structure decisions (use google-ads-campaign-structure-advisor), or Quality Score optimization (use google-ads-quality-score-optimizer)."
 ---
 # Keyword Strategy Planner
 

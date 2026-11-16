@@ -1,6 +1,6 @@
 ---
 name: google-ads-learning-phase-tracker
-description: "This skill should be used when the user asks to \"check learning phase status\", \"fix stuck learning phase\", \"accelerate Smart Bidding learning\", \"predict learning phase duration\", or mentions \"learning limited\", \"bid strategy learning\", or \"tCPA learning phase\". Do NOT use for: bid strategy selection (use bid-strategy-selector), campaign structure changes (use campaign-structure-advisor), or conversion tracking setup (use conversion-tracking-setup)."
+description: "This skill should be used when the user asks to \"check learning phase status\", \"fix stuck learning phase\", \"accelerate Smart Bidding learning\", \"predict learning phase duration\", or mentions \"learning limited\", \"bid strategy learning\", or \"tCPA learning phase\". Do NOT use for: bid strategy selection (use google-ads-bid-strategy-selector), campaign structure changes (use google-ads-campaign-structure-advisor), or conversion tracking setup (use google-ads-conversion-tracking-setup)."
 ---
 # Learning Phase Tracker
 

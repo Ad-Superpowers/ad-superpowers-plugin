@@ -1,12 +1,15 @@
 ---
 name: meta-creative-diversification-generator
-description: "Creative strategy for Meta ads: audit the creative mix of an ad account, map ads by motivator, angle and execution, rank the biggest gaps and plan the next batch with briefs. This skill should be used when the user asks for a \"creative audit\", \"creative strategy\", \"creative diversification\", \"what ads should we make next\", \"why does Meta spend everything on one ad\", a creative map or matrix, new creative briefs based on what is running, or to \"brainstorm ad concepts\". Do NOT use for: ad copy writing only (use ad-copy-generator), video scripts only (use video-script-writer), fatigue on one ad set (use creative-fatigue-analyzer), launching ads (use ad-launch-playbook)."
+description: "Creative strategy for Meta ads: audit the creative mix of an ad account, map ads by motivator, angle and execution, rank the biggest gaps and plan the next batch with briefs. This skill should be used when the user asks for a \"creative audit\", \"creative strategy\", \"creative diversification\", \"what ads should we make next\", \"why does Meta spend everything on one ad\", a creative map or matrix, new creative briefs based on what is running, or to \"brainstorm ad concepts\". Do NOT use for: ad copy writing only (use meta-ad-copy-generator), video scripts only (use meta-video-script-writer), fatigue on one ad set (use meta-creative-fatigue-analyzer), launching ads (use meta-ad-launch-playbook)."
 ---
 # Creative Strategy for Meta
 
 Audit what an ad account really runs, see where the spend sits, find the messages it is missing, and
 plan the next batch as briefs. Every number comes from the `creative_map.py` script; this skill reads,
 labels and explains. It never writes to the ad account.
+
+Live analysis needs the Ad Superpowers connector with Meta connected: the script runs on the server
+(`skill(action="run")`) and the server reads the ads. Without the connector only the demo runs.
 
 ## Core principle
 

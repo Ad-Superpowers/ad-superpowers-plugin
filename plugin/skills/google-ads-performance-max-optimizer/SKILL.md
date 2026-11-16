@@ -1,6 +1,6 @@
 ---
 name: google-ads-performance-max-optimizer
-description: "This skill should be used when the user asks to \"set up Performance Max\", \"optimize PMax campaigns\", \"configure audience signals\", \"choose search themes\", or mentions \"PMax asset group strategy\", \"channel performance breakdown\", or \"e-commerce vs lead gen PMax\". Do NOT use for: PMax audit scoring (use pmax-audit-checklist), PMax retail-specific optimization (use pmax-retail-optimizer), PMax vs Search cannibalization (use pmax-search-cannibalization-detector)."
+description: "This skill should be used when the user asks to \"set up Performance Max\", \"optimize PMax campaigns\", \"configure audience signals\", \"choose search themes\", or mentions \"PMax asset group strategy\", \"channel performance breakdown\", or \"e-commerce vs lead gen PMax\". Do NOT use for: PMax audit scoring (use google-ads-pmax-audit-checklist), PMax retail-specific optimization (use google-ads-pmax-retail-optimizer), PMax vs Search cannibalization (use google-ads-pmax-search-cannibalization-detector)."
 ---
 # Performance Max Optimizer
 

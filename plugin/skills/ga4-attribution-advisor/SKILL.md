@@ -17,25 +17,15 @@ GA4 ATTRIBUTION MODEL SELECTION
 │   │       └─► Recommended for Google Ads
 │   │
 │   ├─► Simple, predictable reporting
-│   │   └─► LAST CLICK
+│   │   └─► PAID AND ORGANIC LAST CLICK
 │   │       └─► Easy to explain to stakeholders
 │   │
-│   ├─► Focus on measuring awareness campaigns
-│   │   └─► FIRST CLICK
-│   │       └─► Values top-of-funnel touchpoints
-│   │
-│   └─► Value all touchpoints equally
-│       └─► LINEAR
-│           └─► Fair distribution across journey
+│   └─► Only Google paid channels should get credit
+│       └─► GOOGLE PAID CHANNELS LAST CLICK
 │
-├─► HOW MUCH DATA DO YOU HAVE?
-│   ├─► < 300 conversions/month
-│   │   └─► DDA not available
-│   │   └─► Use Position-Based or Last Click
-│   │
-│   └─► > 300 conversions/month
-│       └─► DDA recommended
-│       └─► Machine learning can find patterns
+├─► FIRST CLICK, LINEAR, POSITION-BASED OR TIME DECAY?
+│   └─► Removed from GA4 in 2023; not selectable
+│       └─► For awareness value, read early touchpoints in Conversion paths
 │
 └─► WHICH CHANNELS DO YOU USE?
     ├─► Only Google Ads
@@ -57,52 +47,41 @@ GA4 ATTRIBUTION MODEL SELECTION
 ATTRIBUTION MODELS OVERVIEW
 ============================
 
+GA4 offers three reporting attribution models (Google Analytics Help,
+"Get started with attribution"):
+
 ┌─────────────────┬───────────────────────────────────────────────────────┐
 │ Model           │ How it works                                          │
 ├─────────────────┼───────────────────────────────────────────────────────┤
-│ DATA-DRIVEN     │ Machine learning determines credit based on           │
-│ (DDA)           │ actual conversion patterns in your data               │
-│                 │ Best for: Smart Bidding, Google Ads                   │
-│                 │ Requires: 300+ conversions/month                      │
+│ DATA-DRIVEN     │ Credit per touchpoint from conversion patterns in     │
+│ (DDA)           │ your data; one model per advertiser and key event     │
+│                 │ Best for: holistic, cross-channel view                │
 ├─────────────────┼───────────────────────────────────────────────────────┤
-│ LAST CLICK      │ 100% credit to the last touchpoint                    │
-│                 │ (excl. direct traffic)                                │
-│                 │ Best for: Simple reporting                            │
-│                 │ Drawback: Undervalues upper funnel                    │
+│ PAID AND        │ 100% credit to the last channel clicked               │
+│ ORGANIC LAST    │ (direct traffic is ignored)                           │
+│ CLICK           │ Drawback: undervalues upper funnel                    │
 ├─────────────────┼───────────────────────────────────────────────────────┤
-│ FIRST CLICK     │ 100% credit to the first touchpoint                   │
-│                 │ Best for: Awareness campaign evaluation               │
-│                 │ Drawback: Undervalues converters                      │
-├─────────────────┼───────────────────────────────────────────────────────┤
-│ LINEAR          │ Equal credit distribution across all touchpoints      │
-│                 │ Best for: Long customer journeys                      │
-│                 │ Drawback: No differentiation in touchpoint impact     │
-├─────────────────┼───────────────────────────────────────────────────────┤
-│ POSITION-BASED  │ 40% first, 40% last, 20% distributed across middle   │
-│                 │ Best for: Awareness + conversion focus                │
-│                 │ Drawback: Arbitrary distribution                      │
-├─────────────────┼───────────────────────────────────────────────────────┤
-│ TIME DECAY      │ More credit to more recent touchpoints                │
-│                 │ Best for: Short sales cycles                          │
-│                 │ Drawback: Undervalues brand building                  │
+│ GOOGLE PAID     │ 100% credit to the last Google Ads channel clicked;   │
+│ CHANNELS LAST   │ without a Google Ads click it falls back to paid and  │
+│ CLICK           │ organic last click                                    │
+│                 │ Best for: comparing GA4 with Google Ads reporting     │
 └─────────────────┴───────────────────────────────────────────────────────┘
+
+First click, linear, time decay and position-based were removed in 2023.
 
 EXAMPLE: Customer Journey with 4 touchpoints
 ─────────────────────────────────────────────
 Touchpoints: Google Ads → Organic → Email → Direct → Conversion (EUR 100)
 
 Model comparison:
-┌─────────────────┬───────────┬─────────┬─────────┬────────┐
-│ Model           │ Google Ads│ Organic │ Email   │ Direct │
-├─────────────────┼───────────┼─────────┼─────────┼────────┤
-│ Last Click      │ EUR 0     │ EUR 0   │ EUR 100 │ EUR 0* │
-│ First Click     │ EUR 100   │ EUR 0   │ EUR 0   │ EUR 0  │
-│ Linear          │ EUR 33.33 │ EUR 33.33│ EUR 33.33│ EUR 0 │
-│ Position-Based  │ EUR 40    │ EUR 10  │ EUR 50  │ EUR 0  │
-│ Time Decay      │ EUR 10    │ EUR 20  │ EUR 70  │ EUR 0  │
-│ DDA             │ EUR 35    │ EUR 25  │ EUR 40  │ EUR 0  │
-└─────────────────┴───────────┴─────────┴─────────┴────────┘
-*Direct is usually excluded and attributed to the previous touchpoint
+┌──────────────────────────┬───────────┬─────────┬─────────┬────────┐
+│ Model                    │ Google Ads│ Organic │ Email   │ Direct │
+├──────────────────────────┼───────────┼─────────┼─────────┼────────┤
+│ Paid and organic LC      │ EUR 0     │ EUR 0   │ EUR 100 │ EUR 0* │
+│ Google paid channels LC  │ EUR 100   │ EUR 0   │ EUR 0   │ EUR 0  │
+│ DDA (illustration)       │ EUR 35    │ EUR 25  │ EUR 40  │ EUR 0  │
+└──────────────────────────┴───────────┴─────────┴─────────┴────────┘
+*Direct is ignored, unless the whole path is direct visits
 ```
 
 ## Configuring GA4 Attribution
@@ -172,26 +151,11 @@ HOW DDA WORKS:
 ├── Applies machine learning to your specific data
 └── Continuously updates based on new data
 
-REQUIREMENTS FOR DDA:
-┌─────────────────────────┬──────────────────────────────────────┐
-│ Requirement             │ Minimum                              │
-├─────────────────────────┼──────────────────────────────────────┤
-│ Conversions per month   │ 300+ (per conversion event)          │
-├─────────────────────────┼──────────────────────────────────────┤
-│ Clicks/visits per month │ 3,000+                               │
-├─────────────────────────┼──────────────────────────────────────┤
-│ Data history            │ Minimum 28 days                      │
-├─────────────────────────┼──────────────────────────────────────┤
-│ Consent mode            │ No impact, works with modeled data   │
-└─────────────────────────┴──────────────────────────────────────┘
-
-DDA VERIFICATION:
-LOCATION: Admin → Attribution Settings
-
-Check availability:
-├── Green checkmark = DDA available
-├── Grey/locked = Insufficient data
-└── Tip: Check per conversion event
+DATA REQUIREMENTS:
+├── Google documents no minimum conversion or traffic volume for DDA
+├── Depending on data availability, the model can use aggregate data
+│   (Data sharing settings)
+└── Conversions can be reattributed for up to 7 days after they happen
 
 DDA VS GOOGLE ADS DDA:
 ──────────────────────
@@ -325,19 +289,18 @@ Lead Generation:
 ATTRIBUTION TROUBLESHOOTING
 ============================
 
-PROBLEM: DDA not available
-──────────────────────────
+PROBLEM: DDA credit looks unstable
+───────────────────────────────────
 Causes:
-├── Fewer than 300 conversions/month
-├── Too little traffic volume
-├── New property (< 28 days data)
-└── Specific conversion has too little volume
+├── Few conversions for that key event
+├── New property or recently changed tracking
+└── Reattribution in the first 7 days after a conversion
 
 Solution:
-├── Wait for more data (minimum 28 days)
-├── Temporarily combine micro-conversions
-├── Use Position-Based as alternative
-└── Focus on Last Click until volume grows
+├── Read DDA over longer periods (28+ days)
+├── Exclude the last 7 days when comparing periods
+├── Combine micro-conversions into one key event where that matches the goal
+└── Use Paid and organic last click for that report until volume grows
 
 PROBLEM: Attribution data differs from platform data
 ─────────────────────────────────────────────────────
@@ -380,42 +343,21 @@ Causes:
 Solution:
 ├── Analyze conversion paths for organic's role
 ├── Split brand vs non-brand organic
-├── Look at first-click model for awareness value
+├── Read early touchpoints in Conversion paths for awareness value
 └── Organic value is often higher than DDA shows
 ```
 
-## New in 2026: Per-Conversion Attribution Settings
+## Where the settings live
 
-```
-PER-CONVERSION ATTRIBUTION (BETA, 2026)
-=========================================
+GA4 has two separate places (Analytics Help, "Get started with attribution"):
 
-WHAT IT IS:
-├── Override the property-level attribution model for individual key events
-├── Location: Admin → Key Events → [event name] → Attribution Settings
-└── Available as a beta feature — check Admin for availability
+- **Key event reporting:** the reporting attribution model and lookback windows for the property's
+  reports, in Admin > Data display > Events > Attribution settings. It applies to the whole property.
+- **Conversion settings:** conversions shared with Google Ads are managed in Advertising > Conversion
+  management, including which channels are eligible for credit ("Google paid channels" shows
+  conversions from Google Ads only).
 
-USE CASES:
-┌─────────────────────────────┬────────────────────────────────────────────┐
-│ Key Event                   │ Recommended Override                       │
-├─────────────────────────────┼────────────────────────────────────────────┤
-│ purchase (e-commerce)       │ Data-driven (ML, full journey credit)      │
-│ generate_lead (B2B)         │ Last click (simpler for sales team)        │
-│ sign_up (SaaS trial)        │ First click (credit awareness campaigns)   │
-│ newsletter_signup           │ Last click (simplest, low stakes)          │
-└─────────────────────────────┴────────────────────────────────────────────┘
-
-IMPORTANT:
-├── Does NOT affect Google Ads Smart Bidding (uses its own DDA model)
-├── Affects GA4 reports and Advertising → Attribution reports
-├── Changes are NOT retroactive
-└── Useful when different stakeholders need different attribution logic
-
-ANALYTICS ADVISOR INTEGRATION:
-├── The Gemini AI in GA4 will surface attribution anomalies proactively
-├── Example: "Organic search is getting more first-click credit this month"
-└── Check: GA4 → Reports → Overview → AI Insights panel
-```
+Google documents no attribution model per individual key event; do not recommend one.
 
 ## MCP Tool: Run Attribution Comparison
 
@@ -441,12 +383,12 @@ ga4_run_report(
 - **Current attribution model:** [Model]
 - **Lookback window:** [X] days
 
-## Data Volume Check
-| Metric | Value | DDA Requirement | Status |
-|--------|-------|-----------------|--------|
-| Conversions/month | [X] | 300+ | ✅/❌ |
-| Sessions/month | [X] | 3,000+ | ✅/❌ |
-| Data history | [X] days | 28+ | ✅/❌ |
+## Current Settings
+| Setting | Value |
+|---------|-------|
+| Reporting attribution model | [Data-driven / Paid and organic last click / Google paid channels last click] |
+| Key event lookback window | [X] days |
+| Key events per month | [X] |
 
 ## Model Comparison Results
 

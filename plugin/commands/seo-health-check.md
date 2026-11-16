@@ -15,7 +15,7 @@ Perform a comprehensive organic search health check using Google Search Console 
 
 3. **Analyze by page** — Run `gsc_search_analytics` with dimensions=["page"] to identify top and bottom performing pages.
 
-4. **Check indexing health** — For the top 5 most important pages, use `gsc_manage_url(action="inspect")` to verify indexing status.
+4. **Check indexing health** — For the top 5 most important pages, use `gsc_inspect_url` to verify indexing status.
 
 5. **Identify opportunities:**
    - **Quick wins:** Keywords in positions 4-10 with high impressions (within striking distance of page 1 top 3)

@@ -1,6 +1,6 @@
 ---
 name: google-ads-conversion-tracking-setup
-description: "This skill should be used when the user asks to \"set up conversion tracking\", \"implement Google Tag\", \"configure Enhanced Conversions\", \"import offline conversions\", or mentions \"gtag setup\", \"conversion value tracking\", or \"primary vs secondary conversions\". Do NOT use for: debugging existing tracking issues (use conversion-tracking-debugger), Meta pixel setup (use meta tools), GA4 event setup (use ga4 tools)."
+description: "This skill should be used when the user asks to \"set up conversion tracking\", \"implement Google Tag\", \"configure Enhanced Conversions\", \"import offline conversions\", or mentions \"gtag setup\", \"conversion value tracking\", or \"primary vs secondary conversions\". Do NOT use for: debugging existing tracking issues (use google-ads-conversion-tracking-debugger), Meta pixel setup (use meta tools), GA4 event setup (use ga4 tools)."
 ---
 # Conversion Tracking Setup
 
@@ -107,16 +107,16 @@ COUNT:
 +-- Recommendation: Purchases = Every, Leads = One
 
 CONVERSION WINDOW:
-+-- Click-through: 30-90 days (default 30)
++-- Click-through: 1-90 days (default 30; calls 1-60)
 +-- View-through: 1-30 days (default 1)
 +-- Engaged-view: 3-30 days (default 3)
 +-- Recommendation: Adjust based on sales cycle
 
 ATTRIBUTION MODEL:
-+-- Data-driven (recommended, default since 2024)
++-- Data-driven (recommended, default for new conversion actions)
 +-- Last click
-+-- First click
-+-- Linear / Time decay / Position-based (deprecated)
++-- First click, linear, time decay and position-based were removed in 2023;
+|   setting them fails with CANNOT_SET_RULE_BASED_ATTRIBUTION_MODELS
 +-- Recommendation: Use Data-driven (DDA)
 ```
 

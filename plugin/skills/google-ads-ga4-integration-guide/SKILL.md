@@ -1,6 +1,6 @@
 ---
 name: google-ads-ga4-integration-guide
-description: "This skill should be used when the user asks to \"link Google Ads to GA4\", \"import GA4 conversions into Google Ads\", \"sync GA4 audiences\", \"align attribution models\", or mentions \"UTM tagging\", \"cross-platform tracking\", or \"data-driven attribution\". Do NOT use for: GA4 standalone reporting (use ga4 MCP tools directly), conversion tracking setup (use conversion-tracking-setup), enhanced conversions (use enhanced-conversions-setup)."
+description: "This skill should be used when the user asks to \"link Google Ads to GA4\", \"sync GA4 audiences\", \"align attribution models\", or mentions \"UTM tagging\", \"cross-platform tracking\", or \"data-driven attribution\". Do NOT use for: GA4 standalone reporting (use ga4 MCP tools directly), conversion tracking setup (use google-ads-conversion-tracking-setup), enhanced conversions (use google-ads-enhanced-conversions-setup), importing GA4 key events as Google Ads conversions (use ga4-conversion-import)."
 ---
 # GA4 Integration Guide
 
@@ -115,26 +115,22 @@ Causes:
 ATTRIBUTION MODEL OPTIONS:
 ──────────────────────────
 
+GA4 reporting models:
 ┌──────────────────────────────────────────────────────────────────┐
 │ Model                │ Description            │ Use Case         │
 ├──────────────────────┼────────────────────────┼──────────────────┤
-│ Data-driven          │ AI-based, adapts to    │ Recommended     │
-│                      │ your data              │ (default 2024+)  │
+│ Data-driven          │ Credit from your own   │ Recommended      │
+│                      │ conversion paths       │                  │
 ├──────────────────────┼────────────────────────┼──────────────────┤
-│ Last Click           │ 100% to last           │ Simple funnel    │
-│                      │ (non-direct) click     │ comparison       │
+│ Paid and organic     │ 100% to last           │ Simple funnel    │
+│ last click           │ (non-direct) click     │ comparison       │
 ├──────────────────────┼────────────────────────┼──────────────────┤
-│ First Click          │ 100% to first click    │ Awareness focus  │
-├──────────────────────┼────────────────────────┼──────────────────┤
-│ Linear               │ Equally distributed    │ All touchpoints  │
-│                      │                        │ equally important│
-├──────────────────────┼────────────────────────┼──────────────────┤
-│ Position-based       │ 40% first, 40% last    │ Balance awareness│
-│                      │ 20% middle             │ + conversion     │
-├──────────────────────┼────────────────────────┼──────────────────┤
-│ Time decay           │ More to recent         │ Short sales      │
-│                      │                        │ cycles           │
+│ Google paid channels │ 100% to last Google    │ Matching Google  │
+│ last click           │ Ads click              │ Ads reporting    │
 └──────────────────────┴────────────────────────┴──────────────────┘
+
+Google Ads conversion actions: Data-driven or Last click only. First click,
+linear, time decay and position-based were removed from both in 2023.
 
 RECOMMENDED ALIGNMENT:
 ──────────────────────
@@ -148,10 +144,8 @@ RECOMMENDED ALIGNMENT:
    ├── GA4: 30, 60, or 90 days
    └── Google Ads: Match with GA4 setting
 
-WARNING — DATA-DRIVEN REQUIRES:
-├── Minimum 300 conversions in 30 days
-├── Minimum 3000 ad interactions
-└── Otherwise: fallback to last-click
+NOTE: neither GA4 nor Google Ads sets a minimum conversion volume for
+data-driven attribution.
 ```
 
 ## Importing GA4 Conversions
@@ -466,7 +460,7 @@ CREATE CROSS-PLATFORM REPORT:
 ATTRIBUTION COMPARISON:
 ───────────────────────
 1. Advertising → Attribution paths
-2. Compare: First click vs Last click vs Data-driven
+2. Compare: Data-driven vs Paid and organic last click
 3. See: How channels work together
 ```
 

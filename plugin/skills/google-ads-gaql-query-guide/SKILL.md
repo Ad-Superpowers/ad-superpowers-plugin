@@ -1,6 +1,6 @@
 ---
 name: google-ads-gaql-query-guide
-description: "This skill should be used when the user asks to \"write a GAQL query\", \"build a Google Ads report\", \"select metrics and dimensions\", \"filter by date range in GAQL\", or mentions \"video_views\", \"campaign_search_term_view\", \"LAST_90_DAYS\", or \"Google Ads Query Language\"."
+description: "This skill should be used when the user asks to \"write a GAQL query\", \"build a Google Ads report\", \"select metrics and dimensions\", \"filter by date range in GAQL\", or mentions \"video_views\", \"campaign_search_term_view\", \"LAST_90_DAYS\", or \"Google Ads Query Language\". Do NOT use for: diagnosing why performance changed (use google-ads-performance-troubleshooter), attribution settings (use google-ads-attribution-model-advisor), or GA4 reports (call ga4_run_report)."
 ---
 # GAQL Query Guide
 

@@ -1,6 +1,6 @@
 ---
 name: google-ads-shopping-feed-optimizer
-description: "This skill should be used when the user asks to \"optimize Shopping feed\", \"fix product disapprovals\", \"improve product titles\", \"set up custom labels\", or mentions \"Merchant Center\", \"feed rules\", \"product data quality\", or \"free listings optimization\". Do NOT use for: Shopping campaign structure advice (use shopping-campaign-structure-advisor), PMax retail optimization (use pmax-retail-optimizer), general PMax setup (use performance-max-optimizer)."
+description: "This skill should be used when the user asks to \"optimize Shopping feed\", \"fix product disapprovals\", \"improve product titles\", \"set up custom labels\", or mentions \"Merchant Center\", \"feed rules\", \"product data quality\", or \"free listings optimization\". Do NOT use for: Shopping campaign structure advice (use google-ads-shopping-campaign-structure-advisor), PMax retail optimization (use google-ads-pmax-retail-optimizer), general PMax setup (use google-ads-performance-max-optimizer)."
 ---
 # Shopping Feed Optimizer
 

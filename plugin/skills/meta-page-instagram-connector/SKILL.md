@@ -1,6 +1,6 @@
 ---
 name: meta-page-instagram-connector
-description: "This skill should be used when the user wants to set up a client's Facebook Page and Instagram for ads, connect Meta Page and Instagram to a client, wire a client's Meta Page and IG, decide which Facebook Page a client's ads post from, or fix a client's Instagram-access (error 1815199) problem. It discovers the promotable Pages and connected Instagram accounts for the client's Meta ad account and saves the chosen identities onto the client profile, so meta_create_ad resolves them automatically on every ad. Do NOT use for: building the ad itself (use ad-launch-playbook), general client import/grouping (use client-context-onboarding), or bid strategy (use bid-strategy-selector)."
+description: "This skill should be used when the user wants to set up a client's Facebook Page and Instagram for ads, connect Meta Page and Instagram to a client, wire a client's Meta Page and IG, decide which Facebook Page a client's ads post from, or fix a client's Instagram-access (error 1815199) problem. It discovers the promotable Pages and connected Instagram accounts for the client's Meta ad account and saves the chosen identities onto the client profile, so meta_create_ad resolves them automatically on every ad. Do NOT use for: building the ad itself (use meta-ad-launch-playbook), general client import/grouping (use client-context-onboarding), or bid strategy (use meta-bid-strategy-selector)."
 ---
 # Meta Page & Instagram Connector
 
@@ -87,7 +87,7 @@ clients_update(
 clients(action="get", client="acme-corp")   # confirm facebook_page_id / instagram_user_id are set
 ```
 
-From now on, `meta_create_ad` for this client resolves the Page/IG automatically, while no other client profile links the same ad account. To launch, `use ad-launch-playbook`.
+From now on, `meta_create_ad` for this client resolves the Page/IG automatically, while no other client profile links the same ad account. To launch, `use meta-ad-launch-playbook`.
 
 ## Edge cases
 
@@ -107,4 +107,4 @@ From now on, `meta_create_ad` for this client resolves the Page/IG automatically
 ## Complementary skills
 
 - `use client-context-onboarding` — import and group connected ad accounts into client profiles (run this first; this skill completes the Meta wiring).
-- `use ad-launch-playbook` — once the Page/IG are wired, build and launch the ads.
+- `use meta-ad-launch-playbook` — once the Page/IG are wired, build and launch the ads.

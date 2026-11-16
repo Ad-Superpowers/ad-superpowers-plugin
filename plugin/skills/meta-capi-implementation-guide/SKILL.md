@@ -1,6 +1,6 @@
 ---
 name: meta-capi-implementation-guide
-description: "This skill should be used when the user asks to \"set up CAPI\", \"implement server-side tracking\", \"configure event deduplication\", or mentions \"Conversions API\", \"CAPI Gateway\", or \"CAPI troubleshooting\". Do NOT use for: EMQ optimization specifically (use emq-optimizer), attribution window decisions (use attribution-window-advisor), pixel-only tracking issues (use performance-troubleshooter)."
+description: "This skill should be used when the user asks to \"set up CAPI\", \"implement server-side tracking\", \"configure event deduplication\", or mentions \"Conversions API\", \"CAPI Gateway\", or \"CAPI troubleshooting\". Do NOT use for: EMQ optimization specifically (use meta-emq-optimizer), attribution window decisions (use meta-attribution-window-advisor), pixel-only tracking issues (use meta-performance-troubleshooter)."
 ---
 # CAPI Implementation Guide
 

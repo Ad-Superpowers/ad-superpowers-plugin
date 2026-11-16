@@ -12,7 +12,7 @@
       "name": "ad-superpowers",
       "source": "./plugin",
       "description": "Ad Superpowers sits between you and your ad platforms. One connection gives Claude Meta, Google Ads, GA4, Search Console, Tag Manager, Merchant Center, LinkedIn and TikTok, with client context, workflows and 124 expert skills for agencies and PPC specialists. Audit accounts, report across clients and launch campaigns from a media plan in minutes, with you in control of every change.",
-      "version": "2.7.7",
+      "version": "2.7.8",
       "author": {
         "name": "Ad Superpowers",
         "email": "contact@adsuperpowers.ai"

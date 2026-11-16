@@ -1,5 +1,5 @@
 ---
-description: "Monitor your website's technical SEO health using Google Search Console. Checks sitemap status, indexing coverage, and inspects key pages for crawl issues, canonical conflicts, mobile usability problems, and rich results eligibility."
+description: "Monitor your website's technical SEO health using Google Search Console. Checks sitemap status, indexing coverage, and inspects key pages for crawl issues, canonical conflicts, and rich results eligibility."
 disable-model-invocation: true
 ---
 
@@ -36,9 +36,9 @@ Flag: status != "Success", errors > 0, or last downloaded > 7 days ago.
 | Estimated index rate | Y/X % |
 
 ### Page Inspections
-| Page | Indexed? | Last Crawl | Canonical OK? | Mobile OK? | Rich Results |
-|------|----------|------------|--------------|------------|-------------|
-Canonical OK = Google canonical matches user-declared canonical. Mobile OK = no usability issues.
+| Page | Indexed? | Last Crawl | Canonical OK? | Rich Results |
+|------|----------|------------|--------------|-------------|
+Canonical OK = Google canonical matches user-declared canonical.
 
 ### Critical Issues (fix now)
 - [Issue description with affected page/sitemap and specific fix]
@@ -104,8 +104,7 @@ Inspect these specific pages: [specify pages_to_inspect]
 ### Step 4: Inspect key pages
 For each selected page (max 5), run:
 ```
-gsc_manage_url(
-    action="inspect",
+gsc_inspect_url(
     site_url="[specify site_url]",
     url="PAGE_URL"
 )
@@ -114,7 +113,6 @@ For each inspected page, extract:
 - **Index status**: indexed / not indexed (+ reason if not indexed)
 - **Last crawl date**: flag if > 30 days ago
 - **Canonical URL**: compare Google-selected vs user-declared. Flag conflicts.
-- **Mobile usability**: PASS or list issues
 - **Rich results**: types detected or none
 - **Page fetch status**: success / error
 - **Robots.txt**: allowed / blocked
@@ -127,7 +125,6 @@ For each inspected page, extract:
 - Robots.txt blocking important pages
 
 **WARNING** (fix soon):
-- Mobile usability issues
 - Stale sitemaps (last downloaded > 14 days)
 - Sitemap errors > 0
 - Last crawl > 30 days ago on important pages

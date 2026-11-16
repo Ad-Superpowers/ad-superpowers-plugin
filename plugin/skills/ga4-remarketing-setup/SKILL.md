@@ -1,6 +1,6 @@
 ---
 name: ga4-remarketing-setup
-description: "This skill should be used when the user asks to \"export GA4 audiences to Google Ads\", \"set up RLSA\", \"configure remarketing lists\", or mentions \"audience sync issues\", \"Display remarketing\", or \"YouTube remarketing\". Do NOT use for: audience creation in GA4 (use ga4-audience-builder), predictive audiences (use ga4-predictive-audiences), audience exclusion strategy (use ga4-audience-exclusions)."
+description: "This skill should be used when the user asks to \"export GA4 audiences to Google Ads\", \"share GA4 audiences with Google Ads\", or mentions \"audience sync issues\", \"Display remarketing\", or \"YouTube remarketing\". Do NOT use for: audience creation in GA4 (use ga4-audience-builder), predictive audiences (use ga4-predictive-audiences), audience exclusion strategy (use ga4-audience-exclusions), RLSA and remarketing lists built in Google Ads (use google-ads-remarketing-list-builder)."
 ---
 # GA4 Remarketing Setup Guide
 

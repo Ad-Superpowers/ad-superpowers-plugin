@@ -2,7 +2,7 @@
 
 Ad Superpowers sits between you and your ad platforms. One connection gives Claude Meta, Google Ads, GA4, Search Console, Tag Manager, Merchant Center, LinkedIn and TikTok, with client context, workflows and expert skills for agencies and PPC specialists.
 
-**124 expert skills** · **35 slash commands** (29 workflow, 6 utility) · **5 specialized agents** · **61 MCP tools**
+**124 expert skills** · **35 slash commands** (29 workflow, 6 utility) · **5 specialized agents** · **62 MCP tools**
 
 ## What you can do
 
@@ -12,17 +12,17 @@ Ad Superpowers sits between you and your ad platforms. One connection gives Clau
 
 ## Platforms
 
-| Platform | Skills | MCP Tools | What you can do |
-|----------|-------:|----------:|------------------|
-| **Meta Ads** | 26 | 15 | Campaigns, ads and budgets, creative strategy and fatigue, audiences, catalog ads |
-| **Google Ads** | 32 | 5 | GAQL reporting, Performance Max, keywords, bidding, campaign changes |
-| **Google Analytics 4** | 18 | 2 | Traffic and conversion reports, attribution, audiences, ecommerce |
-| **Google Search Console** | 2 | 3 | Search performance, keyword rankings, indexing, sitemaps |
-| **Google Tag Manager** | 4 | 4 | Container audits, consent mode, server-side tagging, supervised changes |
-| **Google Merchant Center** | 0 | 6 | Feed and Shopping reads, product issues and performance |
-| **LinkedIn Ads** | 14 | 6 | B2B lead gen, ABM, analytics, campaign changes |
-| **TikTok Ads** | 10 | 9 | Reporting, creatives, audiences, campaign changes |
-| **Cross-platform** | 18 | 9 | Getting started, client context, workflows, skills and the workspace |
+| Platform | Skills | What you can do |
+|----------|-------:|------------------|
+| **Meta Ads** | 26 | Campaigns, ads and budgets, creative strategy and fatigue, audiences, catalog ads |
+| **Google Ads** | 32 | GAQL reporting, Performance Max, keywords, bidding, campaign changes |
+| **Google Analytics 4** | 18 | Traffic and conversion reports, attribution, audiences, ecommerce |
+| **Google Search Console** | 2 | Search performance, keyword rankings, indexing, sitemaps |
+| **Google Tag Manager** | 4 | Container audits, consent mode, server-side tagging, supervised changes |
+| **Google Merchant Center** | 0 | Feed and Shopping reads, product issues and performance |
+| **LinkedIn Ads** | 14 | B2B lead gen, ABM, analytics, campaign changes |
+| **TikTok Ads** | 10 | Reporting, creatives, audiences, campaign changes |
+| **Cross-platform** | 18 | Getting started, client context, workflows, skills and the workspace |
 
 ## Install
 
