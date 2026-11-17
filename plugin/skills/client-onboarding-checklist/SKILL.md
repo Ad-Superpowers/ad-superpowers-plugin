@@ -159,7 +159,7 @@ ORDER BY metrics.cost_micros DESC
 | Research Area | Method | Output |
 |--------------|--------|--------|
 | Meta Ad Library | facebook.com/ads/library | Competitor creative, messaging, offers |
-| Google Ads Auction Insights | `google_ads_run_gaql` (auction insights) | Impression share, overlap rate |
+| Google Ads Auction Insights | Export from the Google Ads UI (not available via the API); own impression share via `google_ads_run_gaql` | Impression share, overlap rate |
 | SEMrush / SpyFu | Third-party tools | Competitor keyword strategy |
 | TikTok Creative Center | ads.tiktok.com/business/creativecenter | Trending formats, competitor ads |
 | LinkedIn Ad Library | linkedin.com/ad-library | B2B competitor messaging |

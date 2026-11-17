@@ -152,7 +152,7 @@ PERFORMANCE ISSUE DIAGNOSIS
 ├── Efficiency problem? (CPA rising, ROAS declining)
 │   ├── Creative fatigue → Flag for creative-analyst
 │   ├── Audience saturation → Check frequency + overlap data
-│   ├── Competitive pressure → Run auction insights GAQL
+│   ├── Competitive pressure → Check impression share lost to rank via GAQL; competitor rows need an Auction insights export from the UI
 │   ├── Quality Score drop → Diagnose with quality-score-optimizer
 │   └── Seasonal shift → Compare YoY data
 │

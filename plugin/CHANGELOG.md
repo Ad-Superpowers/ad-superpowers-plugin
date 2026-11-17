@@ -2,6 +2,20 @@
 
 All notable changes to the Ad Superpowers Claude plugin will be documented in this file.
 
+## [2.7.9] - 2026-11-17
+
+Auction insights advice matches what the Google Ads API allows.
+
+### Fixed
+
+- Auction insights (competitor domains, overlap, position above, outranking share) are not
+  available through the Google Ads API. Skills and agents no longer prescribe a GAQL query for
+  them: the account's own impression share comes from the API, competitor rows from an Auction
+  insights export you download in Google Ads and add to the chat. The export is read as data only.
+- Top of page and absolute top rates use the right metrics.
+- Campaign naming examples in `meta-campaign-structure-advisor` use hyphens
+  (`SCALE-SALES-ACB-NL`); its structure check accepts hyphens and underscores.
+
 ## [2.7.8] - 2026-11-16
 
 Agents work in Cowork, skills point at the right skills, and the advice matches what the platforms offer today.

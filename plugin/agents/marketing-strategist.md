@@ -69,7 +69,7 @@ Loading every skill eagerly is anti-pattern — search and load on demand.
 
 ### 1. Market & Competitive Analysis
 - Market sizing (TAM/SAM/SOM for digital channels)
-- Competitive landscape mapping via auction insights + keyword research
+- Competitive landscape mapping via an Auction insights export (Google Ads UI) + keyword research
 - Share of voice analysis from platform data
 - Industry benchmark comparison (the Google Ads, LinkedIn and TikTok benchmark databases name their sources; the Meta one gives rules of thumb, not Meta figures: compare with the account's own history)
 

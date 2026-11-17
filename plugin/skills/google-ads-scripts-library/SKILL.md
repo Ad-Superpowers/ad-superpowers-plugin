@@ -53,7 +53,7 @@ OPTIMIZATION:
 
 REPORTING:
 ├── 11. Daily/Weekly Report Generator
-├── 12. Competitor Auction Insights
+├── 12. Competitive Position (impression share)
 ├── 13. Campaign Performance Tracker
 ├── 14. Ad Extension Monitor
 └── 15. Account Health Dashboard
@@ -602,10 +602,10 @@ SCRIPTS 11-15: Reporting Scripts
     - Key metrics summary
     - Week-over-week comparison
 
-12. COMPETITOR AUCTION INSIGHTS
-    - Weekly competitor monitoring
-    - Impression share trends
-    - Position tracking
+12. COMPETITIVE POSITION (impression share)
+    - Weekly impression share and lost-IS (budget/rank) trends
+    - Top of page and absolute top rate tracking
+    - Competitor domains need an Auction insights export from the UI
 
 13. CAMPAIGN PERFORMANCE TRACKER
     - Historical data logging

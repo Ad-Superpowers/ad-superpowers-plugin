@@ -183,7 +183,6 @@ age_range_view        - Age demographics
 video                 - Video campaign data
 youtube_video_stat    - YouTube video statistics
 shopping_performance_view - Product-level Shopping/PMax performance
-segments.auction_insight_domain (on campaign) - Competitor domains, overlap, position above, outranking
 ```
 
 ## Core Metrics
@@ -402,20 +401,10 @@ LIMIT 50
 
 ### Auction Insights (Competitor Analysis)
 
-```sql
-SELECT
-  segments.auction_insight_domain,
-  metrics.auction_insight_search_impression_share,
-  metrics.auction_insight_search_overlap_rate,
-  metrics.auction_insight_search_position_above_rate,
-  metrics.auction_insight_search_outranking_share,
-  metrics.auction_insight_search_top_impression_percentage,
-  metrics.auction_insight_search_absolute_top_impression_percentage
-FROM campaign
-WHERE segments.date DURING LAST_30_DAYS
-ORDER BY metrics.auction_insight_search_impression_share DESC
-LIMIT 20
-```
+Auction insights are not available through the Google Ads API for Ad Superpowers: the `auction_insight_*` metrics are not publicly available, and `google_ads_run_gaql` returns `METRIC_ACCESS_DENIED` for them (measured on v25, 17-11-2026). Do not query the auction insight segment or metrics (`auction_insight_*`). For the
+account's own competitive position, query `metrics.search_impression_share`,
+`metrics.search_rank_lost_impression_share` and `metrics.search_budget_lost_impression_share`
+on `campaign`; competitor rows come from an Auction insights export out of the Google Ads UI.
 
 ## Field Compatibility
 

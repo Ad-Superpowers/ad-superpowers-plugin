@@ -449,21 +449,21 @@ meta_query(account_id="act_XXXXX", entity_type="adsets", effective_status=["ACTI
 
 **Campaign Level:**
 ```
-[Tier]_[Objective]_[BudgetType]_[Geo]
+[Tier]-[Objective]-[BudgetType]-[Geo]
 ```
-Example: `SCALE_SALES_ACB_NL` or `TEST_SALES_ASB_EU`
+Example: `SCALE-SALES-ACB-NL` or `TEST-SALES-ASB-EU`
 
 **Ad Set Level:**
 ```
-[Tier]_[AudienceType]_[Date/Detail]
+[Tier]-[AudienceType]-[Date/Detail]
 ```
-Example: `TEST_BROAD_2025-01-15` or `RT_WV30D_ALLPLC`
+Example: `TEST-BROAD-20250115` or `RT-WV30D-ALLPLC`
 
 **Ad Level:**
 ```
-[Format]_[Concept]_[Hook]_[Version]
+[Format]-[Concept]-[Hook]-[Version]
 ```
-Example: `VID_UGC_PROBLEM_V2` or `IMG_LIFESTYLE_BENEFIT_V1`
+Example: `VID-UGC-PROBLEM-V2` or `IMG-LIFESTYLE-BENEFIT-V1`
 
 ### Code Legend
 
